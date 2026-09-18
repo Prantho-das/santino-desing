@@ -114,19 +114,16 @@
   </div>
 
   <!-- TOP CATEGORY SUB-BAR -->
-  <div class="top-category-bar">
-    <div class="container d-flex justify-content-center align-items-center flex-wrap gap-3 gap-md-4">
+  <div class="top-category-bar d-none d-md-block">
+    <div class="container d-flex justify-content-center align-items-center gap-5">
       <a href="#solutions"><i class="bi bi-building"></i> HOTELS</a>
-      <span class="text-muted d-none d-sm-inline">|</span>
+      <span class="text-muted">|</span>
       <a href="#solutions"><i class="bi bi-cup-hot"></i> CAFES</a>
-      <span class="text-muted d-none d-sm-inline">|</span>
+      <span class="text-muted">|</span>
       <a href="#solutions"><i class="bi bi-briefcase"></i> OFFICES</a>
       <span class="text-muted">|</span>
-      <a href="#availability" class="dynamic-partner-slot" id="topPartnerSlot" title="Available at Partner Outlets">
-        <span class="partner-pulse-dot"></span>
-        <span class="partner-content" id="partnerContent">
-          <i class="bi bi-cart4 text-success"></i> <span>SHWAPNO</span>
-        </span>
+      <a href="#availability" class="dynamic-partner-link" id="topPartnerSlot" title="Available at Partner Outlets">
+        <span id="partnerContent" class="partner-content"><i class="bi bi-cart3"></i> SHWAPNO</span>
       </a>
     </div>
   </div>
@@ -273,50 +270,72 @@
         
         <!-- Partner 1: Shwapno Superstores -->
         <div class="col-lg-6">
-          <div class="partner-showcase-card">
-            <div class="partner-card-media">
-              <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/shwapno_santino_retail.jpg" alt="Santino Coffee at Shwapno Superstores">
-              <div class="partner-card-overlay"></div>
-              <span class="partner-badge-pill"><i class="bi bi-cart-check-fill me-1"></i> EXCLUSIVE RETAIL PARTNER</span>
-              <div class="partner-logo-tag">SHWAPNO SUPERSTORES</div>
+          <div class="partner-hover-card">
+            <div class="partner-hover-bg" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/shwapno_santino_retail.jpg');"></div>
+            <div class="partner-hover-overlay"></div>
+            
+            <!-- Default State -->
+            <div class="partner-default-content">
+              <div>
+                <span class="partner-badge-pill"><i class="bi bi-cart-check-fill me-1"></i> EXCLUSIVE RETAIL PARTNER</span>
+              </div>
+              <div class="partner-brand-header">
+                <h3 class="partner-brand-name">SHWAPNO SUPERSTORES</h3>
+                <span class="partner-hint-badge"><i class="bi bi-cursor-fill me-1"></i> Hover to view details</span>
+              </div>
             </div>
-            <div class="partner-card-body">
-              <div>
-                <h3 class="partner-card-title">Fresh Roast Packs at Every Shwapno Aisle</h3>
-                <p class="partner-card-text">
-                  Pick up your favorite Santino roasted coffee bean packs, ground blends, and single-origin selections directly from Shwapno supermarket outlets nationwide for your daily home brew.
-                </p>
+
+            <!-- Hover Revealed State -->
+            <div class="partner-reveal-content">
+              <span class="partner-badge-pill mb-3"><i class="bi bi-cart-check-fill me-1"></i> EXCLUSIVE RETAIL PARTNER</span>
+              <h3 class="partner-reveal-title">Fresh Roast Packs at Every Shwapno Aisle</h3>
+              <p class="partner-reveal-desc">
+                Pick up your favorite Santino roasted coffee bean packs, ground blends, and single-origin selections directly from Shwapno supermarket outlets nationwide for your daily home brew.
+              </p>
+              <div class="partner-chips-row">
+                <span class="partner-chip"><i class="bi bi-bag-check-fill"></i> Whole Bean 250g / 1kg</span>
+                <span class="partner-chip"><i class="bi bi-cup-hot-fill"></i> Roast & Ground</span>
+                <span class="partner-chip"><i class="bi bi-shop"></i> 100+ Outlets</span>
               </div>
-              <div>
-                <button class="btn-partner-action" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                  FIND NEAREST SHWAPNO STORE <i class="bi bi-arrow-right"></i>
-                </button>
-              </div>
+              <button class="btn-partner-hover-cta" data-bs-toggle="modal" data-bs-target="#enquiryModal">
+                FIND NEAREST SHWAPNO STORE <i class="bi bi-arrow-right"></i>
+              </button>
             </div>
           </div>
         </div>
 
         <!-- Partner 2: BFC (Best Fried Chicken) -->
         <div class="col-lg-6">
-          <div class="partner-showcase-card">
-            <div class="partner-card-media">
-              <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/bfc_santino_foodservice.jpg" alt="Santino Coffee Served at BFC Outlets">
-              <div class="partner-card-overlay"></div>
-              <span class="partner-badge-pill"><i class="bi bi-cup-hot-fill me-1"></i> OFFICIAL COFFEE PARTNER</span>
-              <div class="partner-logo-tag">BFC (BEST FRIED CHICKEN)</div>
+          <div class="partner-hover-card">
+            <div class="partner-hover-bg" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/bfc_santino_foodservice.jpg');"></div>
+            <div class="partner-hover-overlay"></div>
+            
+            <!-- Default State -->
+            <div class="partner-default-content">
+              <div>
+                <span class="partner-badge-pill"><i class="bi bi-cup-hot-fill me-1"></i> OFFICIAL COFFEE PARTNER</span>
+              </div>
+              <div class="partner-brand-header">
+                <h3 class="partner-brand-name">BFC (BEST FRIED CHICKEN)</h3>
+                <span class="partner-hint-badge"><i class="bi bi-cursor-fill me-1"></i> Hover to view details</span>
+              </div>
             </div>
-            <div class="partner-card-body">
-              <div>
-                <h3 class="partner-card-title">Freshly Brewed Espresso & Latte Across 50+ Outlets</h3>
-                <p class="partner-card-text">
-                  Savour signature Santino espresso, rich creamy cappuccino, and cold coffees crafted with world-class Italian espresso machinery at all BFC restaurant locations across the country.
-                </p>
+
+            <!-- Hover Revealed State -->
+            <div class="partner-reveal-content">
+              <span class="partner-badge-pill mb-3"><i class="bi bi-cup-hot-fill me-1"></i> OFFICIAL COFFEE PARTNER</span>
+              <h3 class="partner-reveal-title">Freshly Brewed Espresso & Latte Across 50+ Outlets</h3>
+              <p class="partner-reveal-desc">
+                Savour signature Santino espresso, rich creamy cappuccino, and cold coffees crafted with world-class Italian espresso machinery at all BFC restaurant locations across the country.
+              </p>
+              <div class="partner-chips-row">
+                <span class="partner-chip"><i class="bi bi-cup-straw"></i> Hot & Iced Latte</span>
+                <span class="partner-chip"><i class="bi bi-lightning-charge-fill"></i> Italian Espresso</span>
+                <span class="partner-chip"><i class="bi bi-geo-alt-fill"></i> 50+ BFC Outlets</span>
               </div>
-              <div>
-                <button class="btn-partner-action" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                  TASTE AT YOUR NEAREST BFC <i class="bi bi-arrow-right"></i>
-                </button>
-              </div>
+              <button class="btn-partner-hover-cta" data-bs-toggle="modal" data-bs-target="#enquiryModal">
+                TASTE AT YOUR NEAREST BFC <i class="bi bi-arrow-right"></i>
+              </button>
             </div>
           </div>
         </div>
