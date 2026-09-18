@@ -229,29 +229,95 @@ a {
 }
 
 /* --------------------------------------------------------------------------
-   1. HERO BANNER
+   1. HERO BANNER (SLIDER CAROUSEL)
    -------------------------------------------------------------------------- */
 .hero-banner-section {
   position: relative;
-  min-height: 88vh;
-  background: #111111 url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_20_santino_-_250522-07574.jpg') center/cover no-repeat;
+  min-height: 90vh;
+  background: #111111;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   color: #ffffff;
-  padding-top: 110px;
-  padding-bottom: 45px;
+  overflow: hidden;
 }
+
+.hero-carousel, .hero-carousel .carousel-inner, .hero-carousel-item {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero-carousel-item {
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-top: 130px;
+  padding-bottom: 120px;
+}
+
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(10, 10, 10, 0.92) 0%, rgba(10, 10, 10, 0.62) 55%, rgba(10, 10, 10, 0.3) 100%);
+  background: linear-gradient(90deg, rgba(10, 10, 10, 0.94) 0%, rgba(10, 10, 10, 0.65) 55%, rgba(10, 10, 10, 0.35) 100%);
   z-index: 1;
 }
+
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 840px;
+  max-width: 860px;
+}
+
+.hero-carousel-btn {
+  width: 52px;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  transition: all 0.3s ease;
+  opacity: 0.75;
+}
+.hero-carousel-btn:hover {
+  background: var(--kp-maroon);
+  color: #ffffff;
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.hero-carousel-indicators {
+  position: absolute;
+  bottom: 110px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+.hero-carousel-indicators [data-bs-target] {
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.35);
+  border: none;
+  transition: all 0.3s ease;
+}
+.hero-carousel-indicators .active {
+  width: 50px;
+  background-color: var(--kp-gold);
 }
 .hero-tag {
   display: inline-flex;
@@ -929,8 +995,21 @@ a {
     margin-top: 18px;
   }
   .hero-banner-section {
-    padding-top: 85px;
+    padding-top: 0;
     min-height: auto;
+  }
+  .hero-carousel, .hero-carousel .carousel-inner, .hero-carousel-item {
+    min-height: auto;
+  }
+  .hero-carousel-item {
+    padding-top: 75px;
+    padding-bottom: 70px;
+  }
+  .hero-carousel-indicators {
+    bottom: 20px;
+  }
+  .hero-carousel-btn {
+    display: none;
   }
   .solutions-section, .about-video-section, .testimonials-section, .categories-section, .featured-products-section, .faq-section {
     padding: 70px 0;

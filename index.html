@@ -124,25 +124,104 @@
     </div>
   </div>
 
-  <!-- 1. HERO BANNER (WITH IN-BANNER LIVE STATS) -->
-  <section class="hero-banner-section">
-    <div class="hero-overlay"></div>
+  <!-- 1. HERO BANNER (CAROUSEL SLIDER WITH LIVE STATS) -->
+  <section class="hero-banner-section position-relative">
     
-    <div class="container hero-content my-auto">
-      <div class="row">
-        <div class="col-xl-9 col-lg-10">
-          <span class="hero-tag">Innovation Grounded in Heritage</span>
-          <h1 class="hero-title">Empowering Coffee<br>Businesses Across Asia</h1>
-          <p class="hero-desc">
-            Santino Coffee bridges heritage and innovation to empower coffee businesses and communities with world-class machinery, custom roasting, and professional barista solutions.
-          </p>
-          <div>
-            <button class="btn-hero-white" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-              Explore Solutions <i class="bi bi-arrow-right"></i>
-            </button>
+    <div id="heroCarousel" class="carousel slide carousel-fade hero-carousel" data-bs-ride="carousel" data-bs-interval="5500">
+      
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators hero-carousel-indicators">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+
+      <div class="carousel-inner">
+        
+        <!-- Slide 1 -->
+        <div class="carousel-item active hero-carousel-item" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_20_santino_-_250522-07574.jpg');">
+          <div class="hero-overlay"></div>
+          <div class="container hero-content my-auto">
+            <div class="row">
+              <div class="col-xl-9 col-lg-10">
+                <span class="hero-tag"><i class="bi bi-award-fill me-1"></i> Innovation Grounded in Heritage</span>
+                <h1 class="hero-title">Empowering Coffee<br>Businesses Across Asia</h1>
+                <p class="hero-desc">
+                  Santino Coffee bridges heritage and innovation to empower coffee businesses and communities with world-class machinery, custom roasting, and professional barista solutions.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                  <button class="btn-hero-white" data-bs-toggle="modal" data-bs-target="#enquiryModal">
+                    Explore Solutions <i class="bi bi-arrow-right"></i>
+                  </button>
+                  <a href="#products" class="btn btn-outline-light px-4 py-3 fw-bold text-uppercase d-inline-flex align-items-center gap-2" style="border-radius: 6px; font-size: 14.5px; font-family: var(--kp-font-title);">
+                    View Catalog <i class="bi bi-chevron-right"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-item hero-carousel-item" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_23_santino_-_250522-07495.jpg');">
+          <div class="hero-overlay"></div>
+          <div class="container hero-content my-auto">
+            <div class="row">
+              <div class="col-xl-9 col-lg-10">
+                <span class="hero-tag"><i class="bi bi-lightning-charge-fill me-1"></i> State-of-the-Art Espresso</span>
+                <h1 class="hero-title">Precision Machinery &<br>Bionic Automation</h1>
+                <p class="hero-desc">
+                  Authorized partners for Victoria Arduino, Nuova Simonelli, Kalerm, and CAYE Bionic Barista robots delivering unmatched extraction consistency.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                  <a href="#products" class="btn-hero-white">
+                    Discover Equipment <i class="bi bi-arrow-right"></i>
+                  </a>
+                  <button class="btn btn-outline-light px-4 py-3 fw-bold text-uppercase d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#enquiryModal" style="border-radius: 6px; font-size: 14.5px; font-family: var(--kp-font-title);">
+                    Book A Demo <i class="bi bi-play-circle"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-item hero-carousel-item" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_28_santino_-_250522-07656.jpg');">
+          <div class="hero-overlay"></div>
+          <div class="container hero-content my-auto">
+            <div class="row">
+              <div class="col-xl-9 col-lg-10">
+                <span class="hero-tag"><i class="bi bi-shield-check me-1"></i> FSSC22000 & Rainforest Certified</span>
+                <h1 class="hero-title">Artisan Roastery &<br>Barista Academy</h1>
+                <p class="hero-desc">
+                  Decades of custom private label roasting expertise combined with world-class WBC & WBrC championship coaching for coffee leaders.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                  <a href="#services" class="btn-hero-white">
+                    Explore Academy <i class="bi bi-arrow-right"></i>
+                  </a>
+                  <button class="btn btn-outline-light px-4 py-3 fw-bold text-uppercase d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#enquiryModal" style="border-radius: 6px; font-size: 14.5px; font-family: var(--kp-font-title);">
+                    Request Samples <i class="bi bi-cup-hot"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
+
+      <!-- Carousel Nav Arrows -->
+      <button class="carousel-control-prev hero-carousel-btn start-0 ms-3 ms-md-4" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <i class="bi bi-chevron-left"></i>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next hero-carousel-btn end-0 me-3 me-md-4" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <i class="bi bi-chevron-right"></i>
+        <span class="visually-hidden">Next</span>
+      </button>
+
     </div>
 
     <!-- Live Counters Inside Hero Bottom -->
