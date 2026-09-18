@@ -72,4 +72,21 @@ document.addEventListener('DOMContentLoaded', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
+
+  const partnerContent = document.getElementById('partnerContent');
+  if (partnerContent) {
+    const list = [
+      { icon: 'bi-cart4 text-success', text: 'SHWAPNO' },
+      { icon: 'bi-shop text-danger', text: 'BFC' }
+    ];
+    let idx = 0;
+    setInterval(() => {
+      partnerContent.classList.add('fade-out');
+      setTimeout(() => {
+        idx = (idx + 1) % list.length;
+        partnerContent.innerHTML = `<i class="bi ${list[idx].icon}"></i> <span>${list[idx].text}</span>`;
+        partnerContent.classList.remove('fade-out');
+      }, 350);
+    }, 2500);
+  }
 });
