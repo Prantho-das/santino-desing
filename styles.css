@@ -1625,6 +1625,9 @@ a {
 /* --------------------------------------------------------------------------
    RESPONSIVE (MOBILE & TABLET)
    -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   RESPONSIVE (MOBILE & TABLET)
+   -------------------------------------------------------------------------- */
 @media (max-width: 991px) {
   .zigzag-col-image, .zigzag-col-text {
     flex: 1 1 100%;
@@ -1648,19 +1651,87 @@ a {
   }
   .hero-carousel-indicators {
     bottom: 20px;
+    right: 25px;
   }
   .hero-carousel-btn {
     display: none;
   }
-  .solutions-section, .about-video-section, .testimonials-section, .categories-section, .featured-products-section, .faq-section {
-    padding: 70px 0;
+  .solutions-section, .about-video-section, .testimonials-section, .categories-section, .featured-products-section, .faq-section, .retail-partners-section, .lead-section, .community-section, .newsletter-section {
+    padding: 65px 0;
   }
   .solution-card {
     min-height: 420px;
   }
+  .partner-hover-card {
+    height: 410px;
+  }
+  .lead-info-pane, .lead-form-pane {
+    padding: 40px 30px;
+  }
 }
 
 @media (max-width: 767px) {
+  .floating-side-bar {
+    gap: 6px;
+  }
+  .side-btn-enquiry {
+    display: none;
+  }
+  .side-btn-whatsapp, .side-btn-call {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+    border-radius: 8px 0 0 8px;
+  }
+
+  .partner-hover-card {
+    height: 380px;
+  }
+  .partner-brand-name {
+    font-size: 22px;
+  }
+  .partner-reveal-title {
+    font-size: 18.5px;
+  }
+  .partner-reveal-desc {
+    font-size: 13px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .partner-reveal-content {
+    padding: 24px 20px;
+  }
+  .partner-chips-row {
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .partner-chip {
+    font-size: 10.5px;
+    padding: 4px 10px;
+  }
+
+  .lead-info-pane, .lead-form-pane {
+    padding: 32px 20px;
+  }
+  .lead-pane-title {
+    font-size: 24px;
+  }
+  .lead-form-title {
+    font-size: 22px;
+  }
+
+  .newsletter-card-wrapper {
+    padding: 40px 18px;
+    border-radius: 18px;
+  }
+  .newsletter-title {
+    font-size: 24px;
+  }
+  .newsletter-desc {
+    font-size: 13.5px;
+    margin-bottom: 24px;
+  }
+
   .mobile-scroll-row {
     display: flex;
     flex-wrap: nowrap;
@@ -1674,6 +1745,23 @@ a {
     flex: 0 0 85%;
     max-width: 85%;
     scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 575px) {
+  .hero-title {
+    font-size: 1.85rem;
+  }
+  .hero-stat-number {
+    font-size: 1.8rem;
+  }
+  .lead-perks-list {
+    gap: 14px;
+  }
+  .lead-contact-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 }
 
