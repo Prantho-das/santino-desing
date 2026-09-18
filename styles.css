@@ -407,6 +407,126 @@ a {
 }
 
 /* --------------------------------------------------------------------------
+   1.5. RETAIL & FOODSERVICE PRESENCE (SHWAPNO & BFC)
+   -------------------------------------------------------------------------- */
+.retail-partners-section {
+  padding: 95px 0 85px;
+  background: var(--kp-grey-bg);
+  border-bottom: 1px solid var(--kp-border);
+}
+
+.partner-showcase-card {
+  background: #ffffff;
+  border-radius: var(--kp-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--kp-shadow-soft);
+  border: 1px solid var(--kp-border);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+}
+.partner-showcase-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--kp-shadow-hover);
+  border-color: var(--kp-gold);
+}
+
+.partner-card-media {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+}
+.partner-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.partner-showcase-card:hover .partner-card-media img {
+  transform: scale(1.06);
+}
+
+.partner-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%);
+}
+
+.partner-badge-pill {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  background: rgba(24, 24, 24, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--kp-gold);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-family: var(--kp-font-title);
+}
+
+.partner-logo-tag {
+  position: absolute;
+  bottom: 20px;
+  left: 25px;
+  z-index: 2;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 900;
+  font-family: var(--kp-font-title);
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.partner-card-body {
+  padding: 35px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+.partner-card-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--kp-dark);
+  margin-bottom: 12px;
+  font-family: var(--kp-font-title);
+}
+.partner-card-text {
+  font-size: 14.5px;
+  color: var(--kp-text-muted);
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+.btn-partner-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--kp-maroon);
+  font-weight: 800;
+  font-size: 13.5px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-family: var(--kp-font-title);
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.btn-partner-action:hover {
+  color: var(--kp-gold-dark);
+  transform: translateX(5px);
+}
+
+/* --------------------------------------------------------------------------
    2. ABOUT / VIDEO SECTION
    -------------------------------------------------------------------------- */
 .about-video-section {
