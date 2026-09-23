@@ -41,9 +41,9 @@
         <span>Email: <a href="mailto:sales@santino.com.bd">sales@santino.com.bd</a></span>
       </div>
       <div class="d-flex gap-3">
-        <a href="#about">About Us</a>
+        <a href="our-story.html">Our Story</a>
         <span>|</span>
-        <a href="#contact">Experience Center</a>
+        <a href="menu.html#branches">Find Our Cafes</a>
       </div>
     </div>
   </div>
@@ -58,14 +58,14 @@
           <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 68px; width: auto; object-fit: contain;">
         </a>
 
-        <!-- Desktop Menu -->
+        <!-- Desktop Menu 1 -->
         <nav class="d-none d-lg-flex align-items-center gap-1">
-          <a href="#" class="nav-link-custom active">Home</a>
-          <a href="#solutions" class="nav-link-custom">Solutions</a>
-          <a href="#services" class="nav-link-custom">Services</a>
-          <a href="#products" class="nav-link-custom">Equipment</a>
-          <a href="#faqs" class="nav-link-custom">FAQs</a>
-          <a href="#contact" class="nav-link-custom">Contact</a>
+          <a href="our-story.html" class="nav-link-custom">About Us</a>
+          <a href="machines.html" class="nav-link-custom">Machine</a>
+          <a href="beans.html" class="nav-link-custom">Beans</a>
+          <a href="training.html" class="nav-link-custom">Training</a>
+          <a href="office-cafe.html" class="nav-link-custom">Horeca</a>
+          <a href="office-cafe.html" class="nav-link-custom">Office Cafe</a>
         </nav>
 
         <!-- Right CTA Items -->
@@ -74,13 +74,13 @@
             <span>CONTACT US</span>
             <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
           </a>
-          <a href="#" class="text-dark fs-5"><i class="bi bi-search"></i></a>
-          <a href="#" class="text-dark fs-5 position-relative">
+          <a href="menu.html" class="text-dark fs-5" title="View Menu"><i class="bi bi-search"></i></a>
+          <a href="menu.html" class="text-dark fs-5 position-relative" title="Cart">
             <i class="bi bi-cart3"></i>
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">0</span>
           </a>
-          <!-- Mobile Hamburger -->
-          <button class="btn btn-outline-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+          <!-- Mobile Hamburger (Menu 1 Drawer) -->
+          <button class="btn btn-outline-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-label="Open Menu">
             <i class="bi bi-list fs-4"></i>
           </button>
         </div>
@@ -89,20 +89,20 @@
     </div>
   </header>
 
-  <!-- Mobile Offcanvas Menu -->
+  <!-- Mobile Offcanvas Menu (Menu 1 in Hamburger) -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
     <div class="offcanvas-header border-bottom">
       <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 52px; width: auto; object-fit: contain;">
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column justify-content-between">
       <div class="d-flex flex-column gap-3 fs-6 fw-bold text-uppercase">
-        <a href="#" class="text-dark py-2 border-bottom">Home</a>
-        <a href="#solutions" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Business Solutions</a>
-        <a href="#services" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Services & Training</a>
-        <a href="#products" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Commercial Machines</a>
-        <a href="#faqs" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">FAQs</a>
-        <a href="#contact" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Contact Us</a>
+        <a href="our-story.html" class="text-dark py-2 border-bottom">About Us</a>
+        <a href="machines.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Machine</a>
+        <a href="beans.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Beans</a>
+        <a href="training.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Training</a>
+        <a href="office-cafe.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Horeca</a>
+        <a href="office-cafe.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Office Cafe</a>
       </div>
       <div class="pt-4 border-top">
         <div class="small text-muted mb-2">HOTLINE SUPPORT:</div>
@@ -113,18 +113,26 @@
     </div>
   </div>
 
-  <!-- TOP CATEGORY SUB-BAR -->
-  <div class="top-category-bar d-none d-md-block">
-    <div class="container d-flex justify-content-center align-items-center gap-5">
-      <a href="#solutions"><i class="bi bi-building"></i> HOTELS</a>
-      <span class="text-muted">|</span>
-      <a href="#solutions"><i class="bi bi-cup-hot"></i> CAFES</a>
-      <span class="text-muted">|</span>
-      <a href="#solutions"><i class="bi bi-briefcase"></i> OFFICES</a>
-      <span class="text-muted">|</span>
-      <a href="#availability" class="dynamic-partner-link" id="topPartnerSlot" title="Available at Partner Outlets">
-        <span id="partnerContent" class="partner-content"><i class="bi bi-cart3"></i> SHWAPNO</span>
-      </a>
+  <!-- 2ND MENU BAR (Visible on Desktop and Mobile Screen) -->
+  <div class="top-category-bar second-menu-bar">
+    <div class="container-fluid px-2 px-lg-5">
+      <div class="second-menu-wrapper d-flex justify-content-center align-items-center gap-2 gap-sm-4 gap-md-5">
+        <a href="membership.html" class="second-menu-item">
+          <i class="bi bi-award-fill"></i> MEMBERSHIP
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="#bfc" class="second-menu-item">
+          <i class="bi bi-shop"></i> BFC
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="#swapno" class="second-menu-item">
+          <i class="bi bi-cart3"></i> SWAPNO
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="menu.html" class="second-menu-item">
+          <i class="bi bi-journal-text"></i> MENU
+        </a>
+      </div>
     </div>
   </div>
 
@@ -269,9 +277,9 @@
       <div class="row g-4">
         
         <!-- Partner 1: Shwapno Superstores -->
-        <div class="col-lg-6">
+        <div class="col-lg-6" id="swapno">
           <div class="partner-hover-card">
-            <div class="partner-hover-bg" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/shwapno_santino_retail.jpg');"></div>
+            <div class="partner-hover-bg" style="background-image: url('C:/Users/Administrator/.gemini/antigravity-ide/brain/a876d163-8d27-42c2-8f18-9d99c4f42038/shwapno_santino_retail_display_1790196968606.jpg');"></div>
             <div class="partner-hover-overlay"></div>
             
             <!-- Default State -->
@@ -305,9 +313,9 @@
         </div>
 
         <!-- Partner 2: BFC (Best Fried Chicken) -->
-        <div class="col-lg-6">
+        <div class="col-lg-6" id="bfc">
           <div class="partner-hover-card">
-            <div class="partner-hover-bg" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/bfc_santino_foodservice.jpg');"></div>
+            <div class="partner-hover-bg" style="background-image: url('C:/Users/Administrator/.gemini/antigravity-ide/brain/a876d163-8d27-42c2-8f18-9d99c4f42038/bfc_santino_restaurant_bar_1790196986545.jpg');"></div>
             <div class="partner-hover-overlay"></div>
             
             <!-- Default State -->
@@ -369,10 +377,10 @@
     </div>
   </section>
 
-  <!-- 3. "HOW WE CAN HELP" (3 SOLUTION CARDS) -->
+  <!-- 3. "HOW WE CAN HELP" (3 SOLUTION CARDS - HORECA & OFFICE CAFE) -->
   <section class="solutions-section" id="solutions">
-    <div class="container">
-      <div class="sec-heading-center">
+    <div class="container" id="horeca">
+      <div class="sec-heading-center" id="office-cafe">
         <h2 class="sec-title">Tailored Coffee Solutions</h2>
         <div class="sec-subtitle">Built around your needs, scale, and workflow</div>
       </div>
@@ -560,7 +568,7 @@
   </section>
 
   <!-- 7. PRODUCT CATEGORIES (Light Grey Cards + VIEW PRODUCTS →) -->
-  <section class="categories-section">
+  <section class="categories-section" id="beans">
     <div class="container">
       <div class="sec-heading-center">
         <h2 class="sec-title">Product Categories</h2>
@@ -935,7 +943,7 @@
   </section>
 
   <!-- 11. COMMUNITY ENGAGEMENT PROGRAMS -->
-  <section class="community-section">
+  <section class="community-section" id="training">
     <div class="container">
       <div class="sec-heading-center">
         <h2 class="sec-title">Academy & Competitions</h2>

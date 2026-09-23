@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Santino Coffee Club | VIP Privileges & Exclusive Member Perks</title>
+  <meta name="description" content="Join the Santino Coffee Club: Exclusive access to seasonal micro-lots, sensory cupping masterclasses, VIP roastery discounts, and private cafe privileges across Bangladesh.">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="membership-page-body bg-white">
+
+  <div class="floating-side-bar">
+    <a href="https://wa.me/8801700000000" target="_blank" class="side-btn-whatsapp" title="Chat on WhatsApp">
+      <i class="bi bi-whatsapp"></i>
+    </a>
+    <a href="tel:+8801700000000" class="side-btn-call" title="Call Sales & Service">
+      <i class="bi bi-telephone-fill"></i>
+    </a>
+    <button class="side-btn-enquiry" data-bs-toggle="modal" data-bs-target="#joinClubModal">
+      Join Club
+    </button>
+  </div>
+
+  <div class="top-contact-bar d-none d-lg-block">
+    <div class="container-fluid px-lg-5 d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span>For Service: <a href="tel:+8801700000000">+880 1700-000000</a></span>
+        <span>For Sales: <a href="tel:+8801800000000">+880 1800-000000</a></span>
+        <span>Email: <a href="mailto:sales@santino.com.bd">sales@santino.com.bd</a></span>
+      </div>
+      <div class="d-flex gap-3">
+        <a href="our-story.html">Our Story</a>
+        <span>|</span>
+        <a href="menu.html#branches">Find Our Cafes</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container-fluid px-lg-5 py-3">
+      <div class="d-flex align-items-center justify-content-between">
+        
+        <a href="index.html" class="d-flex align-items-center gap-2 py-1">
+          <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 68px; width: auto; object-fit: contain;">
+        </a>
+
+        <nav class="d-none d-lg-flex align-items-center gap-1">
+          <a href="our-story.html" class="nav-link-custom">About Us</a>
+          <a href="machines.html" class="nav-link-custom">Machine</a>
+          <a href="beans.html" class="nav-link-custom">Beans</a>
+          <a href="training.html" class="nav-link-custom">Training</a>
+          <a href="office-cafe.html" class="nav-link-custom">Horeca</a>
+          <a href="office-cafe.html" class="nav-link-custom">Office Cafe</a>
+        </nav>
+
+        <div class="d-flex align-items-center gap-3 gap-md-4">
+          <a href="tel:+8801700000000" class="d-none d-sm-flex align-items-center gap-2 text-dark fw-bold text-uppercase" style="font-size: 13px;">
+            <span>CONTACT US</span>
+            <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
+          </a>
+          <a href="menu.html" class="text-dark fs-5" title="View Menu"><i class="bi bi-search"></i></a>
+          <a href="menu.html" class="text-dark fs-5 position-relative" title="Cart">
+            <i class="bi bi-cart3"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">0</span>
+          </a>
+          <button class="btn btn-outline-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-label="Open Menu">
+            <i class="bi bi-list fs-4"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+    <div class="offcanvas-header border-bottom">
+      <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 52px; width: auto; object-fit: contain;">
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column justify-content-between">
+      <div class="d-flex flex-column gap-3 fs-6 fw-bold text-uppercase">
+        <a href="our-story.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">About Us</a>
+        <a href="machines.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Machine</a>
+        <a href="beans.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Beans</a>
+        <a href="training.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Training</a>
+        <a href="office-cafe.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Horeca</a>
+        <a href="office-cafe.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Office Cafe</a>
+      </div>
+      <div class="pt-4 border-top">
+        <div class="small text-muted mb-2">HOTLINE SUPPORT:</div>
+        <a href="tel:+8801700000000" class="btn btn-dark w-100 fw-bold py-2" style="background-color: var(--santino-teal); border: none;">
+          <i class="bi bi-telephone-fill me-2"></i> CALL US NOW
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-category-bar second-menu-bar">
+    <div class="container-fluid px-2 px-lg-5">
+      <div class="second-menu-wrapper d-flex justify-content-center align-items-center gap-2 gap-sm-4 gap-md-5">
+        <a href="membership.html" class="second-menu-item active" style="color: var(--santino-teal) !important; font-weight: 900;">
+          <i class="bi bi-award-fill"></i> MEMBERSHIP
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="index.html#bfc" class="second-menu-item">
+          <i class="bi bi-shop"></i> BFC
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="index.html#swapno" class="second-menu-item">
+          <i class="bi bi-cart3"></i> SWAPNO
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="menu.html" class="second-menu-item">
+          <i class="bi bi-journal-text"></i> MENU
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <section class="page-hero-section position-relative py-5 overflow-hidden" style="background: linear-gradient(145deg, #0e1a18 0%, #060d0c 100%); color: #ffffff;">
+    <div class="container py-lg-4">
+      <div class="row align-items-center g-5">
+        
+        <div class="col-lg-7 reveal-left">
+          <span class="feature-pill-tag feature-pill-tag-gold mb-3">
+            <i class="bi bi-gem me-1"></i> SANTINO COFFEE CLUB PRIVILEGES
+          </span>
+          <h1 class="display-4 font-heading fw-black text-white mb-3" style="letter-spacing: -1px; line-height: 1.15;">
+            An Exclusive Community for <br>
+            <span style="color: var(--santino-gold);">Specialty Coffee Connoisseurs</span>
+          </h1>
+          <p class="lead text-white-50 mb-4" style="font-size: 17px; max-width: 580px;">
+            Join the Santino Coffee Club to unlock bespoke tasting privileges, seasonal single-origin releases, private roastery masterclasses, and elevated hospitality across all our cafes.
+          </p>
+
+          <div class="d-flex flex-wrap gap-3 mb-4">
+            <a href="#joinClub" class="btn btn-lg fw-bold px-4 py-3 rounded-3 text-white shadow-lg hover-glow" style="background: var(--santino-teal); border: none;">
+              Join Coffee Club <i class="bi bi-arrow-right-short ms-1"></i>
+            </a>
+            <a href="#perks" class="btn btn-outline-light btn-lg fw-bold px-4 py-3 rounded-3">
+              Explore Privileges <i class="bi bi-arrow-down-short"></i>
+            </a>
+          </div>
+
+          <div class="d-flex flex-wrap gap-4 pt-3 border-top border-secondary border-opacity-25 text-white-50 small">
+            <div><i class="bi bi-check2-circle text-gold me-2"></i> Free Membership</div>
+            <div><i class="bi bi-check2-circle text-gold me-2"></i> Private Roastery Sessions</div>
+            <div><i class="bi bi-check2-circle text-gold me-2"></i> Exclusive Micro-Lot Access</div>
+          </div>
+        </div>
+
+        <div class="col-lg-5 reveal-right">
+          <div class="p-4 p-md-5 rounded-4 position-relative overflow-hidden hover-lift modern-glass-dark">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge px-3 py-2 text-dark font-heading fw-bold" style="background: var(--santino-gold);">VIP PRIVILEGES</span>
+              <span class="text-white-50 small"><i class="bi bi-star-fill text-warning me-1"></i> Signature Club</span>
+            </div>
+
+            <h3 class="font-heading fw-bold text-white mb-2">Curated Coffee Experiences</h3>
+            <p class="text-white-50 small mb-4">Enjoy direct invitations to private cupping sessions, priority roastery allocations, and bespoke brewing guidance.</p>
+            
+            <div class="d-flex flex-column gap-3 text-white small mb-4">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-cup-hot text-gold fs-5"></i>
+                <span>Complimentary seasonal tasting flight upon joining</span>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-percent text-gold fs-5"></i>
+                <span>15% Member privilege on all retail specialty beans</span>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-calendar-event text-gold fs-5"></i>
+                <span>Priority seating at Barista Academy workshops</span>
+              </div>
+            </div>
+
+            <a href="#joinClub" class="btn btn-outline-light w-100 py-3 fw-bold rounded-3 font-heading text-uppercase">
+              Activate Privileges
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="perks" style="background-color: #fafafa;">
+    <div class="container py-lg-4">
+      
+      <div class="text-center max-w-700 mx-auto mb-5 reveal">
+        <span class="badge-tag-pill mb-2"><i class="bi bi-award-fill text-teal me-1"></i> MEMBER PRIVILEGES</span>
+        <h2 class="display-6 font-heading fw-black text-dark mb-2">Crafted Exclusively For Coffee Lovers</h2>
+        <p class="text-muted">Discover the elevated benefits designed to enrich every sip and connection with our roastery.</p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        
+        <div class="col-lg-4 col-md-6 reveal" data-delay="100">
+          <div class="p-4 bg-white rounded-4 border h-100 shadow-sm d-flex flex-column justify-content-between hover-lift">
+            <div>
+              <div class="fs-1 text-teal mb-3"><i class="bi bi-patch-check"></i></div>
+              <h4 class="font-heading fw-bold text-dark mb-2">Priority Micro-Lot Reserves</h4>
+              <p class="text-muted small mb-0">Exclusive access to limited-edition championship lots, Geisha reserves, and anaerobic single-origin coffees before public release.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 reveal" data-delay="150">
+          <div class="p-4 bg-white rounded-4 border h-100 shadow-sm d-flex flex-column justify-content-between hover-lift">
+            <div>
+              <div class="fs-1 text-teal mb-3"><i class="bi bi-mortarboard"></i></div>
+              <h4 class="font-heading fw-bold text-dark mb-2">Private Cupping Masterclasses</h4>
+              <p class="text-muted small mb-0">Exclusive invitations to sensory cupping workshops led by certified SCA and WBC trainers at our Tejgaon roastery lab.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 reveal" data-delay="200">
+          <div class="p-4 bg-white rounded-4 border h-100 shadow-sm d-flex flex-column justify-content-between hover-lift">
+            <div>
+              <div class="fs-1 text-teal mb-3"><i class="bi bi-gift"></i></div>
+              <h4 class="font-heading fw-bold text-dark mb-2">Birthday Month Signature Treat</h4>
+              <p class="text-muted small mb-0">Celebrate your special day with a complimentary handcrafted signature latte or single-origin pour-over at any branch.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 reveal" data-delay="100">
+          <div class="p-4 bg-white rounded-4 border h-100 shadow-sm d-flex flex-column justify-content-between hover-lift">
+            <div>
+              <div class="fs-1 text-teal mb-3"><i class="bi bi-tag"></i></div>
+              <h4 class="font-heading fw-bold text-dark mb-2">15% Off Roasted Whole Beans</h4>
+              <p class="text-muted small mb-0">Enjoy preferential pricing on all 250g and 1kg bags of freshly roasted specialty coffee beans and filter packs.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 reveal" data-delay="150">
+          <div class="p-4 bg-white rounded-4 border h-100 shadow-sm d-flex flex-column justify-content-between hover-lift">
+            <div>
+              <div class="fs-1 text-teal mb-3"><i class="bi bi-gear-wide-connected"></i></div>
+              <h4 class="font-heading fw-bold text-dark mb-2">Home & Office Dial-In Support</h4>
+              <p class="text-muted small mb-0">Complimentary virtual or in-person dial-in consultations with our technicians to optimize your home espresso grinder or drip brewer.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 reveal" data-delay="200">
+          <div class="p-4 bg-white rounded-4 border h-100 shadow-sm d-flex flex-column justify-content-between hover-lift">
+            <div>
+              <div class="fs-1 text-teal mb-3"><i class="bi bi-lightning-charge"></i></div>
+              <h4 class="font-heading fw-bold text-dark mb-2">Express Order Ahead</h4>
+              <p class="text-muted small mb-0">Skip the line at busy morning hours through direct priority WhatsApp order-ahead service across all partner cafe branches.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section class="py-5" id="joinClub">
+    <div class="container py-lg-4">
+      <div class="row justify-content-center">
+        
+        <div class="col-lg-8 reveal">
+          <div class="p-4 p-md-5 rounded-4 bg-white border shadow-xl">
+            <div class="text-center mb-4">
+              <span class="badge-tag-pill mb-2"><i class="bi bi-person-check-fill text-teal me-1"></i> JOIN TODAY</span>
+              <h2 class="font-heading fw-bold mb-2">Register For Santino Coffee Club</h2>
+              <p class="text-muted small">Fill in your details below to activate your member privileges immediately.</p>
+            </div>
+
+            <form onsubmit="alert('Welcome to Santino Coffee Club! Your membership privileges are now active.'); return false;">
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Full Name *</label>
+                  <input type="text" class="form-control form-control-lg rounded-3 fs-6" placeholder="Your Name" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Phone Number / WhatsApp *</label>
+                  <input type="tel" class="form-control form-control-lg rounded-3 fs-6" placeholder="+880 1..." required>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Email Address *</label>
+                  <input type="email" class="form-control form-control-lg rounded-3 fs-6" placeholder="name@email.com" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Birthday (For Annual Gift Treat)</label>
+                  <input type="date" class="form-control form-control-lg rounded-3 fs-6">
+                </div>
+              </div>
+
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Preferred Home Cafe Branch</label>
+                  <select class="form-select form-select-lg rounded-3 fs-6">
+                    <option>Gulshan-2 Flagship Experience Center</option>
+                    <option>Banani Borak Mehnur</option>
+                    <option>Tejgaon Roastery & Lab</option>
+                    <option>Dhanmondi Ahmed & Kazi Tower</option>
+                    <option>Uttara Liberty Tower</option>
+                    <option>Baridhara Diplomatic Enclave</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Favorite Brewing Method</label>
+                  <select class="form-select form-select-lg rounded-3 fs-6">
+                    <option>Espresso & Handcrafted Milk Drinks</option>
+                    <option>Pour Over (V60 / Chemex) Single Origins</option>
+                    <option>Cold Brew & Nitro Innovations</option>
+                    <option>Automated Bean-to-Cup</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" id="termsCheck" checked required>
+                <label class="form-check-label small text-muted" for="termsCheck">
+                  I would like to receive invitations to private roastery cuppings and seasonal micro-lot announcements.
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-3 text-white font-heading text-uppercase shadow-lg hover-glow" style="background: var(--santino-teal); border: none; font-size: 15px;">
+                Activate My Membership Privileges →
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="w-full py-5 text-center text-white reveal" style="background: radial-gradient(circle at 50% 50%, #00625d 0%, #003633 100%);">
+    <div class="container py-4">
+      <span class="badge-tag-pill mb-3" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); color: #ffffff;">
+        VISIT OUR CAFES
+      </span>
+      <h3 class="display-5 font-heading fw-black mb-3">Taste The Santino Difference</h3>
+      <p class="lead text-white-50 mx-auto mb-4" style="max-width: 640px; font-size: 18px;">
+        Discover our signature handcrafted beverages, artisanal roasts, and modern cafe ambiance across Dhaka.
+      </p>
+      <a href="menu.html" class="btn btn-light btn-lg fw-bold px-5 py-3 text-uppercase rounded-3 font-heading shadow-lg hover-lift">
+        Explore Drinks Menu <i class="bi bi-arrow-right-short"></i>
+      </a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4">
+        
+        <div class="col-lg-4 col-md-6">
+          <div class="mb-3">
+            <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-white.png" alt="Santino Coffee" style="height: 60px; width: auto; object-fit: contain;">
+          </div>
+          <p class="text-secondary pe-lg-4">
+            Santino Coffee bridges heritage and innovation to empower coffee businesses and communities across Asia. Decades of roasting expertise backed by FSSC22000 food safety certification.
+          </p>
+          <div class="d-flex gap-3 fs-5 text-white mt-3">
+            <a href="https://facebook.com" target="_blank" class="text-secondary"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" class="text-secondary"><i class="bi bi-instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank" class="text-secondary"><i class="bi bi-linkedin"></i></a>
+            <a href="https://wa.me/8801700000000" target="_blank" class="text-secondary"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+          <h5 class="footer-title">Club & Menu</h5>
+          <ul class="footer-links">
+            <li><a href="membership.html">VIP Membership</a></li>
+            <li><a href="menu.html">Drinks Menu</a></li>
+            <li><a href="our-story.html">Roastery Story</a></li>
+            <li><a href="menu.html#branches">Cafe Outlets</a></li>
+            <li><a href="index.html#swapno">Shwapno Superstores</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5 class="footer-title">Equipment & Beans</h5>
+          <ul class="footer-links">
+            <li><a href="machines.html">Victoria Arduino</a></li>
+            <li><a href="machines.html">Nuova Simonelli</a></li>
+            <li><a href="machines.html">CAYE Bionic Barista</a></li>
+            <li><a href="beans.html">Rainforest Alliance Beans</a></li>
+            <li><a href="training.html">Barista Academy</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5 class="footer-title">Santino Experience</h5>
+          <p class="text-secondary mb-1"><i class="bi bi-geo-alt me-2 text-danger"></i> Singapore & Bangladesh Hub</p>
+          <p class="text-secondary mb-1"><i class="bi bi-telephone me-2 text-danger"></i> +880 1700-000000</p>
+          <p class="text-secondary mb-1"><i class="bi bi-envelope me-2 text-danger"></i> sales@santino.com.bd</p>
+          <p class="text-secondary mb-1"><i class="bi bi-globe me-2 text-danger"></i> santino.com.sg</p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center">
+        <div>© 2026 Santino Coffee. All Rights Reserved. Innovation Grounded in Heritage.</div>
+        <div class="d-flex gap-4 mt-2 mt-md-0">
+          <a href="#" class="text-secondary">Privacy Policy</a>
+          <a href="#" class="text-secondary">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal fade" id="joinClubModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 p-4">
+        <div class="modal-header border-0 pb-0">
+          <h4 class="modal-title font-heading fw-bold">Join Coffee Club</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small mb-4">Receive priority allocations on micro-lots and invites to private roastery cuppings.</p>
+          <form onsubmit="alert('Welcome to Santino Coffee Club!'); return false;">
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Full Name *</label>
+              <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Phone Number *</label>
+              <input type="tel" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Email Address *</label>
+              <input type="email" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-dark w-100 py-3 fw-bold" style="background-color: var(--santino-teal); border: none;">
+              ACTIVATE PRIVILEGES
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

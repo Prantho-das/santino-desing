@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barista Academy & Sensory Training | Santino Bangladesh</title>
+  <meta name="description" content="Santino Barista Academy: Hands-on commercial espresso calibration, latte art masterclasses, sensory cupping, and cafe staff upskilling on Victoria Arduino machines.">
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="training-page-body bg-white">
+
+  <!-- Floating Sticky Action Bar -->
+  <div class="floating-side-bar">
+    <a href="https://wa.me/8801700000000" target="_blank" class="side-btn-whatsapp" title="Chat on WhatsApp">
+      <i class="bi bi-whatsapp"></i>
+    </a>
+    <a href="tel:+8801700000000" class="side-btn-call" title="Call Sales & Service">
+      <i class="bi bi-telephone-fill"></i>
+    </a>
+    <button class="side-btn-enquiry" data-bs-toggle="modal" data-bs-target="#enrollModal">
+      Book Visit
+    </button>
+  </div>
+
+  <!-- Top Contact Bar (Desktop) -->
+  <div class="top-contact-bar d-none d-lg-block">
+    <div class="container-fluid px-lg-5 d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span>For Service: <a href="tel:+8801700000000">+880 1700-000000</a></span>
+        <span>For Academy: <a href="tel:+8801800000000">+880 1800-000000</a></span>
+        <span>Email: <a href="mailto:academy@santino.com.bd">academy@santino.com.bd</a></span>
+      </div>
+      <div class="d-flex gap-3">
+        <a href="our-story.html">Our Story</a>
+        <span>|</span>
+        <a href="menu.html#branches">Find Our Cafes</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="site-header">
+    <div class="container-fluid px-lg-5 py-3">
+      <div class="d-flex align-items-center justify-content-between">
+        
+        <!-- Logo -->
+        <a href="index.html" class="d-flex align-items-center gap-2 py-1">
+          <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 68px; width: auto; object-fit: contain;">
+        </a>
+
+        <!-- Desktop Menu 1 -->
+        <nav class="d-none d-lg-flex align-items-center gap-1">
+          <a href="our-story.html" class="nav-link-custom">About Us</a>
+          <a href="machines.html" class="nav-link-custom">Machine</a>
+          <a href="beans.html" class="nav-link-custom">Beans</a>
+          <a href="training.html" class="nav-link-custom active">Training</a>
+          <a href="office-cafe.html" class="nav-link-custom">Horeca</a>
+          <a href="office-cafe.html" class="nav-link-custom">Office Cafe</a>
+        </nav>
+
+        <!-- Right CTA Items -->
+        <div class="d-flex align-items-center gap-3 gap-md-4">
+          <a href="tel:+8801700000000" class="d-none d-sm-flex align-items-center gap-2 text-dark fw-bold text-uppercase" style="font-size: 13px;">
+            <span>CONTACT US</span>
+            <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
+          </a>
+          <a href="menu.html" class="text-dark fs-5" title="View Menu"><i class="bi bi-search"></i></a>
+          <a href="menu.html" class="text-dark fs-5 position-relative" title="Cart">
+            <i class="bi bi-cart3"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">0</span>
+          </a>
+          <!-- Mobile Hamburger -->
+          <button class="btn btn-outline-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-label="Open Menu">
+            <i class="bi bi-list fs-4"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Offcanvas Menu -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+    <div class="offcanvas-header border-bottom">
+      <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 52px; width: auto; object-fit: contain;">
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column justify-content-between">
+      <div class="d-flex flex-column gap-3 fs-6 fw-bold text-uppercase">
+        <a href="our-story.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">About Us</a>
+        <a href="machines.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Machine</a>
+        <a href="beans.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Beans</a>
+        <a href="training.html" class="text-dark py-2 border-bottom text-teal" data-bs-dismiss="offcanvas">Training</a>
+        <a href="office-cafe.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Horeca</a>
+        <a href="office-cafe.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Office Cafe</a>
+      </div>
+      <div class="pt-4 border-top">
+        <div class="small text-muted mb-2">HOTLINE SUPPORT:</div>
+        <a href="tel:+8801700000000" class="btn btn-dark w-100 fw-bold py-2" style="background-color: var(--santino-teal); border: none;">
+          <i class="bi bi-telephone-fill me-2"></i> CALL US NOW
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2ND MENU BAR -->
+  <div class="top-category-bar second-menu-bar">
+    <div class="container-fluid px-2 px-lg-5">
+      <div class="second-menu-wrapper d-flex justify-content-center align-items-center gap-2 gap-sm-4 gap-md-5">
+        <a href="membership.html" class="second-menu-item">
+          <i class="bi bi-award-fill"></i> MEMBERSHIP
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="index.html#bfc" class="second-menu-item">
+          <i class="bi bi-shop"></i> BFC
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="index.html#swapno" class="second-menu-item">
+          <i class="bi bi-cart3"></i> SWAPNO
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="menu.html" class="second-menu-item">
+          <i class="bi bi-journal-text"></i> MENU
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. TRAINING HERO BANNER -->
+  <section class="page-hero-section position-relative py-5 overflow-hidden">
+    <div class="container py-lg-4">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7 reveal-left">
+          <span class="badge-tag-pill mb-3">
+            <i class="bi bi-trophy-fill text-warning me-1"></i> SPECIALTY BARISTA ACADEMY & SENSORY LAB
+          </span>
+          <h1 class="page-hero-title">
+            How We Train Baristas & Cafe Leaders
+          </h1>
+          <p class="page-hero-desc">
+            We don’t just teach recipes — we build mastery. From grinder particle dynamics and milk microfoam thermodynamics to sensory cupping calibration and high-speed commercial workflow on championship Italian multi-boiler machinery.
+          </p>
+          <div class="d-flex flex-wrap gap-3 mt-4">
+            <button class="btn btn-dark btn-lg fw-bold px-4 py-3 rounded-3 hover-glow" style="background-color: var(--santino-teal); border: none;" data-bs-toggle="modal" data-bs-target="#enrollModal">
+              Schedule An Academy Visit <i class="bi bi-arrow-right-short ms-1"></i>
+            </button>
+            <a href="#howWeTrain" class="btn btn-outline-dark btn-lg fw-bold px-4 py-3 rounded-3">
+              Explore Our Training Methods <i class="bi bi-arrow-down-short"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-5 reveal-right">
+          <div class="p-4 rounded-4 text-white shadow-2xl position-relative overflow-hidden hover-lift" style="background: linear-gradient(135deg, #162422 0%, #0c1715 100%);">
+            <span class="badge bg-warning text-dark text-uppercase px-3 py-1 mb-3 fw-bold">SMALL BATCH LEARNING</span>
+            <h3 class="font-heading fw-bold mb-1">Max 4 to 6 Students Per Session</h3>
+            <p class="text-white-50 small mb-3">Guaranteed 80% Practical Hands-On Bar Time</p>
+            <div class="hover-img-zoom text-center">
+              <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_24_santino_-_250522-07240.jpg" alt="Barista Training" class="w-100 rounded-3 my-2 object-fit-cover" style="max-height: 220px;">
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-secondary">
+              <span class="text-gold fw-bold">Commercial Multi-Boilers</span>
+              <button class="btn btn-sm btn-outline-light px-3 py-2 fw-bold" data-bs-toggle="modal" data-bs-target="#enrollModal">Download Brochure</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. CORE METHODOLOGY STATS -->
+  <section class="py-4 border-top border-bottom bg-light reveal">
+    <div class="container">
+      <div class="row g-4 text-center">
+        <div class="col-md-3 col-6">
+          <div class="fs-2 fw-black text-dark font-heading">80%</div>
+          <div class="small text-muted fw-bold text-uppercase">Practical Hands-On Bar Practice</div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="fs-2 fw-black text-teal font-heading">1 : 2</div>
+          <div class="small text-muted fw-bold text-uppercase">Trainer to Machine Ratio</div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="fs-2 fw-black text-dark font-heading">100%</div>
+          <div class="small text-muted fw-bold text-uppercase">Specialty Grade Single Origins Used</div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="fs-2 fw-black text-gold font-heading">SCA & WBC</div>
+          <div class="small text-muted fw-bold text-uppercase">Standard Calibration Protocols</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. HOW WE TRAIN - DETAILED STEP-BY-STEP CHAPTERS (WITH IMAGES & DESCRIPTIONS) -->
+  <section class="py-5" id="howWeTrain">
+    <div class="container py-lg-4">
+      
+      <div class="text-center max-w-700 mx-auto mb-5 reveal">
+        <span class="badge-tag-pill mb-2"><i class="bi bi-mortarboard-fill text-teal me-1"></i> PEDAGOGY & METHODOLOGY</span>
+        <h2 class="display-6 font-heading fw-black text-dark mb-2">Our Hands-On Barista Training Pillars</h2>
+        <p class="text-muted">A deep dive into how our certified master instructors guide you from coffee science fundamentals to commercial bar mastery.</p>
+      </div>
+
+      <!-- Pillar 1: Espresso Extraction & Grinder Calibration -->
+      <div class="row align-items-center g-5 py-4 border-bottom">
+        <div class="col-lg-6 reveal-left">
+          <span class="badge bg-dark text-gold font-heading px-3 py-1 mb-3">PILLAR 01</span>
+          <h3 class="display-6 font-heading fw-bold text-dark mb-3">Scientific Espresso Extraction & Grinder Dial-In</h3>
+          <p class="text-muted mb-3">
+            Every great beverage starts with an uncompromising espresso shot. We train you in the physics and chemistry of extraction — teaching you how to analyze brew ratios (1:2 to 1:2.5), contact time, water temperature stability, and pump pressure profiles.
+          </p>
+          <ul class="list-unstyled d-flex flex-column gap-2 text-dark small mb-4">
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Grinder Particle Distribution:</strong> Micrometric burr calibration for single-origin vs blends</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Dose & Distribution:</strong> WDT needle technique, level tamping, and avoiding channeling</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Yield & Flow Rate:</strong> Gravimetric scale extraction and TDS refractometer monitoring</li>
+          </ul>
+        </div>
+        <div class="col-lg-6 reveal-right">
+          <div class="rounded-4 overflow-hidden shadow-lg position-relative hover-img-zoom">
+            <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_23_santino_-_250522-07495.jpg" alt="Grinder Calibration & Espresso Dial-In" class="w-100 object-fit-cover" style="height: 380px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 2: Milk Science & Free-Pour Latte Art -->
+      <div class="row align-items-center g-5 py-5 border-bottom flex-lg-row-reverse">
+        <div class="col-lg-6 reveal-right">
+          <span class="badge bg-teal text-white font-heading px-3 py-1 mb-3" style="background-color: var(--santino-teal);">PILLAR 02</span>
+          <h3 class="display-6 font-heading fw-bold text-dark mb-3">Milk Thermodynamics & Free-Pour Latte Art</h3>
+          <p class="text-muted mb-3">
+            Achieving silky, glossy microfoam requires precision steam wand control. Trainees master vortex creation, stretching vs rolling phases, and milk protein denaturation at optimal 60°C – 65°C serving temperatures.
+          </p>
+          <ul class="list-unstyled d-flex flex-column gap-2 text-dark small mb-4">
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Microfoam Mechanics:</strong> Zero-bubble glossy texture for velvet mouthfeel</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Symmetric Free-Pour:</strong> Heart, Rosetta, Tulip, and complex multi-tier patterns</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Alternative Milks:</strong> Steaming techniques for Oat, Almond, and Soy proteins</li>
+          </ul>
+        </div>
+        <div class="col-lg-6 reveal-left">
+          <div class="rounded-4 overflow-hidden shadow-lg position-relative hover-img-zoom">
+            <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_26_santino_-_250522-07312.jpg" alt="Latte Art & Milk Steaming" class="w-100 object-fit-cover" style="height: 380px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 3: Sensory Cupping & SCA Tasting Calibration -->
+      <div class="row align-items-center g-5 py-5 border-bottom">
+        <div class="col-lg-6 reveal-left">
+          <span class="badge bg-dark text-gold font-heading px-3 py-1 mb-3">PILLAR 03</span>
+          <h3 class="display-6 font-heading fw-bold text-dark mb-3">Sensory Cupping & SCA Flavor Wheel Calibration</h3>
+          <p class="text-muted mb-3">
+            Develop an elite palate capable of distinguishing subtle terroir nuances across Africa, Central America, and Asia. Trainees learn standardized Specialty Coffee Association (SCA) cupping protocols, breaking crusts, and identifying positive vs defective attributes.
+          </p>
+          <ul class="list-unstyled d-flex flex-column gap-2 text-dark small mb-4">
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Flavor Descriptors:</strong> Floral, citric acidity, stone fruit, caramel, and nutty notes</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Extraction Balance:</strong> Diagnosing sour under-extraction vs bitter over-extraction</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Water Chemistry:</strong> How TDS, calcium, and magnesium alter flavor perception</li>
+          </ul>
+        </div>
+        <div class="col-lg-6 reveal-right">
+          <div class="rounded-4 overflow-hidden shadow-lg position-relative hover-img-zoom">
+            <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_27_santino_-_250522-07216.jpg" alt="Manual Brewing & Sensory Cupping" class="w-100 object-fit-cover" style="height: 380px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 4: High-Volume Commercial Bar Speed & Workflow -->
+      <div class="row align-items-center g-5 py-5 border-bottom flex-lg-row-reverse">
+        <div class="col-lg-6 reveal-right">
+          <span class="badge bg-teal text-white font-heading px-3 py-1 mb-3" style="background-color: var(--santino-teal);">PILLAR 04</span>
+          <h3 class="display-6 font-heading fw-bold text-dark mb-3">Rush Hour Speed, Multi-Order Sequencing & Bar Ergonomics</h3>
+          <p class="text-muted mb-3">
+            Being a top barista isn’t just about making one great cup — it’s about making 200 perfect cups during morning peak rushes. We simulate high-pressure cafe environments, multi-ticket sequencing, and split-second bar coordination.
+          </p>
+          <ul class="list-unstyled d-flex flex-column gap-2 text-dark small mb-4">
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Simultaneous Order Execution:</strong> Preparing milk and pulling shots synchronously</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Bar Ergonomics:</strong> Waste-free motion flow, knockbox speed, and cup staging</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Beverage Consistency:</strong> Ensuring the 100th cup tastes identical to the 1st</li>
+          </ul>
+        </div>
+        <div class="col-lg-6 reveal-left">
+          <div class="rounded-4 overflow-hidden shadow-lg position-relative hover-img-zoom">
+            <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_28_santino_-_250522-07656.jpg" alt="High Speed Cafe Workflow Training" class="w-100 object-fit-cover" style="height: 380px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 5: Preventive Maintenance & Machine Hygiene -->
+      <div class="row align-items-center g-5 py-5">
+        <div class="col-lg-6 reveal-left">
+          <span class="badge bg-dark text-gold font-heading px-3 py-1 mb-3">PILLAR 05</span>
+          <h3 class="display-6 font-heading fw-bold text-dark mb-3">Equipment Preventive Care & Grouphead Hygiene</h3>
+          <p class="text-muted mb-3">
+            Great coffee cannot come from dirty machinery. We train every student in chemical backflushing, steam wand purging, shower screen maintenance, and burr inspection so cafes run smoothly with zero preventable breakdowns.
+          </p>
+          <ul class="list-unstyled d-flex flex-column gap-2 text-dark small mb-4">
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Daily Chemical Backflushing:</strong> Cafiza detergent cleaning SOP</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Gasket & Screen Maintenance:</strong> Replacement and descaling routines</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Water Filtration Audits:</strong> Preventing limescale build-up in boilers</li>
+          </ul>
+        </div>
+        <div class="col-lg-6 reveal-right">
+          <div class="rounded-4 overflow-hidden shadow-lg position-relative hover-img-zoom">
+            <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_25_santino_-_250522-07618.jpg" alt="Machine Maintenance and Care" class="w-100 object-fit-cover" style="height: 380px;">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. WHO WE TRAIN -->
+  <section class="py-5 bg-light">
+    <div class="container py-lg-4">
+      
+      <div class="text-center max-w-700 mx-auto mb-5 reveal">
+        <span class="badge-tag-pill mb-2"><i class="bi bi-people-fill text-teal me-1"></i> TAILORED PROGRAMS</span>
+        <h2 class="display-6 font-heading fw-black text-dark mb-2">Training Programs For Every Ambition</h2>
+        <p class="text-muted">Whether you are stepping behind the espresso bar for the first time or training an entire hotel team.</p>
+      </div>
+
+      <div class="row g-4">
+        
+        <div class="col-lg-4 col-md-6 reveal" data-delay="100">
+          <div class="p-4 bg-white rounded-4 border h-100 shadow-sm d-flex flex-column justify-content-between hover-lift">
+            <div>
+              <div class="fs-1 text-teal mb-3"><i class="bi bi-person-workspace"></i></div>
+              <h4 class="font-heading fw-bold text-dark mb-2">Aspiring Professional Baristas</h4>
+              <p class="text-muted small">Intensive hands-on foundations for individuals seeking career opportunities in specialty cafes locally or internationally.</p>
+            </div>
+            <button class="btn btn-outline-dark w-100 py-2 fw-bold mt-4 font-heading" data-bs-toggle="modal" data-bs-target="#enrollModal">
+              Inquire Program Details
+            </button>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 reveal" data-delay="200">
+          <div class="p-4 bg-white rounded-4 border h-100 shadow-sm d-flex flex-column justify-content-between hover-lift">
+            <div>
+              <div class="fs-1 text-teal mb-3"><i class="bi bi-shop-window"></i></div>
+              <h4 class="font-heading fw-bold text-dark mb-2">Cafe Owners & Entrepreneurs</h4>
+              <p class="text-muted small">Learn equipment selection, beverage costing (COGS), bar ergonomics, workflow layout, and recipe standardization.</p>
+            </div>
+            <button class="btn btn-outline-dark w-100 py-2 fw-bold mt-4 font-heading" data-bs-toggle="modal" data-bs-target="#enrollModal">
+              Inquire Program Details
+            </button>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-12 reveal" data-delay="300">
+          <div class="p-4 bg-white rounded-4 border h-100 shadow-sm d-flex flex-column justify-content-between hover-lift">
+            <div>
+              <div class="fs-1 text-teal mb-3"><i class="bi bi-building"></i></div>
+              <h4 class="font-heading fw-bold text-dark mb-2">Hotels, Restaurants & Corporate Teams</h4>
+              <p class="text-muted small">Customized on-site or showroom group training for 5-star hotel hospitality staff, restaurant chains, and corporate pantries.</p>
+            </div>
+            <button class="btn btn-outline-dark w-100 py-2 fw-bold mt-4 font-heading" data-bs-toggle="modal" data-bs-target="#enrollModal">
+              Inquire Program Details
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. BANNER CTA -->
+  <section class="w-full py-5 text-center text-white reveal" style="background: radial-gradient(circle at 50% 50%, #00625d 0%, #003633 100%);">
+    <div class="container py-4">
+      <span class="badge-tag-pill mb-3" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); color: #ffffff;">
+        VISIT OUR DHAKA ACADEMY
+      </span>
+      <h3 class="display-5 font-heading fw-black mb-3">Ready to Elevate Your Coffee Skills?</h3>
+      <p class="lead text-white-50 mx-auto mb-4" style="max-width: 640px; font-size: 18px;">
+        Schedule a visit to our academy showroom, experience our machines live, and consult with our certified master trainers.
+      </p>
+      <button class="btn btn-light btn-lg fw-bold px-5 py-3 text-uppercase rounded-3 font-heading shadow-lg hover-lift" data-bs-toggle="modal" data-bs-target="#enrollModal">
+        Book Academy Tour & Consultation <i class="bi bi-arrow-right-short"></i>
+      </button>
+    </div>
+  </section>
+
+
+  <!-- ACADEMY CONSULTATION & VISIT MODAL -->
+  <div class="modal fade" id="enrollModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content rounded-4 border-0 p-4 p-md-5">
+        <div class="modal-header border-0 pb-0">
+          <div>
+            <span class="badge mb-2 px-3 py-1 text-dark" style="background: var(--santino-gold);">ACADEMY INQUIRY</span>
+            <h3 class="modal-title font-heading fw-bold">Book Academy Visit & Consultation</h3>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body pt-3">
+          <p class="text-muted small mb-4">Fill out the form below to connect with our academy instructors and receive detailed course syllabus information.</p>
+          <form onsubmit="alert('Thank you! Our academy coordinator will contact you shortly with batch schedule details.'); return false;">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Full Name *</label>
+                <input type="text" class="form-control form-control-lg rounded-3 fs-6" placeholder="Your Name" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Phone Number / WhatsApp *</label>
+                <input type="tel" class="form-control form-control-lg rounded-3 fs-6" placeholder="+880 1..." required>
+              </div>
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Email Address *</label>
+                <input type="email" class="form-control form-control-lg rounded-3 fs-6" placeholder="name@email.com" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">I Am Inquiring As</label>
+                <select class="form-select form-select-lg rounded-3 fs-6">
+                  <option>Individual Aspiring Barista</option>
+                  <option>Cafe Owner / Entrepreneur</option>
+                  <option>Hotel / Restaurant / Corporate Team</option>
+                  <option>Coffee Enthusiast / Home Brewer</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label small fw-bold">Preferred Training Focus</label>
+              <select class="form-select form-select-lg rounded-3 fs-6">
+                <option>Foundation Barista & Espresso Extraction</option>
+                <option>Advanced Latte Art & Milk Steaming</option>
+                <option>Sensory Cupping & Manual Brewing (SCA)</option>
+                <option>Competition Coaching (WBC / WBrC)</option>
+                <option>Custom Corporate / Hospitality Team Training</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-3 text-white font-heading text-uppercase shadow-lg" style="background: var(--santino-teal); border: none; font-size: 15px;">
+              Submit Training Inquiry →
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4">
+        
+        <div class="col-lg-4 col-md-6">
+          <div class="mb-3">
+            <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-white.png" alt="Santino Coffee" style="height: 60px; width: auto; object-fit: contain;">
+          </div>
+          <p class="text-secondary pe-lg-4">
+            Santino Coffee bridges heritage and innovation to empower coffee businesses and communities across Asia. Decades of roasting expertise backed by FSSC22000 food safety certification.
+          </p>
+          <div class="d-flex gap-3 fs-5 text-white mt-3">
+            <a href="https://facebook.com" target="_blank" class="text-secondary"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" class="text-secondary"><i class="bi bi-instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank" class="text-secondary"><i class="bi bi-linkedin"></i></a>
+            <a href="https://wa.me/8801700000000" target="_blank" class="text-secondary"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+          <h5 class="footer-title">Academy & Story</h5>
+          <ul class="footer-links">
+            <li><a href="training.html">Barista Foundations</a></li>
+            <li><a href="training.html">Latte Art Mastery</a></li>
+            <li><a href="training.html">Sensory Cupping</a></li>
+            <li><a href="training.html">Corporate Training</a></li>
+            <li><a href="our-story.html">Our Story</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5 class="footer-title">Equipment & Beans</h5>
+          <ul class="footer-links">
+            <li><a href="machines.html">Victoria Arduino</a></li>
+            <li><a href="machines.html">Kalerm Touchscreens</a></li>
+            <li><a href="machines.html">CAYE Robotics</a></li>
+            <li><a href="beans.html">The Green Label</a></li>
+            <li><a href="membership.html">VIP Membership</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5 class="footer-title">Santino Experience</h5>
+          <p class="text-secondary mb-1"><i class="bi bi-geo-alt me-2 text-danger"></i> Singapore & Bangladesh Hub</p>
+          <p class="text-secondary mb-1"><i class="bi bi-telephone me-2 text-danger"></i> +880 1700-000000</p>
+          <p class="text-secondary mb-1"><i class="bi bi-envelope me-2 text-danger"></i> academy@santino.com.bd</p>
+          <p class="text-secondary mb-1"><i class="bi bi-globe me-2 text-danger"></i> santino.com.sg</p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center">
+        <div>© 2026 Santino Coffee. All Rights Reserved. Barista Academy & Sensory Lab.</div>
+        <div class="d-flex gap-4 mt-2 mt-md-0">
+          <a href="#" class="text-secondary">Privacy Policy</a>
+          <a href="#" class="text-secondary">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
