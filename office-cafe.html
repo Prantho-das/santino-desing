@@ -344,7 +344,7 @@
   </div>
 
   <!-- MINIMAL CLEAN OFFICE CAFE HERO -->
-  <section class="pro-banner-hero" style="background-image: url('images/imgi_20_santino_-_250522-07574.jpg'); background-position: center; min-height: 52vh;">
+  <section class="pro-banner-hero" style="background-image: url('images/bd-office-coffee.jpg'); background-position: center; min-height: 52vh;">
     <div class="pro-banner-overlay" style="background: linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.45) 100%);"></div>
     <div class="pro-banner-glow-line"></div>
     
@@ -368,11 +368,11 @@
 
       <!-- Action Buttons -->
       <div class="pro-banner-actions">
-        <button class="pro-btn-gold" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
+        <button class="btn-hero-lifestyle" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
           <span>Book Free Office Trial</span>
           <i class="bi bi-cup-hot-fill"></i>
         </button>
-        <a href="#calculator" class="pro-btn-frosted">
+        <a href="#calculator" class="btn-hero-outline">
           <i class="bi bi-calculator fs-5 text-gold"></i>
           <span>Savings Calculator</span>
         </a>
@@ -521,34 +521,35 @@
   </section>
 
   <!-- 4. INTERACTIVE ROI & COFFEE ESTIMATOR CALCULATOR -->
-  <section class="py-5" id="calculator">
+  <section class="py-5" id="calculator" style="background-color: #fbf9f5;">
     <div class="container py-lg-4">
       
-      <div class="calculator-box reveal">
+      <div class="bg-white rounded-4 p-4 p-md-5 shadow-sm border reveal" style="border-color: rgba(0, 98, 93, 0.12) !important;">
         <div class="row align-items-center g-5">
           
           <div class="col-lg-6">
-            <span class="badge px-3 py-2 text-dark font-heading fw-bold mb-3" style="background: var(--santino-gold);">OFFICE COFFEE ESTIMATOR</span>
-            <h2 class="display-6 font-heading fw-black text-white mb-3">Calculate Your Monthly Workplace Coffee Savings</h2>
-            <p class="text-white-50 mb-4">
-              Compare the true cost of employee takeaway runs and single-use capsules with Santino’s fully managed bean-to-cup solution.
+            <span class="badge-tag-pill mb-3"><i class="bi bi-calculator me-1"></i> WORKPLACE ROI ESTIMATOR</span>
+            <h2 class="display-6 font-heading fw-bold text-dark mb-3">Calculate Your Monthly Workplace Coffee Savings</h2>
+            <p class="text-muted mb-4" style="font-size: 0.98rem; line-height: 1.6;">
+              Compare the true cost of employee takeaway cafe runs and single-use capsules with Santino’s fully managed bean-to-cup office solution.
             </p>
 
-            <div class="mb-4">
-              <label class="form-label text-white fw-bold d-flex justify-content-between">
-                <span>Select Your Office Team Size:</span>
-                <span id="staffCountText" class="text-gold fw-bold fs-5">50 Employees</span>
+            <div class="mb-4 bg-light p-4 rounded-4 border">
+              <label class="form-label text-dark fw-bold d-flex justify-content-between align-items-center mb-2">
+                <span>Select Office Team Size:</span>
+                <span id="staffCountText" class="fw-black fs-5" style="color: var(--santino-teal);">50 Employees</span>
               </label>
-              <input type="range" class="form-range" id="staffRange" min="10" max="300" step="10" value="50" oninput="updateCalculator(this.value)">
-              <div class="d-flex justify-content-between text-white-50 small mt-1">
+              <input type="range" class="form-range" id="staffRange" min="10" max="300" step="10" value="50" oninput="updateCalculator(this.value)" style="accent-color: var(--santino-teal); height: 8px;">
+              <div class="d-flex justify-content-between text-muted small mt-2 fw-semibold">
                 <span>10 Staff (Boutique)</span>
                 <span>150 Staff (HQ)</span>
                 <span>300+ (Enterprise)</span>
               </div>
             </div>
 
-            <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 text-white-50 small">
-              <i class="bi bi-info-circle text-gold me-2"></i> Based on average 2 cups per coffee drinker per day, eliminating 30+ mins employee away time per coffee run.
+            <div class="p-3 rounded-3 bg-light border text-muted small d-flex align-items-start gap-2">
+              <i class="bi bi-info-circle-fill text-teal mt-0.5" style="color: var(--santino-teal);"></i>
+              <span>Calculated based on 2 cups per employee daily, eliminating 30+ minutes coffee away-time.</span>
             </div>
           </div>
 
@@ -556,30 +557,33 @@
             <div class="row g-3">
               
               <div class="col-sm-6">
-                <div class="calc-result-badge hover-lift">
-                  <div class="text-white-50 small text-uppercase fw-bold mb-1">Est. Daily Cups</div>
-                  <div class="calc-result-num" id="dailyCupsDisplay">100</div>
-                  <div class="text-white-50 small">Fresh Barista Drinks</div>
+                <div class="p-4 rounded-4 bg-light border text-center hover-lift h-100">
+                  <div class="text-muted small text-uppercase fw-bold mb-1" style="font-size: 11px; letter-spacing: 0.5px;">Est. Daily Cups</div>
+                  <div class="display-6 fw-black mb-1" id="dailyCupsDisplay" style="color: var(--santino-teal); font-family: var(--kp-font-title);">100</div>
+                  <div class="text-muted small">Fresh Barista Servings</div>
                 </div>
               </div>
 
               <div class="col-sm-6">
-                <div class="calc-result-badge hover-lift">
-                  <div class="text-white-50 small text-uppercase fw-bold mb-1">Monthly Roasted Beans</div>
-                  <div class="calc-result-num" id="monthlyBeansDisplay">22 kg</div>
-                  <div class="text-white-50 small">Specialty Fresh Beans</div>
+                <div class="p-4 rounded-4 bg-light border text-center hover-lift h-100">
+                  <div class="text-muted small text-uppercase fw-bold mb-1" style="font-size: 11px; letter-spacing: 0.5px;">Monthly Beans</div>
+                  <div class="display-6 fw-black mb-1" id="monthlyBeansDisplay" style="color: var(--santino-gold); font-family: var(--kp-font-title);">22 kg</div>
+                  <div class="text-muted small">Specialty Fresh Roast</div>
                 </div>
               </div>
 
               <div class="col-12">
-                <div class="calc-result-badge text-start p-4 hover-lift" style="background: rgba(0, 98, 93, 0.25); border-color: rgba(0, 98, 93, 0.5);">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-white fw-bold">Est. Monthly Savings vs Takeout Cafes:</span>
-                    <span class="text-gold fw-black fs-4" id="monthlySavingsDisplay">৳ 65,000+</span>
+                <div class="p-4 rounded-4 text-start shadow-sm" style="background: linear-gradient(135deg, #003a37 0%, #005a54 100%); color: #ffffff;">
+                  <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                    <span class="text-white fw-bold">Est. Monthly Savings vs Cafes:</span>
+                    <span class="fw-black fs-3" id="monthlySavingsDisplay" style="color: #f9cb53;">৳ 65,000+</span>
                   </div>
-                  <div class="small text-white-50 mb-3">Recommended Setup: <strong class="text-white" id="recMachineDisplay">Kalerm Touch Auto (Dual Milk)</strong></div>
-                  <button class="btn btn-light w-100 fw-bold py-3 text-uppercase font-heading" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
-                    Claim This Setup For 7-Day Trial →
+                  <div class="small mb-4" style="color: rgba(255,255,255,0.85);">
+                    Recommended Setup: <strong class="text-white" id="recMachineDisplay">Kalerm Touch Auto (Dual Milk)</strong>
+                  </div>
+                  <button class="btn-hero-lifestyle w-100" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal" style="background: var(--santino-gold) !important; border-color: var(--santino-gold) !important;">
+                    <span>Claim This Setup For 7-Day Trial</span>
+                    <i class="bi bi-arrow-right"></i>
                   </button>
                 </div>
               </div>
@@ -756,19 +760,22 @@
     </div>
   </section>
 
-  <!-- 7. BANNER STATEMENT (North End Inspiration Reimagined) -->
-  <section class="w-full py-5 text-center text-white reveal" style="background: radial-gradient(circle at 50% 50%, #00625d 0%, #003633 100%);">
-    <div class="container py-4">
-      <span class="corp-badge-pill mb-3" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); color: #ffffff;">
-        PARTNER WITH SANTINO
+  <!-- 7. BANNER STATEMENT -->
+  <section class="py-5 text-center text-white position-relative overflow-hidden" style="background: linear-gradient(135deg, #003633 0%, #004d49 50%, #002826 100%);">
+    <div class="container py-4 position-relative" style="z-index: 2;">
+      <span class="badge-tag-pill mb-3" style="background: rgba(195, 153, 108, 0.15) !important; border: 1px solid rgba(195, 153, 108, 0.4) !important; color: #dfbe8d !important; padding: 6px 18px; font-size: 11.5px; font-weight: 700; letter-spacing: 1.5px; border-radius: 50px; display: inline-flex; align-items: center;">
+        <i class="bi bi-briefcase-fill me-2" style="color: #c3996c;"></i> PARTNER WITH SANTINO
       </span>
-      <h3 class="display-5 font-heading fw-black mb-3">Our Business is Supporting Your Business</h3>
-      <p class="lead text-white-50 mx-auto mb-4" style="max-width: 640px; font-size: 18px;">
+      <h2 class="display-5 font-heading fw-bold text-white mb-3">Our Business is Supporting Your Business</h2>
+      <p class="text-white-50 mx-auto mb-4" style="max-width: 660px; font-size: 1.05rem; line-height: 1.7;">
         Fuel your employees with world-class coffee every day. Experience 7 days of seamless corporate coffee without any upfront commitment.
       </p>
-      <button class="btn btn-light btn-lg fw-bold px-5 py-3 text-uppercase rounded-3 font-heading shadow-lg hover-lift" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
-        Request Free 7-Day Office Trial <i class="bi bi-arrow-right-short"></i>
-      </button>
+      <div class="d-flex justify-content-center">
+        <button class="btn-hero-cta-teal" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
+          <span>Request Free 7-Day Office Trial</span>
+          <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -864,7 +871,7 @@
         
         <div class="col-lg-4 col-md-6">
           <div class="mb-3">
-            <img src="images/Logo-Santino-Coffee-white.png" alt="Santino Coffee" style="height: 60px; width: auto; object-fit: contain;">
+            <img src="images/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 60px; width: auto; object-fit: contain;">
           </div>
           <p class="text-secondary pe-lg-4">
             Santino Coffee bridges heritage and innovation to empower coffee businesses and communities across Asia. Decades of roasting expertise backed by FSSC22000 food safety certification.

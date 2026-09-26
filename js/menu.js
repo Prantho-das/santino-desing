@@ -101,7 +101,7 @@ const menuProducts = [
     price: 390,
     tag: 'POPULAR',
     badgeClass: 'badge-gold',
-    img: 'images/imgi_28_santino_-_250522-07656.jpg',
+    img: 'images/bd-barista-latte-art.jpg',
     desc: 'Belgian single-origin cocoa ganache blended with freshly pulled espresso and steamed dairy.',
     calories: '260 kcal',
     type: 'both',
