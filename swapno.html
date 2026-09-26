@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shwapno × Santino Coffee | Retail Specialty Beans in 100+ Superstores</title>
+  <meta name="description" content="Find fresh Santino specialty coffee beans and grounds on the retail shelves of 100+ Shwapno Superstores across Bangladesh. Whole bean, fine grind, and single origin selections.">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Proza+Libre:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="swapno-brand-body">
+
+  <!-- Floating Sticky Action Bar -->
+  <div class="floating-side-bar">
+    <a href="https://wa.me/8801700000000" target="_blank" class="side-btn-whatsapp" title="Chat on WhatsApp">
+      <i class="bi bi-whatsapp"></i>
+    </a>
+    <a href="tel:+8801700000000" class="side-btn-call" title="Call Sales & Service">
+      <i class="bi bi-telephone-fill"></i>
+    </a>
+    <button class="side-btn-enquiry" data-bs-toggle="modal" data-bs-target="#enquiryModal">
+      Drop an Enquiry
+    </button>
+  </div>
+
+  <!-- Top Contact Bar (Desktop) -->
+  <div class="top-contact-bar d-none d-lg-block">
+    <div class="container-fluid px-lg-5 d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span>For Service: <a href="tel:+8801700000000">+880 1700-000000</a></span>
+        <span>For Sales: <a href="tel:+8801800000000">+880 1800-000000</a></span>
+        <span>Email: <a href="mailto:sales@santino.com.bd">sales@santino.com.bd</a></span>
+      </div>
+      <div class="d-flex gap-3">
+        <a href="our-story.html">Our Story</a>
+        <span>|</span>
+        <a href="menu.html#branches">Find Our Cafes</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="site-header">
+    <div class="container-fluid px-lg-5 py-3">
+      <div class="d-flex align-items-center justify-content-between">
+        
+        <!-- Logo -->
+        <a href="index.html" class="d-flex align-items-center gap-2 py-1">
+          <img src="images/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 68px; width: auto; object-fit: contain;">
+        </a>
+
+        <!-- Desktop Menu 1 (with Multi-Level Nested Dropdown for Equipment) -->
+        <nav class="d-none d-lg-flex align-items-center gap-1">
+          <a href="our-story.html" class="nav-link-custom">ABOUT US</a>
+          
+          <!-- EQUIPMENT WITH NESTED DROPDOWN -->
+          <div class="nav-item-dropdown">
+            <a href="machines.html" class="nav-link-custom d-flex align-items-center gap-1">
+              <span>EQUIPMENT</span>
+              <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
+            </a>
+
+            <!-- Level 1 Dropdown List -->
+            <ul class="nav-nested-menu">
+              
+              <!-- 1. Nuova Simonelli -->
+              <li class="nav-nested-item">
+                <a href="machines.html#nuova-simonelli" class="nav-nested-link">
+                  <span>Nuova Simonelli</span>
+                  <span class="nav-nested-badge">ITALY</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Appia Life</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Aurelia Wave</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Prontobar Touch</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">MDJ Grinder</a></li>
+                </ul>
+              </li>
+
+              <!-- 2. Victoria Arduino (Exact from Screenshot) -->
+              <li class="nav-nested-item">
+                <a href="machines.html#victoria-arduino" class="nav-nested-link">
+                  <span>Victoria Arduino</span>
+                  <span class="nav-nested-badge">FLAGSHIP</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">E1 Prima</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Maverick</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Eagle One</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Eagle Tempo</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">MY-Series Grinders</a></li>
+                </ul>
+              </li>
+
+              <!-- 3. CREM -->
+              <li class="nav-nested-item">
+                <a href="machines.html#crem" class="nav-nested-link">
+                  <span>CREM</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">EX3</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Diamant Pro</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Megacrem</a></li>
+                </ul>
+              </li>
+
+              <!-- 4. Kalerm -->
+              <li class="nav-nested-item">
+                <a href="machines.html#kalerm" class="nav-nested-link">
+                  <span>Kalerm</span>
+                  <span class="nav-nested-badge">SMART</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Y580C Smart</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">K95L Commercial</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">X580 Automatic</a></li>
+                </ul>
+              </li>
+
+              <!-- 5. Rex Royal -->
+              <li class="nav-nested-item">
+                <a href="machines.html#rex-royal" class="nav-nested-link">
+                  <span>Rex Royal</span>
+                  <span class="nav-nested-badge">SWISS</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">S500 Compact</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">S300 Commercial</a></li>
+                </ul>
+              </li>
+
+              <!-- 6. 3TEMP -->
+              <li class="nav-nested-item">
+                <a href="machines.html#3temp" class="nav-nested-link">
+                  <span>3TEMP</span>
+                  <span class="nav-nested-badge">BREWER</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Hipster Pulse</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Hipster Profile</a></li>
+                </ul>
+              </li>
+
+              <!-- 7. CAYE Bionic Barista -->
+              <li class="nav-nested-item">
+                <a href="machines.html#caye" class="nav-nested-link">
+                  <span>CAYE Bionic Barista</span>
+                  <span class="nav-nested-badge">AI/ROBOT</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Robotic Kiosk System</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Dual-Arm Barista Robot</a></li>
+                </ul>
+              </li>
+
+              <!-- 8. Grinders -->
+              <li class="nav-nested-item">
+                <a href="machines.html#grinders" class="nav-nested-link">
+                  <span>Grinders</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Mythos One / Two</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Eureka Helios</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Fiorenzato F64</a></li>
+                </ul>
+              </li>
+
+              <!-- 9. Bubble Tea Shop Solutions -->
+              <li class="nav-nested-item">
+                <a href="machines.html" class="nav-nested-link">
+                  <span>Bubble Tea Shop Solutions</span>
+                </a>
+              </li>
+
+              <!-- 10. Blupura Water Solutions -->
+              <li class="nav-nested-item">
+                <a href="machines.html" class="nav-nested-link">
+                  <span>Blupura Water Solutions</span>
+                </a>
+              </li>
+
+              <!-- 11. Others -->
+              <li class="nav-nested-item">
+                <a href="machines.html" class="nav-nested-link">
+                  <span>Others</span>
+                </a>
+              </li>
+
+              <!-- 12. Technical Support -->
+              <li class="nav-nested-item">
+                <a href="index.html#machine-services" class="nav-nested-link">
+                  <span>Technical Support</span>
+                  <span class="nav-nested-badge" style="background: rgba(0, 98, 93, 0.4); color: #85e4db; border-color: rgba(133, 228, 219, 0.4);">24/7 AMC</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Installation & Setup</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Preventive AMC</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Emergency Breakdown</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">100% Genuine Spare Parts</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Descaling & Filtration</a></li>
+                </ul>
+              </li>
+
+            </ul>
+          </div>
+
+          <a href="beans.html" class="nav-link-custom">COFFEE BEANS</a>
+          <a href="beans.html#consumables" class="nav-link-custom">CONSUMABLES</a>
+          <a href="office-cafe.html" class="nav-link-custom">OTHER SERVICES</a>
+          <a href="training.html" class="nav-link-custom">ACADEMY</a>
+        </nav>
+
+        <!-- Right CTA Items -->
+        <div class="d-flex align-items-center gap-3 gap-md-4">
+          <a href="tel:+8801700000000" class="d-none d-sm-flex align-items-center gap-2 text-dark fw-bold text-uppercase" style="font-size: 13px;">
+            <span>CONTACT US</span>
+            <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
+          </a>
+          <a href="menu.html" class="text-dark fs-5" title="View Menu"><i class="bi bi-search"></i></a>
+          <a href="menu.html" class="text-dark fs-5 position-relative" title="Cart">
+            <i class="bi bi-cart3"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">0</span>
+          </a>
+          <!-- Mobile Hamburger (Menu 1 Drawer) -->
+          <button class="btn btn-outline-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-label="Open Menu">
+            <i class="bi bi-list fs-4"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Offcanvas Menu (Menu 1 in Hamburger with Collapsible Accordion) -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+    <div class="offcanvas-header border-bottom bg-light">
+      <img src="images/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 48px; width: auto; object-fit: contain;">
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column justify-content-between p-3">
+      <div class="d-flex flex-column gap-1">
+        <a href="our-story.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>About Us</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        
+        <!-- Mobile Equipment Accordion Item -->
+        <div class="border-bottom py-2">
+          <a class="d-flex align-items-center justify-content-between px-2 text-dark fw-bold text-uppercase text-decoration-none collapsed" data-bs-toggle="collapse" href="#mobileEquipmentCollapse" role="button" aria-expanded="false">
+            <span>Equipment & Machines</span>
+            <i class="bi bi-chevron-down text-muted" style="font-size: 12px;"></i>
+          </a>
+          <div class="collapse mt-2 ps-3 pe-2" id="mobileEquipmentCollapse">
+            <div class="d-flex flex-column gap-2 py-2 border-start ps-3" style="border-color: var(--santino-teal) !important;">
+              <a href="machines.html#victoria-arduino" class="small text-dark fw-bold text-decoration-none d-flex justify-content-between">
+                <span>Victoria Arduino</span>
+                <span class="badge bg-warning text-dark" style="font-size: 9px;">FLAGSHIP</span>
+              </a>
+              <a href="machines.html#nuova-simonelli" class="small text-dark fw-bold text-decoration-none d-flex justify-content-between">
+                <span>Nuova Simonelli</span>
+                <span class="badge bg-secondary" style="font-size: 9px;">ITALY</span>
+              </a>
+              <a href="machines.html#crem" class="small text-muted text-decoration-none">CREM</a>
+              <a href="machines.html#kalerm" class="small text-muted text-decoration-none">Kalerm Smart</a>
+              <a href="machines.html#rex-royal" class="small text-muted text-decoration-none">Rex Royal Swiss</a>
+              <a href="machines.html#3temp" class="small text-muted text-decoration-none">3TEMP Specialty</a>
+              <a href="machines.html#caye" class="small text-muted text-decoration-none">CAYE Bionic Barista</a>
+              <a href="machines.html#grinders" class="small text-muted text-decoration-none">Grinders</a>
+              <a href="index.html#machine-services" class="small text-success fw-bold text-decoration-none">Technical Services (AMC)</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="beans.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Coffee Beans</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        <a href="beans.html#consumables" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Consumables</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        <a href="training.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Barista Academy</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        <a href="office-cafe.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Horeca & Office Solutions</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+      </div>
+
+      <div class="pt-3 border-top mt-3">
+        <div class="small text-muted mb-2 fw-semibold">HOTLINE & CONSULTANCY:</div>
+        <a href="tel:+8801700000000" class="btn btn-dark w-100 fw-bold py-2.5 d-flex align-items-center justify-content-center gap-2" style="background-color: var(--santino-teal); border: none; border-radius: 8px;">
+          <i class="bi bi-telephone-fill"></i> CALL SPECIALIST
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2ND MENU BAR (Visible on Desktop and Mobile Screen) -->
+  <div class="top-category-bar second-menu-bar">
+    <div class="container-fluid px-2 px-lg-5">
+      <div class="second-menu-wrapper d-flex justify-content-center align-items-center gap-2 gap-sm-4 gap-md-5">
+        <a href="membership.html" class="second-menu-item">
+          <i class="bi bi-award-fill"></i> MEMBERSHIP
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="bfc.html" class="second-menu-item">
+          <i class="bi bi-shop"></i> BFC
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="swapno.html" class="second-menu-item active">
+          <i class="bi bi-cart3"></i> SWAPNO
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="brands.html" class="second-menu-item">
+          <i class="bi bi-grid-3x3-gap-fill"></i> ALL BRANDS
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="menu.html" class="second-menu-item">
+          <i class="bi bi-journal-text"></i> MENU
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MINIMAL CLEAN SHWAPNO HERO BANNER -->
+  <section class="pro-banner-hero pro-banner-swapno" style="background-image: url('images/shwapno_santino_retail.jpg'); background-position: center 35%; min-height: 52vh;">
+    <div class="pro-banner-overlay" style="background: linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(11, 21, 20, 0.45) 100%);"></div>
+    <div class="pro-banner-glow-line"></div>
+    
+    <div class="container pro-banner-container" style="max-width: 680px;">
+      
+      <!-- Live Partnership Trust Pill -->
+      <div class="pro-banner-pill mb-3">
+        <span class="pro-pulse-dot"></span>
+        <span>OFFICIAL RETAIL PARTNER</span>
+      </div>
+
+      <!-- Main Heading -->
+      <h1 class="pro-banner-title mb-2">
+        Shwapno × Santino Retail Coffee
+      </h1>
+
+      <!-- Lead Description -->
+      <p class="pro-banner-desc mb-4" style="max-width: 520px; font-size: 1.05rem;">
+        Freshly roasted specialty coffee bean packs available on aisles across 100+ Shwapno Superstores.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="pro-banner-actions">
+        <a href="#store-locator" class="pro-btn-gold">
+          <i class="bi bi-geo-alt-fill me-1"></i>
+          <span>Find Nearest Shwapno</span>
+        </a>
+        <a href="#swapno-gallery" class="pro-btn-frosted">
+          <i class="bi bi-images me-1 text-gold"></i>
+          <span>View Retail Gallery</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CLEAN SUBTLE STATS STRIP BELOW HERO -->
+  <section class="py-4 border-bottom bg-white">
+    <div class="container">
+      <div class="row g-4 text-center justify-content-center">
+        <div class="col-6 col-md-3">
+          <div class="fs-2 fw-black font-heading" style="color: #d90429;">100+</div>
+          <div class="small text-muted fw-bold text-uppercase">Superstore Shelves</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="fs-2 fw-black text-dark font-heading">Weekly</div>
+          <div class="small text-muted fw-bold text-uppercase">Fresh Batch Dispatch</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="fs-2 fw-black font-heading" style="color: var(--santino-teal);">100%</div>
+          <div class="small text-muted fw-bold text-uppercase">Nitrogen Degassing Pack</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="fs-2 fw-black font-heading" style="color: var(--santino-gold);">On-Demand</div>
+          <div class="small text-muted fw-bold text-uppercase">In-Store Grinding Booths</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. RICH EDITORIAL PHOTOGRAPHY SHOWCASE -->
+  <section id="swapno-gallery" class="py-5" style="background-color: #08100f; color: #ffffff;">
+    <div class="container py-lg-4">
+      
+      <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="editorial-gallery-badge justify-content-center mb-2"><i class="bi bi-camera-fill me-1"></i> RETAIL EXPERIENCE</span>
+        <h2 class="display-6 fw-bold text-white font-heading">Inside Shwapno × Santino Retail Craft</h2>
+        <p class="text-white-50 small">Fresh roasted bags, one-way degassing valves, and in-store grinding experience across 100+ supermarket aisles.</p>
+      </div>
+
+      <!-- Modern Seamless Gallery Layout -->
+      <div class="row g-4">
+        
+        <!-- Large Feature 1 (7 cols) -->
+        <div class="col-lg-7">
+          <div class="editorial-gallery-item" style="min-height: 380px;">
+            <img src="images/shwapno_santino_retail.jpg" alt="Shwapno Supermarket Coffee Shelf" class="editorial-gallery-img">
+            <div class="editorial-gallery-overlay">
+              <span class="editorial-gallery-badge"><i class="bi bi-cart3"></i> Supermarket Aisle</span>
+              <h3 class="editorial-gallery-title">Nationwide Superstore Presence</h3>
+              <p class="editorial-gallery-desc">Dedicated premium coffee displays in 100+ Shwapno branches bringing freshly roasted Singapore beans directly to home brewers.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Large Feature 2 (5 cols) -->
+        <div class="col-lg-5">
+          <div class="editorial-gallery-item" style="min-height: 380px;">
+            <img src="images/imgi_28_santino_-_250522-07656.jpg" alt="Artisan Batch Roastery" class="editorial-gallery-img">
+            <div class="editorial-gallery-overlay">
+              <span class="editorial-gallery-badge" style="color: #ffd166;"><i class="bi bi-fire"></i> Weekly Fresh Batches</span>
+              <h3 class="editorial-gallery-title">Direct Roastery Logistics</h3>
+              <p class="editorial-gallery-desc">Weekly dispatch directly from our roastery ensuring beans on retail shelves are always within their optimal aroma window.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tile 3 (4 cols) -->
+        <div class="col-md-6 col-lg-4">
+          <div class="editorial-gallery-item" style="min-height: 280px;">
+            <img src="images/imgi_22_Untitleddesign_4.png" alt="Nitrogen Sealed Packaging" class="editorial-gallery-img">
+            <div class="editorial-gallery-overlay">
+              <span class="editorial-gallery-badge" style="color: #64dfdf;"><i class="bi bi-shield-check"></i> Nitrogen Degassing</span>
+              <h3 class="editorial-gallery-title">Aroma Lock Pouches</h3>
+              <p class="editorial-gallery-desc">Foil-lined pouches with Italian one-way degassing valves preserve complex volatile crema oils.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tile 4 (4 cols) -->
+        <div class="col-md-6 col-lg-4">
+          <div class="editorial-gallery-item" style="min-height: 280px;">
+            <img src="images/imgi_30_Blue-Stone-3_800x_526184df-2650-40b7-9dcf-e8af5b97527b.webp" alt="In-Store Precision Grinding" class="editorial-gallery-img">
+            <div class="editorial-gallery-overlay">
+              <span class="editorial-gallery-badge" style="color: #06d6a0;"><i class="bi bi-sliders"></i> Complimentary Service</span>
+              <h3 class="editorial-gallery-title">In-Store Precision Grinding</h3>
+              <p class="editorial-gallery-desc">Free calibrated grinding at flagship booths for French Press, Pour Over, Moka Pot, or Espresso.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tile 5 (4 cols) -->
+        <div class="col-md-12 col-lg-4">
+          <div class="editorial-gallery-item" style="min-height: 280px;">
+            <img src="images/imgi_20_santino_-_250522-07574.jpg" alt="Weekend Cupping & Tasting" class="editorial-gallery-img">
+            <div class="editorial-gallery-overlay">
+              <span class="editorial-gallery-badge" style="color: #ffb703;"><i class="bi bi-cup-hot-fill"></i> Tasting Experience</span>
+              <h3 class="editorial-gallery-title">Weekend In-Store Cupping</h3>
+              <p class="editorial-gallery-desc">Live barista brewing and free espresso tasting sessions for Shwapno Club members every weekend.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 2. RETAIL BEAN PACKS CATALOG -->
+  <section id="retail-packs" class="py-5 bg-white">
+    <div class="container py-lg-4">
+      <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="badge-tag-pill mb-2"><i class="bi bi-bag-check-fill text-gold me-1"></i> RETAIL PACK COLLECTION</span>
+        <h2 class="sec-title">Santino Coffee On Shwapno Shelves</h2>
+        <div class="sec-subtitle">Available in Whole Bean & Fresh Pre-Ground Variants across all 100+ branches</div>
+      </div>
+
+      <div class="row g-4">
+        
+        <!-- Product 1 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden p-4 text-center hover-lift">
+            <div class="p-3 bg-light rounded-4 mb-3 d-flex align-items-center justify-content-center" style="height: 190px;">
+              <img src="images/imgi_28_santino_-_250522-07656.jpg" alt="Santino Espresso Italia" class="img-fluid rounded-3" style="max-height: 160px; object-fit: cover;">
+            </div>
+            <span class="badge bg-dark rounded-pill mx-auto mb-2 px-3 py-1">Best Seller</span>
+            <h5 class="fw-bold mb-1 font-heading">Signature Espresso Blend</h5>
+            <p class="small text-muted mb-2">Dark Chocolate & Roasted Almond Notes</p>
+            <div class="small text-secondary mb-3"><i class="bi bi-bag-check me-1"></i> Available: 250g | 500g</div>
+            <div class="mt-auto fw-bold fs-5 text-dark">৳ 650 <span class="small text-muted fw-normal">/ 250g</span></div>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden p-4 text-center hover-lift">
+            <div class="p-3 bg-light rounded-4 mb-3 d-flex align-items-center justify-content-center" style="height: 190px;">
+              <img src="images/imgi_140_santino_-_250522-07574.jpg" alt="Colombia Supremo" class="img-fluid rounded-3" style="max-height: 160px; object-fit: cover;">
+            </div>
+            <span class="badge bg-success rounded-pill mx-auto mb-2 px-3 py-1">100% Arabica Single Origin</span>
+            <h5 class="fw-bold mb-1 font-heading">Colombia Supremo</h5>
+            <p class="small text-muted mb-2">Caramel, Brown Sugar & Citrus Acidity</p>
+            <div class="small text-secondary mb-3"><i class="bi bi-bag-check me-1"></i> Available: 250g | 500g</div>
+            <div class="mt-auto fw-bold fs-5 text-dark">৳ 850 <span class="small text-muted fw-normal">/ 250g</span></div>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden p-4 text-center hover-lift">
+            <div class="p-3 bg-light rounded-4 mb-3 d-flex align-items-center justify-content-center" style="height: 190px;">
+              <img src="images/imgi_100_05_Sustainability-e1750424125646.jpg" alt="Mocha Italia Roast" class="img-fluid rounded-3" style="max-height: 160px; object-fit: cover;">
+            </div>
+            <span class="badge bg-warning text-dark rounded-pill mx-auto mb-2 px-3 py-1">Velvety & Full-Bodied</span>
+            <h5 class="fw-bold mb-1 font-heading">Mocha Italia Roast</h5>
+            <p class="small text-muted mb-2">Hazelnut, Molasses & Cocoa Crema</p>
+            <div class="small text-secondary mb-3"><i class="bi bi-bag-check me-1"></i> Available: 250g | 500g | 1kg</div>
+            <div class="mt-auto fw-bold fs-5 text-dark">৳ 720 <span class="small text-muted fw-normal">/ 250g</span></div>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden p-4 text-center hover-lift">
+            <div class="p-3 bg-light rounded-4 mb-3 d-flex align-items-center justify-content-center" style="height: 190px;">
+              <img src="images/imgi_19_santino_-_250522-07313.jpg" alt="Barista Gold Edition" class="img-fluid rounded-3" style="max-height: 160px; object-fit: cover;">
+            </div>
+            <span class="badge bg-danger rounded-pill mx-auto mb-2 px-3 py-1">Limited Batch</span>
+            <h5 class="fw-bold mb-1 font-heading">Barista Gold Edition</h5>
+            <p class="small text-muted mb-2">Ethiopian Yirgacheffe & Java Floral Notes</p>
+            <div class="small text-secondary mb-3"><i class="bi bi-bag-check me-1"></i> Available: 250g</div>
+            <div class="mt-auto fw-bold fs-5 text-dark">৳ 950 <span class="small text-muted fw-normal">/ 250g</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. STORE LOCATOR WITH SEARCH & AREA FILTERS -->
+  <section id="store-locator" class="py-5" style="background-color: #f8faf9;">
+    <div class="container py-lg-4">
+      
+      <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="badge-tag-pill mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> SUPERSTORE LOCATOR</span>
+        <h2 class="sec-title">Find Santino Shelves At 100+ Shwapno Outlets</h2>
+        <div class="sec-subtitle">Search by area, road, or filter by division to find your nearest fresh coffee stock</div>
+      </div>
+
+      <!-- Search Bar & Filters -->
+      <div class="row justify-content-center mb-4">
+        <div class="col-lg-8">
+          <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white p-1 border">
+            <span class="input-group-text bg-transparent border-0 ps-3"><i class="bi bi-search text-muted"></i></span>
+            <input type="text" id="shwapnoSearchInput" class="form-control border-0 shadow-none" placeholder="Search branch (e.g. Gulshan, Banani, Dhanmondi, Uttara, Chattogram, Sylhet)..." onkeyup="filterShwapnoOutlets()">
+            <button class="btn btn-dark rounded-pill px-4 fw-bold" type="button" style="background-color: #d90429; border: none;" onclick="filterShwapnoOutlets()">Search</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zone Filter Pills -->
+      <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
+        <button class="branch-filter-btn active" onclick="filterShwapnoZone('all', this)">All Superstores (12)</button>
+        <button class="branch-filter-btn" onclick="filterShwapnoZone('dhaka-north', this)">Dhaka North (Gulshan, Banani, Uttara)</button>
+        <button class="branch-filter-btn" onclick="filterShwapnoZone('dhaka-south', this)">Dhaka South (Dhanmondi, Mogbazar)</button>
+        <button class="branch-filter-btn" onclick="filterShwapnoZone('chattogram', this)">Chattogram</button>
+        <button class="branch-filter-btn" onclick="filterShwapnoZone('sylhet', this)">Sylhet & Other</button>
+      </div>
+
+      <!-- 12 Detailed Shwapno Superstore Branch Cards -->
+      <div class="row g-4" id="shwapnoOutletGrid">
+        
+        <!-- Outlet 1 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-north gulshan">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-danger bg-opacity-10 text-danger"><i class="bi bi-geo-alt-fill me-1"></i> DHAKA NORTH</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock + Grinder</span>
+            </div>
+            <h4 class="branch-title">Shwapno Flagship Gulshan 1</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>South Avenue, Gulshan 1 Circle, Dhaka 1212</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 8:00 AM – 11:00 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000001</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Gulshan+1" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 2 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-north banani">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-danger bg-opacity-10 text-danger"><i class="bi bi-geo-alt-fill me-1"></i> DHAKA NORTH</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock</span>
+            </div>
+            <h4 class="branch-title">Shwapno Superstore Banani 11</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Road 11, Block E, Banani, Dhaka 1213</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 8:00 AM – 11:00 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000002</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Banani+11" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 3 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-south dhanmondi">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-primary bg-opacity-10 text-primary"><i class="bi bi-geo-alt-fill me-1"></i> DHAKA SOUTH</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock + Grinder</span>
+            </div>
+            <h4 class="branch-title">Shwapno Dhanmondi 27</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Old 27 (New 16), Satmasjid Road, Dhanmondi, Dhaka</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 8:00 AM – 11:00 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000003</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Dhanmondi+27" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 4 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-north uttara">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-danger bg-opacity-10 text-danger"><i class="bi bi-geo-alt-fill me-1"></i> DHAKA NORTH</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock</span>
+            </div>
+            <h4 class="branch-title">Shwapno Uttara Sector 3</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Rabindra Sarani, Sector 3, Uttara, Dhaka 1230</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 8:00 AM – 11:00 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000004</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Uttara+Sector+3" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 5 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-north mirpur">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-danger bg-opacity-10 text-danger"><i class="bi bi-geo-alt-fill me-1"></i> DHAKA NORTH</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock</span>
+            </div>
+            <h4 class="branch-title">Shwapno Mirpur 1</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Sony Cinema Hall Circle, Mirpur 1, Dhaka 1216</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 8:00 AM – 10:30 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000005</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Mirpur+1" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 6 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-south mogbazar">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-primary bg-opacity-10 text-primary"><i class="bi bi-geo-alt-fill me-1"></i> DHAKA SOUTH</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock</span>
+            </div>
+            <h4 class="branch-title">Shwapno Mogbazar Wireless</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Wireless Gate, Outer Circular Road, Mogbazar, Dhaka</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 8:30 AM – 11:00 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000006</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Mogbazar" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 7 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="chattogram khulshi">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-warning bg-opacity-10 text-dark"><i class="bi bi-geo-alt-fill me-1"></i> CHATTOGRAM</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock + Grinder</span>
+            </div>
+            <h4 class="branch-title">Shwapno Khulshi Town Center</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Zakir Hossain Road, South Khulshi, Chattogram</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 8:30 AM – 10:30 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000007</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Khulshi+Chattogram" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 8 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="chattogram nasirabad">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-warning bg-opacity-10 text-dark"><i class="bi bi-geo-alt-fill me-1"></i> CHATTOGRAM</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock</span>
+            </div>
+            <h4 class="branch-title">Shwapno Nasirabad GEC</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>CDA Avenue, GEC Circle, Nasirabad, Chattogram</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 8:30 AM – 10:30 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000008</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+GEC+Chattogram" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 9 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="sylhet zindabazar">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-info bg-opacity-10 text-info"><i class="bi bi-geo-alt-fill me-1"></i> SYLHET</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock</span>
+            </div>
+            <h4 class="branch-title">Shwapno Sylhet Zindabazar</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Al Hamra Shopping City, Zindabazar, Sylhet 3100</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 9:00 AM – 10:30 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000009</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Zindabazar+Sylhet" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 10 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="sylhet kumarpara">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-info bg-opacity-10 text-info"><i class="bi bi-geo-alt-fill me-1"></i> SYLHET</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock</span>
+            </div>
+            <h4 class="branch-title">Shwapno Sylhet Kumarpara</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Kumarpara Main Road, Sylhet 3100</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 9:00 AM – 10:30 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000010</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Kumarpara+Sylhet" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 11 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-south narayanganj">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-primary bg-opacity-10 text-primary"><i class="bi bi-geo-alt-fill me-1"></i> NARAYANGANJ</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock</span>
+            </div>
+            <h4 class="branch-title">Shwapno Chashara Narayanganj</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Bangabandhu Road, Chashara, Narayanganj</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 8:30 AM – 10:30 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000011</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Chashara" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet 12 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-north bashundhara">
+          <div class="branch-card-pro">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="branch-badge bg-danger bg-opacity-10 text-danger"><i class="bi bi-geo-alt-fill me-1"></i> DHAKA NORTH</span>
+              <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Full Stock + Grinder</span>
+            </div>
+            <h4 class="branch-title">Shwapno Bashundhara R/A</h4>
+            <div class="branch-info-list mb-3">
+              <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Block C, Main Gate Avenue, Bashundhara R/A, Dhaka</span></div>
+              <div class="info-line"><i class="bi bi-clock text-muted"></i> <span>Open Daily: 8:00 AM – 11:00 PM</span></div>
+              <div class="info-line"><i class="bi bi-telephone text-muted"></i> <span>Hotline: +880 1700-000012</span></div>
+            </div>
+            <div class="d-flex gap-2 pt-2 border-top">
+              <a href="https://maps.google.com/?q=Shwapno+Bashundhara" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map-fill me-1"></i> Map Directions</a>
+              <button class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#enquiryModal"><i class="bi bi-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4 pb-4">
+        <div class="col-lg-4 col-md-6">
+          <img src="images/Logo-Santino-Coffee-white.png" alt="Santino Coffee" style="height: 52px; width: auto; object-fit: contain;" class="mb-3">
+          <p class="text-secondary small leading-relaxed pe-lg-4">
+            Singapore's premier heritage roastery and complete coffee solution partner in Bangladesh. Commercial espresso machines, automated coffee stations, barista training, and retail bean supplies.
+          </p>
+          <div class="d-flex gap-3 fs-5 mt-3 text-secondary">
+            <a href="https://facebook.com" target="_blank" class="text-secondary"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" class="text-secondary"><i class="bi bi-instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank" class="text-secondary"><i class="bi bi-linkedin"></i></a>
+            <a href="https://wa.me/8801700000000" target="_blank" class="text-secondary"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2 col-md-3">
+          <h5 class="footer-title">Quick Links</h5>
+          <ul class="footer-links">
+            <li><a href="our-story.html">Our Story</a></li>
+            <li><a href="machines.html">Commercial Machines</a></li>
+            <li><a href="beans.html">Specialty Beans</a></li>
+            <li><a href="training.html">Barista Academy</a></li>
+            <li><a href="office-cafe.html">Office Coffee</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2 col-md-3">
+          <h5 class="footer-title">Partners</h5>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4">
+        
+        <div class="col-lg-4 col-md-6">
+          <div class="mb-3">
+            <img src="images/Logo-Santino-Coffee-white.png" alt="Santino Coffee" style="height: 60px; width: auto; object-fit: contain;">
+          </div>
+          <p class="text-secondary pe-lg-4">
+            Santino Coffee bridges heritage and innovation to empower coffee businesses and communities across Asia. Decades of roasting expertise backed by FSSC22000 food safety certification.
+          </p>
+          <div class="d-flex gap-3 fs-5 text-white mt-3">
+            <a href="https://facebook.com" target="_blank" class="text-secondary"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" class="text-secondary"><i class="bi bi-instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank" class="text-secondary"><i class="bi bi-linkedin"></i></a>
+            <a href="https://wa.me/8801700000000" target="_blank" class="text-secondary"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+          <h5 class="footer-title">Solutions</h5>
+          <ul class="footer-links">
+            <li><a href="index.html#solutions">Café & Roastery</a></li>
+            <li><a href="index.html#solutions">Hotel & Hospitality</a></li>
+            <li><a href="index.html#solutions">Corporate Offices</a></li>
+            <li><a href="training.html">Barista Academy</a></li>
+            <li><a href="machines.html">Machine Rentals</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5 class="footer-title">Equipment & Beans</h5>
+          <ul class="footer-links">
+            <li><a href="machines.html#victoria-arduino">Victoria Arduino</a></li>
+            <li><a href="machines.html#nuova-simonelli">Nuova Simonelli</a></li>
+            <li><a href="machines.html#caye">CAYE Bionic Barista</a></li>
+            <li><a href="beans.html">Rainforest Alliance Beans</a></li>
+            <li><a href="beans.html#consumables">Cafeva Cleaning Care</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5 class="footer-title">Santino Experience</h5>
+          <p class="text-secondary mb-1"><i class="bi bi-geo-alt me-2 text-danger"></i> Singapore & Bangladesh Hub</p>
+          <p class="text-secondary mb-1"><i class="bi bi-telephone me-2 text-danger"></i> +880 1700-000000</p>
+          <p class="text-secondary mb-1"><i class="bi bi-envelope me-2 text-danger"></i> sales@santino.com.bd</p>
+          <p class="text-secondary mb-1"><i class="bi bi-globe me-2 text-danger"></i> santino.com.sg</p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center">
+        <div>© 2026 Santino Coffee. All Rights Reserved. Innovation Grounded in Heritage.</div>
+        <div class="d-flex gap-4 mt-2 mt-md-0">
+          <a href="#" class="text-secondary">Privacy Policy</a>
+          <a href="#" class="text-secondary">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Quick Enquiry Modal -->
+  <div class="modal fade" id="enquiryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 p-4">
+        <div class="modal-header border-0 pb-0">
+          <h4 class="modal-title font-heading fw-bold">Drop an Enquiry</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small mb-4">Leave your details and our commercial coffee team will contact you immediately.</p>
+          <form onsubmit="alert('Thank you! We will contact you shortly.'); return false;">
+            <div class="mb-3">
+              <input type="text" class="form-control" placeholder="Full Name *" required>
+            </div>
+            <div class="mb-3">
+              <input type="tel" class="form-control" placeholder="Phone Number *" required>
+            </div>
+            <div class="mb-3">
+              <input type="email" class="form-control" placeholder="Email Address *" required>
+            </div>
+            <div class="mb-3">
+              <textarea class="form-control" rows="3" placeholder="Tell us about your machine or coffee needs..."></textarea>
+            </div>
+            <button type="submit" class="btn-kp-maroon w-100 py-2">
+              SEND INQUIRY
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="back-to-top" title="Back to Top">
+    <i class="bi bi-arrow-up-short"></i>
+  </button>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function filterShwapnoZone(zone, btn) {
+      document.querySelectorAll('.branch-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cards = document.querySelectorAll('#shwapnoOutletGrid .outlet-card');
+      cards.forEach(card => {
+        const cardZone = card.getAttribute('data-zone') || '';
+        if (zone === 'all' || cardZone.includes(zone)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function filterShwapnoOutlets() {
+      const q = (document.getElementById('shwapnoSearchInput').value || '').toLowerCase().trim();
+      const cards = document.querySelectorAll('#shwapnoOutletGrid .outlet-card');
+      cards.forEach(card => {
+        const zone = card.getAttribute('data-zone') || '';
+        const text = card.innerText.toLowerCase();
+        if (!q || zone.includes(q) || text.includes(q)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+  <script src="js/script.js"></script>
+</body>
+</html>

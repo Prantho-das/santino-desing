@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BFC × Santino Coffee | Signature Espresso at 50+ Outlets in Bangladesh</title>
+  <meta name="description" content="Enjoy freshly brewed premium Santino coffee at all 50+ BFC (Best Fried Chicken) restaurants across Bangladesh. Italian espresso, creamy cappuccinos and iced cold coffees.">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Proza+Libre:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bfc-brand-body">
+
+  <!-- Floating Sticky Action Bar -->
+  <div class="floating-side-bar">
+    <a href="https://wa.me/8801700000000" target="_blank" class="side-btn-whatsapp" title="Chat on WhatsApp">
+      <i class="bi bi-whatsapp"></i>
+    </a>
+    <a href="tel:+8801700000000" class="side-btn-call" title="Call Sales & Service">
+      <i class="bi bi-telephone-fill"></i>
+    </a>
+    <button class="side-btn-enquiry" data-bs-toggle="modal" data-bs-target="#enquiryModal">
+      Drop an Enquiry
+    </button>
+  </div>
+
+  <!-- Top Contact Bar (Desktop) -->
+  <div class="top-contact-bar d-none d-lg-block">
+    <div class="container-fluid px-lg-5 d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span>For Service: <a href="tel:+8801700000000">+880 1700-000000</a></span>
+        <span>For Sales: <a href="tel:+8801800000000">+880 1800-000000</a></span>
+        <span>Email: <a href="mailto:sales@santino.com.bd">sales@santino.com.bd</a></span>
+      </div>
+      <div class="d-flex gap-3">
+        <a href="our-story.html">Our Story</a>
+        <span>|</span>
+        <a href="menu.html#branches">Find Our Cafes</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="site-header">
+    <div class="container-fluid px-lg-5 py-3">
+      <div class="d-flex align-items-center justify-content-between">
+        
+        <!-- Logo -->
+        <a href="index.html" class="d-flex align-items-center gap-2 py-1">
+          <img src="images/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 68px; width: auto; object-fit: contain;">
+        </a>
+
+        <!-- Desktop Menu 1 (with Multi-Level Nested Dropdown for Equipment) -->
+        <nav class="d-none d-lg-flex align-items-center gap-1">
+          <a href="our-story.html" class="nav-link-custom">ABOUT US</a>
+          
+          <!-- EQUIPMENT WITH NESTED DROPDOWN -->
+          <div class="nav-item-dropdown">
+            <a href="machines.html" class="nav-link-custom d-flex align-items-center gap-1">
+              <span>EQUIPMENT</span>
+              <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
+            </a>
+
+            <!-- Level 1 Dropdown List -->
+            <ul class="nav-nested-menu">
+              
+              <!-- 1. Nuova Simonelli -->
+              <li class="nav-nested-item">
+                <a href="machines.html#nuova-simonelli" class="nav-nested-link">
+                  <span>Nuova Simonelli</span>
+                  <span class="nav-nested-badge">ITALY</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Appia Life</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Aurelia Wave</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Prontobar Touch</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">MDJ Grinder</a></li>
+                </ul>
+              </li>
+
+              <!-- 2. Victoria Arduino (Exact from Screenshot) -->
+              <li class="nav-nested-item">
+                <a href="machines.html#victoria-arduino" class="nav-nested-link">
+                  <span>Victoria Arduino</span>
+                  <span class="nav-nested-badge">FLAGSHIP</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">E1 Prima</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Maverick</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Eagle One</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Eagle Tempo</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">MY-Series Grinders</a></li>
+                </ul>
+              </li>
+
+              <!-- 3. CREM -->
+              <li class="nav-nested-item">
+                <a href="machines.html#crem" class="nav-nested-link">
+                  <span>CREM</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">EX3</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Diamant Pro</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Megacrem</a></li>
+                </ul>
+              </li>
+
+              <!-- 4. Kalerm -->
+              <li class="nav-nested-item">
+                <a href="machines.html#kalerm" class="nav-nested-link">
+                  <span>Kalerm</span>
+                  <span class="nav-nested-badge">SMART</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Y580C Smart</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">K95L Commercial</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">X580 Automatic</a></li>
+                </ul>
+              </li>
+
+              <!-- 5. Rex Royal -->
+              <li class="nav-nested-item">
+                <a href="machines.html#rex-royal" class="nav-nested-link">
+                  <span>Rex Royal</span>
+                  <span class="nav-nested-badge">SWISS</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">S500 Compact</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">S300 Commercial</a></li>
+                </ul>
+              </li>
+
+              <!-- 6. 3TEMP -->
+              <li class="nav-nested-item">
+                <a href="machines.html#3temp" class="nav-nested-link">
+                  <span>3TEMP</span>
+                  <span class="nav-nested-badge">BREWER</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Hipster Pulse</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Hipster Profile</a></li>
+                </ul>
+              </li>
+
+              <!-- 7. CAYE Bionic Barista -->
+              <li class="nav-nested-item">
+                <a href="machines.html#caye" class="nav-nested-link">
+                  <span>CAYE Bionic Barista</span>
+                  <span class="nav-nested-badge">AI/ROBOT</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Robotic Kiosk System</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Dual-Arm Barista Robot</a></li>
+                </ul>
+              </li>
+
+              <!-- 8. Grinders -->
+              <li class="nav-nested-item">
+                <a href="machines.html#grinders" class="nav-nested-link">
+                  <span>Grinders</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Mythos One / Two</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Eureka Helios</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Fiorenzato F64</a></li>
+                </ul>
+              </li>
+
+              <!-- 9. Bubble Tea Shop Solutions -->
+              <li class="nav-nested-item">
+                <a href="machines.html" class="nav-nested-link">
+                  <span>Bubble Tea Shop Solutions</span>
+                </a>
+              </li>
+
+              <!-- 10. Blupura Water Solutions -->
+              <li class="nav-nested-item">
+                <a href="machines.html" class="nav-nested-link">
+                  <span>Blupura Water Solutions</span>
+                </a>
+              </li>
+
+              <!-- 11. Others -->
+              <li class="nav-nested-item">
+                <a href="machines.html" class="nav-nested-link">
+                  <span>Others</span>
+                </a>
+              </li>
+
+              <!-- 12. Technical Support -->
+              <li class="nav-nested-item">
+                <a href="index.html#machine-services" class="nav-nested-link">
+                  <span>Technical Support</span>
+                  <span class="nav-nested-badge" style="background: rgba(0, 98, 93, 0.4); color: #85e4db; border-color: rgba(133, 228, 219, 0.4);">24/7 AMC</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Installation & Setup</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Preventive AMC</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Emergency Breakdown</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">100% Genuine Spare Parts</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Descaling & Filtration</a></li>
+                </ul>
+              </li>
+
+            </ul>
+          </div>
+
+          <a href="beans.html" class="nav-link-custom">COFFEE BEANS</a>
+          <a href="beans.html#consumables" class="nav-link-custom">CONSUMABLES</a>
+          <a href="office-cafe.html" class="nav-link-custom">OTHER SERVICES</a>
+          <a href="training.html" class="nav-link-custom">ACADEMY</a>
+        </nav>
+
+        <!-- Right CTA Items -->
+        <div class="d-flex align-items-center gap-3 gap-md-4">
+          <a href="tel:+8801700000000" class="d-none d-sm-flex align-items-center gap-2 text-dark fw-bold text-uppercase" style="font-size: 13px;">
+            <span>CONTACT US</span>
+            <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
+          </a>
+          <a href="menu.html" class="text-dark fs-5" title="View Menu"><i class="bi bi-search"></i></a>
+          <a href="menu.html" class="text-dark fs-5 position-relative" title="Cart">
+            <i class="bi bi-cart3"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">0</span>
+          </a>
+          <!-- Mobile Hamburger (Menu 1 Drawer) -->
+          <button class="btn btn-outline-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-label="Open Menu">
+            <i class="bi bi-list fs-4"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Offcanvas Menu (Menu 1 in Hamburger with Collapsible Accordion) -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+    <div class="offcanvas-header border-bottom bg-light">
+      <img src="images/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 48px; width: auto; object-fit: contain;">
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column justify-content-between p-3">
+      <div class="d-flex flex-column gap-1">
+        <a href="our-story.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>About Us</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        
+        <!-- Mobile Equipment Accordion Item -->
+        <div class="border-bottom py-2">
+          <a class="d-flex align-items-center justify-content-between px-2 text-dark fw-bold text-uppercase text-decoration-none collapsed" data-bs-toggle="collapse" href="#mobileEquipmentCollapse" role="button" aria-expanded="false">
+            <span>Equipment & Machines</span>
+            <i class="bi bi-chevron-down text-muted" style="font-size: 12px;"></i>
+          </a>
+          <div class="collapse mt-2 ps-3 pe-2" id="mobileEquipmentCollapse">
+            <div class="d-flex flex-column gap-2 py-2 border-start ps-3" style="border-color: var(--santino-teal) !important;">
+              <a href="machines.html#victoria-arduino" class="small text-dark fw-bold text-decoration-none d-flex justify-content-between">
+                <span>Victoria Arduino</span>
+                <span class="badge bg-warning text-dark" style="font-size: 9px;">FLAGSHIP</span>
+              </a>
+              <a href="machines.html#nuova-simonelli" class="small text-dark fw-bold text-decoration-none d-flex justify-content-between">
+                <span>Nuova Simonelli</span>
+                <span class="badge bg-secondary" style="font-size: 9px;">ITALY</span>
+              </a>
+              <a href="machines.html#crem" class="small text-muted text-decoration-none">CREM</a>
+              <a href="machines.html#kalerm" class="small text-muted text-decoration-none">Kalerm Smart</a>
+              <a href="machines.html#rex-royal" class="small text-muted text-decoration-none">Rex Royal Swiss</a>
+              <a href="machines.html#3temp" class="small text-muted text-decoration-none">3TEMP Specialty</a>
+              <a href="machines.html#caye" class="small text-muted text-decoration-none">CAYE Bionic Barista</a>
+              <a href="machines.html#grinders" class="small text-muted text-decoration-none">Grinders</a>
+              <a href="index.html#machine-services" class="small text-success fw-bold text-decoration-none">Technical Services (AMC)</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="beans.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Coffee Beans</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        <a href="beans.html#consumables" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Consumables</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        <a href="training.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Barista Academy</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        <a href="office-cafe.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Horeca & Office Solutions</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+      </div>
+
+      <div class="pt-3 border-top mt-3">
+        <div class="small text-muted mb-2 fw-semibold">HOTLINE & CONSULTANCY:</div>
+        <a href="tel:+8801700000000" class="btn btn-dark w-100 fw-bold py-2.5 d-flex align-items-center justify-content-center gap-2" style="background-color: var(--santino-teal); border: none; border-radius: 8px;">
+          <i class="bi bi-telephone-fill"></i> CALL SPECIALIST
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2ND MENU BAR (Visible on Desktop and Mobile Screen) -->
+  <div class="top-category-bar second-menu-bar">
+    <div class="container-fluid px-2 px-lg-5">
+      <div class="second-menu-wrapper d-flex justify-content-center align-items-center gap-2 gap-sm-4 gap-md-5">
+        <a href="membership.html" class="second-menu-item">
+          <i class="bi bi-award-fill"></i> MEMBERSHIP
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="bfc.html" class="second-menu-item active">
+          <i class="bi bi-shop"></i> BFC
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="swapno.html" class="second-menu-item">
+          <i class="bi bi-cart3"></i> SWAPNO
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="brands.html" class="second-menu-item">
+          <i class="bi bi-grid-3x3-gap-fill"></i> ALL BRANDS
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="menu.html" class="second-menu-item">
+          <i class="bi bi-journal-text"></i> MENU
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MINIMAL CLEAN BFC HERO BANNER -->
+  <section class="pro-banner-hero pro-banner-bfc" style="background-image: url('images/bfc_santino_foodservice.jpg'); background-position: center 30%; min-height: 52vh;">
+    <div class="pro-banner-overlay" style="background: linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(11, 21, 20, 0.45) 100%);"></div>
+    <div class="pro-banner-glow-line"></div>
+    
+    <div class="container pro-banner-container" style="max-width: 680px;">
+      
+      <!-- Live Partnership Trust Pill -->
+      <div class="pro-banner-pill mb-3">
+        <span class="pro-pulse-dot"></span>
+        <span>OFFICIAL FOODSERVICE PARTNER</span>
+      </div>
+
+      <!-- Main Heading -->
+      <h1 class="pro-banner-title mb-2">
+        BFC × Santino Espresso Bar
+      </h1>
+
+      <!-- Lead Description -->
+      <p class="pro-banner-desc mb-4" style="max-width: 520px; font-size: 1.05rem;">
+        Specialty Italian espresso & handcrafted beverages served fresh across 50+ BFC outlets.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="pro-banner-actions">
+        <a href="#outlets" class="pro-btn-gold">
+          <i class="bi bi-geo-alt-fill me-1"></i>
+          <span>Find Nearest BFC</span>
+        </a>
+        <a href="#bfc-gallery" class="pro-btn-frosted">
+          <i class="bi bi-images me-1 text-gold"></i>
+          <span>View Gallery</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SUBTLE STATS STRIP BELOW HERO -->
+  <section class="py-4 border-bottom bg-white">
+    <div class="container">
+      <div class="row g-4 text-center justify-content-center">
+        <div class="col-6 col-md-3">
+          <div class="fs-2 fw-black text-danger font-heading" style="color: #d90429 !important;">50+</div>
+          <div class="small text-muted fw-bold text-uppercase">BFC Outlets Powered</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="fs-2 fw-black text-dark font-heading">1.5M+</div>
+          <div class="small text-muted fw-bold text-uppercase">Cups Served Annually</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="fs-2 fw-black text-dark font-heading">&lt; 45s</div>
+          <div class="small text-muted fw-bold text-uppercase">Serving Speed</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="fs-2 fw-black text-success font-heading">24/7</div>
+          <div class="small text-muted fw-bold text-uppercase">Certified Barista SLA</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. RICH EDITORIAL PHOTOGRAPHY SHOWCASE -->
+  <section id="bfc-gallery" class="py-5" style="background-color: #08100f; color: #ffffff;">
+    <div class="container py-lg-4">
+      
+      <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="editorial-gallery-badge justify-content-center mb-2"><i class="bi bi-camera-fill me-1"></i> VISUAL EXPERIENCE</span>
+        <h2 class="display-6 fw-bold text-white font-heading">Inside The BFC × Santino Craft</h2>
+        <p class="text-white-50 small">Live commercial espresso stations, artisan roasted beans, and certified barista workflows across 50+ branches.</p>
+      </div>
+
+      <!-- Modern Seamless Gallery Layout -->
+      <div class="row g-4">
+        
+        <!-- Large Feature 1 (7 cols) -->
+        <div class="col-lg-7">
+          <div class="editorial-gallery-item" style="min-height: 380px;">
+            <img src="images/bfc_santino_foodservice.jpg" alt="Commercial Espresso Station" class="editorial-gallery-img">
+            <div class="editorial-gallery-overlay">
+              <span class="editorial-gallery-badge"><i class="bi bi-cup-hot-fill"></i> Live Counter Setup</span>
+              <h3 class="editorial-gallery-title">Commercial 9-Bar Espresso Station</h3>
+              <p class="editorial-gallery-desc">High-pressure Italian steam boilers ensuring thick golden crema on every single shot served across all BFC outlets.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Large Feature 2 (5 cols) -->
+        <div class="col-lg-5">
+          <div class="editorial-gallery-item" style="min-height: 380px;">
+            <img src="images/imgi_20_santino_-_250522-07574.jpg" alt="Barista Latte Pour" class="editorial-gallery-img">
+            <div class="editorial-gallery-overlay">
+              <span class="editorial-gallery-badge" style="color: #64dfdf;"><i class="bi bi-droplet-fill"></i> Microfoam Steam</span>
+              <h3 class="editorial-gallery-title">Velvety Textured Milk</h3>
+              <p class="editorial-gallery-desc">Micro-textured milk heated to the exact 65°C sweet spot for silk-smooth cappuccinos and lattes.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tile 3 (4 cols) -->
+        <div class="col-md-6 col-lg-4">
+          <div class="editorial-gallery-item" style="min-height: 280px;">
+            <img src="images/imgi_28_santino_-_250522-07656.jpg" alt="Master Drum Roastery" class="editorial-gallery-img">
+            <div class="editorial-gallery-overlay">
+              <span class="editorial-gallery-badge" style="color: #ffd166;"><i class="bi bi-fire"></i> Custom Roasts</span>
+              <h3 class="editorial-gallery-title">BFC Signature Blend</h3>
+              <p class="editorial-gallery-desc">Medium-dark roasted weekly in micro-batches with rich dark cocoa & hazelnut notes.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tile 4 (4 cols) -->
+        <div class="col-md-6 col-lg-4">
+          <div class="editorial-gallery-item" style="min-height: 280px;">
+            <img src="images/imgi_24_santino_-_250522-07240.jpg" alt="Barista Training" class="editorial-gallery-img">
+            <div class="editorial-gallery-overlay">
+              <span class="editorial-gallery-badge" style="color: #06d6a0;"><i class="bi bi-award-fill"></i> Barista Academy</span>
+              <h3 class="editorial-gallery-title">Certified Staff Calibration</h3>
+              <p class="editorial-gallery-desc">Regular WBC-standard training and audits to guarantee taste consistency at all 50+ branches.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tile 5 (4 cols) -->
+        <div class="col-md-12 col-lg-4">
+          <div class="editorial-gallery-item" style="min-height: 280px;">
+            <img src="images/imgi_25_santino_-_250522-07618.jpg" alt="Fast Service Velocity" class="editorial-gallery-img">
+            <div class="editorial-gallery-overlay">
+              <span class="editorial-gallery-badge" style="color: #ffb703;"><i class="bi bi-lightning-charge-fill"></i> Peak Velocity</span>
+              <h3 class="editorial-gallery-title">Under 45s Serving Speed</h3>
+              <p class="editorial-gallery-desc">Engineered workflow designed for rush hours without compromising beverage extraction quality.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section class="py-5" style="background-color: #f8faf9;">
+    <div class="container py-lg-4">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <div class="pe-lg-4">
+            <span class="text-uppercase fw-bold text-success small" style="color: var(--santino-teal) !important; letter-spacing: 2px;">Partnership Synergy</span>
+            <h2 class="display-6 fw-bold mt-2 mb-4" style="color: #1a2b29;">How Santino Powers The BFC Coffee Experience</h2>
+            <p class="text-secondary leading-relaxed">
+              Every BFC quick-service counter is equipped with professional Santino commercial bean-to-cup espresso equipment and our custom-roasted barista blend beans. Designed to serve restaurant diners fast, consistent, and barista-level specialty coffee.
+            </p>
+            
+            <div class="d-flex flex-column gap-3 mt-4">
+              <div class="d-flex align-items-start gap-3 p-3 bg-white rounded-3 shadow-sm border border-light">
+                <div class="p-2 rounded-circle text-white d-flex align-items-center justify-content-center" style="background-color: var(--santino-teal); width: 44px; height: 44px; flex-shrink: 0;">
+                  <i class="bi bi-cup-hot fs-5"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold mb-1">Authentic 9-Bar Extraction</h6>
+                  <p class="small text-muted mb-0">High-pressure Italian steam boilers ensuring thick golden crema on every single shot.</p>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-start gap-3 p-3 bg-white rounded-3 shadow-sm border border-light">
+                <div class="p-2 rounded-circle text-white d-flex align-items-center justify-content-center" style="background-color: var(--santino-gold); width: 44px; height: 44px; flex-shrink: 0;">
+                  <i class="bi bi-lightning-charge fs-5"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold mb-1">Under 45s Serving Velocity</h6>
+                  <p class="small text-muted mb-0">Engineered for rush hour restaurant volumes without dropping cup quality.</p>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-start gap-3 p-3 bg-white rounded-3 shadow-sm border border-light">
+                <div class="p-2 rounded-circle text-white d-flex align-items-center justify-content-center" style="background-color: #1a2b29; width: 44px; height: 44px; flex-shrink: 0;">
+                  <i class="bi bi-award fs-5"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold mb-1">Certified Barista Staff Training</h6>
+                  <p class="small text-muted mb-0">Regular calibration and milk texturing training conducted by Santino Coffee Academy.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="row g-3">
+            <div class="col-6">
+              <img src="images/imgi_28_santino_-_250522-07656.jpg" alt="Commercial Espresso Roastery" class="img-fluid rounded-4 shadow-sm w-100" style="height: 240px; object-fit: cover;">
+            </div>
+            <div class="col-6">
+              <img src="images/imgi_141_EagleOne_e524e570-7076-4cbc-916e-ad851ca2de5c.jpg" alt="Italian Machine Technology" class="img-fluid rounded-4 shadow-sm w-100" style="height: 240px; object-fit: cover;">
+            </div>
+            <div class="col-12">
+              <div class="p-4 rounded-4 text-white shadow-sm" style="background: linear-gradient(135deg, var(--santino-teal) 0%, #003633 100%);">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div>
+                    <h5 class="fw-bold mb-1 text-white">BFC Signature Blend Beans</h5>
+                    <p class="small text-light opacity-75 mb-0">80% Arabica + 20% Robusta custom medium-dark roast profile.</p>
+                  </div>
+                  <i class="bi bi-bag-check-fill fs-1 text-warning"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="bfc-menu" class="py-5 bg-white">
+    <div class="container py-lg-4">
+      <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="text-uppercase fw-bold small" style="color: var(--santino-teal); letter-spacing: 2px;">Served Hot & Iced</span>
+        <h2 class="display-6 fw-bold mt-2" style="color: #1a2b29;">Santino Coffee Lineup at BFC</h2>
+        <p class="text-muted">Available at all BFC counters across Dhaka, Chattogram, Sylhet, and major cities.</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center p-4 hover-lift">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(0,98,93,0.08); color: var(--santino-teal);">
+              <i class="bi bi-cup-hot fs-1"></i>
+            </div>
+            <span class="badge bg-danger rounded-pill mx-auto mb-2 px-3 py-1">All Time Favorite</span>
+            <h5 class="fw-bold mb-1">Classic Cappuccino</h5>
+            <p class="small text-muted mb-3">Rich single origin espresso topped with thick velvety steamed microfoam milk.</p>
+            <div class="mt-auto fw-bold fs-5 text-dark">৳ 180 <span class="small text-muted fw-normal">/ Regular</span></div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center p-4 hover-lift">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(195,153,108,0.15); color: var(--santino-gold);">
+              <i class="bi bi-snow2 fs-1"></i>
+            </div>
+            <span class="badge bg-warning text-dark rounded-pill mx-auto mb-2 px-3 py-1">Cold Refreshment</span>
+            <h5 class="fw-bold mb-1">Iced Caramel Latte</h5>
+            <p class="small text-muted mb-3">Freshly pulled espresso layered over cold milk, ice cubes, and gourmet caramel drizzle.</p>
+            <div class="mt-auto fw-bold fs-5 text-dark">৳ 220 <span class="small text-muted fw-normal">/ 16oz</span></div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center p-4 hover-lift">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(0,98,93,0.08); color: var(--santino-teal);">
+              <i class="bi bi-fire fs-1"></i>
+            </div>
+            <span class="badge bg-dark rounded-pill mx-auto mb-2 px-3 py-1">Pure Caffeine</span>
+            <h5 class="fw-bold mb-1">Americano / Long Black</h5>
+            <p class="small text-muted mb-3">Double ristretto shot diluted with purified hot water for crisp dark notes.</p>
+            <div class="mt-auto fw-bold fs-5 text-dark">৳ 150 <span class="small text-muted fw-normal">/ Regular</span></div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center p-4 hover-lift">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(195,153,108,0.15); color: var(--santino-gold);">
+              <i class="bi bi-cup-straw fs-1"></i>
+            </div>
+            <span class="badge bg-success rounded-pill mx-auto mb-2 px-3 py-1">Signature Dessert</span>
+            <h5 class="fw-bold mb-1">Hazelnut Mocha Frappe</h5>
+            <p class="small text-muted mb-3">Blended ice roast espresso, pure cocoa, roasted hazelnut notes, and whipped cream.</p>
+            <div class="mt-auto fw-bold fs-5 text-dark">৳ 250 <span class="small text-muted fw-normal">/ 16oz</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. COMPREHENSIVE OUTLETS LOCATOR (12+ DETAILED BRANCHES) -->
+  <section id="outlets" class="py-5" style="background-color: #f1f5f4;">
+    <div class="container py-lg-4">
+      
+      <div class="row align-items-center mb-4">
+        <div class="col-md-7">
+          <span class="text-uppercase fw-bold small" style="color: var(--santino-teal); letter-spacing: 2px;">Nationwide Presence</span>
+          <h2 class="display-6 fw-bold mt-1 mb-0 font-heading" style="color: #1a2b29;">Find Santino Coffee at Your Nearest BFC</h2>
+          <p class="text-muted small mt-1 mb-0">Serving fresh Italian espresso at 50+ branches across Bangladesh.</p>
+        </div>
+        <div class="col-md-5 text-md-end mt-3 mt-md-0">
+          <div class="input-group shadow-sm">
+            <input type="text" id="bfcSearchInput" class="form-control rounded-pill-start border-0 px-3" placeholder="Search branch (e.g. Dhanmondi, Gulshan, Sylhet)..." onkeyup="filterBfcOutlets()">
+            <button class="btn btn-dark rounded-pill-end px-3" type="button" onclick="filterBfcOutlets()"><i class="bi bi-search"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Area Filter Pills -->
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <button class="branch-filter-btn active" onclick="filterBfcByTag('all', this)">All Outlets (12)</button>
+        <button class="branch-filter-btn" onclick="filterBfcByTag('dhaka-north', this)">Dhaka North (Gulshan, Banani, Uttara)</button>
+        <button class="branch-filter-btn" onclick="filterBfcByTag('dhaka-south', this)">Dhaka South (Dhanmondi, Bailey Rd, Khilgaon)</button>
+        <button class="branch-filter-btn" onclick="filterBfcByTag('chattogram', this)">Chattogram (GEC, Agrabad)</button>
+        <button class="branch-filter-btn" onclick="filterBfcByTag('sylhet', this)">Sylhet & Others</button>
+      </div>
+
+      <!-- Outlets Grid (12 Detailed Branches) -->
+      <div class="row g-3" id="bfcOutletGrid">
+        
+        <!-- Branch 1: Dhanmondi -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-south dhanmondi">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Dhanmondi 27</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Rangs Fortune Square, Road 27, Dhanmondi, Dhaka</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 10:00 AM – 11:30 PM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000001</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Dhanmondi+27+Dhaka" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 2: Gulshan 1 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-north gulshan">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Gulshan 1 Avenue</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Navana Tower, Ground Floor, Gulshan 1, Dhaka</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 10:00 AM – 12:00 AM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000002</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Gulshan+1+Dhaka" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 3: Banani 11 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-north banani">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Banani 11</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> House 54, Road 11, Block D, Banani, Dhaka</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 11:00 AM – 12:30 AM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000003</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Banani+Road+11+Dhaka" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 4: Uttara Sector 3 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-north uttara">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Uttara Sector 3</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Rabindra Sarani, Sector 3, Uttara, Dhaka</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 10:30 AM – 11:30 PM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000004</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Uttara+Sector+3+Dhaka" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 5: Bailey Road -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-south bailey">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Bailey Road</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> 12 New Bailey Road, Natak Sarani, Dhaka</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 11:00 AM – 11:00 PM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000005</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Bailey+Road+Dhaka" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 6: Mirpur 10 -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-north mirpur">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Mirpur 10 Circle</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Near Fire Service, Mirpur 10 Roundabout, Dhaka</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 10:00 AM – 11:00 PM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000006</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Mirpur+10+Dhaka" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 7: Khilgaon Taltola -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-south khilgaon">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Khilgaon Taltola</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Taltola Market Road, Khilgaon, Dhaka</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 11:00 AM – 11:30 PM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000007</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Khilgaon+Dhaka" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 8: Bashundhara R/A -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="dhaka-north bashundhara">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Bashundhara Gate</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Main Gate Avenue, Block A, Bashundhara R/A, Dhaka</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 10:00 AM – 12:00 AM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000008</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Bashundhara+Dhaka" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 9: Chattogram GEC -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="chattogram gec">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Chattogram GEC Circle</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Central Plaza Road, GEC Circle, Chattogram</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 11:00 AM – 11:30 PM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000009</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+GEC+Circle+Chattogram" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 10: Chattogram Agrabad -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="chattogram agrabad">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Chattogram Agrabad C/A</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Sabdar Ali Road, Agrabad Commercial Area, Chattogram</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 10:30 AM – 11:00 PM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000010</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Agrabad+Chattogram" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 11: Sylhet Zindabazar -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="sylhet zindabazar">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Sylhet Zindabazar</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> City Centre Mall, Zindabazar, Sylhet</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 11:00 AM – 11:00 PM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000011</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Zindabazar+Sylhet" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+        <!-- Branch 12: Cumilla Kandirpar -->
+        <div class="col-md-6 col-lg-4 outlet-card" data-zone="sylhet cumilla">
+          <div class="bg-white p-4 rounded-4 shadow-sm h-100 border border-light hover-lift d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-0 font-heading text-dark">BFC Cumilla Kandirpar</h5>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Active Bar</span>
+              </div>
+              <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Sattar Tower, Kandirpar, Cumilla</p>
+              <div class="small text-secondary mb-2"><i class="bi bi-clock me-1 text-gold"></i> 11:00 AM – 10:30 PM Daily</div>
+              <div class="small text-muted mb-3"><i class="bi bi-telephone-fill me-1 text-gold"></i> Hotline: +880 1711-000012</div>
+            </div>
+            <a href="https://maps.google.com/?q=BFC+Kandirpar+Cumilla" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold"><i class="bi bi-map me-1"></i> Open in Google Maps</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section class="py-5 text-white" style="background: linear-gradient(135deg, #111e1c 0%, #004541 100%);">
+    <div class="container py-lg-4 text-center">
+      <h2 class="display-6 fw-bold mb-3 text-white">Want Santino Espresso Station In Your Restaurant Chain?</h2>
+      <p class="lead text-light-50 mb-4 mx-auto" style="max-width: 650px; color: #d1dedc;">
+        From turnkey Italian machinery leasing to custom bean roasts and nationwide barista crew training — we make high-volume foodservice coffee effortless and lucrative.
+      </p>
+      <div class="d-flex justify-content-center gap-3">
+        <button class="btn btn-warning px-4 py-3 fw-bold rounded-pill text-dark shadow" data-bs-toggle="modal" data-bs-target="#enquiryModal" style="background-color: var(--santino-gold); border: none;">
+          <i class="bi bi-briefcase-fill me-2"></i> Partner With Santino Foodservice
+        </button>
+        <a href="tel:+8801800000000" class="btn btn-outline-light px-4 py-3 fw-bold rounded-pill">
+          <i class="bi bi-telephone-outbound-fill me-2"></i> Call Corporate Sales
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4 pb-4">
+        <div class="col-lg-4 col-md-6">
+          <img src="images/Logo-Santino-Coffee-white.png" alt="Santino Coffee" style="height: 52px; width: auto; object-fit: contain;" class="mb-3">
+          <p class="text-secondary small leading-relaxed pe-lg-4">
+            Singapore's premier heritage roastery and complete coffee solution partner in Bangladesh. Powering restaurants, retail superstores, hotels, and office cafes.
+          </p>
+          <div class="d-flex gap-3 fs-5 mt-3 text-secondary">
+            <a href="https://facebook.com" target="_blank" class="text-secondary"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" class="text-secondary"><i class="bi bi-instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank" class="text-secondary"><i class="bi bi-linkedin"></i></a>
+            <a href="https://wa.me/8801700000000" target="_blank" class="text-secondary"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4">
+        
+        <div class="col-lg-4 col-md-6">
+          <div class="mb-3">
+            <img src="images/Logo-Santino-Coffee-white.png" alt="Santino Coffee" style="height: 60px; width: auto; object-fit: contain;">
+          </div>
+          <p class="text-secondary pe-lg-4">
+            Santino Coffee bridges heritage and innovation to empower coffee businesses and communities across Asia. Decades of roasting expertise backed by FSSC22000 food safety certification.
+          </p>
+          <div class="d-flex gap-3 fs-5 text-white mt-3">
+            <a href="https://facebook.com" target="_blank" class="text-secondary"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" class="text-secondary"><i class="bi bi-instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank" class="text-secondary"><i class="bi bi-linkedin"></i></a>
+            <a href="https://wa.me/8801700000000" target="_blank" class="text-secondary"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+          <h5 class="footer-title">Solutions</h5>
+          <ul class="footer-links">
+            <li><a href="index.html#solutions">Café & Roastery</a></li>
+            <li><a href="index.html#solutions">Hotel & Hospitality</a></li>
+            <li><a href="index.html#solutions">Corporate Offices</a></li>
+            <li><a href="training.html">Barista Academy</a></li>
+            <li><a href="machines.html">Machine Rentals</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5 class="footer-title">Equipment & Beans</h5>
+          <ul class="footer-links">
+            <li><a href="machines.html#victoria-arduino">Victoria Arduino</a></li>
+            <li><a href="machines.html#nuova-simonelli">Nuova Simonelli</a></li>
+            <li><a href="machines.html#caye">CAYE Bionic Barista</a></li>
+            <li><a href="beans.html">Rainforest Alliance Beans</a></li>
+            <li><a href="beans.html#consumables">Cafeva Cleaning Care</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5 class="footer-title">Santino Experience</h5>
+          <p class="text-secondary mb-1"><i class="bi bi-geo-alt me-2 text-danger"></i> Singapore & Bangladesh Hub</p>
+          <p class="text-secondary mb-1"><i class="bi bi-telephone me-2 text-danger"></i> +880 1700-000000</p>
+          <p class="text-secondary mb-1"><i class="bi bi-envelope me-2 text-danger"></i> sales@santino.com.bd</p>
+          <p class="text-secondary mb-1"><i class="bi bi-globe me-2 text-danger"></i> santino.com.sg</p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center">
+        <div>© 2026 Santino Coffee. All Rights Reserved. Innovation Grounded in Heritage.</div>
+        <div class="d-flex gap-4 mt-2 mt-md-0">
+          <a href="#" class="text-secondary">Privacy Policy</a>
+          <a href="#" class="text-secondary">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Quick Enquiry Modal -->
+  <div class="modal fade" id="enquiryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 p-4">
+        <div class="modal-header border-0 pb-0">
+          <h4 class="modal-title font-heading fw-bold">Drop an Enquiry</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small mb-4">Leave your details and our commercial coffee team will contact you immediately.</p>
+          <form onsubmit="alert('Thank you! We will contact you shortly.'); return false;">
+            <div class="mb-3">
+              <input type="text" class="form-control" placeholder="Full Name *" required>
+            </div>
+            <div class="mb-3">
+              <input type="tel" class="form-control" placeholder="Phone Number *" required>
+            </div>
+            <div class="mb-3">
+              <input type="email" class="form-control" placeholder="Email Address *" required>
+            </div>
+            <div class="mb-3">
+              <textarea class="form-control" rows="3" placeholder="Tell us about your machine or coffee needs..."></textarea>
+            </div>
+            <button type="submit" class="btn-kp-maroon w-100 py-2">
+              SEND INQUIRY
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="back-to-top" title="Back to Top">
+    <i class="bi bi-arrow-up-short"></i>
+  </button>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function filterBfcOutlets() {
+      const q = (document.getElementById('bfcSearchInput').value || '').toLowerCase().trim();
+      const cards = document.querySelectorAll('#bfcOutletGrid .outlet-card');
+      cards.forEach(card => {
+        const zone = card.getAttribute('data-zone') || '';
+        const text = card.innerText.toLowerCase();
+        if (!q || zone.includes(q) || text.includes(q)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+  <script src="js/script.js"></script>
+</body>
+</html>

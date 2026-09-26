@@ -10,12 +10,12 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <!-- Google Fonts: Proza Libre, Montserrat & Plus Jakarta Sans -->
+  <!-- Google Fonts: Proza Libre, Montserrat, Plus Jakarta Sans & Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Proza+Libre:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Proza+Libre:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
@@ -55,17 +55,177 @@
         
         <!-- Logo -->
         <a href="index.html" class="d-flex align-items-center gap-2 py-1">
-          <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 68px; width: auto; object-fit: contain;">
+          <img src="images/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 68px; width: auto; object-fit: contain;">
         </a>
 
-        <!-- Desktop Menu 1 -->
+        <!-- Desktop Menu 1 (with Multi-Level Nested Dropdown for Equipment) -->
         <nav class="d-none d-lg-flex align-items-center gap-1">
-          <a href="our-story.html" class="nav-link-custom">About Us</a>
-          <a href="machines.html" class="nav-link-custom">Machine</a>
-          <a href="beans.html" class="nav-link-custom">Beans</a>
-          <a href="training.html" class="nav-link-custom">Training</a>
-          <a href="office-cafe.html" class="nav-link-custom">Horeca</a>
-          <a href="office-cafe.html" class="nav-link-custom">Office Cafe</a>
+          <a href="our-story.html" class="nav-link-custom">ABOUT US</a>
+          
+          <!-- EQUIPMENT WITH NESTED DROPDOWN -->
+          <div class="nav-item-dropdown">
+            <a href="machines.html" class="nav-link-custom d-flex align-items-center gap-1">
+              <span>EQUIPMENT</span>
+              <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
+            </a>
+
+            <!-- Level 1 Dropdown List -->
+            <ul class="nav-nested-menu">
+              
+              <!-- 1. Nuova Simonelli -->
+              <li class="nav-nested-item">
+                <a href="machines.html#nuova-simonelli" class="nav-nested-link">
+                  <span>Nuova Simonelli</span>
+                  <span class="nav-nested-badge">ITALY</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Appia Life</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Aurelia Wave</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Prontobar Touch</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">MDJ Grinder</a></li>
+                </ul>
+              </li>
+
+              <!-- 2. Victoria Arduino (Exact from Screenshot) -->
+              <li class="nav-nested-item">
+                <a href="machines.html#victoria-arduino" class="nav-nested-link">
+                  <span>Victoria Arduino</span>
+                  <span class="nav-nested-badge">FLAGSHIP</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">E1 Prima</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Maverick</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Eagle One</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Eagle Tempo</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">MY-Series Grinders</a></li>
+                </ul>
+              </li>
+
+              <!-- 3. CREM -->
+              <li class="nav-nested-item">
+                <a href="machines.html#crem" class="nav-nested-link">
+                  <span>CREM</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">EX3</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Diamant Pro</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Megacrem</a></li>
+                </ul>
+              </li>
+
+              <!-- 4. Kalerm -->
+              <li class="nav-nested-item">
+                <a href="machines.html#kalerm" class="nav-nested-link">
+                  <span>Kalerm</span>
+                  <span class="nav-nested-badge">SMART</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Y580C Smart</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">K95L Commercial</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">X580 Automatic</a></li>
+                </ul>
+              </li>
+
+              <!-- 5. Rex Royal -->
+              <li class="nav-nested-item">
+                <a href="machines.html#rex-royal" class="nav-nested-link">
+                  <span>Rex Royal</span>
+                  <span class="nav-nested-badge">SWISS</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">S500 Compact</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">S300 Commercial</a></li>
+                </ul>
+              </li>
+
+              <!-- 6. 3TEMP -->
+              <li class="nav-nested-item">
+                <a href="machines.html#3temp" class="nav-nested-link">
+                  <span>3TEMP</span>
+                  <span class="nav-nested-badge">BREWER</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Hipster Pulse</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Hipster Profile</a></li>
+                </ul>
+              </li>
+
+              <!-- 7. CAYE Bionic Barista -->
+              <li class="nav-nested-item">
+                <a href="machines.html#caye" class="nav-nested-link">
+                  <span>CAYE Bionic Barista</span>
+                  <span class="nav-nested-badge">AI/ROBOT</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Robotic Kiosk System</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Dual-Arm Barista Robot</a></li>
+                </ul>
+              </li>
+
+              <!-- 8. Grinders -->
+              <li class="nav-nested-item">
+                <a href="machines.html#grinders" class="nav-nested-link">
+                  <span>Grinders</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="machines.html" class="nav-sub-link">Mythos One / Two</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Eureka Helios</a></li>
+                  <li><a href="machines.html" class="nav-sub-link">Fiorenzato F64</a></li>
+                </ul>
+              </li>
+
+              <!-- 9. Bubble Tea Shop Solutions -->
+              <li class="nav-nested-item">
+                <a href="machines.html" class="nav-nested-link">
+                  <span>Bubble Tea Shop Solutions</span>
+                </a>
+              </li>
+
+              <!-- 10. Blupura Water Solutions -->
+              <li class="nav-nested-item">
+                <a href="machines.html" class="nav-nested-link">
+                  <span>Blupura Water Solutions</span>
+                </a>
+              </li>
+
+              <!-- 11. Others -->
+              <li class="nav-nested-item">
+                <a href="machines.html" class="nav-nested-link">
+                  <span>Others</span>
+                </a>
+              </li>
+
+              <!-- 12. Technical Support -->
+              <li class="nav-nested-item">
+                <a href="index.html#machine-services" class="nav-nested-link">
+                  <span>Technical Support</span>
+                  <span class="nav-nested-badge" style="background: rgba(0, 98, 93, 0.4); color: #85e4db; border-color: rgba(133, 228, 219, 0.4);">24/7 AMC</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="nav-nested-submenu">
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Installation & Setup</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Preventive AMC</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Emergency Breakdown</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">100% Genuine Spare Parts</a></li>
+                  <li><a href="index.html#machine-services" class="nav-sub-link">Descaling & Filtration</a></li>
+                </ul>
+              </li>
+
+            </ul>
+          </div>
+
+          <a href="beans.html" class="nav-link-custom">COFFEE BEANS</a>
+          <a href="beans.html#consumables" class="nav-link-custom">CONSUMABLES</a>
+          <a href="office-cafe.html" class="nav-link-custom">OTHER SERVICES</a>
+          <a href="training.html" class="nav-link-custom">ACADEMY</a>
         </nav>
 
         <!-- Right CTA Items -->
@@ -89,25 +249,68 @@
     </div>
   </header>
 
-  <!-- Mobile Offcanvas Menu (Menu 1 in Hamburger) -->
+  <!-- Mobile Offcanvas Menu (Menu 1 in Hamburger with Collapsible Accordion) -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
-    <div class="offcanvas-header border-bottom">
-      <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 52px; width: auto; object-fit: contain;">
+    <div class="offcanvas-header border-bottom bg-light">
+      <img src="images/Logo-Santino-Coffee-transparent.png" alt="Santino Coffee" style="height: 48px; width: auto; object-fit: contain;">
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body d-flex flex-column justify-content-between">
-      <div class="d-flex flex-column gap-3 fs-6 fw-bold text-uppercase">
-        <a href="our-story.html" class="text-dark py-2 border-bottom">About Us</a>
-        <a href="machines.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Machine</a>
-        <a href="beans.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Beans</a>
-        <a href="training.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Training</a>
-        <a href="office-cafe.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Horeca</a>
-        <a href="office-cafe.html" class="text-dark py-2 border-bottom" data-bs-dismiss="offcanvas">Office Cafe</a>
+    <div class="offcanvas-body d-flex flex-column justify-content-between p-3">
+      <div class="d-flex flex-column gap-1">
+        <a href="our-story.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>About Us</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        
+        <!-- Mobile Equipment Accordion Item -->
+        <div class="border-bottom py-2">
+          <a class="d-flex align-items-center justify-content-between px-2 text-dark fw-bold text-uppercase text-decoration-none collapsed" data-bs-toggle="collapse" href="#mobileEquipmentCollapse" role="button" aria-expanded="false">
+            <span>Equipment & Machines</span>
+            <i class="bi bi-chevron-down text-muted" style="font-size: 12px;"></i>
+          </a>
+          <div class="collapse mt-2 ps-3 pe-2" id="mobileEquipmentCollapse">
+            <div class="d-flex flex-column gap-2 py-2 border-start ps-3" style="border-color: var(--santino-teal) !important;">
+              <a href="machines.html#victoria-arduino" class="small text-dark fw-bold text-decoration-none d-flex justify-content-between">
+                <span>Victoria Arduino</span>
+                <span class="badge bg-warning text-dark" style="font-size: 9px;">FLAGSHIP</span>
+              </a>
+              <a href="machines.html#nuova-simonelli" class="small text-dark fw-bold text-decoration-none d-flex justify-content-between">
+                <span>Nuova Simonelli</span>
+                <span class="badge bg-secondary" style="font-size: 9px;">ITALY</span>
+              </a>
+              <a href="machines.html#crem" class="small text-muted text-decoration-none">CREM</a>
+              <a href="machines.html#kalerm" class="small text-muted text-decoration-none">Kalerm Smart</a>
+              <a href="machines.html#rex-royal" class="small text-muted text-decoration-none">Rex Royal Swiss</a>
+              <a href="machines.html#3temp" class="small text-muted text-decoration-none">3TEMP Specialty</a>
+              <a href="machines.html#caye" class="small text-muted text-decoration-none">CAYE Bionic Barista</a>
+              <a href="machines.html#grinders" class="small text-muted text-decoration-none">Grinders</a>
+              <a href="index.html#machine-services" class="small text-success fw-bold text-decoration-none">Technical Services (AMC)</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="beans.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Coffee Beans</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        <a href="beans.html#consumables" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Consumables</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        <a href="training.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Barista Academy</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
+        <a href="office-cafe.html" class="d-flex align-items-center justify-content-between py-2.5 px-2 text-dark fw-bold text-uppercase border-bottom text-decoration-none">
+          <span>Horeca & Office Solutions</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+        </a>
       </div>
-      <div class="pt-4 border-top">
-        <div class="small text-muted mb-2">HOTLINE SUPPORT:</div>
-        <a href="tel:+8801700000000" class="btn btn-dark w-100 fw-bold py-2" style="background-color: var(--kp-maroon); border: none;">
-          <i class="bi bi-telephone-fill me-2"></i> CALL US NOW
+
+      <div class="pt-3 border-top mt-3">
+        <div class="small text-muted mb-2 fw-semibold">HOTLINE & CONSULTANCY:</div>
+        <a href="tel:+8801700000000" class="btn btn-dark w-100 fw-bold py-2.5 d-flex align-items-center justify-content-center gap-2" style="background-color: var(--santino-teal); border: none; border-radius: 8px;">
+          <i class="bi bi-telephone-fill"></i> CALL SPECIALIST
         </a>
       </div>
     </div>
@@ -121,12 +324,16 @@
           <i class="bi bi-award-fill"></i> MEMBERSHIP
         </a>
         <span class="second-menu-sep text-muted">|</span>
-        <a href="#bfc" class="second-menu-item">
+        <a href="bfc.html" class="second-menu-item">
           <i class="bi bi-shop"></i> BFC
         </a>
         <span class="second-menu-sep text-muted">|</span>
-        <a href="#swapno" class="second-menu-item">
+        <a href="swapno.html" class="second-menu-item">
           <i class="bi bi-cart3"></i> SWAPNO
+        </a>
+        <span class="second-menu-sep text-muted">|</span>
+        <a href="brands.html" class="second-menu-item">
+          <i class="bi bi-grid-3x3-gap-fill"></i> ALL BRANDS
         </a>
         <span class="second-menu-sep text-muted">|</span>
         <a href="menu.html" class="second-menu-item">
@@ -136,132 +343,434 @@
     </div>
   </div>
 
-  <!-- 1. HERO BANNER (CAROUSEL SLIDER WITH LIVE STATS) -->
+  <!-- 1. HERO BANNER (5-SLIDE CAROUSEL WITH REAL ASSETS & VIDEO) -->
   <section class="hero-banner-section position-relative">
     
-    <div id="heroCarousel" class="carousel slide carousel-fade hero-carousel" data-bs-ride="carousel" data-bs-interval="5500">
+    <div id="heroCarousel" class="carousel slide carousel-fade hero-carousel" data-bs-ride="carousel" data-bs-interval="6500">
       
-      <!-- Carousel Indicators -->
-      <div class="carousel-indicators hero-carousel-indicators">
+      <div class="carousel-inner">
+        
+        <!-- Slide 1: Care Partner / Expansion Coffee Business in Bangladesh -->
+        <div class="carousel-item active hero-carousel-item" style="background-image: url('images/bangladesh_corporate_expansion.jpg');">
+          <div class="hero-overlay"></div>
+          <div class="container hero-content my-auto">
+            <div class="row align-items-center">
+              <div class="col-xl-8 col-lg-9 hero-content-wrap">
+                <div class="hero-slider-eyebrow">CARE PARTNER & B2B EXPANSION</div>
+                <h1 class="hero-lifestyle-title">
+                  Expansion Coffee Business,<br>
+                  <span class="hero-italic-serif">In Bangladesh</span>
+                </h1>
+                <p class="hero-lifestyle-desc">
+                  Turnkey commercial coffee solutions — Italian espresso machinery leases, 4-hour rapid technical care SLA, custom artisan roasting, and cafe consulting.
+                </p>
+                <div>
+                  <button class="btn-hero-lifestyle" data-bs-toggle="modal" data-bs-target="#enquiryModal">
+                    Explore B2B Solutions <i class="bi bi-arrow-right"></i>
+                  </button>
+                </div>
+
+                <!-- 3-Item Feature Strip -->
+                <div class="hero-features-strip">
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-gear-wide-connected"></i>
+                    <div class="hero-feature-text">Italian Espresso<br>Machinery</div>
+                  </div>
+                  <div class="hero-feature-sep"></div>
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-clock-history"></i>
+                    <div class="hero-feature-text">4-Hour Rapid<br>Service SLA</div>
+                  </div>
+                  <div class="hero-feature-sep"></div>
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-shield-check"></i>
+                    <div class="hero-feature-text">Turnkey Care<br>Partnership</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2: Cafe in BFC -->
+        <div class="carousel-item hero-carousel-item" style="background-image: url('images/bfc_santino_foodservice.jpg'); background-position: center 30%;">
+          <div class="hero-overlay"></div>
+          <div class="container hero-content my-auto">
+            <div class="row align-items-center">
+              <div class="col-xl-8 col-lg-9 hero-content-wrap">
+                <div class="hero-slider-eyebrow">OFFICIAL FOODSERVICE PARTNER</div>
+                <h1 class="hero-lifestyle-title">
+                  Signature Espresso Bar,<br>
+                  <span class="hero-italic-serif">Across 50+ BFC Outlets</span>
+                </h1>
+                <p class="hero-lifestyle-desc">
+                  Commercial 9-bar Italian espresso stations, custom roasted barista blend beans, and WBC-standard staff training powering dining across 50+ BFC restaurants nationwide.
+                </p>
+                <div>
+                  <a href="bfc.html" class="btn-hero-lifestyle">
+                    Visit BFC Brand Page <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+
+                <!-- 3-Item Feature Strip -->
+                <div class="hero-features-strip">
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-shop"></i>
+                    <div class="hero-feature-text">50+ BFC<br>Outlets</div>
+                  </div>
+                  <div class="hero-feature-sep"></div>
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-cup-hot"></i>
+                    <div class="hero-feature-text">Fresh Barista<br>Coffee Blend</div>
+                  </div>
+                  <div class="hero-feature-sep"></div>
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-award"></i>
+                    <div class="hero-feature-text">WBC Standard<br>Staff Training</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3: Cafe in Sharpon (Shwapno) -->
+        <div class="carousel-item hero-carousel-item" style="background-image: url('images/shwapno_santino_retail.jpg'); background-position: center 35%;">
+          <div class="hero-overlay"></div>
+          <div class="container hero-content my-auto">
+            <div class="row align-items-center">
+              <div class="col-xl-8 col-lg-9 hero-content-wrap">
+                <div class="hero-slider-eyebrow">RETAIL SUPERSTORE PARTNER</div>
+                <h1 class="hero-lifestyle-title">
+                  Specialty Retail Coffee,<br>
+                  <span class="hero-italic-serif">At 100+ Shwapno Shelves</span>
+                </h1>
+                <p class="hero-lifestyle-desc">
+                  Freshly roasted whole bean & fine ground coffee packs with one-way degassing valves and in-store grinding booths available across 100+ Shwapno superstores.
+                </p>
+                <div>
+                  <a href="swapno.html" class="btn-hero-lifestyle">
+                    Visit Shwapno Page <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+
+                <!-- 3-Item Feature Strip -->
+                <div class="hero-features-strip">
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-cart3"></i>
+                    <div class="hero-feature-text">100+ Shwapno<br>Superstores</div>
+                  </div>
+                  <div class="hero-feature-sep"></div>
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-flower1"></i>
+                    <div class="hero-feature-text">Whole Bean &<br>Fine Ground</div>
+                  </div>
+                  <div class="hero-feature-sep"></div>
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-box-seam"></i>
+                    <div class="hero-feature-text">Degassing Valve<br>Aroma Seal</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4: Video in Bean (Artisan Roastery & Sourcing) -->
+        <div class="carousel-item hero-carousel-item position-relative overflow-hidden">
+          <div class="hero-video-wrap">
+            <video class="hero-video-bg" autoplay muted loop playsinline poster="images/imgi_4_pexels-sikunovruslan-11942442.jpg">
+              <source src="videos/coffee_roasting_video.webm" type="video/webm">
+              <source src="https://web.luckincdn.com/default/assets/ourstory-41023fc9.webm" type="video/webm">
+            </video>
+          </div>
+          <div class="hero-overlay"></div>
+          <div class="container hero-content my-auto">
+            <div class="row align-items-center">
+              <div class="col-xl-8 col-lg-9 hero-content-wrap">
+                <div class="hero-slider-eyebrow">90+ SCA MICRO-LOT ROASTERY</div>
+                <h1 class="hero-lifestyle-title">
+                  Direct Trade Origins,<br>
+                  <span class="hero-italic-serif">& Roasting Mastery</span>
+                </h1>
+                <p class="hero-lifestyle-desc">
+                  Single-origin micro-lots directly sourced from Ethiopia, Colombia & Guatemala. Precision batch roasting preserves peak aromatic notes and golden crema.
+                </p>
+                <div>
+                  <a href="beans.html" class="btn-hero-lifestyle">
+                    Explore Bean Roasts <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+
+                <!-- 3-Item Feature Strip -->
+                <div class="hero-features-strip">
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-fire"></i>
+                    <div class="hero-feature-text">Drum Batch<br>Roasting</div>
+                  </div>
+                  <div class="hero-feature-sep"></div>
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-globe-americas"></i>
+                    <div class="hero-feature-text">Direct Trade<br>Ethiopia & Colombia</div>
+                  </div>
+                  <div class="hero-feature-sep"></div>
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-patch-check"></i>
+                    <div class="hero-feature-text">FSSC 22000<br>Certified</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 5: Video Espresso Business (Commercial Machinery & Care SLA) -->
+        <div class="carousel-item hero-carousel-item position-relative overflow-hidden">
+          <div class="hero-video-wrap">
+            <video class="hero-video-bg" autoplay muted loop playsinline poster="images/imgi_218_blackeagle2.jpg">
+              <source src="videos/coffee_espresso_video.mp4" type="video/mp4">
+              <source src="https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/ab6140f6-129c-4ae9-aaa0-20190c43183b.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="hero-overlay"></div>
+          <div class="container hero-content my-auto">
+            <div class="row align-items-center">
+              <div class="col-xl-8 col-lg-9 hero-content-wrap">
+                <div class="hero-slider-eyebrow">ITALIAN ENGINEERING & CARE SLA</div>
+                <h1 class="hero-lifestyle-title">
+                  Turnkey Espresso Business,<br>
+                  <span class="hero-italic-serif">& 4-Hour Service SLA</span>
+                </h1>
+                <p class="hero-lifestyle-desc">
+                  Official distributor of Victoria Arduino, Nuova Simonelli, and Kalerm. Providing guaranteed 4-hour on-site maintenance, barista calibration, and zero-capex leasing.
+                </p>
+                <div>
+                  <a href="machines.html" class="btn-hero-lifestyle">
+                    Discover Machines <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+
+                <!-- 3-Item Feature Strip -->
+                <div class="hero-features-strip">
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-gear"></i>
+                    <div class="hero-feature-text">Victoria Arduino<br>& Simonelli</div>
+                  </div>
+                  <div class="hero-feature-sep"></div>
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-tools"></i>
+                    <div class="hero-feature-text">4-Hour SLA<br>On-site AMC</div>
+                  </div>
+                  <div class="hero-feature-sep"></div>
+                  <div class="hero-feature-unit">
+                    <i class="bi bi-cash-stack"></i>
+                    <div class="hero-feature-text">Zero-Capex<br>Lease Plans</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Circular Outline Nav Arrows (Left & Right) -->
+      <button class="hero-nav-arrow hero-nav-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev" aria-label="Previous Slide">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <button class="hero-nav-arrow hero-nav-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next" aria-label="Next Slide">
+        <i class="bi bi-arrow-right"></i>
+      </button>
+
+      <!-- Vertical Slide Pagination on Right Edge -->
+      <div class="hero-vertical-pagination d-none d-lg-flex">
+        <span class="hero-slide-counter-num" id="heroSlideCounter">01 / 05</span>
+        <ul class="hero-vert-dot-list">
+          <li class="hero-vert-dot active" data-bs-target="#heroCarousel" data-bs-slide-to="0"></li>
+          <li class="hero-vert-dot" data-bs-target="#heroCarousel" data-bs-slide-to="1"></li>
+          <li class="hero-vert-dot" data-bs-target="#heroCarousel" data-bs-slide-to="2"></li>
+          <li class="hero-vert-dot" data-bs-target="#heroCarousel" data-bs-slide-to="3"></li>
+          <li class="hero-vert-dot" data-bs-target="#heroCarousel" data-bs-slide-to="4"></li>
+        </ul>
+      </div>
+
+      <!-- Horizontal Line Indicators at Bottom Center -->
+      <div class="hero-lifestyle-indicators">
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
       </div>
-
-      <div class="carousel-inner">
-        
-        <!-- Slide 1 -->
-        <div class="carousel-item active hero-carousel-item" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_20_santino_-_250522-07574.jpg');">
-          <div class="hero-overlay"></div>
-          <div class="container hero-content my-auto">
-            <div class="row">
-              <div class="col-xl-9 col-lg-10">
-                <span class="hero-tag"><i class="bi bi-award-fill me-1"></i> Innovation Grounded in Heritage</span>
-                <h1 class="hero-title">Empowering Coffee<br>Businesses Across Asia</h1>
-                <p class="hero-desc">
-                  Santino Coffee bridges heritage and innovation to empower coffee businesses and communities with world-class machinery, custom roasting, and professional barista solutions.
-                </p>
-                <div class="d-flex flex-wrap gap-3">
-                  <button class="btn-hero-white" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                    Explore Solutions <i class="bi bi-arrow-right"></i>
-                  </button>
-                  <a href="#products" class="btn btn-outline-light px-4 py-3 fw-bold text-uppercase d-inline-flex align-items-center gap-2" style="border-radius: 6px; font-size: 14.5px; font-family: var(--kp-font-title);">
-                    View Catalog <i class="bi bi-chevron-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 2 -->
-        <div class="carousel-item hero-carousel-item" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_23_santino_-_250522-07495.jpg');">
-          <div class="hero-overlay"></div>
-          <div class="container hero-content my-auto">
-            <div class="row">
-              <div class="col-xl-9 col-lg-10">
-                <span class="hero-tag"><i class="bi bi-lightning-charge-fill me-1"></i> State-of-the-Art Espresso</span>
-                <h1 class="hero-title">Precision Machinery &<br>Bionic Automation</h1>
-                <p class="hero-desc">
-                  Authorized partners for Victoria Arduino, Nuova Simonelli, Kalerm, and CAYE Bionic Barista robots delivering unmatched extraction consistency.
-                </p>
-                <div class="d-flex flex-wrap gap-3">
-                  <a href="#products" class="btn-hero-white">
-                    Discover Equipment <i class="bi bi-arrow-right"></i>
-                  </a>
-                  <button class="btn btn-outline-light px-4 py-3 fw-bold text-uppercase d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#enquiryModal" style="border-radius: 6px; font-size: 14.5px; font-family: var(--kp-font-title);">
-                    Book A Demo <i class="bi bi-play-circle"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="carousel-item hero-carousel-item" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_28_santino_-_250522-07656.jpg');">
-          <div class="hero-overlay"></div>
-          <div class="container hero-content my-auto">
-            <div class="row">
-              <div class="col-xl-9 col-lg-10">
-                <span class="hero-tag"><i class="bi bi-shield-check me-1"></i> FSSC22000 & Rainforest Certified</span>
-                <h1 class="hero-title">Artisan Roastery &<br>Barista Academy</h1>
-                <p class="hero-desc">
-                  Decades of custom private label roasting expertise combined with world-class WBC & WBrC championship coaching for coffee leaders.
-                </p>
-                <div class="d-flex flex-wrap gap-3">
-                  <a href="#services" class="btn-hero-white">
-                    Explore Academy <i class="bi bi-arrow-right"></i>
-                  </a>
-                  <button class="btn btn-outline-light px-4 py-3 fw-bold text-uppercase d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#enquiryModal" style="border-radius: 6px; font-size: 14.5px; font-family: var(--kp-font-title);">
-                    Request Samples <i class="bi bi-cup-hot"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Carousel Nav Arrows -->
-      <button class="carousel-control-prev hero-carousel-btn start-0 ms-3 ms-md-4" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <i class="bi bi-chevron-left"></i>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next hero-carousel-btn end-0 me-3 me-md-4" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <i class="bi bi-chevron-right"></i>
-        <span class="visually-hidden">Next</span>
-      </button>
 
     </div>
+  </section>
 
-    <!-- Live Counters Inside Hero Bottom -->
-    <div class="container hero-stats-row">
-      <div class="row g-4 align-items-center">
-        
-        <div class="col-md-4 col-sm-6">
-          <div class="hero-stat-item">
-            <div class="hero-stat-number"><span class="counter" data-target="30">0</span>+</div>
-            <div class="hero-stat-label">Years of Roasting Heritage</div>
-          </div>
+  <!-- 1.2. FEATURED MENU HIGHLIGHT SLIDER (HOT & COLD SIGNATURES) -->
+  <section class="home-menu-preview-section py-5 position-relative" id="featured-menu" style="background: linear-gradient(180deg, #fdfbf7 0%, #f4eee3 100%);">
+    <div class="container py-3">
+      
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4">
+        <div>
+          <span class="hero-tag mb-2" style="background: rgba(0, 98, 93, 0.08); border-color: rgba(0, 98, 93, 0.2); color: var(--kp-maroon);"><i class="bi bi-cup-hot-fill me-1"></i> 100% Premium Beans</span>
+          <h2 class="sec-title mb-1">Good Coffee, Better Days</h2>
+          <p class="text-muted mb-0" style="font-size: 0.95rem;">Santino Caffè Signature Hot & Cold Brews crafted with authentic Italian roast.</p>
         </div>
-
-        <div class="col-md-4 col-sm-6 stat-divider">
-          <div class="hero-stat-item">
-            <div class="hero-stat-number"><span class="counter" data-target="500">0</span>+</div>
-            <div class="hero-stat-label">Hotels, Cafés & Corporate Partners</div>
-          </div>
+        <div class="mt-3 mt-md-0 d-flex align-items-center gap-2">
+          <!-- Slider Navigation Arrows -->
+          <button class="btn btn-outline-dark rounded-circle p-2 menu-slider-prev" style="width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center;" aria-label="Previous Drink">
+            <i class="bi bi-arrow-left"></i>
+          </button>
+          <button class="btn btn-dark rounded-circle p-2 menu-slider-next" style="width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; background: var(--santino-teal); border-color: var(--santino-teal);" aria-label="Next Drink">
+            <i class="bi bi-arrow-right"></i>
+          </button>
+          <a href="menu.html" class="btn btn-dark ms-2 fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: var(--kp-maroon); border: none; font-size: 13.5px; letter-spacing: 0.4px;">
+            View Full Menu <i class="bi bi-arrow-up-right ms-1"></i>
+          </a>
         </div>
-
-        <div class="col-md-4 col-sm-6 stat-divider">
-          <div class="hero-stat-item">
-            <div class="hero-stat-number"><span class="counter" data-target="100">0</span>%</div>
-            <div class="hero-stat-label">FSSC22000 & Rainforest Certified</div>
-          </div>
-        </div>
-
       </div>
+
+      <!-- Menu Horizontal Slider Track -->
+      <div class="menu-teaser-slider-wrapper">
+        <div class="menu-teaser-track" id="menuTeaserTrack">
+          
+          <!-- Item 1: Hot Cappuccino -->
+          <div class="menu-teaser-card">
+            <div class="menu-card-tag hot-tag"><i class="bi bi-fire"></i> Hot Classic</div>
+            <div class="menu-teaser-img-box">
+              <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&auto=format&fit=crop&q=80" alt="Cappuccino">
+            </div>
+            <div class="menu-teaser-info">
+              <h4 class="menu-teaser-title">Cappuccino</h4>
+              <p class="menu-teaser-desc">Velvety micro-foam espresso with rich aroma & smooth taste.</p>
+              <div class="menu-teaser-price-row">
+                <div class="price-val"><span class="currency">Tk.</span> 170 <small class="text-muted fs-8">/ Reg</small></div>
+                <a href="menu.html" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2: Iced Latte -->
+          <div class="menu-teaser-card">
+            <div class="menu-card-tag cold-tag"><i class="bi bi-snow"></i> Cold Favorite</div>
+            <div class="menu-teaser-img-box">
+              <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&auto=format&fit=crop&q=80" alt="Iced Latte">
+            </div>
+            <div class="menu-teaser-info">
+              <h4 class="menu-teaser-title">Iced Latte</h4>
+              <p class="menu-teaser-desc">Smooth chilled milk layered over double shot fresh espresso.</p>
+              <div class="menu-teaser-price-row">
+                <div class="price-val"><span class="currency">Tk.</span> 200 <small class="text-muted fs-8">/ Large</small></div>
+                <a href="menu.html" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3: Iced Mocha -->
+          <div class="menu-teaser-card">
+            <div class="menu-card-tag cold-tag"><i class="bi bi-snow"></i> Rich Cocoa</div>
+            <div class="menu-teaser-img-box">
+              <img src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=700&auto=format&fit=crop&q=85" alt="Iced Mocha" loading="lazy">
+            </div>
+            <div class="menu-teaser-info">
+              <h4 class="menu-teaser-title">Iced Mocha</h4>
+              <p class="menu-teaser-desc">Premium dark chocolate syrup drizzle with iced espresso and cream.</p>
+              <div class="menu-teaser-price-row">
+                <div class="price-val"><span class="currency">Tk.</span> 210 <small class="text-muted fs-8">/ Large</small></div>
+                <a href="menu.html" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 4: Mocha Frappe -->
+          <div class="menu-teaser-card">
+            <div class="menu-card-tag frappe-tag"><i class="bi bi-stars"></i> Hero Item</div>
+            <div class="menu-teaser-img-box">
+              <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&auto=format&fit=crop&q=80" alt="Mocha Frappe">
+            </div>
+            <div class="menu-teaser-info">
+              <h4 class="menu-teaser-title">Mocha Frappe</h4>
+              <p class="menu-teaser-desc">Blended iced coffee topped with whipped cream and rich chocolate fudge.</p>
+              <div class="menu-teaser-price-row">
+                <div class="price-val"><span class="currency">Tk.</span> 230 <small class="text-muted fs-8">/ Large</small></div>
+                <a href="menu.html" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 5: Hazelnut Frappe -->
+          <div class="menu-teaser-card">
+            <div class="menu-card-tag frappe-tag"><i class="bi bi-stars"></i> Signature</div>
+            <div class="menu-teaser-img-box">
+              <img src="https://images.unsplash.com/photo-1579888944880-d98341245702?w=600&auto=format&fit=crop&q=80" alt="Hazelnut Frappe">
+            </div>
+            <div class="menu-teaser-info">
+              <h4 class="menu-teaser-title">Hazelnut Frappe</h4>
+              <p class="menu-teaser-desc">Roasted hazelnut blend with crushed ice, coffee essence & whipped peak.</p>
+              <div class="menu-teaser-price-row">
+                <div class="price-val"><span class="currency">Tk.</span> 230 <small class="text-muted fs-8">/ Large</small></div>
+                <a href="menu.html" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 6: Americano -->
+          <div class="menu-teaser-card">
+            <div class="menu-card-tag hot-tag"><i class="bi bi-fire"></i> Bold Brew</div>
+            <div class="menu-teaser-img-box">
+              <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&auto=format&fit=crop&q=80" alt="Americano">
+            </div>
+            <div class="menu-teaser-info">
+              <h4 class="menu-teaser-title">Americano</h4>
+              <p class="menu-teaser-desc">Double-shot artisan espresso lengthened with purified hot water.</p>
+              <div class="menu-teaser-price-row">
+                <div class="price-val"><span class="currency">Tk.</span> 140 <small class="text-muted fs-8">/ Reg</small></div>
+                <a href="menu.html" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 7: Iced Chocolate -->
+          <div class="menu-teaser-card">
+            <div class="menu-card-tag cold-tag"><i class="bi bi-snow"></i> Sweet Sip</div>
+            <div class="menu-teaser-img-box">
+              <img src="https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=600&auto=format&fit=crop&q=80" alt="Iced Chocolate">
+            </div>
+            <div class="menu-teaser-info">
+              <h4 class="menu-teaser-title">Iced Chocolate</h4>
+              <p class="menu-teaser-desc">Indulgent dark chocolate blended creamy with ice cold milk.</p>
+              <div class="menu-teaser-price-row">
+                <div class="price-val"><span class="currency">Tk.</span> 190 <small class="text-muted fs-8">/ Large</small></div>
+                <a href="menu.html" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Member Perk Banner Bar -->
+      <div class="menu-loyalty-strip mt-4 d-flex flex-column flex-md-row justify-content-between align-items-center p-3 p-md-4 rounded-4 text-white shadow-sm" style="background: linear-gradient(135deg, #0d3835 0%, #00625d 100%); border: 1px solid rgba(212, 175, 55, 0.3);">
+        <div class="d-flex align-items-center gap-3 text-center text-md-start mb-3 mb-md-0">
+          <div class="loyalty-icon-circle" style="background: rgba(212, 175, 55, 0.2); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #f9cb53; font-size: 22px;">
+            <i class="bi bi-gift-fill"></i>
+          </div>
+          <div>
+            <div class="fw-bold fs-6 text-white">Santino Coffee Member Perk</div>
+            <div class="small" style="color: #c9e2df;">Buy 5 Coffee & Get your 6th one <strong>Coffee Free!</strong></div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <a href="membership.html" class="btn btn-sm btn-light fw-bold px-4 py-2 rounded-pill" style="color: #00625d;">Become Member</a>
+          <a href="menu.html" class="btn btn-sm btn-outline-light fw-semibold px-3 py-2 rounded-pill">Explore Menu (20+ Items)</a>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -279,35 +788,35 @@
         <!-- Partner 1: Shwapno Superstores -->
         <div class="col-lg-6" id="swapno">
           <div class="partner-hover-card">
-            <div class="partner-hover-bg" style="background-image: url('C:/Users/Administrator/.gemini/antigravity-ide/brain/a876d163-8d27-42c2-8f18-9d99c4f42038/shwapno_santino_retail_display_1790196968606.jpg');"></div>
+            <div class="partner-hover-bg" style="background-image: url('images/shwapno_santino_retail.jpg');"></div>
             <div class="partner-hover-overlay"></div>
             
             <!-- Default State -->
             <div class="partner-default-content">
               <div>
-                <span class="partner-badge-pill"><i class="bi bi-cart-check-fill me-1"></i> EXCLUSIVE RETAIL PARTNER</span>
+                <span class="partner-badge-pill"><i class="bi bi-cart-check-fill me-1"></i> RETAIL SPECIALTY PARTNER</span>
               </div>
               <div class="partner-brand-header">
                 <h3 class="partner-brand-name">SHWAPNO SUPERSTORES</h3>
-                <span class="partner-hint-badge"><i class="bi bi-cursor-fill me-1"></i> Hover to view details</span>
+                <span class="partner-hint-badge"><i class="bi bi-cursor-fill me-1"></i> Santino Premium Beans in Flagship Branches</span>
               </div>
             </div>
 
             <!-- Hover Revealed State -->
             <div class="partner-reveal-content">
-              <span class="partner-badge-pill mb-3"><i class="bi bi-cart-check-fill me-1"></i> EXCLUSIVE RETAIL PARTNER</span>
-              <h3 class="partner-reveal-title">Fresh Roast Packs at Every Shwapno Aisle</h3>
+              <span class="partner-badge-pill mb-3"><i class="bi bi-cart-check-fill me-1"></i> RETAIL SPECIALTY PARTNER</span>
+              <h3 class="partner-reveal-title">Santino Premium Beans in Flagship Branches</h3>
               <p class="partner-reveal-desc">
-                Pick up your favorite Santino roasted coffee bean packs, ground blends, and single-origin selections directly from Shwapno supermarket outlets nationwide for your daily home brew.
+                Discover Santino’s freshly roasted 100% premium coffee beans and artisanal grounds now exclusively stocked across Shwapno’s prime flagship retail aisles nationwide.
               </p>
               <div class="partner-chips-row">
                 <span class="partner-chip"><i class="bi bi-bag-check-fill"></i> Whole Bean 250g / 1kg</span>
-                <span class="partner-chip"><i class="bi bi-cup-hot-fill"></i> Roast & Ground</span>
+                <span class="partner-chip"><i class="bi bi-star-fill"></i> Flagship Aisles</span>
                 <span class="partner-chip"><i class="bi bi-shop"></i> 100+ Outlets</span>
               </div>
-              <button class="btn-partner-hover-cta" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                FIND NEAREST SHWAPNO STORE <i class="bi bi-arrow-right"></i>
-              </button>
+              <a href="swapno.html" class="btn-partner-hover-cta text-decoration-none">
+                EXPLORE SHWAPNO BRAND PAGE <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </div>
@@ -315,35 +824,35 @@
         <!-- Partner 2: BFC (Best Fried Chicken) -->
         <div class="col-lg-6" id="bfc">
           <div class="partner-hover-card">
-            <div class="partner-hover-bg" style="background-image: url('C:/Users/Administrator/.gemini/antigravity-ide/brain/a876d163-8d27-42c2-8f18-9d99c4f42038/bfc_santino_restaurant_bar_1790196986545.jpg');"></div>
+            <div class="partner-hover-bg" style="background-image: url('images/bfc_santino_foodservice.jpg');"></div>
             <div class="partner-hover-overlay"></div>
             
             <!-- Default State -->
             <div class="partner-default-content">
               <div>
-                <span class="partner-badge-pill"><i class="bi bi-cup-hot-fill me-1"></i> OFFICIAL COFFEE PARTNER</span>
+                <span class="partner-badge-pill"><i class="bi bi-cup-hot-fill me-1"></i> FOODSERVICE HERITAGE</span>
               </div>
               <div class="partner-brand-header">
                 <h3 class="partner-brand-name">BFC (BEST FRIED CHICKEN)</h3>
-                <span class="partner-hint-badge"><i class="bi bi-cursor-fill me-1"></i> Hover to view details</span>
+                <span class="partner-hint-badge"><i class="bi bi-cursor-fill me-1"></i> Premium Coffee in BFC Since 2021</span>
               </div>
             </div>
 
             <!-- Hover Revealed State -->
             <div class="partner-reveal-content">
-              <span class="partner-badge-pill mb-3"><i class="bi bi-cup-hot-fill me-1"></i> OFFICIAL COFFEE PARTNER</span>
-              <h3 class="partner-reveal-title">Freshly Brewed Espresso & Latte Across 50+ Outlets</h3>
+              <span class="partner-badge-pill mb-3"><i class="bi bi-cup-hot-fill me-1"></i> FOODSERVICE HERITAGE</span>
+              <h3 class="partner-reveal-title">Premium Coffee in BFC Since 2021</h3>
               <p class="partner-reveal-desc">
-                Savour signature Santino espresso, rich creamy cappuccino, and cold coffees crafted with world-class Italian espresso machinery at all BFC restaurant locations across the country.
+                Serving freshly extracted artisan espresso, creamy hot cappuccinos, and ice-cold handcrafted coffees across 50+ BFC dining outlets powered by Italian commercial machines.
               </p>
               <div class="partner-chips-row">
-                <span class="partner-chip"><i class="bi bi-cup-straw"></i> Hot & Iced Latte</span>
-                <span class="partner-chip"><i class="bi bi-lightning-charge-fill"></i> Italian Espresso</span>
+                <span class="partner-chip"><i class="bi bi-calendar-check-fill"></i> Since 2021</span>
+                <span class="partner-chip"><i class="bi bi-cup-straw"></i> Hot & Cold Brews</span>
                 <span class="partner-chip"><i class="bi bi-geo-alt-fill"></i> 50+ BFC Outlets</span>
               </div>
-              <button class="btn-partner-hover-cta" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                TASTE AT YOUR NEAREST BFC <i class="bi bi-arrow-right"></i>
-              </button>
+              <a href="bfc.html" class="btn-partner-hover-cta text-decoration-none">
+                EXPLORE BFC BRAND PAGE <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </div>
@@ -358,18 +867,24 @@
       <div class="row align-items-center g-5">
         
         <div class="col-lg-5">
+          <span class="hero-tag mb-2" style="background: rgba(0, 98, 93, 0.08); border-color: rgba(0, 98, 93, 0.2); color: var(--kp-maroon);"><i class="bi bi-patch-check-fill me-1"></i> 30+ Years of Craftsmanship</span>
           <h2 class="about-title">Innovation Grounded in Heritage</h2>
-          <p class="about-desc">
-            Decades of roasting experience, fine-tuned for consistency and flavour in every batch. We provide tailored coffee solutions built around your needs, scale, and workflow — empowering businesses from specialty cafés to multinational hotels across Asia.
+          <p class="about-desc mb-3">
+            Since 1993, Santino has bridged the art of traditional European drum roasting with next-generation automated extraction technology. Every single batch is precision-roasted to unlock sweet acidity, rich body, and lasting crema.
           </p>
-          <a href="#solutions" class="link-company">
-            DISCOVER SANTINO <i class="bi bi-arrow-right"></i>
-          </a>
+          <p class="about-desc mb-4" style="font-size: 0.92rem; color: #555;">
+            From international hotels and quick-service restaurant leaders like BFC to premium retail shelves at Shwapno, we empower businesses across Bangladesh with complete end-to-end beverage ecosystems.
+          </p>
+          <div class="d-flex align-items-center gap-3">
+            <a href="our-story.html" class="link-company fw-bold">
+              DISCOVER OUR ROASTING STORY <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
         </div>
 
         <div class="col-lg-7">
           <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/zlas9kzRYSs?rel=0" title="Santino Coffee Business" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/rZpN3Si1tIQ?rel=0" title="Innovation Grounded in Heritage - Coffee Roastery & Barista Journey" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
         </div>
 
@@ -377,55 +892,215 @@
     </div>
   </section>
 
-  <!-- 3. "HOW WE CAN HELP" (3 SOLUTION CARDS - HORECA & OFFICE CAFE) -->
+  <!-- 2.5. BARISTA ACADEMY SECTION (THEME ALIGNED & HARMONIZED) -->
+  <section class="barista-academy-home-section py-5" id="academy" style="background: #fcf9f2; border-bottom: 1px solid rgba(0, 98, 93, 0.1);">
+    <div class="container py-2">
+      
+      <!-- Top Row: Editorial Headline + Hero Visual Collage -->
+      <div class="row align-items-center g-4 g-lg-5 mb-5">
+        
+        <!-- Left Column: Editorial Headline & Copy -->
+        <div class="col-lg-5">
+          <span class="hero-tag mb-3" style="background: rgba(0, 98, 93, 0.08); border-color: rgba(0, 98, 93, 0.2); color: var(--kp-maroon);"><i class="bi bi-mortarboard-fill me-1"></i> Barista Academy</span>
+          
+          <h2 class="sec-title mb-3" style="font-size: 2.35rem; line-height: 1.2;">
+            Learn the Art of Great Coffee
+          </h2>
+          
+          <p class="text-muted mb-4" style="font-size: 0.96rem; line-height: 1.65; max-width: 440px;">
+            Our Barista Academy offers professional training for coffee lovers, aspiring baristas, and corporate teams. Get hands-on experience, expert guidance, and real-world skills.
+          </p>
+          
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <a href="training.html" class="btn btn-dark fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: var(--kp-maroon); border: none; font-size: 13.5px; letter-spacing: 0.3px;">
+              Explore Academy <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="btn btn-outline-dark fw-semibold px-4 py-2 rounded-pill d-inline-flex align-items-center gap-2" style="font-size: 13.5px; background: #ffffff;">
+              <i class="bi bi-play-circle fs-6"></i> <span>Watch Overview</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Column: Hero Visual Carousel with Overlapping Mini Cards -->
+        <div class="col-lg-7">
+          <div class="position-relative">
+            
+            <!-- Main Hero Image Frame: Auto-Sliding Carousel -->
+            <div id="baristaHeroCarousel" class="carousel slide carousel-fade rounded-4 overflow-hidden shadow-sm position-relative" data-bs-ride="carousel" data-bs-interval="3500" style="height: 380px; background: #111;">
+              
+              <!-- Carousel Inner Slides -->
+              <div class="carousel-inner h-100">
+                <!-- Slide 1: Portafilter Ground Coffee Close-up -->
+                <div class="carousel-item active h-100">
+                  <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1200&auto=format&fit=crop&q=80" alt="Freshly Ground Coffee Portafilter" class="w-100 h-100" style="object-fit: cover;">
+                </div>
+                <!-- Slide 2: Master Barista Pouring Free-pour Latte Art -->
+                <div class="carousel-item h-100">
+                  <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=1200&auto=format&fit=crop&q=80" alt="Master Barista Pouring Latte Art" class="w-100 h-100" style="object-fit: cover;">
+                </div>
+                <!-- Slide 3: Commercial Espresso Machine Extraction -->
+                <div class="carousel-item h-100">
+                  <img src="images/imgi_23_santino_-_250522-07495.jpg" alt="Commercial Espresso Dial-In" class="w-100 h-100" style="object-fit: cover;">
+                </div>
+              </div>
+
+              <!-- Script Typography Overlay (Persistent across slides) -->
+              <div class="position-absolute top-0 start-0 m-4 text-white" style="font-family: var(--kp-font-title); font-style: italic; font-weight: 800; font-size: 1.5rem; line-height: 1.2; text-shadow: 0 2px 12px rgba(0,0,0,0.9); z-index: 2;">
+                Better Baristas<br>Brew Better Stories
+              </div>
+
+              <!-- Carousel Minimal Indicators Top-Right -->
+              <div class="carousel-indicators mb-3 me-3 justify-content-end" style="z-index: 2;">
+                <button type="button" data-bs-target="#baristaHeroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" style="width: 18px; height: 4px; border-radius: 4px;"></button>
+                <button type="button" data-bs-target="#baristaHeroCarousel" data-bs-slide-to="1" aria-label="Slide 2" style="width: 18px; height: 4px; border-radius: 4px;"></button>
+                <button type="button" data-bs-target="#baristaHeroCarousel" data-bs-slide-to="2" aria-label="Slide 3" style="width: 18px; height: 4px; border-radius: 4px;"></button>
+              </div>
+            </div>
+
+            <!-- Overlapping Mini Floating Cards Bottom-Left -->
+            <div class="position-absolute bottom-0 start-0 d-flex gap-2 p-2" style="transform: translate(-10px, 20px); z-index: 3;">
+              <!-- Mini Card 1: Authentic Latte Art Cup Top View -->
+              <div class="rounded-3 overflow-hidden shadow-sm border border-2 border-white" style="width: 105px; height: 105px; background: #fff;">
+                <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300&auto=format&fit=crop&q=80" alt="Latte Art Cup" class="w-100 h-100" style="object-fit: cover;">
+              </div>
+              <!-- Mini Card 2: Classroom & Baristas Hands -->
+              <div class="rounded-3 overflow-hidden shadow-sm border border-2 border-white" style="width: 105px; height: 105px; background: #fff;">
+                <img src="images/imgi_24_santino_-_250522-07240.jpg" alt="Barista Classroom Training" class="w-100 h-100" style="object-fit: cover;">
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Feature Strip: 4 Equal Height Feature Cards + Dark CTA Card -->
+      <div class="row g-3 g-lg-4 align-items-stretch pt-2">
+        
+        <!-- Feature 1: Professional Training -->
+        <div class="col-md-6 col-lg-3 col-xl-2">
+          <div class="p-3 bg-white rounded-4 h-100 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 155px; border-color: rgba(0,0,0,0.06) !important;">
+            <div>
+              <div class="mb-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: rgba(0, 98, 93, 0.08); color: var(--kp-maroon); font-size: 16px;">
+                <i class="bi bi-cup-hot-fill"></i>
+              </div>
+              <h6 class="fw-bold mb-1 text-dark" style="font-size: 0.92rem; font-family: var(--kp-font-title);">Professional Training</h6>
+            </div>
+            <p class="text-muted small mb-0" style="font-size: 11.5px; line-height: 1.4;">Learn from certified trainers with industry experience.</p>
+          </div>
+        </div>
+
+        <!-- Feature 2: Hands-on Practice -->
+        <div class="col-md-6 col-lg-3 col-xl-2">
+          <div class="p-3 bg-white rounded-4 h-100 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 155px; border-color: rgba(0,0,0,0.06) !important;">
+            <div>
+              <div class="mb-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: rgba(0, 98, 93, 0.08); color: var(--kp-maroon); font-size: 16px;">
+                <i class="bi bi-people-fill"></i>
+              </div>
+              <h6 class="fw-bold mb-1 text-dark" style="font-size: 0.92rem; font-family: var(--kp-font-title);">Hands-on Practice</h6>
+            </div>
+            <p class="text-muted small mb-0" style="font-size: 11.5px; line-height: 1.4;">Work with real equipment and live coffee stations.</p>
+          </div>
+        </div>
+
+        <!-- Feature 3: Certification -->
+        <div class="col-md-6 col-lg-3 col-xl-2">
+          <div class="p-3 bg-white rounded-4 h-100 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 155px; border-color: rgba(0,0,0,0.06) !important;">
+            <div>
+              <div class="mb-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: rgba(0, 98, 93, 0.08); color: var(--kp-maroon); font-size: 16px;">
+                <i class="bi bi-patch-check-fill"></i>
+              </div>
+              <h6 class="fw-bold mb-1 text-dark" style="font-size: 0.92rem; font-family: var(--kp-font-title);">Certification</h6>
+            </div>
+            <p class="text-muted small mb-0" style="font-size: 11.5px; line-height: 1.4;">Get a recognized certificate after course completion.</p>
+          </div>
+        </div>
+
+        <!-- Feature 4: Career Support -->
+        <div class="col-md-6 col-lg-3 col-xl-2">
+          <div class="p-3 bg-white rounded-4 h-100 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 155px; border-color: rgba(0,0,0,0.06) !important;">
+            <div>
+              <div class="mb-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: rgba(0, 98, 93, 0.08); color: var(--kp-maroon); font-size: 16px;">
+                <i class="bi bi-briefcase-fill"></i>
+              </div>
+              <h6 class="fw-bold mb-1 text-dark" style="font-size: 0.92rem; font-family: var(--kp-font-title);">Career Support</h6>
+            </div>
+            <p class="text-muted small mb-0" style="font-size: 11.5px; line-height: 1.4;">Guidance for job placement and career growth.</p>
+          </div>
+        </div>
+
+        <!-- Right Promo Banner Card: Join Our Barista Academy -->
+        <div class="col-md-12 col-lg-12 col-xl-4">
+          <div class="p-3 p-md-4 rounded-4 text-white h-100 d-flex flex-column justify-content-between shadow-sm position-relative overflow-hidden" style="background: linear-gradient(135deg, #0d3835 0%, #00625d 100%); min-height: 155px;">
+            <div>
+              <span class="text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 0.8px; color: #a9cfcc;">FOR INDIVIDUALS & TEAMS</span>
+              <h5 class="fw-bold mt-1 mb-1 text-white" style="font-family: var(--kp-font-title);">Join Our Barista Academy</h5>
+              <p class="small mb-0" style="color: #d1e7e5; font-size: 12px; line-height: 1.4;">
+                Build your skills. Grow your career. Be a part of our coffee community.
+              </p>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+              <a href="training.html" class="rounded-circle d-flex align-items-center justify-content-center text-white border border-light" style="width: 36px; height: 36px; background: rgba(255,255,255,0.15); transition: all 0.2s ease;">
+                <i class="bi bi-arrow-right fs-6"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. "COFFEE SOLUTIONS FOR YOUR BUSINESS" (HORECA, OFFICE COFFEE, EVENT COFFEE / CONSULTING) -->
   <section class="solutions-section" id="solutions">
     <div class="container" id="horeca">
       <div class="sec-heading-center" id="office-cafe">
-        <h2 class="sec-title">Tailored Coffee Solutions</h2>
+        <h2 class="sec-title">Coffee Solutions for Your Business</h2>
         <div class="sec-subtitle">Built around your needs, scale, and workflow</div>
       </div>
 
       <div class="row g-4 mobile-scroll-row">
         
-        <!-- Card 1: Professional Coffee Machines -->
+        <!-- Card 1: HORECA -->
         <div class="col-lg-4 col-md-6">
-          <div class="solution-card" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_26_santino_-_250522-07312.jpg');">
+          <div class="solution-card" style="background-image: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1000&auto=format&fit=crop&q=80');">
             <div class="solution-card-overlay"></div>
             <div class="solution-card-content">
-              <h3 class="solution-card-title">Professional Coffee Machines</h3>
+              <h3 class="solution-card-title">HORECA</h3>
               <ul class="solution-card-links">
-                <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal">Victoria Arduino & Nuova Simonelli <i class="bi bi-arrow-right"></i></a></li>
-                <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal">CAYE Bionic Barista & Kalerm <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="office-cafe.html" class="text-white text-decoration-none">Hotels, Fine Dining & Cafes <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="machines.html" class="text-white text-decoration-none">Commercial Espresso Machines <i class="bi bi-arrow-right"></i></a></li>
               </ul>
-              <button class="btn-card-knowmore" data-bs-toggle="modal" data-bs-target="#enquiryModal">EXPLORE EQUIPMENT →</button>
+              <a href="office-cafe.html" class="btn-card-knowmore text-decoration-none text-center">EXPLORE HORECA →</a>
             </div>
           </div>
         </div>
 
-        <!-- Card 2: Coffee Beans Roasting -->
+        <!-- Card 2: Office Coffee -->
         <div class="col-lg-4 col-md-6">
-          <div class="solution-card" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_25_santino_-_250522-07618.jpg');">
+          <div class="solution-card" style="background-image: url('https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1000&auto=format&fit=crop&q=80');">
             <div class="solution-card-overlay"></div>
             <div class="solution-card-content">
-              <h3 class="solution-card-title">Coffee Beans Roasting</h3>
+              <h3 class="solution-card-title">Office Coffee</h3>
               <ul class="solution-card-links">
-                <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal">The Green Label Certified Blends <i class="bi bi-arrow-right"></i></a></li>
-                <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal">Custom OEM Private Label Roasting <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="office-cafe.html" class="text-white text-decoration-none">Corporate Bean-to-Cup Setup <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="text-white text-decoration-none">Monthly Roast Subscriptions <i class="bi bi-arrow-right"></i></a></li>
               </ul>
-              <button class="btn-card-knowmore" data-bs-toggle="modal" data-bs-target="#enquiryModal">VIEW COFFEE BEANS →</button>
+              <a href="office-cafe.html" class="btn-card-knowmore text-decoration-none text-center">EXPLORE OFFICE COFFEE →</a>
             </div>
           </div>
         </div>
 
-        <!-- Card 3: Solutions Provider -->
+        <!-- Card 3: Event Coffee / Consulting -->
         <div class="col-lg-4 col-md-6">
-          <div class="solution-card" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_27_santino_-_250522-07216.jpg');">
+          <div class="solution-card" style="background-image: url('https://images.unsplash.com/photo-1511578314322-379afb476865?w=1000&auto=format&fit=crop&q=80');">
             <div class="solution-card-overlay"></div>
             <div class="solution-card-content">
-              <h3 class="solution-card-title">End-to-End Solutions</h3>
+              <h3 class="solution-card-title">Event Coffee / Consulting</h3>
               <ul class="solution-card-links">
-                <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal">Coffee Machine Rentals & Leasing <i class="bi bi-arrow-right"></i></a></li>
-                <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal">Barista Academy & Technical Support <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="text-white text-decoration-none">Pop-Up Live Espresso Bars <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="training.html" class="text-white text-decoration-none">Cafe Setup & Barista Strategy <i class="bi bi-arrow-right"></i></a></li>
               </ul>
               <button class="btn-card-knowmore" data-bs-toggle="modal" data-bs-target="#enquiryModal">GET CONSULTATION →</button>
             </div>
@@ -441,87 +1116,118 @@
     
     <!-- Row 1: Innovation with Purpose -->
     <div class="zigzag-row">
-      <div class="zigzag-col-image" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_23_santino_-_250522-07495.jpg');"></div>
+      <div class="zigzag-col-image" style="background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&auto=format&fit=crop&q=80');"></div>
       <div class="zigzag-col-text">
         <h3 class="zigzag-title">Innovation with Purpose</h3>
         <p class="zigzag-desc">
-          We embrace new ideas, technologies, and methods that elevate coffee culture while respecting tradition. From advanced CAYE Bionic Baristas to intelligent superautomatics, we empower businesses to lead the coffee revolution.
+          We embrace new ideas, technologies, and methods that elevate coffee culture in Bangladesh while respecting tradition. From advanced CAYE Bionic Baristas to intelligent superautomatics, we empower businesses to lead the coffee revolution.
         </p>
-        <a href="#products" class="link-kp-red">EXPLORE AUTOMATION <i class="bi bi-arrow-right"></i></a>
+        <a href="machines.html" class="link-kp-red">EXPLORE AUTOMATION <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
 
     <!-- Row 2: Quality Without Compromise -->
     <div class="zigzag-row flex-lg-row-reverse">
-      <div class="zigzag-col-image" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_28_santino_-_250522-07656.jpg');"></div>
+      <div class="zigzag-col-image" style="background-image: url('https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=1200&auto=format&fit=crop&q=80');"></div>
       <div class="zigzag-col-text">
         <h3 class="zigzag-title">Quality Without Compromise</h3>
         <p class="zigzag-desc">
-          Everything we do shows our dedication and commitment to quality — backed by our FSSC22000 food safety certification and Rainforest Alliance certified coffee beans roasted fresh to precision in every batch.
+          Everything we do shows our dedication and commitment to quality — backed by our FSSC22000 food safety certification and Rainforest Alliance certified coffee beans roasted fresh to precision in every single batch.
         </p>
-        <a href="#products" class="link-kp-red">VIEW CERTIFICATIONS <i class="bi bi-arrow-right"></i></a>
+        <a href="beans.html" class="link-kp-red">VIEW CERTIFICATIONS <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
 
     <!-- Row 3: Empowerment Through Knowledge -->
     <div class="zigzag-row">
-      <div class="zigzag-col-image" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_24_santino_-_250522-07240.jpg');"></div>
+      <div class="zigzag-col-image" style="background-image: url('images/imgi_24_santino_-_250522-07240.jpg');"></div>
       <div class="zigzag-col-text">
         <h3 class="zigzag-title">Empowerment Through Knowledge</h3>
         <p class="zigzag-desc">
-          We train, mentor, and share expertise to grow the next generation of coffee leaders. Our certified trainers support baristas from foundational skills to World Barista & Brewers Cup championships.
+          We train, mentor, and share expertise to grow the next generation of coffee leaders in Bangladesh. Our certified trainers support baristas from foundational skills to World Barista & Brewers Cup championships.
         </p>
-        <a href="#contact" class="link-kp-red">JOIN ACADEMY <i class="bi bi-arrow-right"></i></a>
+        <a href="training.html" class="link-kp-red">JOIN ACADEMY <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
 
   </section>
 
-  <!-- 5. TESTIMONIALS / CUSTOMERS SPEAK (Dark Section) -->
-  <section class="testimonials-section">
-    <div class="container">
-      <div class="sec-heading-center">
-        <div class="sec-subtitle" style="color: var(--kp-gold);">Trusted Across Asia</div>
-        <h2 class="sec-title text-white">What Our Hospitality Partners Say</h2>
+  <!-- 5. TESTIMONIALS / CUSTOMERS SPEAK (Clean, Refined & Minimal) -->
+  <section class="testimonials-section py-5" style="background: #0f1c1a; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);">
+    <div class="container py-4">
+      <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="hero-tag mb-2" style="background: rgba(212, 175, 55, 0.15); border-color: rgba(212, 175, 55, 0.4); color: #f9cb53;"><i class="bi bi-star-fill me-1"></i> Partner Trust</span>
+        <h2 class="sec-title text-white mb-2" style="font-size: 2.2rem;">What Our Hospitality Partners Say</h2>
+        <div style="color: #b4cbc8; font-size: 1rem; font-weight: 500;">Powering leading restaurant chains, hotels, and specialty cafes nationwide.</div>
       </div>
 
       <div class="row g-4 mobile-scroll-row">
         
+        <!-- Partner 1: Fast Food Chain -->
         <div class="col-lg-4 col-md-6">
-          <div class="testimonial-card">
+          <div class="p-4 rounded-4 h-100 d-flex flex-column justify-content-between" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.3s ease;">
             <div>
-              <div class="testimonial-stars">★★★★★</div>
-              <p class="testimonial-quote">"Santino's Victoria Arduino machinery and custom roasted blends delivered the exact premium specialty standard our flagship cafe required."</p>
+              <div class="d-flex align-items-center gap-1 mb-3" style="color: #f9cb53; font-size: 14px;">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p class="mb-4" style="color: #cfdbd9; font-size: 0.94rem; line-height: 1.65; font-style: italic;">
+                "Santino's espresso calibration and commercial machine consistency have enabled us to serve great coffee smoothly across all our 50+ BFC restaurant outlets."
+              </p>
             </div>
-            <div>
-              <div class="testimonial-author">Marcus Tan</div>
-              <div class="testimonial-role">Founder, Artisan Specialty Cafe</div>
+            <div class="d-flex align-items-center gap-3 pt-3" style="border-top: 1px solid rgba(255, 255, 255, 0.06);">
+              <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width: 40px; height: 40px; background: var(--santino-teal); font-size: 14px;">
+                BFC
+              </div>
+              <div>
+                <div class="text-white fw-bold" style="font-size: 0.92rem;">F&B Operations Lead</div>
+                <div class="text-muted small" style="font-size: 11.5px;">BFC (Best Fried Chicken) Bangladesh</div>
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- Partner 2: Luxury Hotel -->
         <div class="col-lg-4 col-md-6">
-          <div class="testimonial-card">
+          <div class="p-4 rounded-4 h-100 d-flex flex-column justify-content-between" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.3s ease;">
             <div>
-              <div class="testimonial-stars">★★★★★</div>
-              <p class="testimonial-quote">"Their Rainforest Alliance certified beans and 24/7 technical breakdown support maintain zero downtime across our hotel restaurants."</p>
+              <div class="d-flex align-items-center gap-1 mb-3" style="color: #f9cb53; font-size: 14px;">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p class="mb-4" style="color: #cfdbd9; font-size: 0.94rem; line-height: 1.65; font-style: italic;">
+                "Their Rainforest Alliance certified roasted beans and responsive 24/7 preventative machinery service maintain zero downtime across our banquet and cafe operations."
+              </p>
             </div>
-            <div>
-              <div class="testimonial-author">David Lee</div>
-              <div class="testimonial-role">Director of Food & Beverage, Luxury Hotel Group</div>
+            <div class="d-flex align-items-center gap-3 pt-3" style="border-top: 1px solid rgba(255, 255, 255, 0.06);">
+              <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width: 40px; height: 40px; background: #8e6d29; font-size: 14px;">
+                RH
+              </div>
+              <div>
+                <div class="text-white fw-bold" style="font-size: 0.92rem;">Director of Culinary & Beverage</div>
+                <div class="text-muted small" style="font-size: 11.5px;">5-Star Luxury Hotel Group, Dhaka</div>
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- Partner 3: Retail / Supermarket -->
         <div class="col-lg-4 col-md-6">
-          <div class="testimonial-card">
+          <div class="p-4 rounded-4 h-100 d-flex flex-column justify-content-between" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.3s ease;">
             <div>
-              <div class="testimonial-stars">★★★★★</div>
-              <p class="testimonial-quote">"From barista training workshops to OEM bean roasting, Santino is the most reliable complete coffee partner in the region."</p>
+              <div class="d-flex align-items-center gap-1 mb-3" style="color: #f9cb53; font-size: 14px;">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p class="mb-4" style="color: #cfdbd9; font-size: 0.94rem; line-height: 1.65; font-style: italic;">
+                "Santino's retail roast packs on our supermarket shelves have received exceptional customer feedback for fresh aroma, airtight packaging, and rich flavor."
+              </p>
             </div>
-            <div>
-              <div class="testimonial-author">Rachel Wong</div>
-              <div class="testimonial-role">Corporate F&B Operations Manager</div>
+            <div class="d-flex align-items-center gap-3 pt-3" style="border-top: 1px solid rgba(255, 255, 255, 0.06);">
+              <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width: 40px; height: 40px; background: #d90429; font-size: 14px;">
+                SW
+              </div>
+              <div>
+                <div class="text-white fw-bold" style="font-size: 0.92rem;">Category Category Manager</div>
+                <div class="text-muted small" style="font-size: 11.5px;">Shwapno Superstores Nationwide</div>
+              </div>
             </div>
           </div>
         </div>
@@ -530,121 +1236,294 @@
     </div>
   </section>
 
-  <!-- 6. PARTNER BRANDS MARQUEE -->
-  <section class="brands-marquee-section">
-    <div class="marquee-track">
-      <div class="marquee-item">VICTORIA ARDUINO</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">NUOVA SIMONELLI</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">KALERM</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">CREM</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">REX ROYAL</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">3TEMP</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">CAYE BIONIC BARISTA</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">HARIO</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">DAVINCI GOURMET</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">TEADROP MELBOURNE</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">NIKO NEKO MATCHA</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">CAFEVA CARE</div>
-      <div class="marquee-item">•</div>
-      <!-- Loop Items -->
-      <div class="marquee-item">VICTORIA ARDUINO</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">NUOVA SIMONELLI</div>
-      <div class="marquee-item">•</div>
-      <div class="marquee-item">KALERM</div>
-      <div class="marquee-item">•</div>
+  <!-- 6. PARTNER BRANDS MARQUEE + BECOME PARTNER ACTION STRIP -->
+  <section class="brands-marquee-section position-relative" style="background: #ffffff; border-top: 1px solid var(--kp-border); border-bottom: 1px solid var(--kp-border); overflow: hidden; padding: 0;">
+    <div class="container-fluid p-0">
+      <div class="row g-0 align-items-stretch">
+        
+        <!-- Left Side: Infinite Marquee Slider with Smooth Fade -->
+        <div class="col-lg-7 col-xl-8 d-flex align-items-center overflow-hidden position-relative py-3 px-3 px-lg-4" style="background: #ffffff; min-height: 105px;">
+          <div class="marquee-track-container position-relative overflow-hidden w-100 py-1" style="mask-image: linear-gradient(to right, transparent 0%, black 5%, black 92%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 92%, transparent 100%);">
+            <div class="marquee-track align-items-center" style="animation: kpMarqueeScroll 26s linear infinite; display: flex; gap: 48px; width: max-content;">
+              
+              <!-- Brand 1: Victoria Arduino -->
+              <div class="d-flex flex-column align-items-center justify-content-center text-center px-2">
+                <img src="images/imgi_7_victoria-arduino-logo_b98bf55d-e3de-4d00-a2ee-75da5451d868.png" alt="Victoria Arduino" style="height: 34px; width: auto; max-width: 120px; object-fit: contain; filter: grayscale(100%); opacity: 0.85; margin-bottom: 4px;">
+                <span style="font-size: 10.5px; font-weight: 700; color: #555; letter-spacing: 0.6px; text-transform: uppercase;">VICTORIA ARDUINO</span>
+              </div>
+              <div class="text-muted opacity-50 align-self-center">•</div>
+
+              <!-- Brand 2: Nuova Simonelli -->
+              <div class="d-flex flex-column align-items-center justify-content-center text-center px-2">
+                <img src="images/imgi_6_NS.png" alt="Nuova Simonelli" style="height: 32px; width: auto; max-width: 120px; object-fit: contain; filter: grayscale(100%); opacity: 0.85; margin-bottom: 4px;">
+                <span style="font-size: 10.5px; font-weight: 700; color: #555; letter-spacing: 0.6px; text-transform: uppercase;">NUOVA SIMONELLI</span>
+              </div>
+              <div class="text-muted opacity-50 align-self-center">•</div>
+
+              <!-- Brand 3: Kalerm -->
+              <div class="d-flex flex-column align-items-center justify-content-center text-center px-2">
+                <img src="images/imgi_14_kalerm-202203230959.png" alt="Kalerm" style="height: 30px; width: auto; max-width: 100px; object-fit: contain; filter: grayscale(100%); opacity: 0.85; margin-bottom: 4px;">
+                <span style="font-size: 10.5px; font-weight: 700; color: #555; letter-spacing: 0.6px; text-transform: uppercase;">KALERM</span>
+              </div>
+              <div class="text-muted opacity-50 align-self-center">•</div>
+
+              <!-- Brand 4: Hario -->
+              <div class="d-flex flex-column align-items-center justify-content-center text-center px-2">
+                <img src="images/imgi_16_HARIO_Logo.jpg" alt="Hario" style="height: 28px; width: auto; max-width: 100px; object-fit: contain; filter: grayscale(100%); opacity: 0.85; margin-bottom: 4px;">
+                <span style="font-size: 10.5px; font-weight: 700; color: #555; letter-spacing: 0.6px; text-transform: uppercase;">HARIO</span>
+              </div>
+              <div class="text-muted opacity-50 align-self-center">•</div>
+
+              <!-- Brand 5: DaVinci Gourmet -->
+              <div class="d-flex flex-column align-items-center justify-content-center text-center px-2">
+                <img src="images/imgi_17_DaVinci_Logo_1.png" alt="DaVinci Gourmet" style="height: 30px; width: auto; max-width: 110px; object-fit: contain; filter: grayscale(100%); opacity: 0.85; margin-bottom: 4px;">
+                <span style="font-size: 10.5px; font-weight: 700; color: #555; letter-spacing: 0.6px; text-transform: uppercase;">DAVINCI GOURMET</span>
+              </div>
+              <div class="text-muted opacity-50 align-self-center">•</div>
+
+              <!-- Brand 6: CAYE Bionic Barista -->
+              <div class="d-flex flex-column align-items-center justify-content-center text-center px-2">
+                <i class="bi bi-robot fs-4 text-teal" style="margin-bottom: 4px;"></i>
+                <span style="font-size: 10.5px; font-weight: 700; color: #555; letter-spacing: 0.6px; text-transform: uppercase;">CAYE BIONIC BARISTA</span>
+              </div>
+              <div class="text-muted opacity-50 align-self-center">•</div>
+
+              <!-- LOOP CLONE ITEMS FOR SEAMLESS CONTINUOUS SCROLL -->
+              <div class="d-flex flex-column align-items-center justify-content-center text-center px-2">
+                <img src="images/imgi_7_victoria-arduino-logo_b98bf55d-e3de-4d00-a2ee-75da5451d868.png" alt="Victoria Arduino" style="height: 34px; width: auto; max-width: 120px; object-fit: contain; filter: grayscale(100%); opacity: 0.85; margin-bottom: 4px;">
+                <span style="font-size: 10.5px; font-weight: 700; color: #555; letter-spacing: 0.6px; text-transform: uppercase;">VICTORIA ARDUINO</span>
+              </div>
+              <div class="text-muted opacity-50 align-self-center">•</div>
+
+              <div class="d-flex flex-column align-items-center justify-content-center text-center px-2">
+                <img src="images/imgi_6_NS.png" alt="Nuova Simonelli" style="height: 32px; width: auto; max-width: 120px; object-fit: contain; filter: grayscale(100%); opacity: 0.85; margin-bottom: 4px;">
+                <span style="font-size: 10.5px; font-weight: 700; color: #555; letter-spacing: 0.6px; text-transform: uppercase;">NUOVA SIMONELLI</span>
+              </div>
+              <div class="text-muted opacity-50 align-self-center">•</div>
+
+              <div class="d-flex flex-column align-items-center justify-content-center text-center px-2">
+                <img src="images/imgi_14_kalerm-202203230959.png" alt="Kalerm" style="height: 30px; width: auto; max-width: 100px; object-fit: contain; filter: grayscale(100%); opacity: 0.85; margin-bottom: 4px;">
+                <span style="font-size: 10.5px; font-weight: 700; color: #555; letter-spacing: 0.6px; text-transform: uppercase;">KALERM</span>
+              </div>
+              <div class="text-muted opacity-50 align-self-center">•</div>
+
+              <div class="d-flex flex-column align-items-center justify-content-center text-center px-2">
+                <img src="images/imgi_16_HARIO_Logo.jpg" alt="Hario" style="height: 28px; width: auto; max-width: 100px; object-fit: contain; filter: grayscale(100%); opacity: 0.85; margin-bottom: 4px;">
+                <span style="font-size: 10.5px; font-weight: 700; color: #555; letter-spacing: 0.6px; text-transform: uppercase;">HARIO</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Full-Width Full-Height 'Become Our Cafe Partner' Action Block -->
+        <div class="col-lg-5 col-xl-4 d-flex flex-column justify-content-center py-3 px-4 pe-lg-5 text-white position-relative" style="background: linear-gradient(135deg, #093330 0%, #00625d 100%); border-left: 2px solid rgba(212, 175, 55, 0.4); z-index: 2; min-height: 105px;">
+          <div class="mb-2">
+            <span class="badge mb-1 text-dark fw-bold px-2 py-0.5 rounded-pill" style="background: #f9cb53; font-size: 9.5px; letter-spacing: 0.5px;">EXPAND WITH SANTINO</span>
+            <h5 class="fw-bold mb-1 text-white" style="font-size: 1.15rem; font-family: var(--kp-font-title); letter-spacing: 0.2px;">Become Our Cafe Partner</h5>
+            <p class="small mb-0 text-white-50" style="font-size: 11.5px; line-height: 1.35;">
+              Turnkey machine setups, roasted beans & barista coaching.
+            </p>
+          </div>
+          <div class="mt-1">
+            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="btn btn-light w-100 fw-bold rounded-pill py-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-2" style="color: #00625d; font-size: 13px; letter-spacing: 0.3px;">
+              <span>Partner With Us</span> <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
-  <!-- 7. PRODUCT CATEGORIES (Light Grey Cards + VIEW PRODUCTS →) -->
-  <section class="categories-section" id="beans">
-    <div class="container">
-      <div class="sec-heading-center">
-        <h2 class="sec-title">Product Categories</h2>
-        <div class="sec-subtitle">Comprehensive Range of Beverage Machinery & Roasts</div>
+  <!-- 7. ESPRESSO MACHINE SERVICES SECTION (PREMIUM REDESIGN) -->
+  <section class="categories-section py-5" id="machine-services" style="background: #fdfbf7; border-top: 1px solid rgba(0, 98, 93, 0.08); border-bottom: 1px solid rgba(0, 98, 93, 0.08);">
+    <div class="container py-lg-4">
+      
+      <!-- Section Header -->
+      <div class="sec-heading-center text-center mb-5">
+        <span class="d-inline-flex align-items-center gap-2 mb-3 px-3 py-1 rounded-pill" style="background: rgba(0, 98, 93, 0.1); border: 1px solid rgba(0, 98, 93, 0.28); color: #004d49; font-weight: 800; font-size: 12px; letter-spacing: 1px;">
+          <i class="bi bi-shield-check text-warning fs-6"></i> TECHNICAL EXCELLENCE & SUPPORT
+        </span>
+        <h2 class="sec-title" style="font-size: 2.35rem; font-weight: 800; color: #1a1a1a;">Espresso Machine Services</h2>
+        <div class="sec-subtitle text-muted" style="font-size: 1.05rem; max-width: 600px; margin: 0 auto;">
+          Certified Italian machinery maintenance, authorized installation & rapid nationwide technical support.
+        </div>
       </div>
 
+      <!-- 6 Service Cards Grid -->
       <div class="row g-4 mobile-scroll-row">
         
+        <!-- Service 1: Installation & Setup -->
         <div class="col-lg-4 col-md-6">
-          <div class="category-card">
-            <div class="category-img-box">
-              <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_21_EagleOne_e524e570-7076-4cbc-916e-ad851ca2de5c.jpg" alt="Commercial Espresso Machines">
-            </div>
+          <div class="card h-100 border-0 rounded-4 shadow-sm bg-white overflow-hidden d-flex flex-column justify-content-between position-relative" style="border: 1px solid rgba(0, 98, 93, 0.12) !important; transition: transform 0.3s ease, box-shadow 0.3s ease;">
             <div>
-              <h3 class="category-title">Commercial Espresso Machines</h3>
-              <a href="#products" class="category-link">VIEW PRODUCTS →</a>
+              <div class="position-relative overflow-hidden d-flex align-items-center justify-content-center" style="height: 195px; background: #f4f7f6; padding: 20px;">
+                <span class="position-absolute top-0 start-0 m-3 badge text-dark fw-bold px-2 py-1 rounded-pill shadow-sm" style="background: #ffffff; font-size: 11px; border: 1px solid rgba(0,0,0,0.08);">
+                  <i class="bi bi-gear-wide-connected text-teal me-1"></i> Commissioning
+                </span>
+                <img src="images/imgi_21_EagleOne_e524e570-7076-4cbc-916e-ad851ca2de5c.jpg" alt="Commercial Espresso Machine Installation" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: transform 0.4s ease;">
+              </div>
+              <div class="p-4">
+                <h4 class="fw-bold mb-2 text-dark" style="font-size: 1.18rem; font-family: var(--kp-font-title);">Installation & Setup</h4>
+                <p class="text-muted small mb-3" style="font-size: 13.5px; line-height: 1.6;">
+                  Site inspection, electrical & Brita water filtration connection, pressure profiling, and precision barista workflow calibration.
+                </p>
+                <div class="d-flex flex-wrap gap-1 mb-2">
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">Site Inspection</span>
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">Water Calibration</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 pt-0">
+              <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="btn btn-outline-dark w-100 fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" style="border-color: #00625d; color: #00625d; font-size: 13px;">
+                <span>Book Installation</span> <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </div>
 
+        <!-- Service 2: Preventive Maintenance (AMC) -->
         <div class="col-lg-4 col-md-6">
-          <div class="category-card">
-            <div class="category-img-box">
-              <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_29_maverick-VA_1200x1200_fc8d047e-bc19-4666-8e3a-90081b8cdca7.webp" alt="Superautomatics & Bionic Barista">
-            </div>
+          <div class="card h-100 border-0 rounded-4 shadow-sm bg-white overflow-hidden d-flex flex-column justify-content-between position-relative" style="border: 1px solid rgba(0, 98, 93, 0.12) !important; transition: transform 0.3s ease, box-shadow 0.3s ease;">
             <div>
-              <h3 class="category-title">Superautomatics & Bionic Barista</h3>
-              <a href="#products" class="category-link">VIEW PRODUCTS →</a>
+              <div class="position-relative overflow-hidden d-flex align-items-center justify-content-center" style="height: 195px; background: #f4f7f6; padding: 20px;">
+                <span class="position-absolute top-0 start-0 m-3 badge text-dark fw-bold px-2 py-1 rounded-pill shadow-sm" style="background: #ffffff; font-size: 11px; border: 1px solid rgba(0,0,0,0.08);">
+                  <i class="bi bi-calendar-check text-success me-1"></i> Annual Contract
+                </span>
+                <img src="images/imgi_29_maverick-VA_1200x1200_fc8d047e-bc19-4666-8e3a-90081b8cdca7.webp" alt="Preventive Maintenance & AMC" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: transform 0.4s ease;">
+              </div>
+              <div class="p-4">
+                <h4 class="fw-bold mb-2 text-dark" style="font-size: 1.18rem; font-family: var(--kp-font-title);">Preventive Maintenance (AMC)</h4>
+                <p class="text-muted small mb-3" style="font-size: 13.5px; line-height: 1.6;">
+                  Scheduled monthly health checks, group head gasket changes, shower screen cleanings, and proactive diagnostics to prevent downtime.
+                </p>
+                <div class="d-flex flex-wrap gap-1 mb-2">
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">Monthly Visits</span>
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">Zero Downtime</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 pt-0">
+              <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="btn btn-outline-dark w-100 fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" style="border-color: #00625d; color: #00625d; font-size: 13px;">
+                <span>Explore AMC Plans</span> <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </div>
 
+        <!-- Service 3: Emergency Repair & Breakdown -->
         <div class="col-lg-4 col-md-6">
-          <div class="category-card">
-            <div class="category-img-box">
-              <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_22_Untitleddesign_4.png" alt="Rainforest Alliance Coffee Beans">
-            </div>
+          <div class="card h-100 border-0 rounded-4 shadow-sm bg-white overflow-hidden d-flex flex-column justify-content-between position-relative" style="border: 1px solid rgba(0, 98, 93, 0.12) !important; transition: transform 0.3s ease, box-shadow 0.3s ease;">
             <div>
-              <h3 class="category-title">Rainforest Alliance Coffee Beans</h3>
-              <a href="#products" class="category-link">VIEW PRODUCTS →</a>
+              <div class="position-relative overflow-hidden d-flex align-items-center justify-content-center" style="height: 195px; background: #f4f7f6; padding: 20px;">
+                <span class="position-absolute top-0 start-0 m-3 badge text-danger fw-bold px-2 py-1 rounded-pill shadow-sm" style="background: #ffffff; font-size: 11px; border: 1px solid rgba(0,0,0,0.08);">
+                  <i class="bi bi-lightning-charge-fill me-1"></i> Rapid Response
+                </span>
+                <img src="images/imgi_31_blackeagle2.jpg" alt="Emergency Breakdown & Repair" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: transform 0.4s ease;">
+              </div>
+              <div class="p-4">
+                <h4 class="fw-bold mb-2 text-dark" style="font-size: 1.18rem; font-family: var(--kp-font-title);">Emergency Breakdown & Repair</h4>
+                <p class="text-muted small mb-3" style="font-size: 13.5px; line-height: 1.6;">
+                  Rapid-response certified engineers equipped with diagnostic gear stationed in Dhaka & major hubs for fast on-site recovery.
+                </p>
+                <div class="d-flex flex-wrap gap-1 mb-2">
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">24/7 Hotline</span>
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">Fast Dispatch</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 pt-0">
+              <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="btn btn-outline-dark w-100 fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" style="border-color: #00625d; color: #00625d; font-size: 13px;">
+                <span>Request Repair</span> <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </div>
 
+        <!-- Service 4: 100% Genuine OEM Spare Parts -->
         <div class="col-lg-4 col-md-6">
-          <div class="category-card">
-            <div class="category-img-box">
-              <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_30_Blue-Stone-3_800x_526184df-2650-40b7-9dcf-e8af5b97527b.webp" alt="Precision Coffee Grinders">
-            </div>
+          <div class="card h-100 border-0 rounded-4 shadow-sm bg-white overflow-hidden d-flex flex-column justify-content-between position-relative" style="border: 1px solid rgba(0, 98, 93, 0.12) !important; transition: transform 0.3s ease, box-shadow 0.3s ease;">
             <div>
-              <h3 class="category-title">Precision Coffee Grinders</h3>
-              <a href="#products" class="category-link">VIEW PRODUCTS →</a>
+              <div class="position-relative overflow-hidden d-flex align-items-center justify-content-center" style="height: 195px; background: #f4f7f6; padding: 20px;">
+                <span class="position-absolute top-0 start-0 m-3 badge text-dark fw-bold px-2 py-1 rounded-pill shadow-sm" style="background: #ffffff; font-size: 11px; border: 1px solid rgba(0,0,0,0.08);">
+                  <i class="bi bi-patch-check-fill text-primary me-1"></i> 100% Genuine
+                </span>
+                <img src="images/imgi_30_Blue-Stone-3_800x_526184df-2650-40b7-9dcf-e8af5b97527b.webp" alt="Genuine OEM Spare Parts" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: transform 0.4s ease;">
+              </div>
+              <div class="p-4">
+                <h4 class="fw-bold mb-2 text-dark" style="font-size: 1.18rem; font-family: var(--kp-font-title);">100% Genuine OEM Parts</h4>
+                <p class="text-muted small mb-3" style="font-size: 13.5px; line-height: 1.6;">
+                  Direct factory-imported replacement heating elements, solenoids, portafilters, pumps, and burrs for Italian espresso machines.
+                </p>
+                <div class="d-flex flex-wrap gap-1 mb-2">
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">Direct Factory Import</span>
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">OEM Warranty</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 pt-0">
+              <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="btn btn-outline-dark w-100 fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" style="border-color: #00625d; color: #00625d; font-size: 13px;">
+                <span>Order Spare Parts</span> <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </div>
 
+        <!-- Service 5: Descaling & Water Filtration -->
         <div class="col-lg-4 col-md-6">
-          <div class="category-card">
-            <div class="category-img-box">
-              <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_2_This_machine_isn_t_for_everyone._It_s_for_people_who_refuse_to_compromise_on_their_coffee_experience._3.png" alt="Batch Brewers & Pour Over">
-            </div>
+          <div class="card h-100 border-0 rounded-4 shadow-sm bg-white overflow-hidden d-flex flex-column justify-content-between position-relative" style="border: 1px solid rgba(0, 98, 93, 0.12) !important; transition: transform 0.3s ease, box-shadow 0.3s ease;">
             <div>
-              <h3 class="category-title">Batch Brewers & Pour Over</h3>
-              <a href="#products" class="category-link">VIEW PRODUCTS →</a>
+              <div class="position-relative overflow-hidden d-flex align-items-center justify-content-center" style="height: 195px; background: #f4f7f6; padding: 20px;">
+                <span class="position-absolute top-0 start-0 m-3 badge text-dark fw-bold px-2 py-1 rounded-pill shadow-sm" style="background: #ffffff; font-size: 11px; border: 1px solid rgba(0,0,0,0.08);">
+                  <i class="bi bi-droplet-half text-info me-1"></i> Water & Boiler
+                </span>
+                <img src="images/imgi_2_This_machine_isn_t_for_everyone._It_s_for_people_who_refuse_to_compromise_on_their_coffee_experience._3.png" alt="Descaling & Water Filtration Care" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: transform 0.4s ease;">
+              </div>
+              <div class="p-4">
+                <h4 class="fw-bold mb-2 text-dark" style="font-size: 1.18rem; font-family: var(--kp-font-title);">Descaling & Water Care</h4>
+                <p class="text-muted small mb-3" style="font-size: 13.5px; line-height: 1.6;">
+                  Food-grade chemical-safe boiler descaling, TDS water testing, and steam wand refurbishment for pristine extraction taste.
+                </p>
+                <div class="d-flex flex-wrap gap-1 mb-2">
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">Food Grade Clean</span>
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">TDS Balancing</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 pt-0">
+              <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="btn btn-outline-dark w-100 fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" style="border-color: #00625d; color: #00625d; font-size: 13px;">
+                <span>Schedule Descaling</span> <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </div>
 
+        <!-- Service 6: Machine Leasing & Rental -->
         <div class="col-lg-4 col-md-6">
-          <div class="category-card">
-            <div class="category-img-box">
-              <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_100_05_Sustainability-e1750424125646.jpg" alt="Syrups, Matcha & Consumables">
-            </div>
+          <div class="card h-100 border-0 rounded-4 shadow-sm bg-white overflow-hidden d-flex flex-column justify-content-between position-relative" style="border: 1px solid rgba(0, 98, 93, 0.12) !important; transition: transform 0.3s ease, box-shadow 0.3s ease;">
             <div>
-              <h3 class="category-title">Syrups, Matcha & Consumables</h3>
-              <a href="#products" class="category-link">VIEW PRODUCTS →</a>
+              <div class="position-relative overflow-hidden d-flex align-items-center justify-content-center" style="height: 195px; background: #f4f7f6; padding: 20px;">
+                <span class="position-absolute top-0 start-0 m-3 badge text-dark fw-bold px-2 py-1 rounded-pill shadow-sm" style="background: #ffffff; font-size: 11px; border: 1px solid rgba(0,0,0,0.08);">
+                  <i class="bi bi-shop text-warning me-1"></i> Flexible Terms
+                </span>
+                <img src="images/imgi_24_santino_-_250522-07240.jpg" alt="Commercial Machine Leasing & Rental" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: transform 0.4s ease;">
+              </div>
+              <div class="p-4">
+                <h4 class="fw-bold mb-2 text-dark" style="font-size: 1.18rem; font-family: var(--kp-font-title);">Machine Leasing & Rental</h4>
+                <p class="text-muted small mb-3" style="font-size: 13.5px; line-height: 1.6;">
+                  Zero capital expenditure solutions with turnkey commercial machinery, roasted bean supplies, and complimentary full servicing.
+                </p>
+                <div class="d-flex flex-wrap gap-1 mb-2">
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">Zero CapEx</span>
+                  <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px;">Free Servicing</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 pt-0">
+              <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="btn btn-outline-dark w-100 fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" style="border-color: #00625d; color: #00625d; font-size: 13px;">
+                <span>Get Lease Quote</span> <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </div>
@@ -672,7 +1551,7 @@
             <span class="badge-hot">FLAGSHIP</span>
             <div>
               <div class="prod-img-box">
-                <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_29_maverick-VA_1200x1200_fc8d047e-bc19-4666-8e3a-90081b8cdca7.webp" alt="Victoria Arduino Black Eagle Maverick">
+                <img src="images/imgi_29_maverick-VA_1200x1200_fc8d047e-bc19-4666-8e3a-90081b8cdca7.webp" alt="Victoria Arduino Black Eagle Maverick">
               </div>
               <div class="prod-cat-name">Victoria Arduino</div>
               <h4 class="prod-title">Black Eagle Maverick</h4>
@@ -688,7 +1567,7 @@
             <span class="badge-hot">CERTIFIED</span>
             <div>
               <div class="prod-img-box">
-                <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_22_Untitleddesign_4.png" alt="The Green Label - Classic Blend">
+                <img src="images/imgi_22_Untitleddesign_4.png" alt="The Green Label - Classic Blend">
               </div>
               <div class="prod-cat-name">Rainforest Alliance</div>
               <h4 class="prod-title">The Green Label - Classic</h4>
@@ -704,7 +1583,7 @@
             <span class="badge-hot">PREMIUM</span>
             <div>
               <div class="prod-img-box">
-                <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_22_Untitleddesign_4.png" alt="The Green Label - Premium Blend">
+                <img src="images/imgi_22_Untitleddesign_4.png" alt="The Green Label - Premium Blend">
               </div>
               <div class="prod-cat-name">Specialty Roast</div>
               <h4 class="prod-title">The Green Label - Premium</h4>
@@ -719,7 +1598,7 @@
           <div class="prod-card">
             <div>
               <div class="prod-img-box">
-                <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_21_EagleOne_e524e570-7076-4cbc-916e-ad851ca2de5c.jpg" alt="Kalerm Y580C Superautomatic">
+                <img src="images/imgi_21_EagleOne_e524e570-7076-4cbc-916e-ad851ca2de5c.jpg" alt="Kalerm Y580C Superautomatic">
               </div>
               <div class="prod-cat-name">Commercial Automation</div>
               <h4 class="prod-title">Kalerm Y580C Smart</h4>
@@ -733,7 +1612,232 @@
     </div>
   </section>
 
-  <!-- 9. "SPEAK TO AN EXPERT" LEAD GENERATION FORM -->
+  <!-- 9. QUICK MEMBERSHIP REGISTRATION (MINIMAL LUXURY DESIGN) -->
+  <section class="newsletter-section py-5 position-relative" id="membership-registration" style="background: #f8f6f0; border-top: 1px solid rgba(0, 98, 93, 0.08); border-bottom: 1px solid rgba(0, 98, 93, 0.08);">
+    <div class="container py-lg-4">
+      
+      <div class="row align-items-center g-4 g-lg-5">
+        
+        <!-- Left Column: Editorial Brand Story & Key Member Perks -->
+        <div class="col-lg-6 pe-lg-4">
+          <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(0, 98, 93, 0.08); border: 1px solid rgba(0, 98, 93, 0.2);">
+            <i class="bi bi-award-fill text-teal"></i>
+            <span style="color: #00625d; font-size: 11.5px; font-weight: 800; letter-spacing: 0.8px;">SANTINO PRIVILEGE CLUB</span>
+          </div>
+
+          <h2 class="fw-bold mb-3" style="font-size: 2.35rem; color: #111827; font-family: var(--kp-font-title); line-height: 1.2;">
+            Join Bangladesh's Premier Coffee Community
+          </h2>
+          
+          <p class="text-muted mb-4" style="font-size: 15px; line-height: 1.65; max-width: 480px;">
+            Become a Santino Club member to unlock exclusive roastery allocations, VIP wholesale pricing on beans, priority technician dispatch, and private barista workshops.
+          </p>
+
+          <!-- 3 Minimalist Feature Blocks -->
+          <div class="d-flex flex-column gap-3 mb-2">
+            
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-xs border" style="border-color: rgba(0, 98, 93, 0.12) !important;">
+              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; background: rgba(0, 98, 93, 0.08); color: #00625d;">
+                <i class="bi bi-percent fs-6"></i>
+              </div>
+              <div>
+                <div class="fw-bold text-dark" style="font-size: 13.5px;">15% VIP Bean Discount</div>
+                <div class="text-muted" style="font-size: 12px;">Special roastery pricing applied automatically on all orders.</div>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-xs border" style="border-color: rgba(0, 98, 93, 0.12) !important;">
+              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; background: rgba(0, 98, 93, 0.08); color: #00625d;">
+                <i class="bi bi-cup-hot fs-6"></i>
+              </div>
+              <div>
+                <div class="fw-bold text-dark" style="font-size: 13.5px;">Exclusive Micro-Lot Tastings</div>
+                <div class="text-muted" style="font-size: 12px;">Complimentary seasonal cupping sessions at Santino Academy.</div>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-xs border" style="border-color: rgba(0, 98, 93, 0.12) !important;">
+              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; background: rgba(0, 98, 93, 0.08); color: #00625d;">
+                <i class="bi bi-wrench-adjustable fs-6"></i>
+              </div>
+              <div>
+                <div class="fw-bold text-dark" style="font-size: 13.5px;">Priority Machine Maintenance</div>
+                <div class="text-muted" style="font-size: 12px;">Fast-track 24/7 technical hotline and emergency site dispatch.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Column: Crisp Minimal Registration Card -->
+        <div class="col-lg-6">
+          <div class="bg-white p-4 p-md-5 rounded-4 shadow-sm border" style="border-color: rgba(0, 98, 93, 0.15) !important;">
+            
+            <div class="mb-4">
+              <h3 class="fw-bold mb-1" style="font-size: 1.35rem; color: #111827; font-family: var(--kp-font-title);">Quick Membership Registration</h3>
+              <p class="text-muted small mb-0" style="font-size: 13px;">Instant digital card activation • 100% Free Lifetime Access</p>
+            </div>
+
+            <form onsubmit="alert('Thank you! Your Santino Coffee Club Membership has been registered successfully. A digital pass will be sent to your email.'); return false;">
+              
+              <!-- Full Name Field -->
+              <div class="custom-input-group mb-3">
+                <label class="custom-input-label">Full Name <span class="text-danger">*</span></label>
+                <div class="input-wrapper">
+                  <i class="bi bi-person input-icon"></i>
+                  <input type="text" class="custom-form-input" placeholder="e.g. Tanvir Ahmed" required>
+                </div>
+              </div>
+
+              <!-- Phone Number Field -->
+              <div class="custom-input-group mb-3">
+                <label class="custom-input-label">Phone / WhatsApp Number <span class="text-danger">*</span></label>
+                <div class="input-wrapper">
+                  <i class="bi bi-whatsapp input-icon"></i>
+                  <input type="tel" class="custom-form-input" placeholder="+880 17XX-XXXXXX" required>
+                </div>
+              </div>
+
+              <!-- Email Address Field -->
+              <div class="custom-input-group mb-4">
+                <label class="custom-input-label">Email Address <span class="text-danger">*</span></label>
+                <div class="input-wrapper">
+                  <i class="bi bi-envelope input-icon"></i>
+                  <input type="email" class="custom-form-input" placeholder="e.g. tanvir@company.com" required>
+                </div>
+              </div>
+
+              <!-- Action Button -->
+              <div class="pt-1">
+                <button type="submit" class="btn-lead-submit">
+                  <span>REGISTER MEMBERSHIP</span>
+                  <i class="bi bi-arrow-right-circle-fill fs-5"></i>
+                </button>
+              </div>
+
+              <!-- Footer Trust Line -->
+              <div class="d-flex align-items-center justify-content-center gap-2 text-muted small mt-3" style="font-size: 11.5px;">
+                <i class="bi bi-shield-check text-success fs-6"></i>
+                <span>Zero Annual Fees • No Credit Card Required</span>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 10. FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION) -->
+  <section class="faq-section" id="faqs">
+    <div class="container">
+      <div class="sec-heading-center">
+        <h2 class="sec-title">Frequently Asked Questions</h2>
+        <div class="sec-subtitle">Everything you need to know about Santino equipment & roastery</div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <div class="accordion" id="faqAccordionKaapi">
+            
+            <div class="accordion-item mb-3 border rounded-3 overflow-hidden shadow-sm">
+              <h2 class="accordion-header">
+                <button class="accordion-button fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqK1">
+                  Why choose Santino Coffee?
+                </button>
+              </h2>
+              <div id="faqK1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordionKaapi">
+                <div class="accordion-body text-muted">
+                  Santino Coffee bridges heritage and innovation to empower coffee businesses across Asia. With decades of roasting experience, FSSC22000 certification, and authorized distribution of Victoria Arduino and Nuova Simonelli, we provide complete, reliable coffee solutions.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item mb-3 border rounded-3 overflow-hidden shadow-sm">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqK2">
+                  What coffee equipment and solutions do you provide?
+                </button>
+              </h2>
+              <div id="faqK2" class="accordion-collapse collapse" data-bs-parent="#faqAccordionKaapi">
+                <div class="accordion-body text-muted">
+                  We supply commercial espresso machines, superautomatics, CAYE Bionic Barista robots, precision grinders, 3TEMP batch brewers, Rainforest Alliance certified coffee beans, OEM private label roasting, and full café setup consulting.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item mb-3 border rounded-3 overflow-hidden shadow-sm">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqK3">
+                  Do you offer barista academy certification and competition coaching?
+                </button>
+              </h2>
+              <div id="faqK3" class="accordion-collapse collapse" data-bs-parent="#faqAccordionKaapi">
+                <div class="accordion-body text-muted">
+                  Yes, our certified trainers lead foundational espresso workshops, advanced latte art masterclasses, and WBC (World Barista Championship) & WBrC competition mentorship.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item mb-3 border rounded-3 overflow-hidden shadow-sm">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqK4">
+                  What after-sales service and preventive maintenance is available?
+                </button>
+              </h2>
+              <div id="faqK4" class="accordion-collapse collapse" data-bs-parent="#faqAccordionKaapi">
+                <div class="accordion-body text-muted">
+                  We provide dedicated technical support, scheduled preventive maintenance contracts, on-site diagnostics, and genuine OEM parts to ensure uninterrupted beverage service.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. COMMUNITY ENGAGEMENT PROGRAMS -->
+  <section class="community-section" id="training">
+    <div class="container">
+      <div class="sec-heading-center">
+        <h2 class="sec-title">Academy & Competitions</h2>
+        <div class="sec-subtitle">Empowering the Next Generation of Coffee Leaders</div>
+      </div>
+
+      <div class="row g-4">
+        
+        <div class="col-md-6">
+          <div class="community-card">
+            <div class="community-img" style="background-image: url('images/imgi_23_santino_-_250522-07495.jpg');"></div>
+            <div class="community-body">
+              <h4 class="font-heading fw-bold mb-2">Santino Coffee Academy</h4>
+              <p class="text-muted mb-3">Structured barista certification courses, crop-to-cup sensory training, and commercial workflow optimization.</p>
+              <a href="#contact" class="link-kp-red">LEARN MORE →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="community-card">
+            <div class="community-img" style="background-image: url('images/imgi_24_santino_-_250522-07240.jpg');"></div>
+            <div class="community-body">
+              <h4 class="font-heading fw-bold mb-2">WBC & WBrC Coaching</h4>
+              <p class="text-muted mb-3">Championship-grade preparation and equipment mastery for national and international coffee competitors.</p>
+              <a href="#contact" class="link-kp-red">LEARN MORE →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. "SPEAK TO AN EXPERT" LEAD GENERATION FORM (MOVED HERE) -->
   <section class="lead-section" id="contact">
     <div class="container">
       <div class="lead-luxury-card">
@@ -872,162 +1976,6 @@
     </div>
   </section>
 
-  <!-- 10. FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION) -->
-  <section class="faq-section" id="faqs">
-    <div class="container">
-      <div class="sec-heading-center">
-        <h2 class="sec-title">Frequently Asked Questions</h2>
-        <div class="sec-subtitle">Everything you need to know about Santino equipment & roastery</div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-lg-9">
-          <div class="accordion" id="faqAccordionKaapi">
-            
-            <div class="accordion-item mb-3 border rounded-3 overflow-hidden shadow-sm">
-              <h2 class="accordion-header">
-                <button class="accordion-button fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqK1">
-                  Why choose Santino Coffee?
-                </button>
-              </h2>
-              <div id="faqK1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordionKaapi">
-                <div class="accordion-body text-muted">
-                  Santino Coffee bridges heritage and innovation to empower coffee businesses across Asia. With decades of roasting experience, FSSC22000 certification, and authorized distribution of Victoria Arduino and Nuova Simonelli, we provide complete, reliable coffee solutions.
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-item mb-3 border rounded-3 overflow-hidden shadow-sm">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqK2">
-                  What coffee equipment and solutions do you provide?
-                </button>
-              </h2>
-              <div id="faqK2" class="accordion-collapse collapse" data-bs-parent="#faqAccordionKaapi">
-                <div class="accordion-body text-muted">
-                  We supply commercial espresso machines, superautomatics, CAYE Bionic Barista robots, precision grinders, 3TEMP batch brewers, Rainforest Alliance certified coffee beans, OEM private label roasting, and full café setup consulting.
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-item mb-3 border rounded-3 overflow-hidden shadow-sm">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqK3">
-                  Do you offer barista academy certification and competition coaching?
-                </button>
-              </h2>
-              <div id="faqK3" class="accordion-collapse collapse" data-bs-parent="#faqAccordionKaapi">
-                <div class="accordion-body text-muted">
-                  Yes, our certified trainers lead foundational espresso workshops, advanced latte art masterclasses, and WBC (World Barista Championship) & WBrC competition mentorship.
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-item mb-3 border rounded-3 overflow-hidden shadow-sm">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faqK4">
-                  What after-sales service and preventive maintenance is available?
-                </button>
-              </h2>
-              <div id="faqK4" class="accordion-collapse collapse" data-bs-parent="#faqAccordionKaapi">
-                <div class="accordion-body text-muted">
-                  We provide dedicated technical support, scheduled preventive maintenance contracts, on-site diagnostics, and genuine OEM parts to ensure uninterrupted beverage service.
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 11. COMMUNITY ENGAGEMENT PROGRAMS -->
-  <section class="community-section" id="training">
-    <div class="container">
-      <div class="sec-heading-center">
-        <h2 class="sec-title">Academy & Competitions</h2>
-        <div class="sec-subtitle">Empowering the Next Generation of Coffee Leaders</div>
-      </div>
-
-      <div class="row g-4">
-        
-        <div class="col-md-6">
-          <div class="community-card">
-            <div class="community-img" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_23_santino_-_250522-07495.jpg');"></div>
-            <div class="community-body">
-              <h4 class="font-heading fw-bold mb-2">Santino Coffee Academy</h4>
-              <p class="text-muted mb-3">Structured barista certification courses, crop-to-cup sensory training, and commercial workflow optimization.</p>
-              <a href="#contact" class="link-kp-red">LEARN MORE →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="community-card">
-            <div class="community-img" style="background-image: url('Wholesale Coffee Beans in Singapore _ Santino Coffee/imgi_24_santino_-_250522-07240.jpg');"></div>
-            <div class="community-body">
-              <h4 class="font-heading fw-bold mb-2">WBC & WBrC Coaching</h4>
-              <p class="text-muted mb-3">Championship-grade preparation and equipment mastery for national and international coffee competitors.</p>
-              <a href="#contact" class="link-kp-red">LEARN MORE →</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- 12. SUBSCRIBE TO OUR NEWSLETTER -->
-  <section class="newsletter-section">
-    <div class="container">
-      <div class="newsletter-card-wrapper">
-        <div class="newsletter-glow-orb"></div>
-        <div class="row justify-content-center text-center position-relative" style="z-index: 2;">
-          <div class="col-xl-8 col-lg-9">
-            
-            <div class="d-inline-flex align-items-center gap-2 newsletter-tag mb-3">
-              <i class="bi bi-stars text-warning"></i>
-              <span>SANTINO COFFEE INSIDER</span>
-            </div>
-
-            <h2 class="newsletter-title">Subscribe to our Newsletter</h2>
-            <p class="newsletter-desc">
-              Stay ahead with the latest commercial machinery launches, roastery single-origin drops, technical maintenance guides, and exclusive barista events across Asia.
-            </p>
-
-            <form class="newsletter-form-box" onsubmit="alert('Thank you for subscribing! Welcome to Santino Insider.'); return false;">
-              <div class="newsletter-input-group">
-                <div class="newsletter-field">
-                  <i class="bi bi-person"></i>
-                  <input type="text" placeholder="Your Name" required>
-                </div>
-                <div class="newsletter-field-divider"></div>
-                <div class="newsletter-field">
-                  <i class="bi bi-envelope"></i>
-                  <input type="email" placeholder="Enter your business email" required>
-                </div>
-                <button type="submit" class="btn-newsletter-action">
-                  <span>SUBSCRIBE</span>
-                  <i class="bi bi-arrow-right"></i>
-                </button>
-              </div>
-            </form>
-
-            <div class="newsletter-trust-row">
-              <span><i class="bi bi-shield-check text-success me-1"></i> No spam ever</span>
-              <span class="trust-divider">•</span>
-              <span><i class="bi bi-people-fill text-info me-1"></i> 10,000+ Coffee Professionals</span>
-              <span class="trust-divider">•</span>
-              <span><i class="bi bi-check2-circle text-warning me-1"></i> Unsubscribe anytime</span>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- FOOTER -->
   <footer class="site-footer">
     <div class="container">
@@ -1035,7 +1983,7 @@
         
         <div class="col-lg-4 col-md-6">
           <div class="mb-3">
-            <img src="Wholesale Coffee Beans in Singapore _ Santino Coffee/Logo-Santino-Coffee-white.png" alt="Santino Coffee" style="height: 60px; width: auto; object-fit: contain;">
+            <img src="images/Logo-Santino-Coffee-white.png" alt="Santino Coffee" style="height: 60px; width: auto; object-fit: contain;">
           </div>
           <p class="text-secondary pe-lg-4">
             Santino Coffee bridges heritage and innovation to empower coffee businesses and communities across Asia. Decades of roasting expertise backed by FSSC22000 food safety certification.
@@ -1130,7 +2078,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Custom JS File -->
-  <script src="script.js"></script>
+  <script src="js/script.js"></script>
 
 </body>
 </html>

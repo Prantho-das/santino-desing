@@ -107,5 +107,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     revealElements.forEach(el => revealObserver.observe(el));
   }
+
+  const menuTrack = document.getElementById('menuTeaserTrack');
+  const menuPrev = document.querySelector('.menu-slider-prev');
+  const menuNext = document.querySelector('.menu-slider-next');
+  if (menuTrack && menuPrev && menuNext) {
+    const scrollAmount = 290;
+    const parentWrapper = menuTrack.closest('.menu-teaser-slider-wrapper');
+    menuPrev.addEventListener('click', () => {
+      parentWrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+    menuNext.addEventListener('click', () => {
+      parentWrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  }
+  const heroCarouselEl = document.getElementById('heroCarousel');
+  if (heroCarouselEl) {
+    const counterEl = document.getElementById('heroSlideCounter');
+    const vertDots = document.querySelectorAll('.hero-vert-dot');
+    heroCarouselEl.addEventListener('slide.bs.carousel', (e) => {
+      const idx = e.to;
+      const total = 5;
+      if (counterEl) {
+        counterEl.textContent = `0${idx + 1} / 0${total}`;
+      }
+      vertDots.forEach((dot, dIdx) => {
+        if (dIdx === idx) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    });
+  }
 });
+
 
