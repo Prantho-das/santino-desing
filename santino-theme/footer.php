@@ -5,30 +5,39 @@
  * @package Santino
  */
 ?>
-  <!-- Footer Section -->
-  <footer class="site-footer">
-    <div class="container-fluid px-lg-5">
-      <div class="row g-4 mb-5">
+
+<footer class="site-footer">
+    <div class="container">
+      <div class="row g-4 justify-content-between">
         
-        <!-- Column 1: Brand Info -->
-        <div class="col-lg-3 col-md-6 col-12 pe-lg-4">
-          <div class="d-flex align-items-center gap-2 mb-3">
-            <img src="<?php echo santino_img( 'Logo-Santino-Coffee-white.png' ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height: 44px; width: auto; object-fit: contain;">
+        <!-- Column 1: Brand & Logo -->
+        <div class="col-lg-3 col-md-6 footer-brand-col">
+          <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="footer-logo-wrap d-inline-block mb-3">
+            <img src="<?php echo santino_img('Logo-Santino-Coffee-white.png'); ?>" alt="Santino Caffè - 100% Premium Coffee Beans" style="height: 48px; width: auto; object-fit: contain; background: transparent; padding: 0; box-shadow: none;">
+          </a>
+          <div class="mb-3">
+            <span class="footer-cert-badge">
+              <i class="bi bi-patch-check-fill text-warning me-1"></i> FSSC22000 &bull; RAINFOREST ALLIANCE
+            </span>
           </div>
-          <p class="footer-brand-desc">
-            Bangladesh's premier commercial espresso machine importer, authorized technical service center, and specialty coffee roastery.
+          <p class="footer-brand-desc mb-3">
+            Official distributor of Victoria Arduino &amp; Nuova Simonelli in Bangladesh. Providing turnkey commercial machinery, artisan roasting, and 24/7 technical care.
           </p>
-          <div class="footer-contact-item">
-            <i class="bi bi-geo-alt-fill text-warning"></i>
-            <span>House 12, Road 11, Banani, Dhaka, Bangladesh</span>
+          <div class="footer-contact-item mb-2 text-white-50 small">
+            <i class="bi bi-geo-alt-fill text-warning me-2"></i>
+            <span class="text-white">1/3 Asad Avenue, Mohammadpur, Dhaka 1207</span>
           </div>
-          <div class="footer-contact-item">
-            <i class="bi bi-telephone-fill text-warning"></i>
-            <a href="tel:+8801700000000">+880 1700-000000</a>
+          <div class="footer-contact-item mb-2 text-white-50 small">
+            <i class="bi bi-telephone-fill text-warning me-2"></i>
+            <span class="text-white">Sales &amp; Service: <a href="tel:+8801613334514" class="text-white fw-bold text-decoration-none">+880 1613-334514</a></span>
           </div>
-          <div class="footer-contact-item">
-            <i class="bi bi-envelope-fill text-warning"></i>
-            <a href="mailto:info@santino.com.bd">info@santino.com.bd</a>
+          <div class="footer-contact-item mb-2 text-white-50 small">
+            <i class="bi bi-mortarboard-fill text-warning me-2"></i>
+            <span class="text-white">Training: <a href="tel:+8801606291393" class="text-white fw-bold text-decoration-none">+880 1606-291393</a></span>
+          </div>
+          <div class="footer-contact-item text-white-50 small">
+            <i class="bi bi-envelope-fill text-warning me-2"></i>
+            <a href="mailto:sales@santino.com.bd" class="text-white fw-bold text-decoration-none">sales@santino.com.bd</a>
           </div>
         </div>
 
@@ -36,12 +45,12 @@
         <div class="col-lg-2 col-md-6 col-6">
           <h5 class="footer-col-title">Quick Links</h5>
           <ul class="footer-menu-list">
-            <li><a href="<?php echo esc_url( home_url( '/our-story' ) ); ?>">About Us</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/machines' ) ); ?>">Machines</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/beans' ) ); ?>">Coffee Beans</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/training' ) ); ?>">Barista Academy</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/office-cafe' ) ); ?>">Horeca &amp; Office</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/membership' ) ); ?>">Club Membership</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>">Machines</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/beans/' ) ); ?>">Coffee Beans</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/training/' ) ); ?>">Barista Academy</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/office-cafe/' ) ); ?>">Horeca &amp; Office</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/membership/' ) ); ?>">Club Membership</a></li>
           </ul>
         </div>
 
@@ -49,11 +58,11 @@
         <div class="col-lg-2 col-md-6 col-6">
           <h5 class="footer-col-title">Customer Care</h5>
           <ul class="footer-menu-list">
-            <li><a href="<?php echo esc_url( home_url( '/office-cafe#contact' ) ); ?>">24/7 AMC Support</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/office-cafe#contact' ) ); ?>">Commercial Consultation</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/menu#branches' ) ); ?>">Find Cafes &amp; Outlets</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/our-story' ) ); ?>">Brand Heritage</a></li>
-            <li><a href="tel:+8801700000000">Direct Hotline</a></li>
+            <li><a href="office-cafe.html#contact">24/7 AMC Support</a></li>
+            <li><a href="office-cafe.html#contact">Commercial Consultation</a></li>
+            <li><a href="#availability">Find Cafes &amp; Outlets</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/our-story/' ) ); ?>">Brand Heritage</a></li>
+            <li><a href="tel:+8801613334514">Direct Hotline</a></li>
           </ul>
         </div>
 
@@ -94,7 +103,7 @@
       <!-- Bottom Sub-Footer Bar -->
       <div class="footer-divider d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
         <div class="footer-copyright">
-          &copy; <?php echo date( 'Y' ); ?> <?php bloginfo( 'name' ); ?>. All rights reserved.
+          &copy; 2026 Santino Caffè Bangladesh. All rights reserved.
         </div>
         <div class="footer-brand-motto">
           Good Coffee &bull; Better Days <i class="bi bi-cup-hot-fill ms-1 text-warning"></i>
@@ -141,15 +150,15 @@
       <div class="dock-icon-wrap"><i class="bi bi-house-door-fill"></i></div>
       <span class="dock-label">Home</span>
     </a>
-    <a href="<?php echo esc_url( home_url( '/machines' ) ); ?>" class="app-dock-item">
+    <a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="app-dock-item">
       <div class="dock-icon-wrap"><i class="bi bi-cpu-fill"></i></div>
       <span class="dock-label">Machines</span>
     </a>
-    <a href="https://wa.me/8801700000000" target="_blank" class="app-dock-item dock-highlight-item" title="WhatsApp Chat">
+    <a href="https://wa.me/8801613334514" target="_blank" class="app-dock-item dock-highlight-item" title="WhatsApp Chat">
       <div class="dock-action-circle"><i class="bi bi-whatsapp"></i></div>
       <span class="dock-label">Chat</span>
     </a>
-    <a href="<?php echo esc_url( home_url( '/beans' ) ); ?>" class="app-dock-item">
+    <a href="<?php echo esc_url( home_url( '/beans/' ) ); ?>" class="app-dock-item">
       <div class="dock-icon-wrap"><i class="bi bi-cup-hot-fill"></i></div>
       <span class="dock-label">Beans</span>
     </a>
@@ -164,6 +173,10 @@
     <i class="bi bi-arrow-up-short"></i>
   </button>
 
-  <?php wp_footer(); ?>
+  <!-- Bootstrap 5 JS Bundle -->
+  
+  <!-- Custom JS File -->
+
+<?php wp_footer(); ?>
 </body>
 </html>

@@ -31,8 +31,12 @@ function santino_theme_setup() {
         'flex-width'  => true,
     ) );
 
-    // Elementor Support
+    // Elementor & WooCommerce Support
     add_theme_support( 'elementor' );
+    add_theme_support( 'woocommerce' );
+    add_theme_support( 'wc-product-gallery-zoom' );
+    add_theme_support( 'wc-product-gallery-lightbox' );
+    add_theme_support( 'wc-product-gallery-slider' );
 
     register_nav_menus( array(
         'primary' => __( 'Primary Header Navigation', 'santino' ),
@@ -42,6 +46,21 @@ function santino_theme_setup() {
     ) );
 }
 add_action( 'after_setup_theme', 'santino_theme_setup' );
+
+/**
+ * Update WooCommerce Cart Count via AJAX
+ */
+function santino_woocommerce_header_add_to_cart_fragment( $fragments ) {
+    ob_start();
+    ?>
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger header-cart-count" style="font-size: 10px;">
+        <?php echo WC()->cart ? esc_html( WC()->cart->get_cart_contents_count() ) : '0'; ?>
+    </span>
+    <?php
+    $fragments['span.header-cart-count'] = ob_get_clean();
+    return $fragments;
+}
+add_filter( 'woocommerce_add_to_cart_fragments', 'santino_woocommerce_header_add_to_cart_fragment' );
 
 /**
  * Register CSS and JS
@@ -65,6 +84,12 @@ function santino_enqueue_scripts() {
 
     // Custom Script
     wp_enqueue_script( 'santino-script', SANTINO_URI . '/assets/js/script.js', array( 'bootstrap-bundle' ), SANTINO_VERSION, true );
+
+    // Localize AJAX parameters for Frontend
+    wp_localize_script( 'santino-script', 'santino_ajax', array(
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'nonce'    => wp_create_nonce( 'santino_frontend_nonce' ),
+    ) );
 }
 add_action( 'wp_enqueue_scripts', 'santino_enqueue_scripts' );
 
@@ -122,3 +147,14 @@ add_action( 'elementor/widgets/register', 'santino_register_elementor_widgets' )
 function santino_img( $file ) {
     return esc_url( SANTINO_URI . '/assets/images/' . ltrim( $file, '/' ) );
 }
+
+/**
+ * Include Elementor Installer & Dependency Notice
+ */
+require_once SANTINO_DIR . '/inc/elementor-installer.php';
+
+/**
+ * Include Santino VIP Membership Backend Engine
+ */
+require_once SANTINO_DIR . '/inc/membership-system.php';
+

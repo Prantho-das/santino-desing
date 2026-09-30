@@ -59,7 +59,7 @@ class Santino_CTA_Banner_Widget extends \Elementor\Widget_Base {
             array(
                 'label'   => esc_html__( 'Hotline Number', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::TEXT,
-                'default' => '+880 1700-000000',
+                'default' => '+880 1613-334514',
             )
         );
 

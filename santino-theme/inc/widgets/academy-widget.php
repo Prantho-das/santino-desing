@@ -86,7 +86,7 @@ class Santino_Academy_Widget extends \Elementor\Widget_Base {
 
                     <div class="d-flex flex-wrap gap-3">
                         <a href="<?php echo esc_url( home_url( '/training' ) ); ?>" class="btn btn-warning rounded-pill px-4 py-2 fw-bold text-dark">Enroll Course</a>
-                        <a href="https://wa.me/8801700000000?text=I want to join Barista Training" target="_blank" class="btn btn-outline-light rounded-pill px-4 py-2"><i class="bi bi-whatsapp me-1"></i> WhatsApp Inquiry</a>
+                        <a href="https://wa.me/8801606291393?text=I want to join Barista Training" target="_blank" class="btn btn-outline-light rounded-pill px-4 py-2"><i class="bi bi-whatsapp me-1"></i> WhatsApp Inquiry</a>
                     </div>
                 </div>
 

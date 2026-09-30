@@ -8731,3 +8731,171 @@ html, body {
 
 
 
+
+
+
+/* ==========================================================================
+   WOOCOMMERCE & ELEMENTOR CUSTOM DESIGN INTEGRATION
+   ========================================================================== */
+
+/* Product Grid & Cards */
+.woocommerce ul.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  padding: 0;
+  margin: 30px 0;
+  list-style: none;
+}
+
+.woocommerce ul.products li.product {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.woocommerce ul.products li.product:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0,98,93,0.12);
+}
+
+.woocommerce ul.products li.product .woocommerce-loop-product__title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #14191e;
+  margin: 12px 0 8px;
+}
+
+.woocommerce ul.products li.product .price {
+  color: var(--santino-teal, #00625d) !important;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.woocommerce ul.products li.product img {
+  border-radius: 12px;
+  object-fit: cover;
+  width: 100%;
+  height: 220px;
+  margin-bottom: 12px;
+}
+
+/* Primary Action Buttons */
+.woocommerce a.button,
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce #respond input#submit {
+  background: var(--santino-teal, #00625d) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  border-radius: 30px !important;
+  padding: 10px 24px !important;
+  transition: all 0.3s ease;
+  border: none !important;
+  font-size: 0.9rem;
+  letter-spacing: 0.3px;
+}
+
+.woocommerce a.button:hover,
+.woocommerce button.button:hover,
+.woocommerce input.button:hover,
+.woocommerce #respond input#submit:hover {
+  background: #004d49 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,98,93,0.25);
+}
+
+.woocommerce a.button.alt,
+.woocommerce button.button.alt,
+.woocommerce input.button.alt {
+  background: var(--santino-gold, #c5a059) !important;
+  color: #14191e !important;
+}
+
+.woocommerce a.button.alt:hover,
+.woocommerce button.button.alt:hover,
+.woocommerce input.button.alt:hover {
+  background: #b38e47 !important;
+  color: #ffffff !important;
+}
+
+/* Single Product */
+.woocommerce div.product {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.05);
+}
+
+.woocommerce div.product .product_title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  color: #14191e;
+  font-size: 2rem;
+}
+
+.woocommerce div.product p.price {
+  font-size: 1.5rem;
+  color: var(--santino-teal, #00625d);
+  font-weight: 700;
+}
+
+.woocommerce div.product .woocommerce-product-details__short-description {
+  color: #555;
+  line-height: 1.7;
+  margin: 20px 0;
+}
+
+/* Cart & Checkout Modern Table */
+.woocommerce table.shop_table {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+.woocommerce table.shop_table th {
+  background: #f8f9fa;
+  font-weight: 700;
+  padding: 14px 16px;
+}
+
+.woocommerce table.shop_table td {
+  padding: 14px 16px;
+  vertical-align: middle;
+}
+
+.woocommerce-cart .cart-collaterals .cart_totals,
+.woocommerce-checkout #order_review {
+  background: #fdfdfd;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Badges & Notices */
+.woocommerce span.onsale {
+  background: var(--santino-gold, #c5a059) !important;
+  color: #14191e;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 4px 12px;
+  min-height: auto;
+  line-height: normal;
+}
+
+.woocommerce-message, 
+.woocommerce-info {
+  border-top-color: var(--santino-teal, #00625d) !important;
+  border-radius: 10px;
+  background: #f0fdfc;
+}

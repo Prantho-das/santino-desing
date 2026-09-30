@@ -165,7 +165,7 @@ class Santino_Machine_Grid_Widget extends \Elementor\Widget_Base {
                                     <p class="text-muted small mb-3"><i class="bi bi-speedometer2 me-1 text-success"></i> <?php echo esc_html( $item['capacity'] ); ?></p>
                                     <div class="d-flex gap-2">
                                         <button class="btn btn-outline-dark btn-sm rounded-pill flex-grow-1" data-bs-toggle="modal" data-bs-target="#enquiryModal">Get Quote</button>
-                                        <a href="https://wa.me/8801700000000?text=I am interested in <?php echo urlencode($item['machine_title']); ?>" target="_blank" class="btn btn-success btn-sm rounded-pill px-3"><i class="bi bi-whatsapp"></i></a>
+                                        <a href="https://wa.me/8801613334514?text=I am interested in <?php echo urlencode($item['machine_title']); ?>" target="_blank" class="btn btn-success btn-sm rounded-pill px-3"><i class="bi bi-whatsapp"></i></a>
                                     </div>
                                 </div>
                             </div>
