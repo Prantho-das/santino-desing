@@ -91,7 +91,7 @@ class Santino_Office_Horeca_Widget extends \Elementor\Widget_Base {
 
                     <div class="col-lg-6">
                         <div class="p-4 rounded-4 bg-light shadow-sm text-center">
-                            <img src="<?php echo santino_img( 'banner-3.png' ); ?>" alt="Office Cafe Setup" class="img-fluid rounded-4">
+                            <img src="<?php echo santino_img( 'bd-office-coffee.jpg' ); ?>" alt="Office Cafe Setup" class="img-fluid rounded-4">
                         </div>
                     </div>
                 </div>

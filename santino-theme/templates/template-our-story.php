@@ -1,5 +1,11 @@
 <?php
 /**
+ * Template Name: Our Heritage & Story Page
+ *
+ * @package Santino
+ */
+
+/**
  * Template Name: Santino Our Heritage & Journey
  * Template Post Type: page
  *
@@ -8,9 +14,9 @@
 
 get_header();
 
-// Elementor builder compatibility check
-if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->documents->get( get_the_ID() ) && \Elementor\Plugin::$instance->documents->get( get_the_ID() )->is_built_with_elementor() ) :
-    while ( have_posts() ) : the_post();
+if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) :
+    while ( have_posts() ) :
+        the_post();
         the_content();
     endwhile;
 else :
@@ -361,7 +367,6 @@ else :
 
   <!-- FOOTER -->
 
-<?php
+<?php\n<?php
 endif;
-
 get_footer();

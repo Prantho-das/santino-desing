@@ -1,15 +1,29 @@
 <?php
 /**
+ * Template Name: Home Page
+ *
+ * @package Santino
+ */
+
+/**
  * Template Name: Santino Home Page
+ * Template Post Type: page
  *
  * @package Santino
  */
 
 get_header();
+
+if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) :
+    while ( have_posts() ) :
+        the_post();
+        the_content();
+    endwhile;
+else :
 ?>
 
-<!-- 1. HERO BANNER (5-SLIDE CAROUSEL WITH REAL ASSETS & VIDEO) -->
-  <section class="hero-banner-section position-relative">
+
+<section class="hero-banner-section position-relative">
     
     <div id="heroCarousel" class="carousel slide carousel-fade hero-carousel" data-bs-ride="carousel" data-bs-interval="6500">
       
@@ -79,7 +93,7 @@ get_header();
                   Commercial 9-bar Italian espresso stations, custom roasted barista blend beans, and WBC-standard staff training powering dining across 50+ BFC restaurants nationwide.
                 </p>
                 <div>
-                  <a href="<?php echo esc_url( home_url( '/bfc/' ) ); ?>" class="btn-hero-lifestyle">
+                  <a href="<?php echo esc_url( home_url("/bfc/") ); ?>" class="btn-hero-lifestyle">
                     Visit BFC Brand Page <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
@@ -122,7 +136,7 @@ get_header();
                   Freshly roasted whole bean & fine ground coffee packs with one-way degassing valves and in-store grinding booths available across 100+ Shwapno superstores.
                 </p>
                 <div>
-                  <a href="<?php echo esc_url( home_url( '/swapno/' ) ); ?>" class="btn-hero-lifestyle">
+                  <a href="<?php echo esc_url( home_url("/swapno/") ); ?>" class="btn-hero-lifestyle">
                     Visit Shwapno Page <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
@@ -171,7 +185,7 @@ get_header();
                   Single-origin micro-lots directly sourced from Ethiopia, Colombia & Guatemala. Precision batch roasting preserves peak aromatic notes and golden crema.
                 </p>
                 <div>
-                  <a href="<?php echo esc_url( home_url( '/beans/' ) ); ?>" class="btn-hero-lifestyle">
+                  <a href="<?php echo esc_url( home_url("/beans/") ); ?>" class="btn-hero-lifestyle">
                     Explore Bean Roasts <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
@@ -220,7 +234,7 @@ get_header();
                   Official distributor of Victoria Arduino, Nuova Simonelli, and Kalerm. Providing guaranteed 4-hour on-site maintenance, barista calibration, and zero-capex leasing.
                 </p>
                 <div>
-                  <a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="btn-hero-lifestyle">
+                  <a href="<?php echo esc_url( home_url("/machines/") ); ?>" class="btn-hero-lifestyle">
                     Discover Machines <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
@@ -359,7 +373,7 @@ get_header();
           <button class="menu-slider-nav-btn menu-slider-next" aria-label="Next Drink">
             <i class="bi bi-arrow-right"></i>
           </button>
-          <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="btn btn-dark ms-2 fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: var(--kp-maroon); border: none; font-size: 13.5px; letter-spacing: 0.4px;">
+          <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="btn btn-dark ms-2 fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: var(--kp-maroon); border: none; font-size: 13.5px; letter-spacing: 0.4px;">
             View Full Menu <i class="bi bi-arrow-up-right ms-1"></i>
           </a>
         </div>
@@ -384,7 +398,7 @@ get_header();
               </div>
               <div class="menu-teaser-price-row">
                 <div class="price-val"><span class="currency">Tk.</span> 170 <small class="text-muted fs-8">/ Reg</small></div>
-                <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
               </div>
             </div>
           </div>
@@ -404,7 +418,7 @@ get_header();
               </div>
               <div class="menu-teaser-price-row">
                 <div class="price-val"><span class="currency">Tk.</span> 200 <small class="text-muted fs-8">/ Large</small></div>
-                <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
               </div>
             </div>
           </div>
@@ -424,7 +438,7 @@ get_header();
               </div>
               <div class="menu-teaser-price-row">
                 <div class="price-val"><span class="currency">Tk.</span> 210 <small class="text-muted fs-8">/ Large</small></div>
-                <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
               </div>
             </div>
           </div>
@@ -444,7 +458,7 @@ get_header();
               </div>
               <div class="menu-teaser-price-row">
                 <div class="price-val"><span class="currency">Tk.</span> 230 <small class="text-muted fs-8">/ Large</small></div>
-                <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
               </div>
             </div>
           </div>
@@ -464,7 +478,7 @@ get_header();
               </div>
               <div class="menu-teaser-price-row">
                 <div class="price-val"><span class="currency">Tk.</span> 230 <small class="text-muted fs-8">/ Large</small></div>
-                <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
               </div>
             </div>
           </div>
@@ -484,7 +498,7 @@ get_header();
               </div>
               <div class="menu-teaser-price-row">
                 <div class="price-val"><span class="currency">Tk.</span> 140 <small class="text-muted fs-8">/ Reg</small></div>
-                <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
               </div>
             </div>
           </div>
@@ -504,7 +518,7 @@ get_header();
               </div>
               <div class="menu-teaser-price-row">
                 <div class="price-val"><span class="currency">Tk.</span> 190 <small class="text-muted fs-8">/ Large</small></div>
-                <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
               </div>
             </div>
           </div>
@@ -527,10 +541,10 @@ get_header();
           </div>
         </div>
         <div class="d-flex flex-wrap align-items-center gap-2 justify-content-center">
-          <a href="<?php echo esc_url( home_url( '/membership/' ) ); ?>" class="btn btn-loyalty-primary">
+          <a href="<?php echo esc_url( home_url("/membership/") ); ?>" class="btn btn-loyalty-primary">
             <i class="bi bi-stars me-1"></i> Become Member
           </a>
-          <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="btn btn-loyalty-secondary">
+          <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="btn btn-loyalty-secondary">
             Explore Menu (20+ Items) <i class="bi bi-arrow-right ms-1"></i>
           </a>
         </div>
@@ -556,7 +570,7 @@ get_header();
         
         <!-- Outlet 1: Shwapno Superstores -->
         <div class="col-lg-6" id="swapno">
-          <a href="<?php echo esc_url( home_url( '/swapno/' ) ); ?>" class="outlet-card">
+          <a href="<?php echo esc_url( home_url("/swapno/") ); ?>" class="outlet-card">
             <img src="<?php echo santino_img('shwapno_santino_retail.jpg'); ?>" alt="Shwapno Superstores" class="outlet-card-img" loading="lazy">
             <div class="outlet-card-overlay"></div>
             <span class="outlet-partner-badge"><i class="bi bi-shop me-1"></i> RETAIL PARTNER</span>
@@ -570,7 +584,7 @@ get_header();
 
         <!-- Outlet 2: BFC (Best Fried Chicken) -->
         <div class="col-lg-6" id="bfc">
-          <a href="<?php echo esc_url( home_url( '/bfc/' ) ); ?>" class="outlet-card">
+          <a href="<?php echo esc_url( home_url("/bfc/") ); ?>" class="outlet-card">
             <img src="<?php echo santino_img('bfc_santino_foodservice.jpg'); ?>" alt="BFC Best Fried Chicken" class="outlet-card-img" loading="lazy">
             <div class="outlet-card-overlay"></div>
             <span class="outlet-partner-badge"><i class="bi bi-cup-hot-fill me-1"></i> RESTAURANT PARTNER</span>
@@ -602,7 +616,7 @@ get_header();
             For over 20 years, Santino Coffee has stayed true to its heritage — combining time-honored coffee traditions with modern innovation. From carefully selected beans to precision roasting, we craft coffee that brings people together, one cup at a time.
           </p>
           <div>
-            <a href="<?php echo esc_url( home_url( '/our-story/' ) ); ?>" class="heritage-cta-link">
+            <a href="<?php echo esc_url( home_url("/our-story/") ); ?>" class="heritage-cta-link">
               Discover Our Roasting Story <i class="bi bi-arrow-right ms-1"></i>
             </a>
           </div>
@@ -683,7 +697,7 @@ get_header();
           </p>
           
           <div class="d-flex flex-wrap align-items-center gap-3">
-            <a href="<?php echo esc_url( home_url( '/training/' ) ); ?>" class="btn btn-dark fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: var(--kp-maroon); border: none; font-size: 13.5px; letter-spacing: 0.3px;">
+            <a href="<?php echo esc_url( home_url("/training/") ); ?>" class="btn btn-dark fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: var(--kp-maroon); border: none; font-size: 13.5px; letter-spacing: 0.3px;">
               Explore Academy <i class="bi bi-arrow-right ms-1"></i>
             </a>
             <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="btn btn-outline-dark fw-semibold px-4 py-2 rounded-pill d-inline-flex align-items-center gap-2" style="font-size: 13.5px; background: #ffffff;">
@@ -803,7 +817,7 @@ get_header();
               </p>
             </div>
             <div class="d-flex justify-content-end mt-3">
-              <a href="<?php echo esc_url( home_url( '/training/' ) ); ?>" class="btn btn-sm btn-light fw-bold px-3 py-1 rounded-pill" style="color: #004642; font-size: 12px;">
+              <a href="<?php echo esc_url( home_url("/training/") ); ?>" class="btn btn-sm btn-light fw-bold px-3 py-1 rounded-pill" style="color: #004642; font-size: 12px;">
                 Learn More <i class="bi bi-arrow-right ms-1"></i>
               </a>
             </div>
@@ -837,10 +851,10 @@ get_header();
             <div class="solution-card-content">
               <h3 class="solution-card-title">HORECA</h3>
               <ul class="solution-card-links">
-                <li><a href="<?php echo esc_url( home_url( '/office-cafe/' ) ); ?>" class="text-white text-decoration-none">Hotels, Fine Dining & Cafes <i class="bi bi-arrow-right"></i></a></li>
-                <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="text-white text-decoration-none">Commercial Espresso Machines <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="<?php echo esc_url( home_url("/office-cafe/") ); ?>" class="text-white text-decoration-none">Hotels, Fine Dining & Cafes <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="<?php echo esc_url( home_url("/machines/") ); ?>" class="text-white text-decoration-none">Commercial Espresso Machines <i class="bi bi-arrow-right"></i></a></li>
               </ul>
-              <a href="<?php echo esc_url( home_url( '/office-cafe/' ) ); ?>" class="btn-card-knowmore text-decoration-none text-center">EXPLORE HORECA →</a>
+              <a href="<?php echo esc_url( home_url("/office-cafe/") ); ?>" class="btn-card-knowmore text-decoration-none text-center">EXPLORE HORECA →</a>
             </div>
           </div>
         </div>
@@ -852,10 +866,10 @@ get_header();
             <div class="solution-card-content">
               <h3 class="solution-card-title">Office Coffee</h3>
               <ul class="solution-card-links">
-                <li><a href="<?php echo esc_url( home_url( '/office-cafe/' ) ); ?>" class="text-white text-decoration-none">Corporate Bean-to-Cup Setup <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="<?php echo esc_url( home_url("/office-cafe/") ); ?>" class="text-white text-decoration-none">Corporate Bean-to-Cup Setup <i class="bi bi-arrow-right"></i></a></li>
                 <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="text-white text-decoration-none">Monthly Roast Subscriptions <i class="bi bi-arrow-right"></i></a></li>
               </ul>
-              <a href="<?php echo esc_url( home_url( '/office-cafe/' ) ); ?>" class="btn-card-knowmore text-decoration-none text-center">EXPLORE OFFICE COFFEE →</a>
+              <a href="<?php echo esc_url( home_url("/office-cafe/") ); ?>" class="btn-card-knowmore text-decoration-none text-center">EXPLORE OFFICE COFFEE →</a>
             </div>
           </div>
         </div>
@@ -868,7 +882,7 @@ get_header();
               <h3 class="solution-card-title">Event Coffee / Consulting</h3>
               <ul class="solution-card-links">
                 <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="text-white text-decoration-none">Pop-Up Live Espresso Bars <i class="bi bi-arrow-right"></i></a></li>
-                <li><a href="<?php echo esc_url( home_url( '/training/' ) ); ?>" class="text-white text-decoration-none">Cafe Setup & Barista Strategy <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="<?php echo esc_url( home_url("/training/") ); ?>" class="text-white text-decoration-none">Cafe Setup & Barista Strategy <i class="bi bi-arrow-right"></i></a></li>
               </ul>
               <button class="btn-card-knowmore" data-bs-toggle="modal" data-bs-target="#enquiryModal">GET CONSULTATION →</button>
             </div>
@@ -890,7 +904,7 @@ get_header();
         <p class="zigzag-desc">
           We embrace new ideas, technologies, and methods that elevate coffee culture in Bangladesh while respecting tradition. From advanced CAYE Bionic Baristas to intelligent superautomatics, we empower businesses to lead the coffee revolution.
         </p>
-        <a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="link-kp-red">EXPLORE AUTOMATION <i class="bi bi-arrow-right"></i></a>
+        <a href="<?php echo esc_url( home_url("/machines/") ); ?>" class="link-kp-red">EXPLORE AUTOMATION <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
 
@@ -902,7 +916,7 @@ get_header();
         <p class="zigzag-desc">
           Everything we do shows our dedication and commitment to quality — backed by our FSSC22000 food safety certification and Rainforest Alliance certified coffee beans roasted fresh to precision in every single batch.
         </p>
-        <a href="<?php echo esc_url( home_url( '/beans/' ) ); ?>" class="link-kp-red">VIEW CERTIFICATIONS <i class="bi bi-arrow-right"></i></a>
+        <a href="<?php echo esc_url( home_url("/beans/") ); ?>" class="link-kp-red">VIEW CERTIFICATIONS <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
 
@@ -914,7 +928,7 @@ get_header();
         <p class="zigzag-desc">
           We train, mentor, and share expertise to grow the next generation of coffee leaders in Bangladesh. Our certified trainers support baristas from foundational skills to World Barista & Brewers Cup championships.
         </p>
-        <a href="<?php echo esc_url( home_url( '/training/' ) ); ?>" class="link-kp-red">JOIN ACADEMY <i class="bi bi-arrow-right"></i></a>
+        <a href="<?php echo esc_url( home_url("/training/") ); ?>" class="link-kp-red">JOIN ACADEMY <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
 
@@ -1323,7 +1337,7 @@ get_header();
           </p>
         </div>
         <div>
-          <a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="btn-view-all">
+          <a href="<?php echo esc_url( home_url("/machines/") ); ?>" class="btn-view-all">
             View All Products <i class="bi bi-arrow-right ms-1"></i>
           </a>
         </div>
@@ -2080,4 +2094,14 @@ get_header();
   <!-- FOOTER (REDESIGNED ULTRA-LUXURY FOOTER) -->
 
 <?php
+    // Elementor DOM Hook Assurance
+    while ( have_posts() ) :
+        the_post();
+        echo '<div style="display:none !important;">';
+        the_content();
+        echo '</div>';
+    endwhile;
+endif;
 get_footer();
+
+

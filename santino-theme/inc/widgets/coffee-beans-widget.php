@@ -107,7 +107,7 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
                 'label'   => esc_html__( 'Image', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::MEDIA,
                 'default' => array(
-                    'url' => SANTINO_URI . '/assets/images/Signature-coffee.png',
+                    'url' => SANTINO_URI . '/assets/images/traditional-coffee-9kg_1.jpg',
                 ),
             )
         );
@@ -125,15 +125,31 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
                         'roast_level'   => 'Dark Roast (Full Body)',
                         'tasting_notes' => 'Molasses, Dark Cocoa, Smoky Cedar',
                         'price'         => '৳ 1,350 / 500g',
-                        'bean_image'    => array( 'url' => SANTINO_URI . '/assets/images/Signature-coffee.png' ),
+                        'bean_image'    => array( 'url' => SANTINO_URI . '/assets/images/traditional-coffee-9kg_1.jpg' ),
                     ),
                     array(
-                        'bean_name'     => 'Ethiopia Guji Microlot',
+                        'bean_name'     => 'Santino Italian Crema Blend',
+                        'origin'        => 'Santos & Guatemala | 1800m',
+                        'roast_level'   => 'Medium-Dark Roast',
+                        'tasting_notes' => 'Roasted Almond, Dark Caramel, Vanilla',
+                        'price'         => '৳ 1,450 / 500g',
+                        'bean_image'    => array( 'url' => SANTINO_URI . '/assets/images/italian-capsules_1.webp' ),
+                    ),
+                    array(
+                        'bean_name'     => 'Ethiopia Guji Specialty Microlot',
                         'origin'        => 'Guji, Oromia, Ethiopia | 2100m',
                         'roast_level'   => 'Light-Medium Filter Roast',
                         'tasting_notes' => 'Jasmine, Bergamot, Blueberry, Peach',
                         'price'         => '৳ 1,850 / 250g',
-                        'bean_image'    => array( 'url' => SANTINO_URI . '/assets/images/Signature-coffee.png' ),
+                        'bean_image'    => array( 'url' => SANTINO_URI . '/assets/images/espresso-capsules_1.webp' ),
+                    ),
+                    array(
+                        'bean_name'     => 'Santino Oro Selection 100% Arabica',
+                        'origin'        => 'Colombia Supremo & Costa Rica | 1950m',
+                        'roast_level'   => 'Medium Roast',
+                        'tasting_notes' => 'Honey, Milk Chocolate, Sweet Tangerine',
+                        'price'         => '৳ 1,650 / 500g',
+                        'bean_image'    => array( 'url' => SANTINO_URI . '/assets/images/oro_-capsules_1.webp' ),
                     ),
                 ),
                 'title_field' => '{{{ bean_name }}}',

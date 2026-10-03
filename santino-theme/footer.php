@@ -112,37 +112,11 @@
     </div>
   </footer>
 
-  <!-- Quick Enquiry Modal -->
-  <div class="modal fade" id="enquiryModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 p-4">
-        <div class="modal-header border-0 pb-0">
-          <h4 class="modal-title font-heading fw-bold">Drop an Enquiry</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <p class="text-muted small mb-4">Leave your details and our commercial coffee team will contact you immediately.</p>
-          <form onsubmit="alert('Thank you! We will contact you shortly.'); return false;">
-            <div class="mb-3">
-              <input type="text" class="form-control" placeholder="Full Name *" required>
-            </div>
-            <div class="mb-3">
-              <input type="tel" class="form-control" placeholder="Phone Number *" required>
-            </div>
-            <div class="mb-3">
-              <input type="email" class="form-control" placeholder="Email Address *" required>
-            </div>
-            <div class="mb-3">
-              <textarea class="form-control" rows="3" placeholder="Tell us about your machine or coffee needs..."></textarea>
-            </div>
-            <button type="submit" class="btn-kp-maroon w-100 py-2">
-              SEND INQUIRY
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <?php 
+  // Load Reusable Components
+  get_template_part( 'template-parts/floating-bar' );
+  get_template_part( 'template-parts/modals' );
+  ?>
 
   <!-- MOBILE NATIVE APP BOTTOM NAVIGATION DOCK -->
   <nav class="mobile-app-dock d-flex d-lg-none" aria-label="Mobile Navigation">

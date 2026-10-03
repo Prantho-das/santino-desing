@@ -16,7 +16,7 @@ class Santino_Academy_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__( 'Santino Barista Academy', 'santino' );
+        return esc_html__( 'Santino Barista Academy Showcase', 'santino' );
     }
 
     public function get_icon() {
@@ -37,20 +37,108 @@ class Santino_Academy_Widget extends \Elementor\Widget_Base {
         );
 
         $this->add_control(
-            'title',
+            'badge',
             array(
-                'label'   => esc_html__( 'Title', 'santino' ),
+                'label'   => esc_html__( 'Badge Text', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::TEXT,
-                'default' => 'Professional Barista Certification & Roastery Academy',
+                'default' => 'BARISTA ACADEMY',
             )
         );
 
         $this->add_control(
-            'subtitle',
+            'title',
             array(
-                'label'   => esc_html__( 'Subtitle', 'santino' ),
+                'label'   => esc_html__( 'Main Title', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Learn the Art of Great Coffee',
+            )
+        );
+
+        $this->add_control(
+            'description',
+            array(
+                'label'   => esc_html__( 'Description', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::TEXTAREA,
-                'default' => 'Hands-on practical training on commercial multi-boiler espresso machines, latte art mastery, sensoric cupping, and cafe operations in Dhaka.',
+                'default' => 'Our Barista Academy offers professional training for coffee lovers, aspiring baristas, and corporate teams. Get hands-on experience, expert guidance, and real-world skills.',
+            )
+        );
+
+        $this->add_control(
+            'btn_text',
+            array(
+                'label'   => esc_html__( 'Button Text', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Explore Academy',
+            )
+        );
+
+        $this->add_control(
+            'btn_url',
+            array(
+                'label'   => esc_html__( 'Button Link', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::URL,
+                'default' => array( 'url' => '/training/' ),
+            )
+        );
+
+        $repeater = new \Elementor\Repeater();
+
+        $repeater->add_control(
+            'icon',
+            array(
+                'label'   => esc_html__( 'Icon Class', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'bi bi-cup-hot-fill',
+            )
+        );
+
+        $repeater->add_control(
+            'title',
+            array(
+                'label'   => esc_html__( 'Feature Title', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Professional Training',
+            )
+        );
+
+        $repeater->add_control(
+            'desc',
+            array(
+                'label'   => esc_html__( 'Feature Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXTAREA,
+                'default' => 'Learn from certified trainers with industry experience.',
+            )
+        );
+
+        $this->add_control(
+            'features',
+            array(
+                'label'       => esc_html__( 'Feature Cards', 'santino' ),
+                'type'        => \Elementor\Controls_Manager::REPEATER,
+                'fields'      => $repeater->get_controls(),
+                'default'     => array(
+                    array(
+                        'icon'  => 'bi bi-cup-hot-fill',
+                        'title' => 'Professional Training',
+                        'desc'  => 'Learn from certified trainers with industry experience.',
+                    ),
+                    array(
+                        'icon'  => 'bi bi-people-fill',
+                        'title' => 'Hands-on Practice',
+                        'desc'  => 'Work with real equipment and live coffee stations.',
+                    ),
+                    array(
+                        'icon'  => 'bi bi-patch-check-fill',
+                        'title' => 'Certification',
+                        'desc'  => 'Get a recognized certificate after course completion.',
+                    ),
+                    array(
+                        'icon'  => 'bi bi-briefcase-fill',
+                        'title' => 'Career Support',
+                        'desc'  => 'Job placement assistance with top partner cafes.',
+                    ),
+                ),
+                'title_field' => '{{{ title }}}',
             )
         );
 
@@ -59,39 +147,75 @@ class Santino_Academy_Widget extends \Elementor\Widget_Base {
 
     protected function render() {
         $settings = $this->get_settings_for_display();
+        $features = ! empty( $settings['features'] ) ? $settings['features'] : array();
+        $btn_url = ! empty( $settings['btn_url']['url'] ) ? esc_url( $settings['btn_url']['url'] ) : home_url( '/training/' );
         ?>
-        <section class="academy-section py-5 bg-dark text-white rounded-5 my-4 mx-3 mx-lg-5 p-4 p-lg-5">
-            <div class="row align-items-center g-4">
-                <div class="col-lg-7">
-                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3">SCA CERTIFIED CURRICULUM</span>
-                    <h2 class="display-6 fw-bold font-heading text-white mb-3"><?php echo esc_html( $settings['title'] ); ?></h2>
-                    <p class="text-light opacity-75 mb-4"><?php echo esc_html( $settings['subtitle'] ); ?></p>
-                    
-                    <div class="row g-3 mb-4">
-                        <div class="col-sm-6">
-                            <div class="p-3 bg-white bg-opacity-10 rounded-3 border border-white border-opacity-10">
-                                <i class="bi bi-award-fill text-warning fs-4 mb-2 d-block"></i>
-                                <h5 class="h6 fw-bold text-white mb-1">Commercial Barista Foundation</h5>
-                                <p class="small text-light opacity-75 mb-0">Espresso extraction dial-in, milk steaming microfoam &amp; machine upkeep.</p>
+        <section class="barista-academy-home-section position-relative" id="academy">
+            <div class="container py-2">
+                <div class="row align-items-center g-4 g-lg-5 mb-5">
+                    <div class="col-lg-5">
+                        <?php if ( ! empty( $settings['badge'] ) ) : ?>
+                            <div class="sec-pill-badge-wrap start mb-3">
+                                <span class="sec-pill-line"></span>
+                                <span class="sec-pill-badge"><i class="bi bi-mortarboard-fill me-1"></i> <?php echo esc_html( $settings['badge'] ); ?></span>
+                                <span class="sec-pill-line"></span>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="p-3 bg-white bg-opacity-10 rounded-3 border border-white border-opacity-10">
-                                <i class="bi bi-cup-straw text-warning fs-4 mb-2 d-block"></i>
-                                <h5 class="h6 fw-bold text-white mb-1">Advanced Latte Art &amp; Brewing</h5>
-                                <p class="small text-light opacity-75 mb-0">Free-pour rosetta, swan, V60, Chemex &amp; AeroPress recipes.</p>
-                            </div>
+                        <?php endif; ?>
+                        
+                        <h2 class="sec-title mb-3" style="font-size: 2.35rem; line-height: 1.2;">
+                            <?php echo esc_html( $settings['title'] ); ?>
+                        </h2>
+                        
+                        <?php if ( ! empty( $settings['description'] ) ) : ?>
+                            <p class="text-muted mb-4" style="font-size: 0.96rem; line-height: 1.65; max-width: 440px;">
+                                <?php echo esc_html( $settings['description'] ); ?>
+                            </p>
+                        <?php endif; ?>
+                        
+                        <div class="d-flex flex-wrap align-items-center gap-3">
+                            <a href="<?php echo $btn_url; ?>" class="btn btn-dark fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: var(--kp-maroon); border: none; font-size: 13.5px; letter-spacing: 0.3px;">
+                                <?php echo esc_html( $settings['btn_text'] ); ?> <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal" class="btn btn-outline-dark fw-semibold px-4 py-2 rounded-pill d-inline-flex align-items-center gap-2" style="font-size: 13.5px; background: #ffffff;">
+                                <i class="bi bi-play-circle fs-6"></i> <span>Watch Overview</span>
+                            </a>
                         </div>
                     </div>
 
-                    <div class="d-flex flex-wrap gap-3">
-                        <a href="<?php echo esc_url( home_url( '/training' ) ); ?>" class="btn btn-warning rounded-pill px-4 py-2 fw-bold text-dark">Enroll Course</a>
-                        <a href="https://wa.me/8801606291393?text=I want to join Barista Training" target="_blank" class="btn btn-outline-light rounded-pill px-4 py-2"><i class="bi bi-whatsapp me-1"></i> WhatsApp Inquiry</a>
+                    <div class="col-lg-7">
+                        <div class="position-relative">
+                            <div id="baristaHeroCarousel" class="carousel slide carousel-fade rounded-4 overflow-hidden shadow-sm position-relative" data-bs-ride="carousel" data-bs-interval="3500" style="height: 380px; background: #111;">
+                                <div class="carousel-inner h-100">
+                                    <div class="carousel-item active h-100">
+                                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1200&auto=format&fit=crop&q=80" alt="Freshly Ground Coffee Portafilter" class="w-100 h-100" style="object-fit: cover;">
+                                    </div>
+                                    <div class="carousel-item h-100">
+                                        <img src="<?php echo santino_img('bd-barista-latte-art.jpg'); ?>" alt="Master Barista Pouring Latte Art" class="w-100 h-100" style="object-fit: cover;">
+                                    </div>
+                                    <div class="carousel-item h-100">
+                                        <img src="<?php echo santino_img('imgi_23_santino_-_250522-07495.jpg'); ?>" alt="Commercial Espresso Dial-In" class="w-100 h-100" style="object-fit: cover;">
+                                    </div>
+                                </div>
+                                <div class="position-absolute top-0 start-0 m-4 text-white" style="font-family: var(--kp-font-title); font-style: italic; font-weight: 800; font-size: 1.5rem; line-height: 1.2; text-shadow: 0 2px 12px rgba(0,0,0,0.9); z-index: 2;">
+                                    Better Baristas<br>Brew Better Stories
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-lg-5 text-center">
-                    <img src="<?php echo santino_img( 'banner-2.png' ); ?>" alt="Barista Academy" class="img-fluid rounded-4 shadow-lg">
+                <div class="row g-3 g-lg-4 align-items-stretch pt-2">
+                    <?php foreach ( $features as $feat ) : ?>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="academy-feature-card">
+                                <div class="academy-feature-icon">
+                                    <i class="<?php echo esc_attr( $feat['icon'] ); ?>"></i>
+                                </div>
+                                <h6 class="academy-feature-title"><?php echo esc_html( $feat['title'] ); ?></h6>
+                                <p class="academy-feature-desc"><?php echo esc_html( $feat['desc'] ); ?></p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </section>

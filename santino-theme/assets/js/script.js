@@ -105,7 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
       rootMargin: '0px 0px -40px 0px'
     });
 
-    revealElements.forEach(el => revealObserver.observe(el));
+    revealElements.forEach(el => {
+      revealObserver.observe(el);
+      // Fallback: make visible after 1.5s in case scroll observer doesn't trigger
+      setTimeout(() => el.classList.add('revealed'), 1500);
+    });
   }
 
   const menuTrack = document.getElementById('menuTeaserTrack');
@@ -205,6 +209,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Submission error:', err);
         alert('Could not submit application. Please check network connection.');
       });
+    });
+  }
+
   // Invoice Submission Form
   const invoiceForm = document.getElementById('santinoInvoiceForm');
   if (invoiceForm) {
@@ -393,6 +400,119 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Global Helpers for Machines & Beans Filtering
+window.filterMachines = function(cat, btn) {
+  document.querySelectorAll('.branch-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.machine-card-col');
+  cards.forEach(card => {
+    if (cat === 'all' || card.getAttribute('data-category') === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
+
+window.filterBeans = function(cat, btn) {
+  document.querySelectorAll('.branch-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.bean-card-col');
+  cards.forEach(card => {
+    if (cat === 'all' || card.getAttribute('data-category') === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
+
+// Office Calculator Global Function
+window.updateCalculator = function(staff) {
+  staff = parseInt(staff) || 10;
+  const staffText = document.getElementById('staffCountText');
+  if (staffText) staffText.innerText = staff + ' Employees';
+  
+  const dailyCups = Math.round(staff * 1.8);
+  const dailyEl = document.getElementById('dailyCupsDisplay');
+  if (dailyEl) dailyEl.innerText = dailyCups;
+  
+  const monthlyKg = Math.round((dailyCups * 22 * 10) / 1000);
+  const beansEl = document.getElementById('monthlyBeansDisplay');
+  if (beansEl) beansEl.innerText = monthlyKg + ' kg';
+  
+  const monthlySavings = (dailyCups * 22 * 120).toLocaleString('en-US');
+  const savingsEl = document.getElementById('monthlySavingsDisplay');
+  if (savingsEl) savingsEl.innerText = '৳ ' + monthlySavings;
+  
+  let machineName = 'Kalerm Touch Auto (Single)';
+  if (staff > 120) {
+    machineName = 'Victoria Arduino / CAYE Robot Hub';
+  } else if (staff >= 40) {
+    machineName = 'Kalerm X400 Dual-Grinder Auto';
+  }
+  const recEl = document.getElementById('recMachineDisplay');
+  if (recEl) recEl.innerText = machineName;
+};
+
+// Menu Category Filter
+window.filterByCategory = function(cat) {
+  const catBtn = document.querySelector(`.btn-cat-tab[data-filter="${cat}"]`);
+  if (catBtn) {
+    catBtn.click();
+    const gridSec = document.getElementById('menuGridSection');
+    if (gridSec) gridSec.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+// Shwapno & BFC Search and Filters
+window.filterShwapnoZone = function(zone, btn) {
+  document.querySelectorAll('.branch-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const cards = document.querySelectorAll('#shwapnoOutletGrid .outlet-card');
+  cards.forEach(card => {
+    const cardZone = card.getAttribute('data-zone') || '';
+    if (zone === 'all' || cardZone.includes(zone)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
+
+window.filterShwapnoOutlets = function() {
+  const input = document.getElementById('shwapnoSearchInput');
+  const q = (input ? input.value : '').toLowerCase().trim();
+  const cards = document.querySelectorAll('#shwapnoOutletGrid .outlet-card');
+  cards.forEach(card => {
+    const zone = card.getAttribute('data-zone') || '';
+    const text = card.innerText.toLowerCase();
+    if (!q || zone.includes(q) || text.includes(q)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
+
+window.filterBfcOutlets = function() {
+  const input = document.getElementById('bfcSearchInput');
+  const q = (input ? input.value : '').toLowerCase().trim();
+  const cards = document.querySelectorAll('#bfcOutletGrid .outlet-card');
+  cards.forEach(card => {
+    const zone = card.getAttribute('data-zone') || '';
+    const text = card.innerText.toLowerCase();
+    if (!q || zone.includes(q) || text.includes(q)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
+
 
 
 

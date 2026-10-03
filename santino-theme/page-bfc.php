@@ -8,14 +8,13 @@
 
 get_header();
 
-// Elementor builder compatibility check
-if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->documents->get( get_the_ID() ) && \Elementor\Plugin::$instance->documents->get( get_the_ID() )->is_built_with_elementor() ) :
-    while ( have_posts() ) : the_post();
+if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) :
+    while ( have_posts() ) :
+        the_post();
         the_content();
     endwhile;
 else :
 ?>
-
 <!-- MINIMAL CLEAN BFC HERO BANNER -->
   <section class="pro-banner-hero pro-banner-bfc" style="background-image: url('<?php echo santino_img('bfc_santino_foodservice.jpg'); ?>'); background-position: center 30%; min-height: 52vh;">
     <div class="pro-banner-overlay" style="background: linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(11, 21, 20, 0.45) 100%);"></div>
@@ -534,5 +533,4 @@ else :
 
 <?php
 endif;
-
 get_footer();

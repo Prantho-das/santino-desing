@@ -85,10 +85,14 @@ function santino_enqueue_scripts() {
     // Custom Script
     wp_enqueue_script( 'santino-script', SANTINO_URI . '/assets/js/script.js', array( 'bootstrap-bundle' ), SANTINO_VERSION, true );
 
+    // Menu System Script
+    wp_enqueue_script( 'santino-menu-js', SANTINO_URI . '/assets/js/menu.js', array( 'bootstrap-bundle', 'santino-script' ), SANTINO_VERSION, true );
+
     // Localize AJAX parameters for Frontend
     wp_localize_script( 'santino-script', 'santino_ajax', array(
-        'ajax_url' => admin_url( 'admin-ajax.php' ),
-        'nonce'    => wp_create_nonce( 'santino_frontend_nonce' ),
+        'ajax_url'  => admin_url( 'admin-ajax.php' ),
+        'nonce'     => wp_create_nonce( 'santino_frontend_nonce' ),
+        'theme_uri' => SANTINO_URI,
     ) );
 }
 add_action( 'wp_enqueue_scripts', 'santino_enqueue_scripts' );
@@ -124,9 +128,16 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     require_once SANTINO_DIR . '/inc/widgets/stats-counter-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/faq-accordion-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/cta-banner-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/cafe-menu-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/outlets-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/story-timeline-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/brands-showcase-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/bfc-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/swapno-retail-widget.php';
 
     // Register Widgets
     $widgets_manager->register( new \Santino_Hero_Banner_Widget() );
+    $widgets_manager->register( new \Santino_Outlets_Widget() );
     $widgets_manager->register( new \Santino_Machine_Grid_Widget() );
     $widgets_manager->register( new \Santino_Coffee_Beans_Widget() );
     $widgets_manager->register( new \Santino_Academy_Widget() );
@@ -138,6 +149,11 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     $widgets_manager->register( new \Santino_Stats_Counter_Widget() );
     $widgets_manager->register( new \Santino_FAQ_Widget() );
     $widgets_manager->register( new \Santino_CTA_Banner_Widget() );
+    $widgets_manager->register( new \Santino_Cafe_Menu_Widget() );
+    $widgets_manager->register( new \Santino_Story_Timeline_Widget() );
+    $widgets_manager->register( new \Santino_Brands_Showcase_Widget() );
+    $widgets_manager->register( new \Santino_BFC_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Swapno_Retail_Widget() );
 }
 add_action( 'elementor/widgets/register', 'santino_register_elementor_widgets' );
 
@@ -157,4 +173,6 @@ require_once SANTINO_DIR . '/inc/elementor-installer.php';
  * Include Santino VIP Membership Backend Engine
  */
 require_once SANTINO_DIR . '/inc/membership-system.php';
+
+
 

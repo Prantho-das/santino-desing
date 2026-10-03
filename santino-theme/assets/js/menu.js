@@ -315,6 +315,16 @@ document.addEventListener('DOMContentLoaded', () => {
   initBranchFilters();
 });
 
+// Image path resolver for WordPress & static contexts
+function getMenuImgUrl(img) {
+  if (!img) return '';
+  if (img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:')) return img;
+  if (typeof santino_ajax !== 'undefined' && santino_ajax.theme_uri) {
+    return santino_ajax.theme_uri + '/assets/' + img;
+  }
+  return '/wp-content/themes/santino-theme/assets/' + img;
+}
+
 // Render Menu Cards
 function renderMenuGrid(items) {
   const grid = document.getElementById('menuItemsGrid');
@@ -339,7 +349,7 @@ function renderMenuGrid(items) {
         
         <!-- Image & Badges -->
         <div class="menu-card-image-wrap">
-          <img src="${item.img}" alt="${item.name}" loading="lazy" class="menu-card-img">
+          <img src="${getMenuImgUrl(item.img)}" alt="${item.name}" loading="lazy" class="menu-card-img">
           <span class="menu-badge-pill ${item.badgeClass}">${item.tag}</span>
           <div class="menu-card-quick-order">
             <button class="btn-quick-add" onclick="event.stopPropagation(); quickAddToCart('${item.id}')">
@@ -463,7 +473,7 @@ function openItemCustomModal(itemId) {
   selectedItemForModal = item;
   currentModalQty = 1;
 
-  document.getElementById('modalItemImg').src = item.img;
+  document.getElementById('modalItemImg').src = getMenuImgUrl(item.img);
   document.getElementById('modalItemTitle').innerText = item.name;
   document.getElementById('modalItemTag').innerText = item.tag;
   document.getElementById('modalItemCalories').innerText = `${item.calories} • ${item.roast}`;
@@ -612,7 +622,7 @@ function renderCart() {
       return `
         <div class="cart-item-row d-flex align-items-center justify-content-between p-3 bg-light rounded-3">
           <div class="d-flex align-items-center gap-3">
-            <img src="${item.img}" alt="" class="rounded-2" style="width: 50px; height: 50px; object-fit: cover;">
+            <img src="${getMenuImgUrl(item.img)}" alt="" class="rounded-2" style="width: 50px; height: 50px; object-fit: cover;">
             <div>
               <div class="fw-bold fs-6 text-dark">${item.name}</div>
               <div class="text-muted small" style="font-size: 11px;">${item.customs}</div>
