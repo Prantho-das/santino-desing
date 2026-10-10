@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'SANTINO_VERSION', '1.1.0' );
+define( 'SANTINO_VERSION', time() );
 define( 'SANTINO_DIR', get_template_directory() );
 define( 'SANTINO_URI', get_template_directory_uri() );
 
@@ -173,6 +173,7 @@ require_once SANTINO_DIR . '/inc/elementor-installer.php';
  * Include Santino VIP Membership Backend Engine
  */
 require_once SANTINO_DIR . '/inc/membership-system.php';
+require_once SANTINO_DIR . '/inc/menus.php';
 
 
 

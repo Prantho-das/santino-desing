@@ -8,7 +8,15 @@
 
 get_header();
 
-if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) :
+$is_elementor_page = false;
+if ( class_exists( '\Elementor\Plugin' ) ) {
+    $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
+    if ( $document && $document->is_built_with_elementor() ) {
+        $is_elementor_page = true;
+    }
+}
+
+if ( $is_elementor_page ) :
     while ( have_posts() ) :
         the_post();
         the_content();
@@ -16,43 +24,478 @@ if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->edit
 else :
 ?>
 
-<section class="py-4 bg-white">
-    <div class="container">
+<style>
+.menu-page-wrap, body, p, .text-muted, .text-secondary, label, input, select, textarea {
+  font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif);
+}
+
+.sec-title,
+.font-heading,
+h1, h2, h3, h4, h5, h6,
+.sec-pill-badge,
+.btn-hero-lifestyle,
+.btn-hero-outline,
+.btn-lookup-action,
+.branch-filter-btn,
+.btn-cat-tab,
+.badge-theme {
+  font-family: var(--kp-font-title, 'Montserrat', sans-serif) !important;
+  letter-spacing: -0.3px;
+}
+
+.sec-title {
+  font-size: clamp(2rem, 3.5vw, 2.8rem) !important;
+  font-weight: 900 !important;
+  color: #111111;
+  letter-spacing: -0.5px !important;
+}
+
+.sec-title.text-white,
+.text-white .sec-title {
+  color: #ffffff !important;
+}
+
+.sec-title-accent, .menu-title-highlight {
+  color: var(--santino-teal, #00625d) !important;
+}
+
+.sec-description {
+  font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif);
+  color: #556662;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.sec-pill-badge-wrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.sec-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 98, 93, 0.08);
+  color: var(--santino-teal, #00625d);
+  border: 1px solid rgba(0, 98, 93, 0.22);
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.sec-pill-badge i {
+  font-size: 7px;
+  color: var(--santino-teal, #00625d);
+}
+
+.portal-lookup-group {
+  display: flex;
+  align-items: center;
+  background: #f8faf9;
+  border: 1.5px solid #d5e5e0;
+  border-radius: 50px;
+  padding: 6px 8px 6px 18px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 98, 93, 0.04);
+  width: 100%;
+}
+
+.portal-lookup-group:focus-within {
+  border-color: var(--santino-teal, #00625d);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(0, 98, 93, 0.12), 0 4px 16px rgba(0, 98, 93, 0.08);
+}
+
+.portal-lookup-field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.portal-lookup-field i {
+  color: var(--santino-teal, #00625d);
+  font-size: 1.15rem;
+}
+
+.portal-lookup-field input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+  font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.95rem;
+  color: #111111;
+  padding: 8px 0;
+}
+
+.portal-lookup-field input::placeholder {
+  color: #8da39e;
+  font-weight: 400;
+}
+
+.btn-lookup-action {
+  background: var(--santino-teal, #00625d);
+  border: none;
+  color: #ffffff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-lookup-action:hover {
+  background: #004d49;
+  transform: scale(1.05);
+}
+
+.btn-hero-lifestyle,
+.btn-hero-outline {
+  font-family: var(--kp-font-title, 'Montserrat', sans-serif) !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.6px !important;
+  text-transform: uppercase !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  padding: 0 28px !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+  border-radius: 50px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  transition: all 0.28s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.btn-hero-lifestyle span,
+.btn-hero-outline span {
+  display: inline-block !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
+
+.btn-hero-lifestyle i,
+.btn-hero-outline i {
+  font-size: 14px !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  vertical-align: middle !important;
+  transition: transform 0.25s ease !important;
+}
+
+.btn-hero-lifestyle {
+  background: var(--santino-teal, #00625d) !important;
+  border: 2px solid var(--santino-teal, #00625d) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px rgba(0, 98, 93, 0.35) !important;
+}
+
+.btn-hero-lifestyle:hover {
+  background: #004d49 !important;
+  border-color: #004d49 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 25px rgba(0, 98, 93, 0.5) !important;
+}
+
+.btn-hero-lifestyle:hover i {
+  transform: translateX(4px) !important;
+}
+
+.btn-hero-outline {
+  background: transparent !important;
+  border: 2px solid rgba(255, 255, 255, 0.85) !important;
+  color: #ffffff !important;
+}
+
+.btn-hero-outline:hover {
+  background: #ffffff !important;
+  color: var(--santino-teal, #00625d) !important;
+  border-color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 22px rgba(255, 255, 255, 0.3) !important;
+}
+
+.floating-bg-icons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.floating-bg-icons i {
+  position: absolute;
+  color: rgba(0, 98, 93, 0.04);
+  animation: floatSlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes floatSlow {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-15px) rotate(10deg); }
+}
+
+/* Category Filter Tabs */
+.btn-cat-tab {
+  border: 1.5px solid #e0ebe8;
+  background: #ffffff;
+  color: #334441;
+  border-radius: 50px;
+  padding: 9px 20px;
+  font-size: 13.5px;
+  font-weight: 700;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.btn-cat-tab:hover {
+  border-color: var(--santino-teal, #00625d);
+  color: var(--santino-teal, #00625d);
+  background: #f4faf8;
+}
+
+.btn-cat-tab.active {
+  background: var(--santino-teal, #00625d);
+  color: #ffffff;
+  border-color: var(--santino-teal, #00625d);
+  box-shadow: 0 4px 14px rgba(0, 98, 93, 0.25);
+}
+
+/* Menu Product Cards */
+.menu-product-card {
+  background: #ffffff;
+  border: 1px solid #e8f0ed;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+}
+
+.menu-product-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0, 98, 93, 0.3);
+  box-shadow: 0 14px 34px rgba(0, 98, 93, 0.12);
+}
+
+.menu-card-image-wrap {
+  position: relative;
+  height: 220px;
+  background: #f7f9f8;
+  overflow: hidden;
+}
+
+.menu-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.menu-product-card:hover .menu-card-img {
+  transform: scale(1.05);
+}
+
+.menu-badge-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+.menu-badge-pill.badge-teal {
+  background: rgba(0, 98, 93, 0.9);
+  color: #ffffff;
+}
+
+.menu-badge-pill.badge-gold {
+  background: rgba(195, 153, 108, 0.95);
+  color: #ffffff;
+}
+
+.menu-badge-pill.badge-danger {
+  background: #e63946;
+  color: #ffffff;
+}
+
+.menu-badge-pill.badge-dark {
+  background: #212529;
+  color: #ffffff;
+}
+
+.menu-card-quick-order {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 2;
+}
+
+.btn-quick-add {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--santino-teal, #00625d);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-quick-add:hover {
+  background: var(--santino-teal, #00625d);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.menu-card-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.menu-taste-notes {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--santino-teal, #00625d);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.menu-item-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #111111;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.menu-item-desc {
+  font-size: 0.88rem;
+  color: #6c757d;
+  line-height: 1.5;
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.menu-item-price {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #111111;
+  font-family: var(--kp-font-title, 'Montserrat', sans-serif);
+}
+
+.btn-customize-pill {
+  background: rgba(0, 98, 93, 0.08);
+  color: var(--santino-teal, #00625d);
+  border: 1px solid rgba(0, 98, 93, 0.2);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-customize-pill:hover {
+  background: var(--santino-teal, #00625d);
+  color: #ffffff;
+}
+</style>
+
+<div class="menu-page-wrap">
+
+  <!-- 1. HERO HEADER & LIVE SEARCH -->
+  <section class="py-4 bg-white position-relative">
+    <div class="floating-bg-icons">
+      <i class="bi bi-cup-hot" style="top: 15%; left: 3%; font-size: 45px;"></i>
+      <i class="bi bi-flower1" style="top: 60%; right: 4%; font-size: 40px;"></i>
+    </div>
+
+    <div class="container position-relative" style="z-index: 1;">
       
       <div class="row align-items-center mb-4 g-3 reveal">
         <div class="col-lg-6">
-          <h1 class="display-6 font-heading fw-black text-dark mb-1">Artisan Coffee & Beverage Menu</h1>
-          <p class="text-muted small mb-0">Crafted with master roasted beans, plant-based dairy, and precision Italian extraction.</p>
+          <div class="sec-pill-badge-wrap mb-2">
+            <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> SANTINO SIGNATURE CAFE MENU</span>
+          </div>
+          <h1 class="sec-title mb-2">Artisan Coffee &amp; <span class="sec-title-accent">Beverage Menu</span></h1>
+          <p class="sec-description mb-0">Crafted with master roasted beans, plant-based dairy, and precision Italian extraction.</p>
         </div>
         <div class="col-lg-6">
-          <div class="input-group input-group-lg shadow-sm rounded-4 overflow-hidden border">
-            <span class="input-group-text bg-white border-0 text-muted ps-3"><i class="bi bi-search"></i></span>
-            <input type="text" id="menuSearchInput" class="form-control border-0 ps-2 fs-6" placeholder="Search coconut latte, SOE, fruity americano, matcha...">
-            <button class="btn btn-outline-secondary border-0 d-none" id="clearSearchBtn"><i class="bi bi-x-circle-fill"></i></button>
+          <div class="portal-lookup-group shadow-sm">
+            <div class="portal-lookup-field">
+              <i class="bi bi-search"></i>
+              <input type="text" id="menuSearchInput" placeholder="Search cappuccino, mocha, frappe, latte, croissant...">
+            </div>
+            <button class="btn btn-outline-secondary border-0 d-none" id="clearSearchBtn" style="width: 32px; height: 32px; padding: 0; margin-right: 4px;" aria-label="Clear"><i class="bi bi-x-circle-fill"></i></button>
+            <button type="button" class="btn-lookup-action" id="menuSearchActionBtn" aria-label="Search">
+              <i class="bi bi-arrow-right"></i>
+            </button>
           </div>
         </div>
       </div>
 
+      <!-- 5 Category Visual Banners (Preserved) -->
       <div class="luckin-category-banners-container reveal">
         
         <a href="javascript:void(0)" onclick="filterByCategory('signature-lattes')" class="luckin-banner-card hover-lift">
-          <img src="https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/0c267af7-c7a5-409d-8a26-c9bc946929ef.jpg" alt="Signature Lattes">
+          <img src="<?php echo santino_img('banner-signature-lattes.jpg'); ?>" alt="Signature Lattes">
         </a>
 
         <a href="javascript:void(0)" onclick="filterByCategory('barista-coffee')" class="luckin-banner-card hover-lift">
-          <img src="https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/b4f10758-5b47-4370-b56e-02aff9c28592.jpg" alt="BARISTA COFFEE">
+          <img src="<?php echo santino_img('banner-barista-coffee.jpg'); ?>" alt="BARISTA COFFEE">
         </a>
 
         <a href="javascript:void(0)" onclick="filterByCategory('fruity-americano')" class="luckin-banner-card hover-lift">
-          <img src="https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/f4e2baf8-013d-4d1c-9756-4e02e02a8b69.jpg" alt="FRUITY AMERICANO">
+          <img src="<?php echo santino_img('banner-fruity-americano.jpg'); ?>" alt="FRUITY AMERICANO">
         </a>
 
         <a href="javascript:void(0)" onclick="filterByCategory('soe-espresso')" class="luckin-banner-card hover-lift">
-          <img src="https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/ebbcbccb-3cec-42c1-b53a-8994f5f80597.jpg" alt="Single Origin Espresso">
+          <img src="<?php echo santino_img('banner-soe-espresso.jpg'); ?>" alt="Single Origin Espresso">
         </a>
 
         <a href="javascript:void(0)" onclick="filterByCategory('matcha-tea')" class="luckin-banner-card hover-lift">
-          <img src="https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/51a7bfc8-098a-43a4-8d72-ad3fef562bbf.jpg" alt="Matcha">
+          <img src="<?php echo santino_img('banner-matcha-tea.jpg'); ?>" alt="Matcha">
         </a>
 
       </div>
@@ -60,6 +503,7 @@ else :
     </div>
   </section>
 
+  <!-- 2. STICKY CATEGORY FILTER BAR -->
   <nav class="menu-category-sticky-bar" id="categoryStickyBar">
     <div class="container">
       <div class="category-tabs-wrapper d-flex align-items-center gap-2">
@@ -79,7 +523,7 @@ else :
           <i class="bi bi-award-fill"></i> Single Origin (SOE)
         </button>
         <button class="btn-cat-tab" data-filter="matcha-tea">
-          <i class="bi bi-flower1"></i> Matcha & Frappe
+          <i class="bi bi-flower1"></i> Matcha &amp; Frappe
         </button>
         <button class="btn-cat-tab" data-filter="bakery">
           <i class="bi bi-pie-chart-fill"></i> Gourmet Bakery
@@ -88,17 +532,21 @@ else :
     </div>
   </nav>
 
+  <!-- 3. ALL HANDCRAFTED ITEMS GRID -->
   <section class="menu-items-section py-5" id="menuGridSection">
     <div class="container">
       
       <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 reveal">
         <div>
-          <h2 class="font-heading fw-bold mb-1" id="currentCategoryHeading">All Handcrafted Items</h2>
-          <div class="text-muted small" id="itemsCountText">Showing specialty beverages and gourmet items</div>
+          <div class="sec-pill-badge-wrap mb-1">
+            <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> FRESHLY BREWED</span>
+          </div>
+          <h2 class="sec-title mb-1" id="currentCategoryHeading">All Handcrafted <span class="sec-title-accent">Items</span></h2>
+          <div class="sec-description text-muted small" id="itemsCountText">Showing specialty beverages and gourmet items</div>
         </div>
         
         <div class="d-flex gap-2 align-items-center">
-          <select id="dietaryFilter" class="form-select form-select-sm" style="width: auto; border-radius: 8px;">
+          <select id="dietaryFilter" class="form-select form-select-sm" style="width: auto; border-radius: 50px; font-weight: 600; padding: 6px 16px; border: 1.5px solid #d5e5e0;">
             <option value="all">All Options</option>
             <option value="iced">Iced Only</option>
             <option value="hot">Hot Only</option>
@@ -115,19 +563,51 @@ else :
         <i class="bi bi-cup-straw text-muted" style="font-size: 4rem;"></i>
         <h4 class="mt-3 fw-bold">No matching drinks found</h4>
         <p class="text-muted">Try searching with different keywords or clear the category filters.</p>
-        <button class="btn btn-outline-dark px-4 py-2 mt-2" id="resetFiltersBtn">Reset Filters</button>
+        <button class="btn btn-outline-dark px-4 py-2 mt-2 rounded-pill" id="resetFiltersBtn">Reset Filters</button>
       </div>
 
     </div>
   </section>
 
-  <!-- App Download Banner -->
+  <!-- 4. OFFICIAL HERO ITEMS & VIP REWARD POSTER -->
+  <section class="py-5" style="background: linear-gradient(135deg, #0f2723 0%, #004d49 100%);">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-5 text-center text-lg-start">
+          <div class="sec-pill-badge-wrap mb-3">
+            <span class="sec-pill-badge" style="background: rgba(195, 153, 108, 0.2); color: #dfbe8d; border-color: rgba(195, 153, 108, 0.4);">
+              <i class="bi bi-gem me-1" style="color: #dfbe8d;"></i> SANTINO HERO ITEMS
+            </span>
+          </div>
+          <h2 class="sec-title text-white mb-3">Premium Beans, <span style="color: #dfbe8d;">Hot &amp; Cold Hero Brews</span></h2>
+          <p class="text-white-50 mb-4" style="font-size: 1.05rem; line-height: 1.7;">
+            Explore our barista favorites including Hot Cappuccino, Iced Latte, Rich Hot Mocha, Iced Mocha, and ice-blended Frappes crafted with 100% premium roasted beans.
+          </p>
+          <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+            <a href="<?php echo esc_url( home_url( '/membership/' ) ); ?>" class="btn-hero-lifestyle" style="background: #dfbe8d !important; border-color: #dfbe8d !important; color: #0d2622 !important;">
+              <i class="bi bi-gift-fill me-1"></i> Buy 5 Get 6th Free
+            </a>
+            <a href="#menuGridSection" class="btn-hero-outline">
+              <i class="bi bi-cup-hot-fill me-1"></i> Explore Full Menu
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="rounded-4 overflow-hidden shadow-lg border border-white-10 text-center" style="max-height: 480px; background: #000;">
+            <img src="<?php echo santino_img('santino-hero-poster.jpg'); ?>" alt="Santino Coffee Hero Menu Poster" class="w-100 h-100 object-fit-contain" style="max-height: 480px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. APP DOWNLOAD BANNER -->
   <section class="app-download-section reveal">
     <div class="container">
       <div class="app-download-card">
         <div class="row align-items-center g-4 text-center text-lg-start">
           <div class="col-lg-7">
-            <span class="app-badge-tag"><i class="bi bi-phone"></i> MOBILE REWARDS & ORDERING</span>
+            <span class="app-badge-tag"><i class="bi bi-phone"></i> MOBILE REWARDS &amp; ORDERING</span>
             <h3 class="app-card-title">Download the Santino Coffee App</h3>
             <p class="app-card-sub mb-0">
               Save time with swift order pickup, earn reward beans on every roast, and access exclusive member privileges.
@@ -156,18 +636,21 @@ else :
     </div>
   </section>
 
-  <section class="cafe-branches-section" id="branches" style="background-color: #fff9f3;">
+  <!-- 6. EXPERIENCE HUBS LOCATOR -->
+  <section class="cafe-branches-section py-5" id="branches" style="background-color: #fff9f3;">
     <div class="container">
       
       <div class="sec-heading-center text-center mb-5 reveal">
-        <span class="badge-tag-pill mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> EXPERIENCE SANTINO NATIONWIDE</span>
-        <h2 class="sec-title">Our Cafes & Roastery Experience Hubs</h2>
-        <div class="sec-subtitle">Step into an artisan coffee retreat or visit our partner express bars across prime Dhaka locations</div>
+        <div class="sec-pill-badge-wrap mb-2">
+          <span class="sec-pill-badge"><i class="bi bi-geo-alt-fill text-danger me-1"></i> EXPERIENCE SANTINO NATIONWIDE</span>
+        </div>
+        <h2 class="sec-title mb-2">Our Cafes &amp; <span class="sec-title-accent">Roastery Hubs</span></h2>
+        <div class="sec-description">Step into an artisan coffee retreat or visit our partner express bars across prime Dhaka locations</div>
       </div>
 
       <div class="d-flex justify-content-center flex-wrap gap-2 mb-5 reveal">
         <button class="branch-filter-btn active" data-branch-filter="all">All Locations (6)</button>
-        <button class="branch-filter-btn" data-branch-filter="gulshan">Gulshan & Banani</button>
+        <button class="branch-filter-btn" data-branch-filter="gulshan">Gulshan &amp; Banani</button>
         <button class="branch-filter-btn" data-branch-filter="dhanmondi">Dhanmondi</button>
         <button class="branch-filter-btn" data-branch-filter="uttara">Uttara</button>
         <button class="branch-filter-btn" data-branch-filter="tejgaon">Tejgaon Roastery</button>
@@ -182,21 +665,21 @@ else :
             </div>
             <div class="branch-card-body">
               <h3 class="branch-title">Santino Experience Hub | Gulshan-2</h3>
-              <p class="branch-desc text-muted small mb-3">State-of-the-art Victoria Arduino espresso bar, cupping lounge & VIP meeting rooms.</p>
+              <p class="branch-desc text-muted small mb-3">State-of-the-art Victoria Arduino espresso bar, cupping lounge &amp; VIP meeting rooms.</p>
               
               <div class="branch-info-list">
                 <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Plot 11, Road 48, CWN Block, Gulshan-2, Dhaka 1212</span></div>
                 <div class="info-line"><i class="bi bi-clock text-primary"></i> <span>Sat – Thurs: 7:30 AM – 11:00 PM | Fri: 8:00 AM – 11:30 PM</span></div>
-                <div class="info-line"><i class="bi bi-p-circle text-success"></i> <span>Valet & Underground Parking Available • Free High-Speed WiFi</span></div>
+                <div class="info-line"><i class="bi bi-p-circle text-success"></i> <span>Valet &amp; Underground Parking Available • Free High-Speed WiFi</span></div>
               </div>
 
               <div class="d-flex gap-2 mt-4">
                 <a href="https://maps.google.com" target="_blank" class="btn-prod-outline flex-fill">
                   <i class="bi bi-pin-map-fill me-1 text-danger"></i> Google Maps
                 </a>
-                <button class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;" data-branch="Gulshan-2 Flagship">
-                  <i class="bi bi-cup-hot-fill me-1"></i> Order Here
-                </button>
+                <a href="tel:+8801613334514" class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;">
+                  <i class="bi bi-cup-hot-fill me-1"></i> Visit Cafe
+                </a>
               </div>
             </div>
           </div>
@@ -221,90 +704,9 @@ else :
                 <a href="https://maps.google.com" target="_blank" class="btn-prod-outline flex-fill">
                   <i class="bi bi-pin-map-fill me-1 text-danger"></i> Google Maps
                 </a>
-                <button class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;" data-branch="Banani Borak Tower">
-                  <i class="bi bi-cup-hot-fill me-1"></i> Order Here
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 branch-item-col reveal" data-delay="300" data-region="tejgaon">
-          <div class="branch-card hover-lift">
-            <div class="branch-card-img" style="background-image: url('<?php echo santino_img('bd-barista-latte-art.jpg'); ?>');">
-              <span class="branch-tag-badge">ROASTERY & ACADEMY</span>
-            </div>
-            <div class="branch-card-body">
-              <h3 class="branch-title">Artisan Roastery & Lab | Tejgaon</h3>
-              <p class="branch-desc text-muted small mb-3">Witness live batch roasting on Giesen roasters, explore crop-to-cup origin flights.</p>
-              
-              <div class="branch-info-list">
-                <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>232-234 Tejgaon Industrial Area (Near Gulshan Link Road), Dhaka</span></div>
-                <div class="info-line"><i class="bi bi-clock text-primary"></i> <span>Sun – Sat: 7:30 AM – 10:00 PM</span></div>
-                <div class="info-line"><i class="bi bi-p-circle text-success"></i> <span>Dedicated Free Parking • Roastery Viewing Deck • Barista Lab</span></div>
-              </div>
-
-              <div class="d-flex gap-2 mt-4">
-                <a href="https://maps.google.com" target="_blank" class="btn-prod-outline flex-fill">
-                  <i class="bi bi-pin-map-fill me-1 text-danger"></i> Google Maps
+                <a href="tel:+8801613334514" class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;">
+                  <i class="bi bi-cup-hot-fill me-1"></i> Visit Cafe
                 </a>
-                <button class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;" data-branch="Tejgaon Roastery">
-                  <i class="bi bi-cup-hot-fill me-1"></i> Order Here
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 branch-item-col reveal" data-delay="100" data-region="dhanmondi">
-          <div class="branch-card hover-lift">
-            <div class="branch-card-img" style="background-image: url('<?php echo santino_img('imgi_24_santino_-_250522-07240.jpg'); ?>');">
-              <span class="branch-tag-badge">LAKESIDE CAFE</span>
-            </div>
-            <div class="branch-card-body">
-              <h3 class="branch-title">Santino Lakeside | Dhanmondi 27</h3>
-              <p class="branch-desc text-muted small mb-3">Lush green garden patio, artisan pour-overs, handcrafted bakery & brunch.</p>
-              
-              <div class="branch-info-list">
-                <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>House 14, Road 27 (Old), Dhanmondi R/A, Dhaka 1209</span></div>
-                <div class="info-line"><i class="bi bi-clock text-primary"></i> <span>Daily: 8:00 AM – 11:00 PM</span></div>
-                <div class="info-line"><i class="bi bi-p-circle text-success"></i> <span>Lakeside View • Garden Seating • Wheelchair Accessible</span></div>
-              </div>
-
-              <div class="d-flex gap-2 mt-4">
-                <a href="https://maps.google.com" target="_blank" class="btn-prod-outline flex-fill">
-                  <i class="bi bi-pin-map-fill me-1 text-danger"></i> Google Maps
-                </a>
-                <button class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;" data-branch="Dhanmondi Lakeside">
-                  <i class="bi bi-cup-hot-fill me-1"></i> Order Here
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 branch-item-col reveal" data-delay="200" data-region="uttara">
-          <div class="branch-card hover-lift">
-            <div class="branch-card-img" style="background-image: url('<?php echo santino_img('imgi_25_santino_-_250522-07618.jpg'); ?>');">
-              <span class="branch-tag-badge">EXPRESS LOUNGE</span>
-            </div>
-            <div class="branch-card-body">
-              <h3 class="branch-title">Santino Express | Uttara Sector 7</h3>
-              <p class="branch-desc text-muted small mb-3">Convenient drive-by express coffee bar, swift mobile app order pickup.</p>
-              
-              <div class="branch-info-list">
-                <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Plot 28, Sonargaon Janapath, Sector 7, Uttara, Dhaka</span></div>
-                <div class="info-line"><i class="bi bi-clock text-primary"></i> <span>Daily: 7:00 AM – 11:00 PM</span></div>
-                <div class="info-line"><i class="bi bi-p-circle text-success"></i> <span>Drive-Thru Pickup • Outdoor Benches • Pet-Friendly Patio</span></div>
-              </div>
-
-              <div class="d-flex gap-2 mt-4">
-                <a href="https://maps.google.com" target="_blank" class="btn-prod-outline flex-fill">
-                  <i class="bi bi-pin-map-fill me-1 text-danger"></i> Google Maps
-                </a>
-                <button class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;" data-branch="Uttara Sector 7">
-                  <i class="bi bi-cup-hot-fill me-1"></i> Order Here
-                </button>
               </div>
             </div>
           </div>
@@ -313,25 +715,25 @@ else :
         <div class="col-lg-4 col-md-6 branch-item-col reveal" data-delay="300" data-region="dhanmondi">
           <div class="branch-card hover-lift">
             <div class="branch-card-img" style="background-image: url('<?php echo santino_img('imgi_27_santino_-_250522-07216.jpg'); ?>');">
-              <span class="branch-tag-badge">ACADEMY & CAFE</span>
+              <span class="branch-tag-badge">LIFESTYLE CAFE</span>
             </div>
             <div class="branch-card-body">
-              <h3 class="branch-title">Santino Studio | Satmasjid Road</h3>
-              <p class="branch-desc text-muted small mb-3">Single-origin manual brew bar, slow coffee experience, and barista training zone.</p>
+              <h3 class="branch-title">Santino Cafe | Dhanmondi 27</h3>
+              <p class="branch-desc text-muted small mb-3">Quiet study ambiance, artisan pourover coffee station, and fresh bakery pastries.</p>
               
               <div class="branch-info-list">
-                <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Level 4, Navana Tower, Satmasjid Road, Dhanmondi, Dhaka</span></div>
-                <div class="info-line"><i class="bi bi-clock text-primary"></i> <span>Daily: 8:30 AM – 10:30 PM</span></div>
-                <div class="info-line"><i class="bi bi-p-circle text-success"></i> <span>Quiet Study Area • Power Outlets at Every Table • SCA Lab</span></div>
+                <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>House 14, Road 27 (Old), Dhanmondi, Dhaka 1209</span></div>
+                <div class="info-line"><i class="bi bi-clock text-primary"></i> <span>Daily: 8:00 AM – 11:00 PM</span></div>
+                <div class="info-line"><i class="bi bi-p-circle text-success"></i> <span>Dedicated Power Sockets • Quiet Work Zones</span></div>
               </div>
 
               <div class="d-flex gap-2 mt-4">
                 <a href="https://maps.google.com" target="_blank" class="btn-prod-outline flex-fill">
                   <i class="bi bi-pin-map-fill me-1 text-danger"></i> Google Maps
                 </a>
-                <button class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;" data-branch="Dhanmondi Satmasjid">
-                  <i class="bi bi-cup-hot-fill me-1"></i> Order Here
-                </button>
+                <a href="tel:+8801613334514" class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;">
+                  <i class="bi bi-cup-hot-fill me-1"></i> Visit Cafe
+                </a>
               </div>
             </div>
           </div>
@@ -342,14 +744,15 @@ else :
     </div>
   </section>
 
+  <!-- 7. ITEM CUSTOMIZATION MODAL -->
   <div class="modal fade" id="itemCustomModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content rounded-4 border-0 overflow-hidden">
+      <div class="modal-content rounded-4 border-0 overflow-hidden shadow-lg">
         
         <div class="modal-header border-0 pb-0">
           <div>
-            <span class="badge mb-1 px-3 py-1" id="modalItemTag" style="background: var(--santino-teal); color: #fff;">SPECIALTY DRINK</span>
-            <h3 class="modal-title font-heading fw-bold" id="modalItemTitle">Drink Title</h3>
+            <span class="badge-theme-teal mb-1" id="modalItemTag">HERO ITEM</span>
+            <h3 class="modal-title font-heading fw-bold text-dark mt-1" id="modalItemTitle">Drink Title</h3>
             <div class="text-muted small" id="modalItemCalories">180 kcal</div>
           </div>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -359,7 +762,7 @@ else :
           <div class="row g-4">
             
             <div class="col-md-5 text-center">
-              <div class="rounded-4 overflow-hidden shadow-sm mb-3 hover-img-zoom" style="height: 240px; background: #f8f9fa;">
+              <div class="rounded-4 overflow-hidden shadow-sm mb-3" style="height: 220px; background: #f8f9fa;">
                 <img id="modalItemImg" src="" alt="Drink" class="w-100 h-100 object-fit-cover">
               </div>
               <p class="text-muted small text-start" id="modalItemDescription">Drink description...</p>
@@ -371,7 +774,18 @@ else :
 
             <div class="col-md-7">
               <div class="mb-3">
-                <label class="form-label small fw-bold text-uppercase">1. Temperature</label>
+                <label class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.5px;">1. Size</label>
+                <div class="d-flex gap-2">
+                  <input type="radio" class="btn-check" name="sizeOption" id="sizeRegular" value="Regular" checked>
+                  <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill py-2" for="sizeRegular">Regular Size</label>
+                  
+                  <input type="radio" class="btn-check" name="sizeOption" id="sizeLarge" value="Large">
+                  <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill py-2" for="sizeLarge">Large Size</label>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.5px;">2. Temperature</label>
                 <div class="d-flex gap-2">
                   <input type="radio" class="btn-check" name="tempOption" id="tempIced" value="Iced" checked>
                   <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill py-2" for="tempIced"><i class="bi bi-snow me-1"></i> Iced (Standard)</label>
@@ -382,7 +796,7 @@ else :
               </div>
 
               <div class="mb-3">
-                <label class="form-label small fw-bold text-uppercase">2. Sweetness</label>
+                <label class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.5px;">3. Sweetness</label>
                 <div class="d-flex gap-2 flex-wrap">
                   <input type="radio" class="btn-check" name="sweetOption" id="sw100" value="100% Regular" checked>
                   <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill" for="sw100">100% Regular</label>
@@ -390,22 +804,19 @@ else :
                   <input type="radio" class="btn-check" name="sweetOption" id="sw70" value="70% Less">
                   <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill" for="sw70">70% Less</label>
                   
-                  <input type="radio" class="btn-check" name="sweetOption" id="sw30" value="30% Slight">
-                  <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill" for="sw30">30% Slight</label>
-                  
-                  <input type="radio" class="btn-check" name="sweetOption" id="sw0" value="0% No Sugar">
+                  <input type="radio" class="btn-check" name="sweetOption" id="sw0" value="0% Sugar">
                   <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill" for="sw0">0% Sugar</label>
                 </div>
               </div>
 
               <div class="mb-3">
-                <label class="form-label small fw-bold text-uppercase">3. Milk Selection</label>
+                <label class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.5px;">4. Milk Selection</label>
                 <div class="d-flex gap-2 flex-wrap">
-                  <input type="radio" class="btn-check" name="milkOption" id="milkFresh" value="Fresh Milk" checked>
-                  <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill" for="milkFresh">Whole Milk (+৳0)</label>
+                  <input type="radio" class="btn-check" name="milkOption" id="milkFresh" value="Fresh Farm Milk" checked>
+                  <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill" for="milkFresh">Fresh Milk (+৳0)</label>
                   
-                  <input type="radio" class="btn-check" name="milkOption" id="milkOat" value="Oatly Oat (+৳50)">
-                  <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill" for="milkOat">Oatly Oat (+৳50)</label>
+                  <input type="radio" class="btn-check" name="milkOption" id="milkOat" value="Oat Milk (+৳50)">
+                  <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill" for="milkOat">Oat (+৳50)</label>
                   
                   <input type="radio" class="btn-check" name="milkOption" id="milkCoconut" value="Coconut Milk (+৳40)">
                   <label class="btn btn-outline-dark btn-sm flex-fill rounded-pill" for="milkCoconut">Coconut (+৳40)</label>
@@ -413,15 +824,15 @@ else :
               </div>
 
               <div class="d-flex justify-content-between align-items-center mb-4 pt-2">
-                <label class="form-label small fw-bold text-uppercase mb-0">Quantity</label>
+                <label class="form-label small fw-bold text-uppercase mb-0" style="letter-spacing: 0.5px;">Quantity</label>
                 <div class="d-flex align-items-center gap-2">
                   <button type="button" class="btn btn-outline-dark btn-sm rounded-circle" id="qtyMinusBtn" style="width: 32px; height: 32px; padding: 0;">-</button>
-                  <span class="fw-bold px-2" id="modalQtyDisplay">1</span>
+                  <span class="fw-bold px-2 font-heading" id="modalQtyDisplay">1</span>
                   <button type="button" class="btn btn-outline-dark btn-sm rounded-circle" id="qtyPlusBtn" style="width: 32px; height: 32px; padding: 0;">+</button>
                 </div>
               </div>
 
-              <button type="button" class="btn btn-dark w-100 py-3 fw-bold rounded-3 font-heading text-uppercase shadow-md hover-glow" id="modalAddToCartBtn" style="background: var(--santino-teal); border: none;">
+              <button type="button" class="btn-hero-lifestyle w-100 py-3" id="modalAddToCartBtn">
                 Add To Order • <span id="modalTotalCalculate">৳ 0</span>
               </button>
             </div>
@@ -433,26 +844,27 @@ else :
     </div>
   </div>
 
+  <!-- 8. SHOPPING ORDER OFFCANVAS -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
     <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title font-heading fw-bold"><i class="bi bi-cart3 me-2"></i> Your Coffee Order</h5>
+      <h5 class="offcanvas-title font-heading fw-bold"><i class="bi bi-cart3 me-2" style="color: var(--santino-teal);"></i> Your Santino Order</h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column justify-content-between">
       
       <div id="cartItemsList" class="d-flex flex-column gap-3 overflow-auto">
         <div id="emptyCartMessage" class="text-center py-5 text-muted">
-          <i class="bi bi-cart-x fs-1"></i>
+          <i class="bi bi-cart-x fs-1 text-muted"></i>
           <p class="mt-2 mb-0">Your order is currently empty</p>
         </div>
       </div>
 
       <div class="pt-3 border-top" id="cartFooterBox" style="display: none;">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="text-muted">Total Amount</span>
-          <span class="fw-bold font-heading fs-5" id="cartTotalPayable">৳ 0</span>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-muted">Total Payable:</span>
+          <span class="fw-black font-heading fs-5" style="color: var(--santino-teal);" id="cartTotalPayable">৳ 0</span>
         </div>
-        <button class="btn btn-dark w-100 py-3 fw-bold rounded-3 font-heading text-uppercase hover-glow" style="background: var(--santino-teal); border: none;" onclick="alert('Thank you for ordering! Please show your order to the barista counter.');">
+        <button class="btn-hero-lifestyle w-100 py-3" onclick="alert('Thank you for ordering with Santino Caffè! Please show this confirmation to your barista.');">
           Proceed To Checkout →
         </button>
       </div>
@@ -460,8 +872,8 @@ else :
     </div>
   </div>
 
-  <!-- FOOTER -->
+</div>
 
-<?php\n<?php
+<?php
 endif;
 get_footer();

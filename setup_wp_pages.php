@@ -24,9 +24,14 @@ $pages = array(
         'template' => 'templates/template-training.php',
     ),
     array(
-        'title'    => 'Corporate Office & HoReCa Coffee Solutions',
+        'title'    => 'Corporate Office Coffee Solutions',
         'slug'     => 'office-cafe',
         'template' => 'templates/template-office-cafe.php',
+    ),
+    array(
+        'title'    => 'HoReCa Coffee & Hospitality Solutions',
+        'slug'     => 'horeca',
+        'template' => 'templates/template-horeca.php',
     ),
     array(
         'title'    => 'Our Heritage & Journey',

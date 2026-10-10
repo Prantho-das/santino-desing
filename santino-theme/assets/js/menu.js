@@ -1,15 +1,122 @@
 // Santino Coffee - Menu & Order Management System
 
 const menuProducts = [
-  // Signature Lattes (Luckin Inspiration)
+  // 1. Hot & Cold Hero Items (Official Poster Items)
   {
-    id: 'sig-1',
+    id: 'hero-cappuccino',
+    name: 'Hot Cappuccino',
+    category: 'barista-coffee',
+    price: 170,
+    tag: 'HERO ITEM',
+    badgeClass: 'badge-teal',
+    img: 'images/menu-cappuccino-hot.jpg',
+    desc: 'Rich Italian espresso topped with a velvety layer of foamed steamed milk and cocoa dusting.',
+    calories: '140 kcal',
+    type: 'hot',
+    plantBased: false,
+    bestseller: true,
+    roast: 'Reg Tk. 170 | Large Tk. 220'
+  },
+  {
+    id: 'hero-iced-latte',
+    name: 'Iced Latte',
+    category: 'barista-coffee',
+    price: 200,
+    tag: 'HERO ITEM',
+    badgeClass: 'badge-teal',
+    img: 'images/menu-iced-latte.jpg',
+    desc: 'Fresh Italian espresso combined with chilled farm milk, served crisp over crystalline ice.',
+    calories: '130 kcal',
+    type: 'iced',
+    plantBased: false,
+    bestseller: true,
+    roast: 'Large Tk. 200 • Smooth & Refreshing'
+  },
+  {
+    id: 'hero-hot-mocha',
+    name: 'Hot Mocha',
+    category: 'barista-coffee',
+    price: 190,
+    tag: 'HERO ITEM',
+    badgeClass: 'badge-gold',
+    img: 'images/menu-hot-mocha.jpg',
+    desc: 'Espresso combined with rich artisanal chocolate syrup, steamed milk, and whipped chocolate drizzle.',
+    calories: '210 kcal',
+    type: 'hot',
+    plantBased: false,
+    bestseller: true,
+    roast: 'Reg Tk. 190 | Large Tk. 230'
+  },
+  {
+    id: 'hero-iced-mocha',
+    name: 'Iced Mocha',
+    category: 'barista-coffee',
+    price: 210,
+    tag: 'HERO ITEM',
+    badgeClass: 'badge-gold',
+    img: 'images/menu-iced-mocha.jpg',
+    desc: 'Chilled espresso and Belgian dark cocoa sauce poured over silky cold milk and ice.',
+    calories: '220 kcal',
+    type: 'iced',
+    plantBased: false,
+    bestseller: true,
+    roast: 'Large Tk. 210 • Rich Belgian Cocoa'
+  },
+  {
+    id: 'hero-mocha-frappe',
+    name: 'Mocha Frappe',
+    category: 'matcha-tea',
+    price: 230,
+    tag: 'HERO ITEM',
+    badgeClass: 'badge-danger',
+    img: 'images/menu-mocha-frappe.jpg',
+    desc: 'Blended espresso, chocolate ganache, ice crystals, and cloud whipped cream topped with chocolate shavings.',
+    calories: '290 kcal',
+    type: 'iced',
+    plantBased: false,
+    bestseller: true,
+    roast: 'Large Tk. 230 • Ice Blended'
+  },
+  {
+    id: 'hero-hazelnut-frappe',
+    name: 'Hazelnut Frappe',
+    category: 'matcha-tea',
+    price: 230,
+    tag: 'HERO ITEM',
+    badgeClass: 'badge-danger',
+    img: 'images/menu-hazelnut-frappe.jpg',
+    desc: 'Roasted Italian hazelnut syrup blended with creamy dairy, espresso, and topped with golden praline crunch.',
+    calories: '280 kcal',
+    type: 'iced',
+    plantBased: false,
+    bestseller: true,
+    roast: 'Large Tk. 230 • Roasted Hazelnut'
+  },
+  {
+    id: 'hero-iced-chocolate',
+    name: 'Iced Chocolate',
+    category: 'signature-lattes',
+    price: 190,
+    tag: 'HERO ITEM',
+    badgeClass: 'badge-teal',
+    img: 'images/menu-iced-chocolate.jpg',
+    desc: 'Velvety cold chocolate crafted with premium cocoa solids, cold farm milk, and chocolate swirl.',
+    calories: '200 kcal',
+    type: 'iced',
+    plantBased: false,
+    bestseller: true,
+    roast: 'Large Tk. 190 • Non-Coffee Treat'
+  },
+
+  // 2. Signature Lattes
+  {
+    id: 'sig-coconut',
     name: 'Santino Raw Coconut Latte',
     category: 'signature-lattes',
     price: 380,
     tag: 'BESTSELLER',
     badgeClass: 'badge-danger',
-    img: 'images/imgi_20_santino_-_250522-07574.jpg',
+    img: 'images/menu-raw-coconut-latte.jpg',
     desc: 'Our iconic creation. Cold-pressed raw coconut milk infused with a double shot of dark-roasted Italian Arabica espresso.',
     calories: '185 kcal',
     type: 'iced',
@@ -18,43 +125,28 @@ const menuProducts = [
     roast: 'Dark Roast • Nutty & Tropical'
   },
   {
-    id: 'sig-2',
-    name: 'Velvet Dream Latte',
+    id: 'sig-caramel',
+    name: 'Vanilla Caramel Macchiato',
     category: 'signature-lattes',
-    price: 410,
+    price: 390,
     tag: 'SIGNATURE',
-    badgeClass: 'badge-teal',
-    img: 'images/imgi_26_santino_-_250522-07312.jpg',
-    desc: 'Ultra-creamy velvet textured milk with balanced caramel sweetness and a velvety smooth espresso finish.',
-    calories: '210 kcal',
-    type: 'hot',
+    badgeClass: 'badge-gold',
+    img: 'images/menu-caramel-macchiato.jpg',
+    desc: 'Freshly steamed milk with Madagascar vanilla syrup, marked with espresso and drizzled with caramel glaze.',
+    calories: '235 kcal',
+    type: 'both',
     plantBased: false,
     bestseller: true,
-    roast: 'Medium Dark • Caramel & Cream'
+    roast: 'Medium Dark • Vanilla Caramel'
   },
   {
-    id: 'sig-3',
-    name: 'Brown Sugar Little Butter Latte',
-    category: 'signature-lattes',
-    price: 430,
-    tag: 'NEW LAUNCH',
-    badgeClass: 'badge-gold',
-    img: 'images/imgi_25_santino_-_250522-07618.jpg',
-    desc: 'Slow-simmered artisanal brown sugar glaze with whipped butter notes and freshly pulled espresso.',
-    calories: '240 kcal',
-    type: 'iced',
-    plantBased: false,
-    bestseller: false,
-    roast: 'Medium Roast • Butterscotch'
-  },
-  {
-    id: 'sig-4',
+    id: 'sig-saffron',
     name: 'Spanish Saffron Latte',
     category: 'signature-lattes',
     price: 450,
     tag: 'PREMIUM',
     badgeClass: 'badge-teal',
-    img: 'images/imgi_27_santino_-_250522-07216.jpg',
+    img: 'images/menu-saffron-latte.jpg',
     desc: 'Condensed milk infused with pure Iranian saffron threads and rich double ristretto.',
     calories: '220 kcal',
     type: 'hot',
@@ -63,15 +155,15 @@ const menuProducts = [
     roast: 'Dark Roast • Saffron & Sweet Milk'
   },
 
-  // Barista Classics
+  // 3. Barista Classics & Americanos
   {
-    id: 'bar-1',
+    id: 'bar-americano',
     name: 'Classic Caffè Americano',
     category: 'barista-coffee',
-    price: 280,
+    price: 240,
     tag: 'CLASSIC',
     badgeClass: 'badge-dark',
-    img: 'images/imgi_23_santino_-_250522-07495.jpg',
+    img: 'images/menu-americano.jpg',
     desc: 'Double shot of Rainforest Alliance certified Italian espresso diluted over pure hot or iced mountain water.',
     calories: '10 kcal',
     type: 'both',
@@ -80,13 +172,13 @@ const menuProducts = [
     roast: 'Full City Roast • Dark Cocoa'
   },
   {
-    id: 'bar-2',
+    id: 'bar-flatwhite',
     name: 'Australian Flat White',
     category: 'barista-coffee',
     price: 360,
     tag: 'BARISTA CHOICE',
     badgeClass: 'badge-teal',
-    img: 'images/imgi_24_santino_-_250522-07240.jpg',
+    img: 'images/menu-flat-white.jpg',
     desc: 'Silky micro-foam poured seamlessly over double ristretto for maximum espresso sweetness.',
     calories: '150 kcal',
     type: 'hot',
@@ -94,46 +186,16 @@ const menuProducts = [
     bestseller: true,
     roast: 'Medium Roast • Milk Chocolate'
   },
-  {
-    id: 'bar-3',
-    name: 'Artisan Caffè Mocha',
-    category: 'barista-coffee',
-    price: 390,
-    tag: 'POPULAR',
-    badgeClass: 'badge-gold',
-    img: 'images/bd-barista-latte-art.jpg',
-    desc: 'Belgian single-origin cocoa ganache blended with freshly pulled espresso and steamed dairy.',
-    calories: '260 kcal',
-    type: 'both',
-    plantBased: false,
-    bestseller: false,
-    roast: 'Dark Roast • Belgian Cocoa'
-  },
-  {
-    id: 'bar-4',
-    name: 'Vanilla Caramel Macchiato',
-    category: 'barista-coffee',
-    price: 420,
-    tag: 'FAVOURITE',
-    badgeClass: 'badge-danger',
-    img: 'images/imgi_19_santino_-_250522-07313.jpg',
-    desc: 'Freshly steamed milk with Madagascar vanilla syrup, marked with espresso and drizzled with caramel sauce.',
-    calories: '235 kcal',
-    type: 'both',
-    plantBased: false,
-    bestseller: true,
-    roast: 'Medium Dark • Vanilla Caramel'
-  },
 
-  // Fruity Americano (Luckin Sparklers)
+  // 4. Fruity Americano
   {
-    id: 'fruit-1',
+    id: 'fruit-orange',
     name: 'Valencia Orange Sparkling Americano',
     category: 'fruity-americano',
     price: 370,
     tag: 'VIRAL HIT',
     badgeClass: 'badge-danger',
-    img: 'images/imgi_21_EagleOne_e524e570-7076-4cbc-916e-ad851ca2de5c.jpg',
+    img: 'images/menu-orange-sparkling.jpg',
     desc: 'Sun-ripened Valencia orange juice topped with sparkling soda and chilled double espresso.',
     calories: '95 kcal',
     type: 'iced',
@@ -142,13 +204,13 @@ const menuProducts = [
     roast: 'Light Roast • Citrus Sparkle'
   },
   {
-    id: 'fruit-2',
+    id: 'fruit-grapefruit',
     name: 'Ruby Grapefruit Fizzy Americano',
     category: 'fruity-americano',
     price: 380,
     tag: 'REFRESHING',
     badgeClass: 'badge-teal',
-    img: 'images/imgi_22_Untitleddesign_4.png',
+    img: 'images/menu-grapefruit-americano.jpg',
     desc: 'Tangy ruby grapefruit pulp with artisanal tonic water and double shot Ethiopia Yirgacheffe.',
     calories: '90 kcal',
     type: 'iced',
@@ -156,31 +218,16 @@ const menuProducts = [
     bestseller: false,
     roast: 'Light Roast • Ruby Citrus'
   },
-  {
-    id: 'fruit-3',
-    name: 'Green Apple Breeze Americano',
-    category: 'fruity-americano',
-    price: 370,
-    tag: 'CRISP',
-    badgeClass: 'badge-gold',
-    img: 'images/imgi_100_05_Sustainability-e1750424125646.jpg',
-    desc: 'Crisp green apple cold-pressed nectar with fizzy botanical soda and cold brew concentrate.',
-    calories: '85 kcal',
-    type: 'iced',
-    plantBased: true,
-    bestseller: false,
-    roast: 'Medium Roast • Crisp Apple'
-  },
 
-  // Single Origin (SOE)
+  // 5. Single Origin (SOE)
   {
-    id: 'soe-1',
+    id: 'soe-ethiopia',
     name: 'SOE Ethiopia Yirgacheffe G1 Flat White',
     category: 'soe-espresso',
     price: 460,
     tag: 'SINGLE ORIGIN 90+ PTS',
     badgeClass: 'badge-gold',
-    img: 'images/imgi_29_maverick-VA_1200x1200_fc8d047e-bc19-4666-8e3a-90081b8cdca7.webp',
+    img: 'images/menu-flat-white.jpg',
     desc: '100% Washed Yirgacheffe roasted in-house. Bright jasmine florals, bergamot lemon, and sweet honey.',
     calories: '140 kcal',
     type: 'both',
@@ -189,13 +236,13 @@ const menuProducts = [
     roast: 'Light-Medium • Jasmine & Bergamot'
   },
   {
-    id: 'soe-2',
+    id: 'soe-geisha',
     name: 'SOE Colombia Geisha Pourover (V60)',
     category: 'soe-espresso',
     price: 550,
     tag: 'CHAMPIONSHIP RESERVE',
     badgeClass: 'badge-danger',
-    img: 'images/imgi_30_Blue-Stone-3_800x_526184df-2650-40b7-9dcf-e8af5b97527b.webp',
+    img: 'images/menu-pourover-v60.jpg',
     desc: 'Exquisite Geisha varietal hand-dripped at 93°C. Complex notes of white peach, lavender, and sparkling tea finish.',
     calories: '5 kcal',
     type: 'both',
@@ -204,15 +251,15 @@ const menuProducts = [
     roast: 'Filter Roast • Peach & Lavender'
   },
 
-  // Matcha & Tea
+  // 6. Matcha & Teas
   {
-    id: 'tea-1',
+    id: 'tea-matcha',
     name: 'Kyoto Uji Matcha Oat Latte',
     category: 'matcha-tea',
     price: 420,
     tag: 'ORGANIC UJI',
     badgeClass: 'badge-teal',
-    img: 'images/imgi_106_santino_-_250522-07249.jpg',
+    img: 'images/menu-matcha-latte.jpg',
     desc: 'Ceremonial grade stone-ground Uji matcha whisked with creamy Oatly oat milk. Rich umami aroma.',
     calories: '175 kcal',
     type: 'both',
@@ -220,79 +267,32 @@ const menuProducts = [
     bestseller: true,
     roast: 'Ceremonial Uji Matcha'
   },
-  {
-    id: 'tea-2',
-    name: 'Coconut Matcha Sparkler',
-    category: 'matcha-tea',
-    price: 430,
-    tag: 'SUMMER HIT',
-    badgeClass: 'badge-gold',
-    img: 'images/imgi_20_santino_-_250522-07574.jpg',
-    desc: 'Dual-layered iced drink with pure raw coconut water base and floating ceremonial green tea foam.',
-    calories: '120 kcal',
-    type: 'iced',
-    plantBased: true,
-    bestseller: false,
-    roast: 'Uji Matcha • Fresh Coconut'
-  },
 
-  // Cold Brew & Frappe
+  // 7. Gourmet Bakery
   {
-    id: 'cold-1',
-    name: 'Vanilla Sweet Cream Nitro Cold Brew',
-    category: 'cold-brew',
-    price: 390,
-    tag: 'NITRO TAP',
-    badgeClass: 'badge-danger',
-    img: 'images/imgi_26_santino_-_250522-07312.jpg',
-    desc: 'Slow-steeped for 20 hours and infused with nitrogen for a Guinness-like cascade and creamy head.',
-    calories: '110 kcal',
-    type: 'iced',
-    plantBased: false,
-    bestseller: true,
-    roast: 'Cold Steep • Creamy Velvet'
-  },
-  {
-    id: 'cold-2',
-    name: 'Dark Mocha Bionic Frappe',
-    category: 'cold-brew',
-    price: 440,
-    tag: 'BLENDED',
-    badgeClass: 'badge-dark',
-    img: 'images/imgi_25_santino_-_250522-07618.jpg',
-    desc: 'Blended espresso, chocolate chips, and fresh cream topped with cocoa dusted whipped cream.',
-    calories: '310 kcal',
-    type: 'iced',
-    plantBased: false,
-    bestseller: false,
-    roast: 'Dark Roast • Blended Cocoa'
-  },
-
-  // Gourmet Bakery
-  {
-    id: 'bak-1',
+    id: 'bak-croissant',
     name: 'French Normandy Butter Croissant',
     category: 'bakery',
-    price: 220,
+    price: 180,
     tag: 'BAKED FRESH DAILY',
     badgeClass: 'badge-gold',
-    img: 'images/imgi_2_This_machine_isn_t_for_everyone._It_s_for_people_who_refuse_to_compromise_on_their_coffee_experience._3.png',
+    img: 'images/menu-croissant.jpg',
     desc: 'Flaky, honeycomb interior baked fresh every morning with 100% French AOP butter.',
     calories: '280 kcal',
     type: 'hot',
     plantBased: false,
     bestseller: true,
-    roast: 'Fresh Bakery'
+    roast: 'Fresh Daily Bakery'
   },
   {
-    id: 'bak-2',
-    name: 'Basque Burnt Cheesecake Slice',
+    id: 'bak-cheesecake',
+    name: 'New York Style Cheesecake Slice',
     category: 'bakery',
-    price: 350,
-    tag: 'CHEF SELECTION',
-    badgeClass: 'badge-teal',
-    img: 'images/imgi_100_05_Sustainability-e1750424125646.jpg',
-    desc: 'Caramelized golden top with a molten, creamy cream cheese and vanilla bean center.',
+    price: 320,
+    tag: 'GOURMET DESSERT',
+    badgeClass: 'badge-gold',
+    img: 'images/menu-cheesecake.jpg',
+    desc: 'Caramelized golden top with a rich, creamy cream cheese and vanilla bean center.',
     calories: '340 kcal',
     type: 'iced',
     plantBased: false,
@@ -322,7 +322,7 @@ function getMenuImgUrl(img) {
   if (typeof santino_ajax !== 'undefined' && santino_ajax.theme_uri) {
     return santino_ajax.theme_uri + '/assets/' + img;
   }
-  return '/wp-content/themes/santino-theme/assets/' + img;
+  return img;
 }
 
 // Render Menu Cards

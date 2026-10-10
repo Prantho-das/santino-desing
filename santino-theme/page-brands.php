@@ -8,7 +8,15 @@
 
 get_header();
 
-if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) :
+$is_elementor_page = false;
+if ( class_exists( '\Elementor\Plugin' ) ) {
+    $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
+    if ( $document && $document->is_built_with_elementor() ) {
+        $is_elementor_page = true;
+    }
+}
+
+if ( $is_elementor_page ) :
     while ( have_posts() ) :
         the_post();
         the_content();
@@ -24,9 +32,10 @@ else :
     <div class="container pro-banner-container" style="max-width: 680px;">
       
       <!-- Minimal Badge -->
-      <div class="pro-banner-pill mb-3">
-        <span class="pro-pulse-dot"></span>
-        <span>NATIONWIDE COFFEE ECOSYSTEM</span>
+      <div class="sec-pill-badge-wrap light mb-3">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> NATIONWIDE COFFEE ECOSYSTEM</span>
+        <span class="sec-pill-line"></span>
       </div>
 
       <!-- Concise Headline -->
@@ -43,10 +52,10 @@ else :
       <div class="pro-banner-actions">
         <a href="#featured-partners" class="btn-hero-lifestyle">
           <span>Explore Partners</span>
-          <i class="bi bi-arrow-down-short fs-5"></i>
+          <i class="bi bi-arrow-down-short"></i>
         </a>
         <button class="btn-hero-outline" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-          <i class="bi bi-handshake fs-5 text-gold"></i>
+          <i class="bi bi-handshake text-gold"></i>
           <span>Become a Partner</span>
         </button>
       </div>
@@ -54,41 +63,53 @@ else :
     </div>
   </section>
 
-  <!-- CLEAN SUBTLE STATS STRIP BELOW HERO -->
-  <section class="py-4 border-bottom bg-white">
+  <!-- Luxury Overlap Floating Metrics Bar -->
+  <div class="story-metrics-floating-wrap">
     <div class="container">
-      <div class="row g-4 text-center justify-content-center">
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black font-heading" style="color: #d90429;">50+</div>
-          <div class="small text-muted fw-bold text-uppercase">BFC Restaurant Outlets</div>
+      <div class="row g-3 g-md-4 text-center justify-content-center">
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-shop-window"></i></div>
+            <div class="metric-num">50+</div>
+            <div class="metric-label">BFC Restaurant Outlets</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-dark font-heading">100+</div>
-          <div class="small text-muted fw-bold text-uppercase">Shwapno Superstores</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-cart4"></i></div>
+            <div class="metric-num">100+</div>
+            <div class="metric-label">Shwapno Superstores</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-teal font-heading" style="color: var(--santino-teal);">150+</div>
-          <div class="small text-muted fw-bold text-uppercase">Corporate Office Cafes</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-building"></i></div>
+            <div class="metric-num">150+</div>
+            <div class="metric-label">Corporate Office Cafes</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-gold font-heading" style="color: var(--santino-gold);">1.5M+</div>
-          <div class="small text-muted fw-bold text-uppercase">Annual Cups Served</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-cup-hot-fill"></i></div>
+            <div class="metric-num">1.5M+</div>
+            <div class="metric-label">Annual Cups Served</div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <section id="featured-partners" class="py-5" style="background-color: #f8faf9;">
     <div class="container py-lg-4">
       <div class="text-center max-w-700 mx-auto mb-5">
         <span class="text-uppercase fw-bold small" style="color: var(--santino-teal); letter-spacing: 2px;">Core Alliances</span>
-        <h2 class="display-6 fw-bold mt-2" style="color: #1a2b29;">Flagship Brand Pages</h2>
-        <p class="text-muted">Dedicated operational integration powering retail and foodservice giants.</p>
+        <h2 class="sec-title mb-2" style="color: #1a2b29;">Flagship Brand Pages</h2>
+        <p class="text-muted mb-0" style="font-size: 0.98rem; max-width: 580px; line-height: 1.5; margin: 0 auto;">Dedicated operational integration powering retail and foodservice giants.</p>
       </div>
 
       <div class="row g-4">
         <div class="col-lg-6">
-          <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden p-4 p-md-5 text-white position-relative" style="background: linear-gradient(135deg, #1b2624 0%, #004541 100%);">
+          <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden p-4 p-md-5 text-white position-relative" style="background: linear-gradient(135deg, #003633 0%, #002220 100%);">
             <div class="d-flex justify-content-between align-items-start mb-4">
               <span class="badge bg-warning text-dark px-3 py-2 fw-bold rounded-pill">Foodservice Chain Partner</span>
               <i class="bi bi-shop fs-1 text-warning"></i>
@@ -101,17 +122,17 @@ else :
               <span class="badge bg-white bg-opacity-10 text-light px-3 py-2 rounded-pill"><i class="bi bi-geo-alt me-1"></i> 50+ Outlets</span>
               <span class="badge bg-white bg-opacity-10 text-light px-3 py-2 rounded-pill"><i class="bi bi-cup-hot me-1"></i> 1.5M+ Cups/Yr</span>
             </div>
-            <a href="<?php echo esc_url( home_url( '/bfc/' ) ); ?>" class="btn btn-warning fw-bold rounded-pill px-4 py-2 text-dark mt-auto align-self-start" style="background-color: var(--santino-gold); border: none;">
+            <a href="<?php echo esc_url( home_url( '/bfc/' ) ); ?>" class="btn-hero-lifestyle align-self-start mt-auto">
               Visit BFC Brand Page <i class="bi bi-arrow-right ms-2"></i>
             </a>
           </div>
         </div>
 
         <div class="col-lg-6">
-          <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden p-4 p-md-5 text-white position-relative" style="background: linear-gradient(135deg, #2a1517 0%, #7b1822 100%);">
+          <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden p-4 p-md-5 text-white position-relative" style="background: linear-gradient(135deg, #002d2a 0%, #004d49 100%);">
             <div class="d-flex justify-content-between align-items-start mb-4">
-              <span class="badge bg-light text-danger px-3 py-2 fw-bold rounded-pill">Retail Superstore Partner</span>
-              <i class="bi bi-cart3 fs-1 text-danger"></i>
+              <span class="badge bg-light text-success px-3 py-2 fw-bold rounded-pill">Retail Superstore Partner</span>
+              <i class="bi bi-cart3 fs-1 text-warning"></i>
             </div>
             <h3 class="fw-bold mb-2 text-white">Shwapno Superstores</h3>
             <p class="text-light opacity-80 mb-4" style="font-size: 0.95rem;">
@@ -121,7 +142,7 @@ else :
               <span class="badge bg-white bg-opacity-10 text-light px-3 py-2 rounded-pill"><i class="bi bi-geo-alt me-1"></i> 100+ Superstores</span>
               <span class="badge bg-white bg-opacity-10 text-light px-3 py-2 rounded-pill"><i class="bi bi-box-seam me-1"></i> 4 Roasted Blends</span>
             </div>
-            <a href="<?php echo esc_url( home_url( '/swapno/' ) ); ?>" class="btn btn-light fw-bold rounded-pill px-4 py-2 text-danger mt-auto align-self-start">
+            <a href="<?php echo esc_url( home_url( '/swapno/' ) ); ?>" class="btn btn-light fw-bold rounded-pill px-4 py-2 text-warning mt-auto align-self-start">
               Visit Shwapno Brand Page <i class="bi bi-arrow-right ms-2"></i>
             </a>
           </div>
@@ -134,8 +155,8 @@ else :
     <div class="container py-lg-4">
       <div class="text-center max-w-700 mx-auto mb-5">
         <span class="text-uppercase fw-bold small" style="color: var(--santino-teal); letter-spacing: 2px;">Comprehensive Client Reach</span>
-        <h2 class="display-6 fw-bold mt-2" style="color: #1a2b29;">Retailers, HORECA & Corporate Network</h2>
-        <p class="text-muted">Proudly powering coffee programs across leading organizations.</p>
+        <h2 class="sec-title mb-2" style="color: #1a2b29;">Retailers, HORECA & Corporate Network</h2>
+        <p class="text-muted mb-0" style="font-size: 0.98rem; max-width: 580px; line-height: 1.5; margin: 0 auto;">Proudly powering coffee programs across leading organizations.</p>
       </div>
 
       <div class="row g-4 text-center">
@@ -193,6 +214,6 @@ else :
 
   <!-- FOOTER -->
 
-<?php\n<?php
+<?php
 endif;
 get_footer();

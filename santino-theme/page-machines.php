@@ -8,7 +8,15 @@
 
 get_header();
 
-if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) :
+$is_elementor_page = false;
+if ( class_exists( '\Elementor\Plugin' ) ) {
+    $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
+    if ( $document && $document->is_built_with_elementor() ) {
+        $is_elementor_page = true;
+    }
+}
+
+if ( $is_elementor_page ) :
     while ( have_posts() ) :
         the_post();
         the_content();
@@ -46,7 +54,7 @@ else :
           <i class="bi bi-play-circle-fill"></i>
         </button>
         <a href="#machineGrid" class="btn-hero-outline">
-          <i class="bi bi-arrow-down-short fs-5 text-gold"></i>
+          <i class="bi bi-arrow-down-short text-gold"></i>
           <span>Explore Catalog</span>
         </a>
       </div>
@@ -54,41 +62,53 @@ else :
     </div>
   </section>
 
-  <!-- CLEAN SUBTLE STATS STRIP BELOW HERO -->
-  <section class="py-4 border-bottom bg-white">
+  <!-- Luxury Overlap Floating Metrics Bar -->
+  <div class="story-metrics-floating-wrap">
     <div class="container">
-      <div class="row g-4 text-center justify-content-center">
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-dark font-heading">500+</div>
-          <div class="small text-muted fw-bold text-uppercase">Machines Installed</div>
+      <div class="row g-3 g-md-4 text-center justify-content-center">
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-gear-wide-connected"></i></div>
+            <div class="metric-num">500+</div>
+            <div class="metric-label">Machines Installed</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-teal font-heading" style="color: var(--santino-teal);">4 Hours</div>
-          <div class="small text-muted fw-bold text-uppercase">Rapid Tech SLA</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-clock-history"></i></div>
+            <div class="metric-num">4 Hours</div>
+            <div class="metric-label">Rapid Tech SLA</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-dark font-heading">100%</div>
-          <div class="small text-muted fw-bold text-uppercase">OEM Italian Parts</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-cpu-fill"></i></div>
+            <div class="metric-num">100%</div>
+            <div class="metric-label">OEM Italian Parts</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-gold font-heading" style="color: var(--santino-gold);">Zero</div>
-          <div class="small text-muted fw-bold text-uppercase">Downtime Warranty</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-shield-check"></i></div>
+            <div class="metric-num">Zero</div>
+            <div class="metric-label">Downtime Warranty</div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- BRAND PARTNERS MARQUEE -->
   <div class="py-4 border-top border-bottom bg-white reveal">
     <div class="container">
-      <div class="d-flex justify-content-center align-items-center flex-wrap gap-4 gap-md-5 opacity-75">
-        <span class="fw-bold font-heading text-muted">AUTHORIZED PARTNERS:</span>
-        <span class="fw-bold text-dark fs-6">VICTORIA ARDUINO</span>
-        <span class="fw-bold text-dark fs-6">NUOVA SIMONELLI</span>
-        <span class="fw-bold text-dark fs-6">KALERM AUTOMATION</span>
-        <span class="fw-bold text-dark fs-6">CAYE BIONIC ROBOTICS</span>
-        <span class="fw-bold text-dark fs-6">3TEMP BREWERS</span>
-        <span class="fw-bold text-dark fs-6">CAFEVA CARE</span>
+      <div class="d-flex justify-content-center align-items-center flex-wrap gap-2 gap-md-3">
+        <span class="sec-pill-badge"><i class="bi bi-shield-check me-1"></i> AUTHORIZED PARTNERS</span>
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm">VICTORIA ARDUINO</span>
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm">NUOVA SIMONELLI</span>
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm">KALERM AUTOMATION</span>
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm">CAYE BIONIC ROBOTICS</span>
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm">3TEMP BREWERS</span>
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm">CAFEVA CARE</span>
       </div>
     </div>
   </div>
@@ -98,7 +118,11 @@ else :
     <div class="container">
       
       <div class="sec-heading-center text-center mb-5 reveal">
-        <span class="badge-tag-pill mb-2"><i class="bi bi-gear-wide-connected text-teal me-1"></i> EQUIPMENT PORTFOLIO</span>
+        <div class="sec-pill-badge-wrap mb-2">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge"><i class="bi bi-gear-wide-connected  me-1"></i> EQUIPMENT PORTFOLIO</span>
+        <span class="sec-pill-line"></span>
+      </div>
         <h2 class="sec-title">Engineered for Flawless Extraction</h2>
         <div class="sec-subtitle">Discover our comprehensive collection of traditional, superautomatic, and bionic coffee machinery</div>
       </div>
@@ -184,11 +208,11 @@ else :
           <div class="machine-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm d-flex flex-column justify-content-between p-4 hover-lift">
             <div>
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="badge bg-danger">BESTSELLER WORKHORSE</span>
+                <span class="badge text-white fw-bold" style="background-color: var(--santino-teal);">BESTSELLER WORKHORSE</span>
                 <span class="text-muted small fw-bold">Nuova Simonelli</span>
               </div>
               <div class="machine-img-box text-center my-3 hover-img-zoom">
-                <img src="<?php echo santino_img('imgi_26_santino_-_250522-07312.jpg'); ?>" alt="Appia Life" class="img-fluid" style="max-height: 200px; object-fit: cover; border-radius: 12px;">
+                <img src="<?php echo santino_img('nuova-simonelli-appia-viva-commercial-espresso-machine_1.png'); ?>" alt="Appia Life" class="img-fluid" style="max-height: 200px; object-fit: cover; border-radius: 12px;">
               </div>
               <h4 class="font-heading fw-bold mb-1">Nuova Simonelli Appia Life</h4>
               <p class="text-muted small mb-3">SIS Soft Infusion System guaranteeing creamy, consistent crema for high-volume cafes.</p>
@@ -248,7 +272,7 @@ else :
           <div class="machine-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm d-flex flex-column justify-content-between p-4 hover-lift">
             <div>
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="badge bg-danger">AI BIONIC ROBOT</span>
+                <span class="badge text-white fw-bold" style="background-color: var(--santino-teal);">AI BIONIC ROBOT</span>
                 <span class="text-muted small fw-bold">CAYE Robotics</span>
               </div>
               <div class="machine-img-box text-center my-3 hover-img-zoom">
@@ -317,7 +341,11 @@ else :
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-lg-6 reveal-left">
-          <span class="badge-tag-pill mb-3">TOTAL PEACE OF MIND</span>
+          <div class="sec-pill-badge-wrap mb-2">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge">TOTAL PEACE OF MIND</span>
+        <span class="sec-pill-line"></span>
+      </div>
           <h2 class="font-heading fw-bold mb-3">Turnkey Leasing & 24/7 Breakdown Coverage</h2>
           <p class="text-muted mb-4">
             Santino offers flexible monthly operating lease options for corporate cafes, restaurants, and hospitality businesses across Bangladesh, eliminating heavy capital expenditures.
@@ -421,6 +449,6 @@ else :
 
   <!-- FOOTER -->
 
-<?php\n<?php
+<?php
 endif;
 get_footer();

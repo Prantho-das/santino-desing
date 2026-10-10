@@ -1,11 +1,5 @@
 <?php
 /**
- * Template Name: Barista Training Academy Page
- *
- * @package Santino
- */
-
-/**
  * Template Name: Santino Barista Academy & SCA Training
  * Template Post Type: page
  *
@@ -14,7 +8,15 @@
 
 get_header();
 
-if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) :
+$is_elementor_page = false;
+if ( class_exists( '\Elementor\Plugin' ) ) {
+    $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
+    if ( $document && $document->is_built_with_elementor() ) {
+        $is_elementor_page = true;
+    }
+}
+
+if ( $is_elementor_page ) :
     while ( have_posts() ) :
         the_post();
         the_content();
@@ -52,7 +54,7 @@ else :
           <i class="bi bi-mortarboard-fill"></i>
         </button>
         <a href="#howWeTrain" class="btn-hero-outline">
-          <i class="bi bi-arrow-down-short fs-5 text-gold"></i>
+          <i class="bi bi-arrow-down-short text-gold"></i>
           <span>Explore Courses</span>
         </a>
       </div>
@@ -60,38 +62,54 @@ else :
     </div>
   </section>
 
-  <!-- 2. CORE METHODOLOGY STATS -->
-  <section class="py-4 border-top border-bottom bg-light reveal">
+  <!-- Luxury Overlap Floating Metrics Bar -->
+  <div class="story-metrics-floating-wrap">
     <div class="container">
-      <div class="row g-4 text-center">
-        <div class="col-md-3 col-6">
-          <div class="fs-2 fw-black text-dark font-heading">80%</div>
-          <div class="small text-muted fw-bold text-uppercase">Practical Hands-On Bar Practice</div>
+      <div class="row g-3 g-md-4 text-center justify-content-center">
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-mortarboard-fill"></i></div>
+            <div class="metric-num">80%</div>
+            <div class="metric-label">Practical Hands-On Bar Practice</div>
+          </div>
         </div>
-        <div class="col-md-3 col-6">
-          <div class="fs-2 fw-black text-teal font-heading">1 : 2</div>
-          <div class="small text-muted fw-bold text-uppercase">Trainer to Machine Ratio</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-people-fill"></i></div>
+            <div class="metric-num">1 : 2</div>
+            <div class="metric-label">Trainer to Machine Ratio</div>
+          </div>
         </div>
-        <div class="col-md-3 col-6">
-          <div class="fs-2 fw-black text-dark font-heading">100%</div>
-          <div class="small text-muted fw-bold text-uppercase">Specialty Grade Single Origins Used</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-cup-hot-fill"></i></div>
+            <div class="metric-num">100%</div>
+            <div class="metric-label">Specialty Grade Single Origins</div>
+          </div>
         </div>
-        <div class="col-md-3 col-6">
-          <div class="fs-2 fw-black text-gold font-heading">SCA & WBC</div>
-          <div class="small text-muted fw-bold text-uppercase">Standard Calibration Protocols</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-patch-check-fill"></i></div>
+            <div class="metric-num">SCA & WBC</div>
+            <div class="metric-label">Standard Calibration Protocols</div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- 3. HOW WE TRAIN - DETAILED STEP-BY-STEP CHAPTERS (WITH IMAGES & DESCRIPTIONS) -->
   <section class="py-5" id="howWeTrain">
     <div class="container py-lg-4">
       
       <div class="text-center max-w-700 mx-auto mb-5 reveal">
-        <span class="badge-tag-pill mb-2"><i class="bi bi-mortarboard-fill text-teal me-1"></i> PEDAGOGY & METHODOLOGY</span>
-        <h2 class="display-6 font-heading fw-black text-dark mb-2">Our Hands-On Barista Training Pillars</h2>
-        <p class="text-muted">A deep dive into how our certified master instructors guide you from coffee science fundamentals to commercial bar mastery.</p>
+        <div class="sec-pill-badge-wrap mb-2">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge"><i class="bi bi-mortarboard-fill  me-1"></i> PEDAGOGY & METHODOLOGY</span>
+        <span class="sec-pill-line"></span>
+      </div>
+        <h2 class="sec-title mb-2">Our Hands-On Barista Training Pillars</h2>
+        <p class="text-muted mb-0" style="font-size: 0.98rem; max-width: 580px; line-height: 1.5; margin: 0 auto;">A deep dive into how our certified master instructors guide you from coffee science fundamentals to commercial bar mastery.</p>
       </div>
 
       <!-- Pillar 1: Espresso Extraction & Grinder Calibration -->
@@ -207,9 +225,13 @@ else :
     <div class="container py-lg-4">
       
       <div class="text-center max-w-700 mx-auto mb-5 reveal">
-        <span class="badge-tag-pill mb-2"><i class="bi bi-people-fill text-teal me-1"></i> TAILORED PROGRAMS</span>
-        <h2 class="display-6 font-heading fw-black text-dark mb-2">Training Programs For Every Ambition</h2>
-        <p class="text-muted">Whether you are stepping behind the espresso bar for the first time or training an entire hotel team.</p>
+        <div class="sec-pill-badge-wrap mb-2">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge"><i class="bi bi-people-fill  me-1"></i> TAILORED PROGRAMS</span>
+        <span class="sec-pill-line"></span>
+      </div>
+        <h2 class="sec-title mb-2">Training Programs For Every Ambition</h2>
+        <p class="text-muted mb-0" style="font-size: 0.98rem; max-width: 580px; line-height: 1.5; margin: 0 auto;">Whether you are stepping behind the espresso bar for the first time or training an entire hotel team.</p>
       </div>
 
       <div class="row g-4">
@@ -221,7 +243,7 @@ else :
               <h4 class="font-heading fw-bold text-dark mb-2">Aspiring Professional Baristas</h4>
               <p class="text-muted small">Intensive hands-on foundations for individuals seeking career opportunities in specialty cafes locally or internationally.</p>
             </div>
-            <button class="btn btn-outline-dark w-100 py-2 fw-bold mt-4 font-heading" data-bs-toggle="modal" data-bs-target="#enrollModal">
+            <button class="btn-hero-lifestyle w-100 py-2.5 mt-4 text-center" data-bs-toggle="modal" data-bs-target="#enrollModal">
               Inquire Program Details
             </button>
           </div>
@@ -234,7 +256,7 @@ else :
               <h4 class="font-heading fw-bold text-dark mb-2">Cafe Owners & Entrepreneurs</h4>
               <p class="text-muted small">Learn equipment selection, beverage costing (COGS), bar ergonomics, workflow layout, and recipe standardization.</p>
             </div>
-            <button class="btn btn-outline-dark w-100 py-2 fw-bold mt-4 font-heading" data-bs-toggle="modal" data-bs-target="#enrollModal">
+            <button class="btn-hero-lifestyle w-100 py-2.5 mt-4 text-center" data-bs-toggle="modal" data-bs-target="#enrollModal">
               Inquire Program Details
             </button>
           </div>
@@ -247,7 +269,7 @@ else :
               <h4 class="font-heading fw-bold text-dark mb-2">Hotels, Restaurants & Corporate Teams</h4>
               <p class="text-muted small">Customized on-site or showroom group training for 5-star hotel hospitality staff, restaurant chains, and corporate pantries.</p>
             </div>
-            <button class="btn btn-outline-dark w-100 py-2 fw-bold mt-4 font-heading" data-bs-toggle="modal" data-bs-target="#enrollModal">
+            <button class="btn-hero-lifestyle w-100 py-2.5 mt-4 text-center" data-bs-toggle="modal" data-bs-target="#enrollModal">
               Inquire Program Details
             </button>
           </div>
@@ -338,6 +360,6 @@ else :
 
   <!-- FOOTER -->
 
-<?php\n<?php
+<?php
 endif;
 get_footer();

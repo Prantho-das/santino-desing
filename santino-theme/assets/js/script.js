@@ -145,11 +145,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // VIP Membership AJAX Submission
+  // VIP Membership AJAX Submission with Phone Validation
   const membershipForm = document.getElementById('santinoMembershipForm');
   if (membershipForm) {
+    const phoneInput = membershipForm.querySelector('input[name="phone"]');
+    if (phoneInput) {
+      phoneInput.addEventListener('input', function() {
+        this.setCustomValidity('');
+      });
+    }
+
     membershipForm.addEventListener('submit', function(e) {
       e.preventDefault();
+
+      const phoneVal = (this.querySelector('input[name="phone"]')?.value || '').trim().replace(/[\s-]/g, '');
+      const bdPhoneRegex = /^(?:\+?880|0)?1[3-9]\d{8}$/;
+
+      if (!bdPhoneRegex.test(phoneVal)) {
+        const phoneField = this.querySelector('input[name="phone"]');
+        if (phoneField) {
+          phoneField.focus();
+          phoneField.setCustomValidity('Please enter a valid 11-digit phone number (e.g. 017XXXXXXXX)');
+          phoneField.reportValidity();
+        } else {
+          alert('Please enter a valid phone number (e.g. 017XXXXXXXX or +88017XXXXXXXX).');
+        }
+        return;
+      }
+
       const submitBtn = this.querySelector('button[type="submit"]');
       const originalText = submitBtn ? submitBtn.innerHTML : 'Submit';
       if (submitBtn) {
@@ -327,14 +350,20 @@ document.addEventListener('DOMContentLoaded', () => {
           for (let i = 1; i <= 5; i++) {
             if (i <= stamps) {
               cupsHtml += `
-                <div class="stamp-cup-item active" style="width: 60px; height: 60px; border-radius: 50%; background: #e6f4f3; border: 2px solid #00625d; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 12px rgba(0,98,93,0.15);">
-                  ☕
+                <div class="stamp-cup-item active text-center flex-1">
+                  <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); display: inline-flex; align-items: center; justify-content: center; font-size: 22px; color: #041a18; box-shadow: 0 0 16px rgba(223, 190, 141, 0.5); border: 2px solid #ffffff;">
+                    ☕
+                  </div>
+                  <div class="small fw-bold mt-1" style="color: #dfbe8d; font-size: 11px;">Cup ${i} ✓</div>
                 </div>
               `;
             } else {
               cupsHtml += `
-                <div class="stamp-cup-item" style="width: 60px; height: 60px; border-radius: 50%; background: #f8fafc; border: 2px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #94a3b8;">
-                  ${i}
+                <div class="stamp-cup-item text-center flex-1">
+                  <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(0, 98, 93, 0.25); border: 2px dashed rgba(195, 153, 108, 0.35); display: inline-flex; align-items: center; justify-content: center; font-size: 18px; color: rgba(255,255,255,0.4);">
+                    ${i}
+                  </div>
+                  <div class="small text-white-50 mt-1" style="font-size: 11px;">Cup ${i}</div>
                 </div>
               `;
             }
@@ -343,13 +372,13 @@ document.addEventListener('DOMContentLoaded', () => {
           let vouchersHtml = '';
           if (d.vouchers && d.vouchers.length > 0) {
             vouchersHtml = `
-              <div class="mt-4 p-3 rounded-4 bg-light border">
-                <h6 class="fw-bold text-success mb-2"><i class="bi bi-gift-fill me-1"></i> Your Free Coffee Vouchers:</h6>
+              <div class="mt-4 p-3.5 rounded-4 border" style="background: rgba(195, 153, 108, 0.1); border-color: rgba(195, 153, 108, 0.35) !important;">
+                <h6 class="fw-bold mb-2" style="color: #dfbe8d;"><i class="bi bi-gift-fill me-1.5"></i> Active Free Coffee Vouchers:</h6>
                 <div class="d-flex flex-wrap gap-2">
                   ${d.vouchers.map(v => `
-                    <div class="p-2 rounded-3 bg-white border d-flex align-items-center gap-2">
-                      <code class="fs-6 fw-bold text-dark">${v.code}</code>
-                      <span class="badge ${v.status === 'unused' ? 'bg-success' : 'bg-secondary'}">${v.status.toUpperCase()}</span>
+                    <div class="p-2.5 rounded-3 d-flex align-items-center gap-2 border" style="background: #091715; border-color: rgba(195,153,108,0.3) !important;">
+                      <code class="fs-6 fw-bold" style="color: #dfbe8d;">${v.code}</code>
+                      <span class="badge ${v.status === 'unused' ? 'bg-success' : 'bg-secondary'}" style="font-size: 10px;">${v.status.toUpperCase()}</span>
                     </div>
                   `).join('')}
                 </div>
@@ -359,25 +388,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
           cardBox.style.display = 'block';
           cardBox.innerHTML = `
-            <div class="card border-0 rounded-4 shadow-xl p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0d2b28 0%, #00625d 50%, #1a1a1a 100%); color: #fff;">
+            <div class="card border rounded-4 shadow-2xl p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: radial-gradient(circle at 80% 20%, #005c56 0%, #071d1b 60%, #04100e 100%); border-color: rgba(195, 153, 108, 0.45) !important; color: #fff;">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
-                  <span class="badge bg-warning text-dark px-3 py-1.5 fw-bold text-uppercase">${d.tier} MEMBER</span>
-                  <h3 class="fw-bold text-white mt-2 mb-0">${d.name}</h3>
-                  <div class="text-white-50 font-monospace small">ID: ${d.member_id} | Phone: ${d.phone}</div>
+                  <span class="badge px-3 py-1.5 fw-bold text-uppercase rounded-pill" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 11px;">
+                    <i class="bi bi-patch-check-fill me-1"></i> SANTINO VIP MEMBER
+                  </span>
+                  <h3 class="fw-bold text-white mt-2 mb-0 font-heading">${d.name}</h3>
+                  <div class="text-white-50 font-monospace small mt-1">VIP ID: <strong style="color: #dfbe8d;">${d.member_id}</strong> | Phone: ${d.phone}</div>
                 </div>
                 <div class="text-end">
-                  <div class="display-6 fw-bold text-warning mb-0">${stamps}/5</div>
-                  <div class="small text-white-50">Approved Cups</div>
+                  <div class="display-6 fw-bold mb-0 font-heading" style="color: #dfbe8d;">${stamps}/5</div>
+                  <div class="small text-white-50">Approved Stamps</div>
                 </div>
               </div>
 
-              <div class="p-3 p-md-4 rounded-4 bg-white text-dark mt-3 shadow-sm">
+              <div class="p-3.5 p-md-4 rounded-4 mt-3 shadow-lg border" style="background: rgba(6, 20, 18, 0.9); border-color: rgba(195, 153, 108, 0.3) !important;">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-cup-hot-fill text-teal me-1"></i> Digital Coffee Stamp Card</h6>
-                  <span class="small fw-bold text-teal">${5 - stamps === 0 ? '🎉 Free Coffee Unlocked!' : (5 - stamps) + ' cups to next FREE COFFEE'}</span>
+                  <h6 class="fw-bold mb-0 text-white font-heading"><i class="bi bi-cup-hot-fill me-1.5" style="color: #dfbe8d;"></i> Digital Stamp Progress</h6>
+                  <span class="small fw-bold" style="color: #dfbe8d;">${5 - stamps === 0 ? '🎉 Free 6th Coffee Unlocked!' : (5 - stamps) + ' cups to next FREE COFFEE'}</span>
                 </div>
-                <div class="d-flex justify-content-between align-items-center py-2 px-1">
+                <div class="d-flex justify-content-between align-items-center py-2 px-1 gap-2">
                   ${cupsHtml}
                 </div>
                 ${vouchersHtml}
@@ -469,13 +500,16 @@ window.filterByCategory = function(cat) {
 };
 
 // Shwapno & BFC Search and Filters
-window.filterShwapnoZone = function(zone, btn) {
-  document.querySelectorAll('.branch-filter-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  const cards = document.querySelectorAll('#shwapnoOutletGrid .outlet-card');
-  cards.forEach(card => {
-    const cardZone = card.getAttribute('data-zone') || '';
-    if (zone === 'all' || cardZone.includes(zone)) {
+
+window.filterBfcByTag = function(tag, btn) {
+  if (btn) {
+    document.querySelectorAll('#outlets .branch-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+  var cards = document.querySelectorAll('#bfcOutletGrid [data-zone]');
+  cards.forEach(function(card) {
+    var zone = (card.getAttribute('data-zone') || '').toLowerCase();
+    if (tag === 'all' || zone.indexOf(tag.toLowerCase()) !== -1) {
       card.style.display = '';
     } else {
       card.style.display = 'none';
@@ -483,14 +517,15 @@ window.filterShwapnoZone = function(zone, btn) {
   });
 };
 
-window.filterShwapnoOutlets = function() {
-  const input = document.getElementById('shwapnoSearchInput');
-  const q = (input ? input.value : '').toLowerCase().trim();
-  const cards = document.querySelectorAll('#shwapnoOutletGrid .outlet-card');
-  cards.forEach(card => {
-    const zone = card.getAttribute('data-zone') || '';
-    const text = card.innerText.toLowerCase();
-    if (!q || zone.includes(q) || text.includes(q)) {
+window.filterShwapnoZone = function(zoneTag, btn) {
+  if (btn) {
+    document.querySelectorAll('#store-locator .branch-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+  var cards = document.querySelectorAll('#shwapnoOutletGrid [data-zone]');
+  cards.forEach(function(card) {
+    var zone = (card.getAttribute('data-zone') || '').toLowerCase();
+    if (zoneTag === 'all' || zone.indexOf(zoneTag.toLowerCase()) !== -1) {
       card.style.display = '';
     } else {
       card.style.display = 'none';
@@ -499,13 +534,13 @@ window.filterShwapnoOutlets = function() {
 };
 
 window.filterBfcOutlets = function() {
-  const input = document.getElementById('bfcSearchInput');
-  const q = (input ? input.value : '').toLowerCase().trim();
-  const cards = document.querySelectorAll('#bfcOutletGrid .outlet-card');
-  cards.forEach(card => {
-    const zone = card.getAttribute('data-zone') || '';
-    const text = card.innerText.toLowerCase();
-    if (!q || zone.includes(q) || text.includes(q)) {
+  var input = document.getElementById('bfcSearchInput');
+  var q = (input ? input.value : '').toLowerCase().trim();
+  var cards = document.querySelectorAll('#bfcOutletGrid [data-zone]');
+  cards.forEach(function(card) {
+    var zone = (card.getAttribute('data-zone') || '').toLowerCase();
+    var text = (card.innerText || '').toLowerCase();
+    if (!q || zone.indexOf(q) !== -1 || text.indexOf(q) !== -1) {
       card.style.display = '';
     } else {
       card.style.display = 'none';
@@ -513,7 +548,17 @@ window.filterBfcOutlets = function() {
   });
 };
 
-
-
-
-
+window.filterShwapnoOutlets = function() {
+  var input = document.getElementById('shwapnoSearchInput');
+  var q = (input ? input.value : '').toLowerCase().trim();
+  var cards = document.querySelectorAll('#shwapnoOutletGrid [data-zone]');
+  cards.forEach(function(card) {
+    var zone = (card.getAttribute('data-zone') || '').toLowerCase();
+    var text = (card.innerText || '').toLowerCase();
+    if (!q || zone.indexOf(q) !== -1 || text.indexOf(q) !== -1) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};

@@ -41,29 +41,32 @@
           </div>
         </div>
 
-        <!-- Column 2: Quick Links -->
+        <!-- Column 2: Quick Links (Dynamic WP Menu) -->
         <div class="col-lg-2 col-md-6 col-6">
           <h5 class="footer-col-title">Quick Links</h5>
-          <ul class="footer-menu-list">
-            <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>">Machines</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/beans/' ) ); ?>">Coffee Beans</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/training/' ) ); ?>">Barista Academy</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/office-cafe/' ) ); ?>">Horeca &amp; Office</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/membership/' ) ); ?>">Club Membership</a></li>
-          </ul>
+          <?php
+          wp_nav_menu( array(
+              'theme_location' => 'footer_quick',
+              'container'      => false,
+              'menu_class'     => 'footer-menu-list',
+              'walker'         => new Santino_Footer_Nav_Walker(),
+              'fallback_cb'    => 'santino_footer_quick_fallback',
+          ) );
+          ?>
         </div>
 
-        <!-- Column 3: Customer Care -->
+        <!-- Column 3: Customer Care (Dynamic WP Menu) -->
         <div class="col-lg-2 col-md-6 col-6">
           <h5 class="footer-col-title">Customer Care</h5>
-          <ul class="footer-menu-list">
-            <li><a href="office-cafe.html#contact">24/7 AMC Support</a></li>
-            <li><a href="office-cafe.html#contact">Commercial Consultation</a></li>
-            <li><a href="#availability">Find Cafes &amp; Outlets</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/our-story/' ) ); ?>">Brand Heritage</a></li>
-            <li><a href="tel:+8801613334514">Direct Hotline</a></li>
-          </ul>
+          <?php
+          wp_nav_menu( array(
+              'theme_location' => 'footer_care',
+              'container'      => false,
+              'menu_class'     => 'footer-menu-list',
+              'walker'         => new Santino_Footer_Nav_Walker(),
+              'fallback_cb'    => 'santino_footer_care_fallback',
+          ) );
+          ?>
         </div>
 
         <!-- Column 4: Follow Us -->
@@ -120,11 +123,11 @@
 
   <!-- MOBILE NATIVE APP BOTTOM NAVIGATION DOCK -->
   <nav class="mobile-app-dock d-flex d-lg-none" aria-label="Mobile Navigation">
-    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="app-dock-item active">
+    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="app-dock-item <?php echo is_front_page() ? 'active' : ''; ?>">
       <div class="dock-icon-wrap"><i class="bi bi-house-door-fill"></i></div>
       <span class="dock-label">Home</span>
     </a>
-    <a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="app-dock-item">
+    <a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="app-dock-item <?php echo is_page( 'machines' ) ? 'active' : ''; ?>">
       <div class="dock-icon-wrap"><i class="bi bi-cpu-fill"></i></div>
       <span class="dock-label">Machines</span>
     </a>
@@ -132,7 +135,7 @@
       <div class="dock-action-circle"><i class="bi bi-whatsapp"></i></div>
       <span class="dock-label">Chat</span>
     </a>
-    <a href="<?php echo esc_url( home_url( '/beans/' ) ); ?>" class="app-dock-item">
+    <a href="<?php echo esc_url( home_url( '/beans/' ) ); ?>" class="app-dock-item <?php echo is_page( 'beans' ) ? 'active' : ''; ?>">
       <div class="dock-icon-wrap"><i class="bi bi-cup-hot-fill"></i></div>
       <span class="dock-label">Beans</span>
     </a>

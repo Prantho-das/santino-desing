@@ -1,11 +1,5 @@
 <?php
 /**
- * Template Name: Coffee Beans Page
- *
- * @package Santino
- */
-
-/**
  * Template Name: Santino Specialty Coffee Beans & Roastery
  * Template Post Type: page
  *
@@ -14,7 +8,15 @@
 
 get_header();
 
-if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) :
+$is_elementor_page = false;
+if ( class_exists( '\Elementor\Plugin' ) ) {
+    $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
+    if ( $document && $document->is_built_with_elementor() ) {
+        $is_elementor_page = true;
+    }
+}
+
+if ( $is_elementor_page ) :
     while ( have_posts() ) :
         the_post();
         the_content();
@@ -52,7 +54,7 @@ else :
           <i class="bi bi-cup-hot-fill"></i>
         </button>
         <a href="#roastCatalog" class="btn-hero-outline">
-          <i class="bi bi-arrow-down-short fs-5 text-gold"></i>
+          <i class="bi bi-arrow-down-short text-gold"></i>
           <span>Explore Roasts</span>
         </a>
       </div>
@@ -60,36 +62,52 @@ else :
     </div>
   </section>
 
-  <!-- CLEAN SUBTLE STATS STRIP BELOW HERO -->
-  <section class="py-4 border-bottom bg-white">
+  <!-- Luxury Overlap Floating Metrics Bar -->
+  <div class="story-metrics-floating-wrap">
     <div class="container">
-      <div class="row g-4 text-center justify-content-center">
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-dark font-heading">90+ SCA</div>
-          <div class="small text-muted fw-bold text-uppercase">Certified Cupping Score</div>
+      <div class="row g-3 g-md-4 text-center justify-content-center">
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-award-fill"></i></div>
+            <div class="metric-num">90+ SCA</div>
+            <div class="metric-label">Certified Cupping Score</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-teal font-heading" style="color: var(--santino-teal);">100%</div>
-          <div class="small text-muted fw-bold text-uppercase">Micro-Lot Single Origin</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-geo-alt-fill"></i></div>
+            <div class="metric-num">100%</div>
+            <div class="metric-label">Micro-Lot Single Origin</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-dark font-heading">24 Hours</div>
-          <div class="small text-muted fw-bold text-uppercase">Fresh Batch Dispatch</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+            <div class="metric-num">24 Hours</div>
+            <div class="metric-label">Fresh Batch Dispatch</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-gold font-heading" style="color: var(--santino-gold);">FSSC 22000</div>
-          <div class="small text-muted fw-bold text-uppercase">Global Safety Certified</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-shield-check"></i></div>
+            <div class="metric-num">FSSC 22000</div>
+            <div class="metric-label">Global Safety Certified</div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- BEANS CATALOG SECTION -->
   <section class="py-5" id="roastCatalog">
     <div class="container">
       
       <div class="sec-heading-center text-center mb-5 reveal">
-        <span class="badge-tag-pill mb-2"><i class="bi bi-award-fill text-gold me-1"></i> SPECIALTY ROAST COLLECTION</span>
+        <div class="sec-pill-badge-wrap mb-2">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge"><i class="bi bi-award-fill  me-1"></i> SPECIALTY ROAST COLLECTION</span>
+        <span class="sec-pill-line"></span>
+      </div>
         <h2 class="sec-title">Roasted to Peak Flavor Expression</h2>
         <div class="sec-subtitle">Explore our Single Origin Espressos (SOE), heritage espresso blends, and OEM private label options</div>
       </div>
@@ -114,7 +132,7 @@ else :
                 <span class="text-muted small fw-bold">Ethiopia</span>
               </div>
               <div class="text-center my-3 hover-img-zoom">
-                <img src="<?php echo santino_img('imgi_22_Untitleddesign_4.png'); ?>" alt="Ethiopia Yirgacheffe" class="img-fluid" style="max-height: 190px; object-fit: contain;">
+                <img src="<?php echo santino_img('beans-ethiopia-yirgacheffe.jpg'); ?>" alt="Ethiopia Yirgacheffe" class="img-fluid" style="max-height: 190px; object-fit: cover; border-radius: 12px;">
               </div>
               <h4 class="font-heading fw-bold mb-1">Ethiopia Yirgacheffe G1</h4>
               <p class="text-muted small mb-3">Washed process from 1,900m altitude. Bursting with jasmine florals, bergamot citrus, and sweet honey.</p>
@@ -143,11 +161,11 @@ else :
           <div class="bean-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm p-4 d-flex flex-column justify-content-between hover-lift">
             <div>
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="badge bg-danger text-white fw-bold">CHAMPIONSHIP LOT</span>
+                <span class="badge text-white fw-bold" style="background-color: var(--santino-teal);">CHAMPIONSHIP LOT</span>
                 <span class="text-muted small fw-bold">Colombia</span>
               </div>
               <div class="text-center my-3 hover-img-zoom">
-                <img src="<?php echo santino_img('imgi_144_Untitleddesign_4.png'); ?>" alt="Colombia Geisha" class="img-fluid" style="max-height: 190px; object-fit: contain;">
+                <img src="<?php echo santino_img('beans-colombia-geisha.jpg'); ?>" alt="Colombia Geisha" class="img-fluid" style="max-height: 190px; object-fit: cover; border-radius: 12px;">
               </div>
               <h4 class="font-heading fw-bold mb-1">Colombia Huila Geisha Reserve</h4>
               <p class="text-muted small mb-3">Anaerobic slow fermentation. Extraordinary aroma of white peach, lavender blossom, and silky green tea finish.</p>
@@ -176,11 +194,11 @@ else :
           <div class="bean-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm p-4 d-flex flex-column justify-content-between hover-lift">
             <div>
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="badge bg-success text-white fw-bold">100% RAINFOREST ALLIANCE</span>
+                <span class="badge text-white fw-bold" style="background-color: var(--santino-teal);">100% RAINFOREST ALLIANCE</span>
                 <span class="text-muted small fw-bold">House Blend</span>
               </div>
               <div class="text-center my-3 hover-img-zoom">
-                <img src="<?php echo santino_img('imgi_146_Untitleddesign_4.png'); ?>" alt="The Green Label" class="img-fluid" style="max-height: 190px; object-fit: contain;">
+                <img src="<?php echo santino_img('beans-green-label-blend.jpg'); ?>" alt="The Green Label" class="img-fluid" style="max-height: 190px; object-fit: cover; border-radius: 12px;">
               </div>
               <h4 class="font-heading fw-bold mb-1">The Green Label Master Blend</h4>
               <p class="text-muted small mb-3">Our flagship commercial espresso blend. Thick golden crema, notes of Swiss dark chocolate, roasted almond, and sweet brown sugar.</p>
@@ -209,11 +227,11 @@ else :
           <div class="bean-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm p-4 d-flex flex-column justify-content-between hover-lift">
             <div>
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="badge bg-dark text-white fw-bold">INTENSE CREMA</span>
+                <span class="badge text-dark fw-bold" style="background-color: var(--santino-gold);">INTENSE CREMA</span>
                 <span class="text-muted small fw-bold">Crema Master</span>
               </div>
               <div class="text-center my-3 hover-img-zoom">
-                <img src="<?php echo santino_img('imgi_147_Untitleddesign_4.png'); ?>" alt="Crema Master" class="img-fluid" style="max-height: 190px; object-fit: contain;">
+                <img src="<?php echo santino_img('traditional-coffee-9kg_1.jpg'); ?>" alt="Crema Master" class="img-fluid" style="max-height: 190px; object-fit: cover; border-radius: 12px;">
               </div>
               <h4 class="font-heading fw-bold mb-1">Santino Crema Master Roastery Blend</h4>
               <p class="text-muted small mb-3">Specially crafted for milky lattes and cappuccinos. Cuts through whole and plant-based milks with rich caramel and roasted pecan.</p>
@@ -275,11 +293,11 @@ else :
           <div class="bean-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm p-4 d-flex flex-column justify-content-between hover-lift">
             <div>
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="badge bg-dark text-white fw-bold">VOLCANIC TERROIR</span>
+                <span class="badge text-dark fw-bold" style="background-color: var(--santino-gold);">VOLCANIC TERROIR</span>
                 <span class="text-muted small fw-bold">Sumatra</span>
               </div>
               <div class="text-center my-3 hover-img-zoom">
-                <img src="<?php echo santino_img('imgi_22_Untitleddesign_4.png'); ?>" alt="Sumatra Mandheling" class="img-fluid" style="max-height: 190px; object-fit: contain;">
+                <img src="<?php echo santino_img('beans-ethiopia-yirgacheffe.jpg'); ?>" alt="Sumatra Mandheling" class="img-fluid" style="max-height: 190px; object-fit: cover; border-radius: 12px;">
               </div>
               <h4 class="font-heading fw-bold mb-1">Sumatra Mandheling Triple Picked</h4>
               <p class="text-muted small mb-3">Wet-hulled Giling Basah method. Heavy body, spicy cedarwood, dark molasses, and low acidity.</p>
@@ -313,7 +331,11 @@ else :
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-lg-6 reveal-left">
-          <span class="badge-tag-pill mb-3">OEM PRIVATE LABEL</span>
+          <div class="sec-pill-badge-wrap mb-2">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge">OEM PRIVATE LABEL</span>
+        <span class="sec-pill-line"></span>
+      </div>
           <h2 class="font-heading fw-bold mb-3">Custom Roast Profiling for Your Brand</h2>
           <p class="text-muted mb-4">
             Santino crafts bespoke coffee profiles tailored to your brand identity, target demographic, and espresso equipment. From origin selection to custom branded packaging with degassing valves.
@@ -401,6 +423,6 @@ else :
 
   <!-- FOOTER -->
 
-<?php\n<?php
+<?php
 endif;
 get_footer();

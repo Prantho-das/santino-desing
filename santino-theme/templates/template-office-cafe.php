@@ -1,11 +1,5 @@
 <?php
 /**
- * Template Name: Office Cafe & HoReCa Page
- *
- * @package Santino
- */
-
-/**
  * Template Name: Santino Corporate Office & HoReCa Coffee Solutions
  * Template Post Type: page
  *
@@ -14,7 +8,15 @@
 
 get_header();
 
-if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) :
+$is_elementor_page = false;
+if ( class_exists( '\Elementor\Plugin' ) ) {
+    $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
+    if ( $document && $document->is_built_with_elementor() ) {
+        $is_elementor_page = true;
+    }
+}
+
+if ( $is_elementor_page ) :
     while ( have_posts() ) :
         the_post();
         the_content();
@@ -52,7 +54,7 @@ else :
           <i class="bi bi-cup-hot-fill"></i>
         </button>
         <a href="#calculator" class="btn-hero-outline">
-          <i class="bi bi-calculator fs-5 text-gold"></i>
+          <i class="bi bi-calculator text-gold"></i>
           <span>Savings Calculator</span>
         </a>
       </div>
@@ -60,33 +62,41 @@ else :
     </div>
   </section>
 
-  <!-- CLEAN SUBTLE STATS STRIP BELOW HERO -->
-  <section class="py-4 border-bottom bg-white">
+  <!-- Luxury Overlap Floating Metrics Bar -->
+  <div class="story-metrics-floating-wrap">
     <div class="container">
-      <div class="row g-4 text-center justify-content-center">
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-dark font-heading">150+</div>
-          <div class="small text-muted fw-bold text-uppercase">Corporate Offices</div>
+      <div class="row g-3 g-md-4 text-center justify-content-center">
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-building"></i></div>
+            <div class="metric-num">150+</div>
+            <div class="metric-label">Corporate Offices</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-teal font-heading" style="color: var(--santino-teal);">4 Hours</div>
-          <div class="small text-muted fw-bold text-uppercase">Rapid Tech SLA</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-clock-history"></i></div>
+            <div class="metric-num">4 Hours</div>
+            <div class="metric-label">Rapid Tech SLA</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-dark font-heading">Zero</div>
-          <div class="small text-muted fw-bold text-uppercase">Machine Capex</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-cash-coin"></i></div>
+            <div class="metric-num">Zero</div>
+            <div class="metric-label">Machine Capex</div>
+          </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="fs-2 fw-black text-gold font-heading" style="color: var(--santino-gold);">100%</div>
-          <div class="small text-muted fw-bold text-uppercase">Managed Service</div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-shield-check"></i></div>
+            <div class="metric-num">100%</div>
+            <div class="metric-label">Managed Service</div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
-
-      </div>
-    </div>
-  </section>
+  </div>
 
   <!-- 2. TRUSTED BY INDUSTRY LEADERS MARQUEE -->
   <section class="py-4 border-bottom bg-light reveal">
@@ -94,12 +104,12 @@ else :
       <p class="text-uppercase small fw-bold text-muted mb-3" style="letter-spacing: 2px;">
         Trusted by 150+ Leading Multinational HQs, Banks, Embassies & Coworking Hubs Across Bangladesh
       </p>
-      <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 gap-md-5 text-secondary opacity-75 fs-6 fw-bold">
-        <span><i class="bi bi-building me-2 text-teal"></i> MULTINATIONAL TECH HUBS</span>
-        <span><i class="bi bi-bank me-2 text-teal"></i> INVESTMENT BANKS</span>
-        <span><i class="bi bi-briefcase me-2 text-teal"></i> EMBASSIES & DIPLOMATIC MISSIONS</span>
-        <span><i class="bi bi-hospital me-2 text-teal"></i> 5-STAR HOTELS & RESORTS</span>
-        <span><i class="bi bi-laptop me-2 text-teal"></i> LUXURY COWORKING NETWORKS</span>
+      <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3">
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm"><i class="bi bi-building me-2 text-teal" style="color: var(--santino-teal);"></i> MULTINATIONAL TECH HUBS</span>
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm"><i class="bi bi-bank me-2 text-teal" style="color: var(--santino-teal);"></i> INVESTMENT BANKS</span>
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm"><i class="bi bi-briefcase me-2 text-teal" style="color: var(--santino-teal);"></i> EMBASSIES & DIPLOMATIC MISSIONS</span>
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm"><i class="bi bi-hospital me-2 text-teal" style="color: var(--santino-teal);"></i> 5-STAR HOTELS & RESORTS</span>
+        <span class="badge bg-white text-dark border px-3 py-2 fs-7 fw-bold shadow-sm"><i class="bi bi-laptop me-2 text-teal" style="color: var(--santino-teal);"></i> LUXURY COWORKING NETWORKS</span>
       </div>
     </div>
   </section>
@@ -110,8 +120,8 @@ else :
       
       <div class="text-center max-w-700 mx-auto mb-5 reveal">
         <span class="corp-badge-pill mb-2"><i class="bi bi-star-fill text-gold me-1"></i> THE SANTINO ADVANTAGE</span>
-        <h2 class="display-6 font-heading fw-black text-dark mb-2">Why Leading Companies Partner With Santino</h2>
-        <p class="text-muted">A full-spectrum coffee infrastructure built around your workflow, company scale, and daily cup volume.</p>
+        <h2 class="sec-title mb-2">Why Leading Companies Partner With Santino</h2>
+        <p class="text-muted mb-0" style="font-size: 0.98rem; max-width: 580px; line-height: 1.5; margin: 0 auto;">A full-spectrum coffee infrastructure built around your workflow, company scale, and daily cup volume.</p>
       </div>
 
       <!-- 7 Pillars Grid -->
@@ -207,7 +217,11 @@ else :
         <div class="row align-items-center g-5">
           
           <div class="col-lg-6">
-            <span class="badge-tag-pill mb-3"><i class="bi bi-calculator me-1"></i> WORKPLACE ROI ESTIMATOR</span>
+            <div class="sec-pill-badge-wrap mb-2">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge"><i class="bi bi-calculator me-1"></i> WORKPLACE ROI ESTIMATOR</span>
+        <span class="sec-pill-line"></span>
+      </div>
             <h2 class="display-6 font-heading fw-bold text-dark mb-3">Calculate Your Monthly Workplace Coffee Savings</h2>
             <p class="text-muted mb-4" style="font-size: 0.98rem; line-height: 1.6;">
               Compare the true cost of employee takeaway cafe runs and single-use capsules with Santino’s fully managed bean-to-cup office solution.
@@ -282,8 +296,8 @@ else :
       
       <div class="text-center max-w-700 mx-auto mb-5 reveal">
         <span class="corp-badge-pill mb-2"><i class="bi bi-arrow-left-right text-gold me-1"></i> HEAD-TO-HEAD</span>
-        <h2 class="display-6 font-heading fw-black text-dark mb-2">Santino Managed Office vs Traditional Solutions</h2>
-        <p class="text-muted">Why modern organizations are retiring single-use capsules and powdered vending machines.</p>
+        <h2 class="sec-title mb-2">Santino Managed Office vs Traditional Solutions</h2>
+        <p class="text-muted mb-0" style="font-size: 0.98rem; max-width: 580px; line-height: 1.5; margin: 0 auto;">Why modern organizations are retiring single-use capsules and powdered vending machines.</p>
       </div>
 
       <div class="table-responsive reveal">
@@ -346,8 +360,8 @@ else :
       
       <div class="text-center max-w-700 mx-auto mb-5 reveal">
         <span class="corp-badge-pill mb-2"><i class="bi bi-layers text-gold me-1"></i> CORPORATE PLANS</span>
-        <h2 class="display-6 font-heading fw-black text-dark mb-2">Tailored Office Coffee Programs</h2>
-        <p class="text-muted">Flexible monthly rental or bean-commitment packages designed for companies of every scale.</p>
+        <h2 class="sec-title mb-2">Tailored Office Coffee Programs</h2>
+        <p class="text-muted mb-0" style="font-size: 0.98rem; max-width: 580px; line-height: 1.5; margin: 0 auto;">Flexible monthly rental or bean-commitment packages designed for companies of every scale.</p>
       </div>
 
       <div class="row g-4 align-items-stretch">
@@ -373,7 +387,7 @@ else :
               </ul>
             </div>
 
-            <button class="btn btn-outline-dark w-100 py-3 fw-bold rounded-3 font-heading" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
+            <button class="btn-hero-outline w-100 py-3 text-center text-dark border-dark" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
               Book Boutique Trial
             </button>
           </div>
@@ -401,7 +415,7 @@ else :
               </ul>
             </div>
 
-            <button class="btn btn-dark w-100 py-3 fw-bold rounded-3 text-white font-heading shadow-md hover-glow" style="background: var(--santino-teal); border: none;" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
+            <button class="btn-hero-lifestyle w-100 py-3 text-center" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
               Book 7-Day Free Trial →
             </button>
           </div>
@@ -428,7 +442,7 @@ else :
               </ul>
             </div>
 
-            <button class="btn btn-outline-dark w-100 py-3 fw-bold rounded-3 font-heading" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
+            <button class="btn-hero-outline w-100 py-3 text-center text-dark border-dark" data-bs-toggle="modal" data-bs-target="#corporateQuoteModal">
               Consult Enterprise Team
             </button>
           </div>
@@ -545,6 +559,6 @@ else :
 
   <!-- FOOTER -->
 
-<?php\n<?php
+<?php
 endif;
 get_footer();

@@ -156,6 +156,7 @@ class Santino_Membership_System {
         $member_id    = get_post_meta( $post->ID, '_santino_member_id', true );
         $phone        = get_post_meta( $post->ID, '_santino_member_phone', true );
         $email        = get_post_meta( $post->ID, '_santino_member_email', true );
+        $address      = get_post_meta( $post->ID, '_santino_member_address', true );
         $tier         = get_post_meta( $post->ID, '_santino_member_tier', true ) ?: 'gold';
         $stamps       = intval( get_post_meta( $post->ID, '_santino_cup_stamps', true ) ?: 0 );
         $total_free   = intval( get_post_meta( $post->ID, '_santino_total_free_coffees', true ) ?: 0 );
@@ -201,6 +202,10 @@ class Santino_Membership_System {
             <tr>
                 <th><label><?php _e( 'Email', 'santino' ); ?></label></th>
                 <td><input type="email" name="santino_member_email" value="<?php echo esc_attr( $email ); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label><?php _e( 'Address', 'santino' ); ?></label></th>
+                <td><textarea name="santino_member_address" class="large-text" rows="2"><?php echo esc_textarea( $address ); ?></textarea></td>
             </tr>
             <tr>
                 <th><label><?php _e( 'Current Cup Stamps (0 - 5)', 'santino' ); ?></label></th>
@@ -299,6 +304,9 @@ class Santino_Membership_System {
             if ( isset( $_POST['santino_member_email'] ) ) {
                 update_post_meta( $post_id, '_santino_member_email', sanitize_email( $_POST['santino_member_email'] ) );
             }
+            if ( isset( $_POST['santino_member_address'] ) ) {
+                update_post_meta( $post_id, '_santino_member_address', sanitize_textarea_field( $_POST['santino_member_address'] ) );
+            }
             if ( isset( $_POST['santino_cup_stamps'] ) ) {
                 update_post_meta( $post_id, '_santino_cup_stamps', intval( $_POST['santino_cup_stamps'] ) );
             }
@@ -330,6 +338,7 @@ class Santino_Membership_System {
             'title'         => __( 'Member Name', 'santino' ),
             'member_id'     => __( 'VIP ID', 'santino' ),
             'phone'         => __( 'Phone', 'santino' ),
+            'address'       => __( 'Address', 'santino' ),
             'stamp_card'    => __( 'Coffee Stamp Card (5 Cups)', 'santino' ),
             'free_coffees'  => __( 'Free Cups Won', 'santino' ),
             'date'          => __( 'Joined', 'santino' ),
@@ -343,6 +352,9 @@ class Santino_Membership_System {
                 break;
             case 'phone':
                 echo esc_html( get_post_meta( $post_id, '_santino_member_phone', true ) ?: '—' );
+                break;
+            case 'address':
+                echo esc_html( get_post_meta( $post_id, '_santino_member_address', true ) ?: '—' );
                 break;
             case 'stamp_card':
                 $stamps = intval( get_post_meta( $post_id, '_santino_cup_stamps', true ) ?: 0 );
@@ -555,10 +567,17 @@ class Santino_Membership_System {
         $full_name = sanitize_text_field( $_POST['fullname'] ?? '' );
         $email     = sanitize_email( $_POST['email'] ?? '' );
         $phone     = sanitize_text_field( $_POST['phone'] ?? '' );
+        $address   = sanitize_textarea_field( $_POST['address'] ?? '' );
         $tier      = sanitize_text_field( $_POST['tier'] ?? 'gold' );
 
         if ( empty( $full_name ) || empty( $phone ) ) {
             wp_send_json_error( array( 'message' => __( 'Please fill in Name and Phone Number.', 'santino' ) ) );
+        }
+
+        // Phone validation (BD format)
+        $clean_phone_check = preg_replace( '/[\s-]/', '', $phone );
+        if ( ! preg_match( '/^(?:\+?880|0)?1[3-9]\d{8}$/', $clean_phone_check ) ) {
+            wp_send_json_error( array( 'message' => __( 'Invalid phone number format. Please enter a valid 11-digit number (e.g. 017XXXXXXXX or +88017XXXXXXXX).', 'santino' ) ) );
         }
 
         // Check if phone already registered
@@ -590,6 +609,7 @@ class Santino_Membership_System {
         update_post_meta( $post_id, '_santino_member_tier', $tier );
         update_post_meta( $post_id, '_santino_member_phone', $phone );
         update_post_meta( $post_id, '_santino_member_email', $email );
+        update_post_meta( $post_id, '_santino_member_address', $address );
         update_post_meta( $post_id, '_santino_cup_stamps', 0 );
         update_post_meta( $post_id, '_santino_total_approved_cups', 0 );
         update_post_meta( $post_id, '_santino_total_free_coffees', 0 );

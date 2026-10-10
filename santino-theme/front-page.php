@@ -8,7 +8,15 @@
 
 get_header();
 
-if ( class_exists( '\Elementor\Plugin' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) :
+$is_elementor_page = false;
+if ( class_exists( '\Elementor\Plugin' ) ) {
+    $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
+    if ( $document && $document->is_built_with_elementor() ) {
+        $is_elementor_page = true;
+    }
+}
+
+if ( $is_elementor_page ) :
     while ( have_posts() ) :
         the_post();
         the_content();
@@ -845,10 +853,10 @@ else :
             <div class="solution-card-content">
               <h3 class="solution-card-title">HORECA</h3>
               <ul class="solution-card-links">
-                <li><a href="<?php echo esc_url( home_url("/office-cafe/") ); ?>" class="text-white text-decoration-none">Hotels, Fine Dining & Cafes <i class="bi bi-arrow-right"></i></a></li>
+                <li><a href="<?php echo esc_url( home_url("/horeca/") ); ?>" class="text-white text-decoration-none">Hotels, Fine Dining & Cafes <i class="bi bi-arrow-right"></i></a></li>
                 <li><a href="<?php echo esc_url( home_url("/machines/") ); ?>" class="text-white text-decoration-none">Commercial Espresso Machines <i class="bi bi-arrow-right"></i></a></li>
               </ul>
-              <a href="<?php echo esc_url( home_url("/office-cafe/") ); ?>" class="btn-card-knowmore text-decoration-none text-center">EXPLORE HORECA →</a>
+              <a href="<?php echo esc_url( home_url("/horeca/") ); ?>" class="btn-card-knowmore text-decoration-none text-center">EXPLORE HORECA →</a>
             </div>
           </div>
         </div>
