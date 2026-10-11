@@ -15,7 +15,7 @@
 get_header();
 
 $is_elementor_page = false;
-if ( class_exists( '\Elementor\Plugin' ) ) {
+if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
     $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
     if ( $document && $document->is_built_with_elementor() ) {
         $is_elementor_page = true;

@@ -168,7 +168,13 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
             $args = array(
                 'post_type'      => 'product',
                 'posts_per_page' => 6,
-                's'              => 'Coffee',
+                'tax_query'      => array(
+                    array(
+                        'taxonomy' => 'product_cat',
+                        'field'    => 'slug',
+                        'terms'    => array( 'specialty-roastery-beans' ),
+                    ),
+                ),
             );
             $query = new \WP_Query( $args );
             if ( $query->have_posts() ) {
@@ -214,6 +220,28 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
                             </div>
                         <?php endforeach;
                         wp_reset_postdata();
+                        
+                        $remaining = 6 - count( $dynamic_products );
+                        if ( $remaining > 0 && ! empty( $settings['beans_list'] ) ) :
+                            $slice = array_slice( $settings['beans_list'], 0, $remaining );
+                            foreach ( $slice as $item ) : ?>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="card h-100 border-0 rounded-4 shadow-sm p-4 bg-white hover-lift transition-all">
+                                        <div class="text-center mb-3">
+                                            <img src="<?php echo esc_url( $item['bean_image']['url'] ); ?>" alt="<?php echo esc_attr( $item['bean_name'] ); ?>" class="img-fluid" style="height: 200px; object-fit: contain;">
+                                        </div>
+                                        <h4 class="h5 fw-bold font-heading mb-1"><?php echo esc_html( $item['bean_name'] ); ?></h4>
+                                        <div class="badge bg-secondary mb-2"><?php echo esc_html( $item['roast_level'] ); ?></div>
+                                        <p class="small text-muted mb-2"><i class="bi bi-geo-alt text-danger me-1"></i> <?php echo esc_html( $item['origin'] ); ?></p>
+                                        <p class="small text-muted mb-3"><i class="bi bi-droplet-fill text-warning me-1"></i> <strong>Notes:</strong> <?php echo esc_html( $item['tasting_notes'] ); ?></p>
+                                        <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                                            <span class="fw-bold text-dark fs-5"><?php echo esc_html( $item['price'] ); ?></span>
+                                            <a href="<?php echo esc_url( home_url( '/beans' ) ); ?>" class="btn btn-dark btn-sm rounded-pill px-3" style="background-color: var(--santino-teal); border: none;">Order Fresh</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach;
+                        endif;
                     else :
                         foreach ( $settings['beans_list'] as $item ) : ?>
                             <div class="col-md-6 col-lg-4">
