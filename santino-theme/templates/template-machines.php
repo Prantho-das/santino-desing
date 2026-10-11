@@ -371,24 +371,25 @@ else :
           <div class="p-4 p-md-5 rounded-4 bg-white border shadow-xl hover-lift">
             <h4 class="font-heading fw-bold mb-2">Request Equipment Quotation</h4>
             <p class="text-muted small mb-4">Tell us about your business scale and daily cup requirements.</p>
-            <form onsubmit="alert('Thank you! Our commercial machinery team will send your custom quote and arrange a demo.'); return false;">
+            <form class="santino-inquiry-form">
+              <input type="hidden" name="inquiry_type" value="machine_quote">
               <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Company / Cafe Name *" required>
+                <input type="text" name="company" class="form-control" placeholder="Company / Cafe Name *" required>
               </div>
               <div class="row g-2 mb-3">
                 <div class="col-6">
-                  <input type="text" class="form-control" placeholder="Contact Person *" required>
+                  <input type="text" name="name" class="form-control" placeholder="Contact Person *" required>
                 </div>
                 <div class="col-6">
-                  <input type="tel" class="form-control" placeholder="Phone Number *" required>
+                  <input type="tel" name="phone" class="form-control" placeholder="Phone Number *" required>
                 </div>
               </div>
               <div class="mb-3">
-                <select class="form-select">
-                  <option>Purchase Outright</option>
-                  <option>Monthly Machine Rental / Lease</option>
-                  <option>Turnkey Coffee + Machine Package</option>
-                  <option>Annual Maintenance Contract</option>
+                <select name="service" class="form-select">
+                  <option value="Purchase Outright">Purchase Outright</option>
+                  <option value="Monthly Machine Rental / Lease">Monthly Machine Rental / Lease</option>
+                  <option value="Turnkey Coffee + Machine Package">Turnkey Coffee + Machine Package</option>
+                  <option value="Annual Maintenance Contract">Annual Maintenance Contract</option>
                 </select>
               </div>
               <button type="submit" class="btn-prod-quote w-100 py-3" style="background-color: var(--santino-teal); border: none;">
@@ -412,30 +413,31 @@ else :
         </div>
         <div class="modal-body">
           <p class="text-muted small mb-4">Visit our Tejgaon Roastery Lab or Gulshan Experience Center to test Victoria Arduino espresso machines and CAYE bionic robots hands-on.</p>
-          <form onsubmit="alert('Demo Booked! Our team will contact you to confirm your showroom session.'); return false;">
+          <form class="santino-inquiry-form">
+            <input type="hidden" name="inquiry_type" value="machine_demo">
             <div class="mb-3">
               <label class="form-label small fw-bold">Full Name *</label>
-              <input type="text" class="form-control" required>
+              <input type="text" name="name" class="form-control" required>
             </div>
             <div class="mb-3">
               <label class="form-label small fw-bold">Phone Number *</label>
-              <input type="tel" class="form-control" required>
+              <input type="tel" name="phone" class="form-control" required>
             </div>
             <div class="mb-3">
               <label class="form-label small fw-bold">Machine of Interest</label>
-              <select class="form-select">
-                <option>Victoria Arduino Black Eagle Maverick</option>
-                <option>Victoria Arduino Eagle One</option>
-                <option>Nuova Simonelli Appia Life</option>
-                <option>Kalerm Superautomatic Series</option>
-                <option>CAYE Bionic Barista Robot</option>
+              <select name="service" class="form-select">
+                <option value="Victoria Arduino Black Eagle Maverick">Victoria Arduino Black Eagle Maverick</option>
+                <option value="Victoria Arduino Eagle One">Victoria Arduino Eagle One</option>
+                <option value="Nuova Simonelli Appia Life">Nuova Simonelli Appia Life</option>
+                <option value="Kalerm Superautomatic Series">Kalerm Superautomatic Series</option>
+                <option value="CAYE Bionic Barista Robot">CAYE Bionic Barista Robot</option>
               </select>
             </div>
             <div class="mb-3">
               <label class="form-label small fw-bold">Preferred Showroom Location</label>
-              <select class="form-select">
-                <option>Tejgaon Roastery & Technical Lab</option>
-                <option>Gulshan-2 Flagship Experience Center</option>
+              <select name="location" class="form-select">
+                <option value="Tejgaon Roastery & Technical Lab">Tejgaon Roastery &amp; Technical Lab</option>
+                <option value="Gulshan-2 Flagship Experience Center">Gulshan-2 Flagship Experience Center</option>
               </select>
             </div>
             <button type="submit" class="btn-kp-maroon w-100 py-3 fw-bold">

@@ -508,20 +508,21 @@ h1, h2, h3, h4, h5, h6,
             Share your venue requirements below. A dedicated hospitality coffee consultant will contact you within 2 business hours.
           </p>
 
-          <form onsubmit="alert('Thank you! Our commercial HoReCa team will reach out to you within 2 business hours.'); return false;">
+          <form class="santino-inquiry-form">
+            <input type="hidden" name="inquiry_type" value="horeca_quote">
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Venue / Business Name *</label>
-                <input type="text" class="form-control rounded-pill px-3 py-2 border-1" placeholder="e.g. Grand Sultan Resort / Cafe Bistro" required style="border-color: #d5e5e0;">
+                <input type="text" name="company" class="form-control rounded-pill px-3 py-2 border-1" placeholder="e.g. Grand Sultan Resort / Cafe Bistro" required style="border-color: #d5e5e0;">
               </div>
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Property Type *</label>
-                <select class="form-select rounded-pill px-3 py-2 border-1" style="border-color: #d5e5e0;">
-                  <option selected>5-Star Hotel / Resort</option>
-                  <option>Specialty Cafe / Chain</option>
-                  <option>Fine Dining Restaurant</option>
-                  <option>Catering &amp; Banquet Facility</option>
-                  <option>Cloud Kitchen &amp; Quick Service</option>
+                <select name="location" class="form-select rounded-pill px-3 py-2 border-1" style="border-color: #d5e5e0;">
+                  <option value="5-Star Hotel / Resort" selected>5-Star Hotel / Resort</option>
+                  <option value="Specialty Cafe / Chain">Specialty Cafe / Chain</option>
+                  <option value="Fine Dining Restaurant">Fine Dining Restaurant</option>
+                  <option value="Catering & Banquet Facility">Catering &amp; Banquet Facility</option>
+                  <option value="Cloud Kitchen & Quick Service">Cloud Kitchen &amp; Quick Service</option>
                 </select>
               </div>
             </div>
@@ -529,27 +530,27 @@ h1, h2, h3, h4, h5, h6,
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Contact Person Name *</label>
-                <input type="text" class="form-control rounded-pill px-3 py-2 border-1" placeholder="General Manager / F&amp;B Director" required style="border-color: #d5e5e0;">
+                <input type="text" name="name" class="form-control rounded-pill px-3 py-2 border-1" placeholder="General Manager / F&amp;B Director" required style="border-color: #d5e5e0;">
               </div>
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Phone Number / WhatsApp *</label>
-                <input type="tel" class="form-control rounded-pill px-3 py-2 border-1" placeholder="+880 1711-000000" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" required style="border-color: #d5e5e0;">
+                <input type="tel" name="phone" class="form-control rounded-pill px-3 py-2 border-1" placeholder="+880 1711-000000" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" required style="border-color: #d5e5e0;">
               </div>
             </div>
 
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Official Work Email *</label>
-                <input type="email" class="form-control rounded-pill px-3 py-2 border-1" placeholder="fb@hotel.com" required style="border-color: #d5e5e0;">
+                <input type="email" name="email" class="form-control rounded-pill px-3 py-2 border-1" placeholder="fb@hotel.com" required style="border-color: #d5e5e0;">
               </div>
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Primary Requirement</label>
-                <select class="form-select rounded-pill px-3 py-2 border-1" style="border-color: #d5e5e0;">
-                  <option>Turnkey Commercial Machine Leasing</option>
-                  <option>Wholesale Specialty Roasted Beans (OEM)</option>
-                  <option>Barista &amp; Staff Training Academy</option>
-                  <option>24/7 Machine Maintenance AMC</option>
-                  <option>Complete Coffee Corner Setup</option>
+                <select name="service" class="form-select rounded-pill px-3 py-2 border-1" style="border-color: #d5e5e0;">
+                  <option value="Turnkey Commercial Machine Leasing">Turnkey Commercial Machine Leasing</option>
+                  <option value="Wholesale Specialty Roasted Beans (OEM)">Wholesale Specialty Roasted Beans (OEM)</option>
+                  <option value="Barista & Staff Training Academy">Barista &amp; Staff Training Academy</option>
+                  <option value="24/7 Machine Maintenance AMC">24/7 Machine Maintenance AMC</option>
+                  <option value="Complete Coffee Corner Setup">Complete Coffee Corner Setup</option>
                 </select>
               </div>
             </div>

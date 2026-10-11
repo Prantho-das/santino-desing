@@ -1654,7 +1654,8 @@ else :
             <h3 class="club-form-title">Become a Santino Club Member</h3>
             <p class="club-form-subtitle">Get exclusive access, special pricing, and premium support — all in one place.</p>
 
-            <form onsubmit="alert('Thank you! Your Santino Coffee Club Membership has been registered successfully. A digital pass will be sent to your email.'); return false;">
+            <form class="santino-inquiry-form">
+              <input type="hidden" name="inquiry_type" value="home_club_registration">
               
               <div class="row g-3">
                 

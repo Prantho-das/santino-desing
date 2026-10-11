@@ -879,26 +879,27 @@ h1, h2, h3, h4, h5, h6,
         </div>
         <div class="modal-body">
           <p class="text-muted small mb-4">Leave your details and our commercial coffee specialist will contact you promptly.</p>
-          <form onsubmit="alert('Thank you! Our coffee team will reach out to you shortly.'); return false;">
+          <form class="santino-inquiry-form">
+            <input type="hidden" name="inquiry_type" value="our_story_inquiry">
             <div class="mb-3">
               <label class="form-label small fw-bold">Full Name *</label>
-              <input type="text" class="form-control rounded-pill px-3 py-2 border-1" placeholder="Tanvir Ahmed" required style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); border-color: #d5e5e0;">
+              <input type="text" name="name" class="form-control rounded-pill px-3 py-2 border-1" placeholder="Tanvir Ahmed" required style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); border-color: #d5e5e0;">
             </div>
             <div class="mb-3">
               <label class="form-label small fw-bold">Phone Number *</label>
-              <input type="tel" class="form-control rounded-pill px-3 py-2 border-1" placeholder="+880 1711-000000" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" required style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); border-color: #d5e5e0;">
+              <input type="tel" name="phone" class="form-control rounded-pill px-3 py-2 border-1" placeholder="+880 1711-000000" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" required style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); border-color: #d5e5e0;">
             </div>
             <div class="mb-3">
               <label class="form-label small fw-bold">Email Address *</label>
-              <input type="email" class="form-control rounded-pill px-3 py-2 border-1" placeholder="tanvir@example.com" required style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); border-color: #d5e5e0;">
+              <input type="email" name="email" class="form-control rounded-pill px-3 py-2 border-1" placeholder="tanvir@example.com" required style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); border-color: #d5e5e0;">
             </div>
             <div class="mb-4">
               <label class="form-label small fw-bold">Interested In</label>
-              <select class="form-select rounded-pill px-3 py-2 border-1" style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); border-color: #d5e5e0;">
-                <option>Commercial Espresso Machinery</option>
-                <option>Wholesale Coffee Beans (Rainforest Alliance)</option>
-                <option>Barista Academy &amp; Staff Training</option>
-                <option>Cafe Franchise &amp; VIP Membership</option>
+              <select name="service" class="form-select rounded-pill px-3 py-2 border-1" style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); border-color: #d5e5e0;">
+                <option value="Commercial Espresso Machinery">Commercial Espresso Machinery</option>
+                <option value="Wholesale Coffee Beans (Rainforest Alliance)">Wholesale Coffee Beans (Rainforest Alliance)</option>
+                <option value="Barista Academy & Staff Training">Barista Academy &amp; Staff Training</option>
+                <option value="Cafe Franchise & VIP Membership">Cafe Franchise &amp; VIP Membership</option>
               </select>
             </div>
             <button type="submit" class="btn-hero-lifestyle w-100 py-3 font-heading fw-bold text-uppercase">
