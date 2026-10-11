@@ -313,40 +313,41 @@ else :
         </div>
         <div class="modal-body pt-3">
           <p class="text-muted small mb-4">Fill out the form below to connect with our academy instructors and receive detailed course syllabus information.</p>
-          <form onsubmit="alert('Thank you! Our academy coordinator will contact you shortly with batch schedule details.'); return false;">
+          <form class="santino-inquiry-form">
+            <input type="hidden" name="type" value="training">
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Full Name *</label>
-                <input type="text" class="form-control form-control-lg rounded-3 fs-6" placeholder="Your Name" required>
+                <input type="text" name="name" class="form-control form-control-lg rounded-3 fs-6" placeholder="Your Name" required>
               </div>
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Phone Number / WhatsApp *</label>
-                <input type="tel" class="form-control form-control-lg rounded-3 fs-6" placeholder="+880 1..." required>
+                <input type="tel" name="phone" class="form-control form-control-lg rounded-3 fs-6" placeholder="+880 1..." required>
               </div>
             </div>
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Email Address *</label>
-                <input type="email" class="form-control form-control-lg rounded-3 fs-6" placeholder="name@email.com" required>
+                <input type="email" name="email" class="form-control form-control-lg rounded-3 fs-6" placeholder="name@email.com" required>
               </div>
               <div class="col-md-6">
                 <label class="form-label small fw-bold">I Am Inquiring As</label>
-                <select class="form-select form-select-lg rounded-3 fs-6">
-                  <option>Individual Aspiring Barista</option>
-                  <option>Cafe Owner / Entrepreneur</option>
-                  <option>Hotel / Restaurant / Corporate Team</option>
-                  <option>Coffee Enthusiast / Home Brewer</option>
+                <select name="details" class="form-select form-select-lg rounded-3 fs-6">
+                  <option value="Individual Aspiring Barista">Individual Aspiring Barista</option>
+                  <option value="Cafe Owner / Entrepreneur">Cafe Owner / Entrepreneur</option>
+                  <option value="Hotel / Restaurant / Corporate Team">Hotel / Restaurant / Corporate Team</option>
+                  <option value="Coffee Enthusiast / Home Brewer">Coffee Enthusiast / Home Brewer</option>
                 </select>
               </div>
             </div>
             <div class="mb-4">
               <label class="form-label small fw-bold">Preferred Training Focus</label>
-              <select class="form-select form-select-lg rounded-3 fs-6">
-                <option>Foundation Barista & Espresso Extraction</option>
-                <option>Advanced Latte Art & Milk Steaming</option>
-                <option>Sensory Cupping & Manual Brewing (SCA)</option>
-                <option>Competition Coaching (WBC / WBrC)</option>
-                <option>Custom Corporate / Hospitality Team Training</option>
+              <select name="details_extra" class="form-select form-select-lg rounded-3 fs-6">
+                <option value="Foundation Barista & Espresso Extraction">Foundation Barista & Espresso Extraction</option>
+                <option value="Advanced Latte Art & Milk Steaming">Advanced Latte Art & Milk Steaming</option>
+                <option value="Sensory Cupping & Manual Brewing (SCA)">Sensory Cupping & Manual Brewing (SCA)</option>
+                <option value="Competition Coaching (WBC / WBrC)">Competition Coaching (WBC / WBrC)</option>
+                <option value="Custom Corporate / Hospitality Team Training">Custom Corporate / Hospitality Team Training</option>
               </select>
             </div>
             <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-3 text-white font-heading text-uppercase shadow-lg" style="background: var(--santino-teal); border: none; font-size: 15px;">

@@ -350,23 +350,24 @@ else :
           <div class="p-4 p-md-5 rounded-4 bg-white border shadow-xl hover-lift">
             <h4 class="font-heading fw-bold mb-2">Request OEM Tasting Flight</h4>
             <p class="text-muted small mb-4">Leave your details to receive sample batches roasted specifically for your cafe.</p>
-            <form onsubmit="alert('Thank you! Our master roaster will prepare your sample tasting kit.'); return false;">
+            <form class="santino-inquiry-form">
+              <input type="hidden" name="inquiry_type" value="beans_oem_flight">
               <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Business Name (Cafe / Hotel) *" required>
+                <input type="text" name="company" class="form-control" placeholder="Business Name (Cafe / Hotel) *" required>
               </div>
               <div class="row g-2 mb-3">
                 <div class="col-6">
-                  <input type="text" class="form-control" placeholder="Contact Name *" required>
+                  <input type="text" name="name" class="form-control" placeholder="Contact Name *" required>
                 </div>
                 <div class="col-6">
-                  <input type="tel" class="form-control" placeholder="Phone Number *" required>
+                  <input type="tel" name="phone" class="form-control" placeholder="Phone Number *" required>
                 </div>
               </div>
               <div class="mb-3">
-                <select class="form-select">
-                  <option>Estimated Monthly Volume: 20kg - 50kg</option>
-                  <option>Estimated Monthly Volume: 50kg - 200kg</option>
-                  <option>Estimated Monthly Volume: 200kg+ (Hotel / Chain)</option>
+                <select name="message" class="form-select">
+                  <option value="Estimated Monthly Volume: 20kg - 50kg">Estimated Monthly Volume: 20kg - 50kg</option>
+                  <option value="Estimated Monthly Volume: 50kg - 200kg">Estimated Monthly Volume: 50kg - 200kg</option>
+                  <option value="Estimated Monthly Volume: 200kg+ (Hotel / Chain)">Estimated Monthly Volume: 200kg+ (Hotel / Chain)</option>
                 </select>
               </div>
               <button type="submit" class="btn-prod-quote w-100 py-3" style="background-color: var(--santino-teal); border: none;">
@@ -390,26 +391,27 @@ else :
         </div>
         <div class="modal-body">
           <p class="text-muted small mb-4">We provide complimentary sample bean packs for registered cafes, restaurants, and hospitality businesses.</p>
-          <form onsubmit="alert('Sample request received! We will deliver fresh roast samples to your address.'); return false;">
+          <form class="santino-inquiry-form">
+            <input type="hidden" name="inquiry_type" value="beans_sample">
             <div class="mb-3">
               <label class="form-label small fw-bold">Full Name *</label>
-              <input type="text" class="form-control" required>
+              <input type="text" name="name" class="form-control" required>
             </div>
             <div class="mb-3">
               <label class="form-label small fw-bold">Phone Number *</label>
-              <input type="tel" class="form-control" required>
+              <input type="tel" name="phone" class="form-control" required>
             </div>
             <div class="mb-3">
               <label class="form-label small fw-bold">Delivery Address for Samples *</label>
-              <textarea class="form-control" rows="2" placeholder="Street, Area, City" required></textarea>
+              <textarea name="message" class="form-control" rows="2" placeholder="Street, Area, City" required></textarea>
             </div>
             <div class="mb-3">
               <label class="form-label small fw-bold">Preferred Roast Profile</label>
-              <select class="form-select">
-                <option>The Green Label Master Espresso Blend</option>
-                <option>Ethiopia Yirgacheffe G1 (Single Origin)</option>
-                <option>Colombia Huila Geisha Reserve</option>
-                <option>Complete 3-Roast Sample Flight</option>
+              <select name="company" class="form-select">
+                <option value="The Green Label Master Espresso Blend">The Green Label Master Espresso Blend</option>
+                <option value="Ethiopia Yirgacheffe G1 (Single Origin)">Ethiopia Yirgacheffe G1 (Single Origin)</option>
+                <option value="Colombia Huila Geisha Reserve">Colombia Huila Geisha Reserve</option>
+                <option value="Complete 3-Roast Sample Flight">Complete 3-Roast Sample Flight</option>
               </select>
             </div>
             <button type="submit" class="btn-kp-maroon w-100 py-3 fw-bold">

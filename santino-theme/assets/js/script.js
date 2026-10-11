@@ -562,3 +562,97 @@ window.filterShwapnoOutlets = function() {
     }
   });
 };
+
+document.addEventListener('submit', function(e) {
+  var form = e.target.closest('.santino-inquiry-form');
+  if (!form) return;
+
+  e.preventDefault();
+  var submitBtn = form.querySelector('button[type="submit"]');
+  var originalText = submitBtn ? submitBtn.innerHTML : 'Submit';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
+  }
+
+  var formData = new FormData(form);
+  formData.append('action', 'santino_submit_inquiry');
+  if (window.santino_ajax && window.santino_ajax.nonce) {
+    formData.append('nonce', window.santino_ajax.nonce);
+  }
+
+  fetch(window.santino_ajax ? window.santino_ajax.ajax_url : '/wp-admin/admin-ajax.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(res) {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+    }
+    if (res.success) {
+      alert(res.data.message);
+      form.reset();
+      var modalEl = form.closest('.modal');
+      if (modalEl && window.bootstrap && window.bootstrap.Modal) {
+        var modal = window.bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+      }
+    } else {
+      alert(res.data && res.data.message ? res.data.message : 'Submission failed. Please check inputs.');
+    }
+  })
+  .catch(function(err) {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+    }
+    alert('Network error. Please try again or call us directly.');
+  });
+});
+
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.santino-add-to-cart-btn');
+  if (!btn) return;
+
+  e.preventDefault();
+  var productId = btn.getAttribute('data-product-id');
+  if (!productId) return;
+
+  var originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+  var formData = new FormData();
+  formData.append('action', 'santino_ajax_add_to_cart');
+  formData.append('product_id', productId);
+  formData.append('quantity', 1);
+  if (window.santino_ajax && window.santino_ajax.nonce) {
+    formData.append('nonce', window.santino_ajax.nonce);
+  }
+
+  fetch(window.santino_ajax ? window.santino_ajax.ajax_url : '/wp-admin/admin-ajax.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(res) {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+    if (res.success) {
+      var badge = document.querySelector('.header-cart-count');
+      if (badge && res.data.cart_count !== undefined) {
+        badge.innerText = res.data.cart_count;
+      }
+      alert('Added to cart successfully!');
+    } else {
+      alert(res.data && res.data.message ? res.data.message : 'Could not add to cart.');
+    }
+  })
+  .catch(function(err) {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+    alert('Network error. Please try again.');
+  });
+});

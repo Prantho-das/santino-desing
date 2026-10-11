@@ -491,58 +491,59 @@ else :
             We will set up a commercial bean-to-cup machine and specialty coffee beans at your office pantry for a 7-day complimentary test drive.
           </p>
 
-          <form onsubmit="alert('Thank you! Our corporate coffee specialist will contact you within 2 business hours.'); return false;">
+          <form class="santino-inquiry-form">
+            <input type="hidden" name="inquiry_type" value="office_trial">
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Company / Organization Name *</label>
-                <input type="text" class="form-control form-control-lg rounded-3 fs-6" placeholder="e.g. Grameenphone / Unilever" required>
+                <input type="text" name="company" class="form-control form-control-lg rounded-3 fs-6" placeholder="e.g. Grameenphone / Unilever" required>
               </div>
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Office Location / Area *</label>
-                <input type="text" class="form-control form-control-lg rounded-3 fs-6" placeholder="Gulshan, Banani, Motijheel, Uttara..." required>
+                <input type="text" name="location" class="form-control form-control-lg rounded-3 fs-6" placeholder="Gulshan, Banani, Motijheel, Uttara..." required>
               </div>
             </div>
 
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Contact Person Name *</label>
-                <input type="text" class="form-control form-control-lg rounded-3 fs-6" placeholder="Your Full Name" required>
+                <input type="text" name="name" class="form-control form-control-lg rounded-3 fs-6" placeholder="Your Full Name" required>
               </div>
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Designation</label>
-                <input type="text" class="form-control form-control-lg rounded-3 fs-6" placeholder="HR Director, Admin Manager, Ops...">
+                <input type="text" name="designation" class="form-control form-control-lg rounded-3 fs-6" placeholder="HR Director, Admin Manager, Ops...">
               </div>
             </div>
 
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Official Phone / WhatsApp *</label>
-                <input type="tel" class="form-control form-control-lg rounded-3 fs-6" placeholder="+880 1..." required>
+                <input type="tel" name="phone" class="form-control form-control-lg rounded-3 fs-6" placeholder="+880 1..." required>
               </div>
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Official Work Email *</label>
-                <input type="email" class="form-control form-control-lg rounded-3 fs-6" placeholder="name@company.com" required>
+                <input type="email" name="email" class="form-control form-control-lg rounded-3 fs-6" placeholder="name@company.com" required>
               </div>
             </div>
 
             <div class="row g-3 mb-4">
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Office Team Size</label>
-                <select class="form-select form-select-lg rounded-3 fs-6">
-                  <option>10 – 30 Employees (Boutique Hub)</option>
-                  <option selected>30 – 100 Employees (Corporate Floor)</option>
-                  <option>100 – 300 Employees (Multi-Floor HQ)</option>
-                  <option>300+ Employees (Enterprise Campus)</option>
+                <select name="team_size" class="form-select form-select-lg rounded-3 fs-6">
+                  <option value="10 – 30 Employees (Boutique Hub)">10 – 30 Employees (Boutique Hub)</option>
+                  <option value="30 – 100 Employees (Corporate Floor)" selected>30 – 100 Employees (Corporate Floor)</option>
+                  <option value="100 – 300 Employees (Multi-Floor HQ)">100 – 300 Employees (Multi-Floor HQ)</option>
+                  <option value="300+ Employees (Enterprise Campus)">300+ Employees (Enterprise Campus)</option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Current Coffee Solution</label>
-                <select class="form-select form-select-lg rounded-3 fs-6">
-                  <option>Nespresso / Capsule Pods</option>
-                  <option>Instant Coffee Powder</option>
-                  <option>Outside Delivery / Cafe Takeaway</option>
-                  <option>Existing Machine (Seeking Better Provider)</option>
-                  <option>Setting Up New Office</option>
+                <select name="message" class="form-select form-select-lg rounded-3 fs-6">
+                  <option value="Nespresso / Capsule Pods">Nespresso / Capsule Pods</option>
+                  <option value="Instant Coffee Powder">Instant Coffee Powder</option>
+                  <option value="Outside Delivery / Cafe Takeaway">Outside Delivery / Cafe Takeaway</option>
+                  <option value="Existing Machine (Seeking Better Provider)">Existing Machine (Seeking Better Provider)</option>
+                  <option value="Setting Up New Office">Setting Up New Office</option>
                 </select>
               </div>
             </div>

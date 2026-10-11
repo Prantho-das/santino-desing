@@ -174,6 +174,7 @@ require_once SANTINO_DIR . '/inc/elementor-installer.php';
  */
 require_once SANTINO_DIR . '/inc/membership-system.php';
 require_once SANTINO_DIR . '/inc/menus.php';
+require_once SANTINO_DIR . '/inc/leads-system.php';
 
 
 
