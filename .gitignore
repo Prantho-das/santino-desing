@@ -2,6 +2,7 @@
 *.ps1
 *.webp
 *.log
+*.zip
 /screenshots/
 /audit_*.php
 /deep_*.php
