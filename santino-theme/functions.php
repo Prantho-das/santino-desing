@@ -134,9 +134,17 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     require_once SANTINO_DIR . '/inc/widgets/brands-showcase-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/bfc-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/swapno-retail-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/pro-banner-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/floating-metrics-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/editorial-gallery-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/certificate-verification-widget.php';
 
     // Register Widgets
     $widgets_manager->register( new \Santino_Hero_Banner_Widget() );
+    $widgets_manager->register( new \Santino_Pro_Banner_Widget() );
+    $widgets_manager->register( new \Santino_Floating_Metrics_Widget() );
+    $widgets_manager->register( new \Santino_Editorial_Gallery_Widget() );
+    $widgets_manager->register( new \Santino_Certificate_Verification_Widget() );
     $widgets_manager->register( new \Santino_Outlets_Widget() );
     $widgets_manager->register( new \Santino_Machine_Grid_Widget() );
     $widgets_manager->register( new \Santino_Coffee_Beans_Widget() );
@@ -175,6 +183,9 @@ require_once SANTINO_DIR . '/inc/elementor-installer.php';
 require_once SANTINO_DIR . '/inc/membership-system.php';
 require_once SANTINO_DIR . '/inc/menus.php';
 require_once SANTINO_DIR . '/inc/leads-system.php';
+require_once SANTINO_DIR . '/inc/club-system.php';
+require_once SANTINO_DIR . '/inc/demo-importer.php';
+
 
 
 
