@@ -13,7 +13,20 @@
         <!-- Column 1: Brand & Logo -->
         <div class="col-lg-3 col-md-6 footer-brand-col">
           <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="footer-logo-wrap d-inline-block mb-3">
-            <img src="<?php echo santino_img('Logo-Santino-Coffee-white.png'); ?>" alt="Santino Caffè - 100% Premium Coffee Beans" style="height: 48px; width: auto; object-fit: contain; background: transparent; padding: 0; box-shadow: none;">
+          <?php
+          $footer_logo = get_theme_mod( 'santino_footer_logo' );
+          if ( ! $footer_logo ) {
+              $custom_logo_id = get_theme_mod( 'custom_logo' );
+              $footer_logo = $custom_logo_id ? wp_get_attachment_image_url( $custom_logo_id, 'full' ) : '';
+          }
+          if ( ! $footer_logo && file_exists( SANTINO_DIR . '/assets/images/Logo-Santino-Coffee-white.png' ) ) {
+              $footer_logo = SANTINO_URI . '/assets/images/Logo-Santino-Coffee-white.png';
+          }
+          if ( $footer_logo ) : ?>
+            <img src="<?php echo esc_url( $footer_logo ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height: 48px; width: auto; object-fit: contain; background: transparent; padding: 0; box-shadow: none;">
+          <?php else : ?>
+            <span class="fs-4 fw-bold font-heading text-white">Santino<span style="color: #c5a059;">.</span></span>
+          <?php endif; ?>
           </a>
           <div class="mb-3">
             <span class="footer-cert-badge">
@@ -150,9 +163,8 @@
     <i class="bi bi-arrow-up-short"></i>
   </button>
 
-  <!-- Bootstrap 5 JS Bundle -->
-  
-  <!-- Custom JS File -->
+  <!-- Reusable Lead & Contact Modals -->
+  <?php get_template_part( 'template-parts/modals' ); ?>
 
 <?php wp_footer(); ?>
 </body>

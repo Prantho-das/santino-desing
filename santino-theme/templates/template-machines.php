@@ -25,7 +25,7 @@ else :
 ?>
 
 <!-- MINIMAL CLEAN COMMERCIAL MACHINES HERO -->
-  <section class="pro-banner-hero" style="background-image: url('<?php echo santino_img('imgi_218_blackeagle2.jpg'); ?>'); background-position: center; min-height: 52vh;">
+  <section class="pro-banner-hero" style="background-image: url('<?php echo function_exists('santino_get_page_banner') ? santino_get_page_banner('machines', 'imgi_218_blackeagle2.jpg') : santino_img('imgi_218_blackeagle2.jpg'); ?>')"; background-position: center; min-height: 52vh;">
     <div class="pro-banner-overlay" style="background: linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.45) 100%);"></div>
     <div class="pro-banner-glow-line"></div>
     

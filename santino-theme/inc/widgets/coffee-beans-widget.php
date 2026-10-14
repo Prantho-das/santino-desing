@@ -107,7 +107,7 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
                 'label'   => esc_html__( 'Image', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::MEDIA,
                 'default' => array(
-                    'url' => SANTINO_URI . '/assets/images/traditional-coffee-9kg_1.jpg',
+                    'url' => function_exists( 'santino_img' ) ? santino_img( 'traditional-coffee-9kg_1.jpg' ) : '',
                 ),
             )
         );
@@ -125,7 +125,7 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
                         'roast_level'   => 'Dark Roast (Full Body)',
                         'tasting_notes' => 'Molasses, Dark Cocoa, Smoky Cedar',
                         'price'         => '৳ 1,350 / 500g',
-                        'bean_image'    => array( 'url' => SANTINO_URI . '/assets/images/traditional-coffee-9kg_1.jpg' ),
+                        'bean_image'    => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'traditional-coffee-9kg_1.jpg' ) : '' ),
                     ),
                     array(
                         'bean_name'     => 'Santino Italian Crema Blend',
@@ -133,7 +133,7 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
                         'roast_level'   => 'Medium-Dark Roast',
                         'tasting_notes' => 'Roasted Almond, Dark Caramel, Vanilla',
                         'price'         => '৳ 1,450 / 500g',
-                        'bean_image'    => array( 'url' => SANTINO_URI . '/assets/images/italian-capsules_1.webp' ),
+                        'bean_image'    => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'italian-capsules_1.webp' ) : '' ),
                     ),
                     array(
                         'bean_name'     => 'Ethiopia Guji Specialty Microlot',
@@ -141,7 +141,7 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
                         'roast_level'   => 'Light-Medium Filter Roast',
                         'tasting_notes' => 'Jasmine, Bergamot, Blueberry, Peach',
                         'price'         => '৳ 1,850 / 250g',
-                        'bean_image'    => array( 'url' => SANTINO_URI . '/assets/images/espresso-capsules_1.webp' ),
+                        'bean_image'    => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'espresso-capsules_1.webp' ) : '' ),
                     ),
                     array(
                         'bean_name'     => 'Santino Oro Selection 100% Arabica',
@@ -149,7 +149,7 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
                         'roast_level'   => 'Medium Roast',
                         'tasting_notes' => 'Honey, Milk Chocolate, Sweet Tangerine',
                         'price'         => '৳ 1,650 / 500g',
-                        'bean_image'    => array( 'url' => SANTINO_URI . '/assets/images/oro_-capsules_1.webp' ),
+                        'bean_image'    => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'oro_-capsules_1.webp' ) : '' ),
                     ),
                 ),
                 'title_field' => '{{{ bean_name }}}',
@@ -228,7 +228,8 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
                                 <div class="col-md-6 col-lg-4">
                                     <div class="card h-100 border-0 rounded-4 shadow-sm p-4 bg-white hover-lift transition-all">
                                         <div class="text-center mb-3">
-                                            <img src="<?php echo esc_url( $item['bean_image']['url'] ); ?>" alt="<?php echo esc_attr( $item['bean_name'] ); ?>" class="img-fluid" style="height: 200px; object-fit: contain;">
+                                            <?php $b_img = ! empty( $item['bean_image']['url'] ) ? esc_url( $item['bean_image']['url'] ) : ( function_exists('santino_img') ? santino_img( 'traditional-coffee-9kg_1.jpg' ) : '' ); ?>
+                                            <img src="<?php echo $b_img; ?>" alt="<?php echo esc_attr( $item['bean_name'] ); ?>" class="img-fluid" style="height: 200px; object-fit: contain;">
                                         </div>
                                         <h4 class="h5 fw-bold font-heading mb-1"><?php echo esc_html( $item['bean_name'] ); ?></h4>
                                         <div class="badge bg-secondary mb-2"><?php echo esc_html( $item['roast_level'] ); ?></div>
@@ -247,7 +248,8 @@ class Santino_Coffee_Beans_Widget extends \Elementor\Widget_Base {
                             <div class="col-md-6 col-lg-4">
                                 <div class="card h-100 border-0 rounded-4 shadow-sm p-4 bg-white hover-lift transition-all">
                                     <div class="text-center mb-3">
-                                        <img src="<?php echo esc_url( $item['bean_image']['url'] ); ?>" alt="<?php echo esc_attr( $item['bean_name'] ); ?>" class="img-fluid" style="height: 200px; object-fit: contain;">
+                                        <?php $b_img = ! empty( $item['bean_image']['url'] ) ? esc_url( $item['bean_image']['url'] ) : ( function_exists('santino_img') ? santino_img( 'traditional-coffee-9kg_1.jpg' ) : '' ); ?>
+                                        <img src="<?php echo $b_img; ?>" alt="<?php echo esc_attr( $item['bean_name'] ); ?>" class="img-fluid" style="height: 200px; object-fit: contain;">
                                     </div>
                                     <h4 class="h5 fw-bold font-heading mb-1"><?php echo esc_html( $item['bean_name'] ); ?></h4>
                                     <div class="badge bg-secondary mb-2"><?php echo esc_html( $item['roast_level'] ); ?></div>

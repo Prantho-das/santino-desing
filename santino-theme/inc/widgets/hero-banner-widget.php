@@ -111,17 +111,27 @@ class Santino_Hero_Banner_Widget extends \Elementor\Widget_Base {
                 'label'   => esc_html__( 'Background / Poster Image', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::MEDIA,
                 'default' => array(
-                    'url' => SANTINO_URI . '/assets/images/bd-barista-latte-art.jpg',
+                    'url' => function_exists( 'santino_img' ) ? santino_img( 'bd-barista-latte-art.jpg' ) : '',
                 ),
+            )
+        );
+
+        $repeater->add_control(
+            'bg_video_upload',
+            array(
+                'label'      => esc_html__( 'Upload MP4 Video (Media Library)', 'santino' ),
+                'type'       => \Elementor\Controls_Manager::MEDIA,
+                'media_type' => 'video',
+                'condition'  => array( 'bg_type' => 'video' ),
             )
         );
 
         $repeater->add_control(
             'bg_video_url',
             array(
-                'label'   => esc_html__( 'MP4 Video URL', 'santino' ),
+                'label'   => esc_html__( 'Or Video URL / External Link', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::TEXT,
-                'default' => SANTINO_URI . '/assets/videos/coffee_espresso_video.mp4',
+                'default' => get_theme_mod( 'santino_hero_video_url', '' ),
                 'condition' => array( 'bg_type' => 'video' ),
             )
         );
@@ -192,8 +202,8 @@ class Santino_Hero_Banner_Widget extends \Elementor\Widget_Base {
                         'btn_text'     => 'Explore B2B Solutions',
                         'btn_url'      => array( 'url' => '#enquiryModal' ),
                         'bg_type'      => 'video',
-                        'bg_image'     => array( 'url' => SANTINO_URI . '/assets/images/bd-barista-latte-art.jpg' ),
-                        'bg_video_url' => SANTINO_URI . '/assets/videos/coffee_espresso_video.mp4',
+                        'bg_image'     => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'bd-barista-latte-art.jpg' ) : '' ),
+                        'bg_video_url' => get_theme_mod( 'santino_hero_video_url', '' ),
                         'feat1_icon'   => 'bi bi-gear-wide-connected',
                         'feat1_text'   => 'Italian Espresso<br>Machinery',
                         'feat2_icon'   => 'bi bi-clock-history',
@@ -209,7 +219,7 @@ class Santino_Hero_Banner_Widget extends \Elementor\Widget_Base {
                         'btn_text'     => 'Visit BFC Brand Page',
                         'btn_url'      => array( 'url' => '/bfc/' ),
                         'bg_type'      => 'image',
-                        'bg_image'     => array( 'url' => SANTINO_URI . '/assets/images/bfc_santino_foodservice.jpg' ),
+                        'bg_image'     => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'bfc_santino_foodservice.jpg' ) : '' ),
                         'feat1_icon'   => 'bi bi-shop',
                         'feat1_text'   => '50+ BFC<br>Outlets',
                         'feat2_icon'   => 'bi bi-cup-hot',
@@ -225,7 +235,7 @@ class Santino_Hero_Banner_Widget extends \Elementor\Widget_Base {
                         'btn_text'     => 'Visit Shwapno Page',
                         'btn_url'      => array( 'url' => '/swapno/' ),
                         'bg_type'      => 'image',
-                        'bg_image'     => array( 'url' => SANTINO_URI . '/assets/images/shwapno_santino_retail.jpg' ),
+                        'bg_image'     => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'shwapno_santino_retail.jpg' ) : '' ),
                         'feat1_icon'   => 'bi bi-cart3',
                         'feat1_text'   => '100+ Shwapno<br>Superstores',
                         'feat2_icon'   => 'bi bi-flower1',
@@ -241,8 +251,8 @@ class Santino_Hero_Banner_Widget extends \Elementor\Widget_Base {
                         'btn_text'     => 'Explore Bean Roasts',
                         'btn_url'      => array( 'url' => '/beans/' ),
                         'bg_type'      => 'video',
-                        'bg_image'     => array( 'url' => SANTINO_URI . '/assets/images/imgi_4_pexels-sikunovruslan-11942442.jpg' ),
-                        'bg_video_url' => SANTINO_URI . '/assets/videos/coffee_roasting_video.webm',
+                        'bg_image'     => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'imgi_4_pexels-sikunovruslan-11942442.jpg' ) : '' ),
+                        'bg_video_url' => get_theme_mod( 'santino_hero_video_url', '' ),
                         'feat1_icon'   => 'bi bi-fire',
                         'feat1_text'   => 'Drum Batch<br>Roasting',
                         'feat2_icon'   => 'bi bi-globe-americas',
@@ -258,8 +268,8 @@ class Santino_Hero_Banner_Widget extends \Elementor\Widget_Base {
                         'btn_text'     => 'Discover Machines',
                         'btn_url'      => array( 'url' => '/machines/' ),
                         'bg_type'      => 'video',
-                        'bg_image'     => array( 'url' => SANTINO_URI . '/assets/images/imgi_218_blackeagle2.jpg' ),
-                        'bg_video_url' => SANTINO_URI . '/assets/videos/coffee_espresso_video.mp4',
+                        'bg_image'     => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'imgi_218_blackeagle2.jpg' ) : '' ),
+                        'bg_video_url' => get_theme_mod( 'santino_hero_video_url', '' ),
                         'feat1_icon'   => 'bi bi-gear',
                         'feat1_text'   => 'Victoria Arduino<br>& Simonelli',
                         'feat2_icon'   => 'bi bi-tools',
@@ -287,8 +297,14 @@ class Santino_Hero_Banner_Widget extends \Elementor\Widget_Base {
                 <div class="carousel-inner">
                     <?php foreach ( $slides as $index => $slide ) : 
                         $is_active = $index === 0 ? 'active' : '';
-                        $is_video = ( isset( $slide['bg_type'] ) && $slide['bg_type'] === 'video' ) && ! empty( $slide['bg_video_url'] );
-                        $bg_img = ! empty( $slide['bg_image']['url'] ) ? esc_url( $slide['bg_image']['url'] ) : '';
+                        $video_src = '';
+                        if ( ! empty( $slide['bg_video_upload']['url'] ) ) {
+                            $video_src = $slide['bg_video_upload']['url'];
+                        } elseif ( ! empty( $slide['bg_video_url'] ) ) {
+                            $video_src = $slide['bg_video_url'];
+                        }
+                        $is_video = ( isset( $slide['bg_type'] ) && $slide['bg_type'] === 'video' ) && ! empty( $video_src );
+                        $bg_img = ! empty( $slide['bg_image']['url'] ) ? esc_url( $slide['bg_image']['url'] ) : ( function_exists('santino_img') ? santino_img( 'bd-barista-latte-art.jpg' ) : '' );
                         $btn_url = ! empty( $slide['btn_url']['url'] ) ? esc_url( $slide['btn_url']['url'] ) : '#';
                         $is_modal = strpos( $btn_url, '#enquiryModal' ) !== false;
                     ?>
@@ -296,7 +312,7 @@ class Santino_Hero_Banner_Widget extends \Elementor\Widget_Base {
                             <?php if ( $is_video ) : ?>
                                 <div class="hero-video-wrap">
                                     <video class="hero-video-bg" autoplay muted loop playsinline poster="<?php echo $bg_img; ?>">
-                                        <source src="<?php echo esc_url( $slide['bg_video_url'] ); ?>" type="video/mp4">
+                                        <source src="<?php echo esc_url( $video_src ); ?>" type="video/mp4">
                                     </video>
                                 </div>
                             <?php endif; ?>

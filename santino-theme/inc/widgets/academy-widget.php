@@ -111,6 +111,33 @@ class Santino_Academy_Widget extends \Elementor\Widget_Base {
         );
 
         $this->add_control(
+            'slide1_img',
+            array(
+                'label'   => esc_html__( 'Carousel Slide 1 Image', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::MEDIA,
+                'default' => array( 'url' => 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1200&auto=format&fit=crop&q=80' ),
+            )
+        );
+
+        $this->add_control(
+            'slide2_img',
+            array(
+                'label'   => esc_html__( 'Carousel Slide 2 Image', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::MEDIA,
+                'default' => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'bd-barista-latte-art.jpg' ) : '' ),
+            )
+        );
+
+        $this->add_control(
+            'slide3_img',
+            array(
+                'label'   => esc_html__( 'Carousel Slide 3 Image', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::MEDIA,
+                'default' => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'imgi_23_santino_-_250522-07495.jpg' ) : '' ),
+            )
+        );
+
+        $this->add_control(
             'features',
             array(
                 'label'       => esc_html__( 'Feature Cards', 'santino' ),
@@ -186,14 +213,19 @@ class Santino_Academy_Widget extends \Elementor\Widget_Base {
                         <div class="position-relative">
                             <div id="baristaHeroCarousel" class="carousel slide carousel-fade rounded-4 overflow-hidden shadow-sm position-relative" data-bs-ride="carousel" data-bs-interval="3500" style="height: 380px; background: #111;">
                                 <div class="carousel-inner h-100">
+                                    <?php
+                                    $s1 = ! empty( $settings['slide1_img']['url'] ) ? esc_url( $settings['slide1_img']['url'] ) : 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1200&auto=format&fit=crop&q=80';
+                                    $s2 = ! empty( $settings['slide2_img']['url'] ) ? esc_url( $settings['slide2_img']['url'] ) : ( function_exists('santino_img') ? santino_img('bd-barista-latte-art.jpg') : '' );
+                                    $s3 = ! empty( $settings['slide3_img']['url'] ) ? esc_url( $settings['slide3_img']['url'] ) : ( function_exists('santino_img') ? santino_img('imgi_23_santino_-_250522-07495.jpg') : '' );
+                                    ?>
                                     <div class="carousel-item active h-100">
-                                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1200&auto=format&fit=crop&q=80" alt="Freshly Ground Coffee Portafilter" class="w-100 h-100" style="object-fit: cover;">
+                                        <img src="<?php echo $s1; ?>" alt="Freshly Ground Coffee Portafilter" class="w-100 h-100" style="object-fit: cover;">
                                     </div>
                                     <div class="carousel-item h-100">
-                                        <img src="<?php echo santino_img('bd-barista-latte-art.jpg'); ?>" alt="Master Barista Pouring Latte Art" class="w-100 h-100" style="object-fit: cover;">
+                                        <img src="<?php echo $s2; ?>" alt="Master Barista Pouring Latte Art" class="w-100 h-100" style="object-fit: cover;">
                                     </div>
                                     <div class="carousel-item h-100">
-                                        <img src="<?php echo santino_img('imgi_23_santino_-_250522-07495.jpg'); ?>" alt="Commercial Espresso Dial-In" class="w-100 h-100" style="object-fit: cover;">
+                                        <img src="<?php echo $s3; ?>" alt="Commercial Espresso Dial-In" class="w-100 h-100" style="object-fit: cover;">
                                     </div>
                                 </div>
                                 <div class="position-absolute top-0 start-0 m-4 text-white" style="font-family: var(--kp-font-title); font-style: italic; font-weight: 800; font-size: 1.5rem; line-height: 1.2; text-shadow: 0 2px 12px rgba(0,0,0,0.9); z-index: 2;">

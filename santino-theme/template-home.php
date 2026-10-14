@@ -40,10 +40,25 @@ else :
         <!-- Slide 1: Care Partner / Expansion Coffee Business in Bangladesh (VIDEO HERO) -->
         <div class="carousel-item active hero-carousel-item position-relative overflow-hidden">
           <div class="hero-video-wrap">
-            <video class="hero-video-bg" autoplay muted loop playsinline poster="<?php echo santino_img('bd-barista-latte-art.jpg'); ?>">
-              <source src="<?php echo esc_url( SANTINO_URI . '/assets/videos/coffee_espresso_video.mp4' ); ?>" type="video/mp4">
-              <source src="<?php echo esc_url( SANTINO_URI . '/assets/videos/coffee_roasting_video.webm' ); ?>" type="video/webm">
+            <?php
+            $hero_vid = get_theme_mod( 'santino_hero_video_mp4' );
+            if ( ! $hero_vid ) {
+                $hero_vid = get_theme_mod( 'santino_hero_video_url' );
+            }
+            if ( ! $hero_vid && file_exists( SANTINO_DIR . '/assets/videos/coffee_espresso_video.mp4' ) ) {
+                $hero_vid = SANTINO_URI . '/assets/videos/coffee_espresso_video.mp4';
+            }
+            $hero_poster = get_theme_mod( 'santino_hero_poster_img' );
+            if ( ! $hero_poster ) {
+                $hero_poster = santino_img( 'bd-barista-latte-art.jpg' );
+            }
+            if ( $hero_vid ) : ?>
+            <video class="hero-video-bg" autoplay muted loop playsinline poster="<?php echo esc_url( $hero_poster ); ?>">
+              <source src="<?php echo esc_url( $hero_vid ); ?>" type="video/mp4">
             </video>
+            <?php else : ?>
+            <div class="hero-video-bg" style="background-image: url('<?php echo esc_url( $hero_poster ); ?>'); background-size: cover; background-position: center;"></div>
+            <?php endif; ?>
           </div>
           <div class="hero-overlay"></div>
           <div class="container hero-content my-auto position-relative" style="z-index: 2;">
@@ -176,7 +191,11 @@ else :
         <div class="carousel-item hero-carousel-item position-relative overflow-hidden">
           <div class="hero-video-wrap">
             <video class="hero-video-bg" autoplay muted loop playsinline poster="<?php echo santino_img('imgi_4_pexels-sikunovruslan-11942442.jpg'); ?>">
-              <source src="<?php echo esc_url( SANTINO_URI . '/assets/videos/coffee_roasting_video.webm' ); ?>" type="video/webm">
+              <?php
+            $s4_vid = get_theme_mod( 'santino_roasting_video_mp4' );
+            if ( ! $s4_vid ) $s4_vid = get_theme_mod( 'santino_roasting_video_url', 'https://web.luckincdn.com/default/assets/ourstory-41023fc9.webm' );
+            ?>
+            <source src="<?php echo esc_url( $s4_vid ); ?>" type="video/webm">
               <source src="https://web.luckincdn.com/default/assets/ourstory-41023fc9.webm" type="video/webm">
             </video>
           </div>
@@ -225,7 +244,11 @@ else :
         <div class="carousel-item hero-carousel-item position-relative overflow-hidden">
           <div class="hero-video-wrap">
             <video class="hero-video-bg" autoplay muted loop playsinline poster="<?php echo santino_img('imgi_218_blackeagle2.jpg'); ?>">
-              <source src="<?php echo esc_url( SANTINO_URI . '/assets/videos/coffee_espresso_video.mp4' ); ?>" type="video/mp4">
+              <?php
+            $s5_vid = get_theme_mod( 'santino_hero_video_mp4' );
+            if ( ! $s5_vid ) $s5_vid = get_theme_mod( 'santino_hero_video_url', 'https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/ab6140f6-129c-4ae9-aaa0-20190c43183b.mp4' );
+            ?>
+            <source src="<?php echo esc_url( $s5_vid ); ?>" type="video/mp4">
               <source src="https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/ab6140f6-129c-4ae9-aaa0-20190c43183b.mp4" type="video/mp4">
             </video>
           </div>

@@ -323,7 +323,7 @@ h1, h2, h3, h4, h5, h6,
 
 <div class="swapno-page-wrap">
   <!-- MINIMAL CLEAN SHWAPNO HERO BANNER -->
-  <section class="pro-banner-hero pro-banner-swapno position-relative overflow-hidden text-center" style="background-image: url('<?php echo santino_img('shwapno_santino_retail.jpg'); ?>'); background-position: center 35%; min-height: 50vh; display: flex; align-items: center; justify-content: center; padding: 70px 20px;">
+  <section class="pro-banner-hero pro-banner-swapno position-relative overflow-hidden text-center" style="background-image: url('<?php echo function_exists('santino_get_page_banner') ? santino_get_page_banner('swapno', 'shwapno_santino_retail.jpg') : santino_img('shwapno_santino_retail.jpg'); ?>')"; background-position: center 35%; min-height: 50vh; display: flex; align-items: center; justify-content: center; padding: 70px 20px;">
     <div class="pro-banner-overlay" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 38, 35, 0.72) 100%); z-index: 1;"></div>
     
     <div class="container position-relative" style="max-width: 780px; z-index: 2;">

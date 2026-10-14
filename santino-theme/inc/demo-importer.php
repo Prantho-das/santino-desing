@@ -14,6 +14,7 @@ class Santino_Demo_Importer {
     public static function init() {
         add_action( 'admin_menu', array( __CLASS__, 'register_admin_menu' ) );
         add_action( 'wp_ajax_santino_ajax_import_theme_data', array( __CLASS__, 'handle_ajax_import' ) );
+        add_action( 'wp_ajax_santino_ajax_import_menus_only', array( __CLASS__, 'handle_ajax_import_menus_only' ) );
         add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_admin_assets' ) );
         add_action( 'admin_notices', array( __CLASS__, 'show_setup_prompt_notice' ) );
     }
@@ -214,11 +215,16 @@ class Santino_Demo_Importer {
 
                     <!-- Import Trigger Box -->
                     <div style="text-align: center; padding: 20px; background: #faf8f5; border: 1.5px dashed #c59d5f; border-radius: 8px;" id="santino-import-box">
-                        <button type="button" id="santino-start-import-btn" class="button button-primary" style="background: #00625d; border-color: #004d49; font-size: 16px; padding: 10px 32px; height: auto; border-radius: 30px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,98,93,0.25);">
-                            <span class="dashicons dashicons-download" style="line-height: 28px; font-size: 20px;"></span> Import Theme Demo Data
-                        </button>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <button type="button" id="santino-start-import-btn" class="button button-primary" style="background: #00625d; border-color: #004d49; font-size: 15px; padding: 10px 28px; height: auto; border-radius: 30px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,98,93,0.25);">
+                                <span class="dashicons dashicons-download" style="line-height: 26px; font-size: 19px;"></span> Import Theme Demo Data
+                            </button>
+                            <button type="button" id="santino-sync-menus-btn" class="button button-secondary" style="font-size: 14px; padding: 10px 22px; height: auto; border-radius: 30px; font-weight: 700; border-color: #00625d; color: #00625d;">
+                                <span class="dashicons dashicons-menu-alt3" style="line-height: 24px; font-size: 18px;"></span> Sync &amp; Assign Menus Only
+                            </button>
+                        </div>
                         <div style="margin-top: 10px; font-size: 12px; color: #777;">
-                            Safe to re-run anytime. It updates page templates and structures without deleting your media.
+                            Safe to re-run anytime. It updates page templates, menus and structures without deleting your media.
                         </div>
                     </div>
 
@@ -253,6 +259,43 @@ class Santino_Demo_Importer {
         <script>
         document.addEventListener('DOMContentLoaded', function() {
             var btn = document.getElementById('santino-start-import-btn');
+            var menuBtn = document.getElementById('santino-sync-menus-btn');
+
+            if (menuBtn) {
+                menuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!confirm('Import and assign the official Santino Header & Footer Navigation Menus?')) {
+                        return;
+                    }
+                    importBox.style.display = 'none';
+                    progressBox.style.display = 'block';
+                    document.getElementById('santino-progress-status').textContent = 'Creating & Assigning Official Santino Menus...';
+
+                    var fd = new FormData();
+                    fd.append('action', 'santino_ajax_import_menus_only');
+                    fd.append('nonce', '<?php echo esc_js( wp_create_nonce( 'santino_demo_import_nonce' ) ); ?>');
+
+                    fetch(ajaxurl, { method: 'POST', body: fd })
+                    .then(function(res) { return res.json(); })
+                    .then(function(res) {
+                        progressBox.style.display = 'none';
+                        if (res.success) {
+                            successBox.style.display = 'block';
+                            if (res.data && res.data.message) {
+                                successMsg.textContent = res.data.message;
+                            }
+                        } else {
+                            importBox.style.display = 'block';
+                            alert('Menu Import Notice: ' + (res.data && res.data.message ? res.data.message : 'Unknown error.'));
+                        }
+                    })
+                    .catch(function(err) {
+                        progressBox.style.display = 'none';
+                        importBox.style.display = 'block';
+                        alert('Network error during menu import.');
+                    });
+                });
+            }
             var importBox = document.getElementById('santino-import-box');
             var progressBox = document.getElementById('santino-import-progress');
             var successBox = document.getElementById('santino-import-success');
@@ -449,7 +492,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#demoModal',
                     'btn2_text'    => 'Explore Catalog',
                     'btn2_url'     => '#machineGrid',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/imgi_218_blackeagle2.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'imgi_218_blackeagle2.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_floating_metrics', 'settings' => array(
                     'metric1_num'   => '500+',
@@ -476,7 +519,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#beansCatalog',
                     'btn2_text'    => 'Wholesale Inquiry',
                     'btn2_url'     => '#wholesaleModal',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/imgi_206_beans1.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'imgi_206_beans1.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_floating_metrics', 'settings' => array(
                     'metric1_num'   => '100%',
@@ -503,7 +546,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#courses',
                     'btn2_text'    => 'Course Curriculum',
                     'btn2_url'     => '#curriculum',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/imgi_216_academy1.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'imgi_216_academy1.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_floating_metrics', 'settings' => array(
                     'metric1_num'   => '1,200+',
@@ -530,7 +573,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#trialModal',
                     'btn2_text'    => 'Calculate Cost',
                     'btn2_url'     => '#calculator',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/imgi_209_office1.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'imgi_209_office1.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_floating_metrics', 'settings' => array(
                     'metric1_num'   => '150+',
@@ -557,7 +600,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#consultationModal',
                     'btn2_text'    => 'View Equipment',
                     'btn2_url'     => '#equipment',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/imgi_209_office1.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'imgi_209_office1.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_floating_metrics', 'settings' => array(
                     'metric1_num'   => '70+',
@@ -585,7 +628,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#storyTimeline',
                     'btn2_text'    => 'Roastery Tour',
                     'btn2_url'     => '#roastery',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/imgi_217_story1.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'imgi_217_story1.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_floating_metrics', 'settings' => array(
                     'metric1_num'   => '25+ Years',
@@ -611,7 +654,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#membershipTiers',
                     'btn2_text'    => 'View Benefits',
                     'btn2_url'     => '#perks',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/imgi_214_beans9.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'imgi_214_beans9.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_floating_metrics', 'settings' => array(
                     'metric1_num'   => '10,000+',
@@ -637,7 +680,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#menuCatalog',
                     'btn2_text'    => 'Find Branch',
                     'btn2_url'     => '#outlets',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/imgi_211_beans6.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'imgi_211_beans6.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_cafe_menu', 'settings' => array( 'title' => 'Full Handcrafted Beverage Catalog' ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_outlets', 'settings' => array( 'title' => 'Order for Pickup at Your Nearest Branch' ) ) ) ),
@@ -653,7 +696,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#brandsMatrix',
                     'btn2_text'    => 'Download Catalog',
                     'btn2_url'     => '#catalog',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/imgi_218_blackeagle2.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'imgi_218_blackeagle2.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_brand_slider', 'settings' => array( 'title' => 'Global Brand Partners in Bangladesh' ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_brands_showcase', 'settings' => array( 'title' => 'Authorized Global Brands Matrix' ) ) ) ),
@@ -670,7 +713,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#outlets',
                     'btn2_text'    => 'View Experience',
                     'btn2_url'     => '#gallery',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/bfc_santino_foodservice.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'bfc_santino_foodservice.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_floating_metrics', 'settings' => array(
                     'metric1_num'   => '50+',
@@ -692,25 +735,25 @@ class Santino_Demo_Importer {
                             'card_badge' => '9-BAR EXTRACTION',
                             'card_title' => 'High Volume Commercial Extraction',
                             'card_desc'  => 'Twin-group commercial machinery calibrated for rapid extraction during rushes.',
-                            'card_image' => array( 'url' => $uri . '/assets/images/imgi_218_blackeagle2.jpg', 'id' => '' ),
+                            'card_image' => array( 'url'=> santino_img( 'imgi_218_blackeagle2.jpg' ), 'id' => '' ),
                         ),
                         array(
                             'card_badge' => 'SCA STANDARDS',
                             'card_title' => 'Certified Barista Quality',
                             'card_desc'  => 'Every cup dialed in to exacting extraction ratios and microfoam texture.',
-                            'card_image' => array( 'url' => $uri . '/assets/images/bd-barista-latte-art.jpg', 'id' => '' ),
+                            'card_image' => array( 'url'=> santino_img( 'bd-barista-latte-art.jpg' ), 'id' => '' ),
                         ),
                         array(
                             'card_badge' => 'FRESH ROASTERY',
                             'card_title' => 'Weekly Roasted Beans',
                             'card_desc'  => 'Fresh batches sealed in nitrogen-flushed packaging for optimal crema.',
-                            'card_image' => array( 'url' => $uri . '/assets/images/imgi_206_beans1.jpg', 'id' => '' ),
+                            'card_image' => array( 'url'=> santino_img( 'imgi_206_beans1.jpg' ), 'id' => '' ),
                         ),
                         array(
                             'card_badge' => 'FAST SERVICE',
                             'card_title' => 'Seamless Turnaround',
                             'card_desc'  => 'Integrated order-to-cup workflow designed for busy service counters.',
-                            'card_image' => array( 'url' => $uri . '/assets/images/imgi_209_office1.jpg', 'id' => '' ),
+                            'card_image' => array( 'url'=> santino_img( 'imgi_209_office1.jpg' ), 'id' => '' ),
                         ),
                     ),
                 ) ) ) ),
@@ -730,7 +773,7 @@ class Santino_Demo_Importer {
                     'btn1_target'  => '#outlets',
                     'btn2_text'    => 'Explore Coffee Packs',
                     'btn2_url'     => '#packs',
-                    'bg_image'     => array( 'url' => $uri . '/assets/images/shwapno_santino_retail.jpg', 'id' => '' ),
+                    'bg_image'     => array( 'url'=> santino_img( 'shwapno_santino_retail.jpg' ), 'id' => '' ),
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_floating_metrics', 'settings' => array(
                     'metric1_num'   => '100+',
@@ -752,25 +795,25 @@ class Santino_Demo_Importer {
                             'card_badge' => 'SUPERSTORE DISPLAY',
                             'card_title' => 'Premium Retail Aisles',
                             'card_desc'  => 'Prominently displayed whole bean bags and fine drip grounds.',
-                            'card_image' => array( 'url' => $uri . '/assets/images/shwapno_santino_retail.jpg', 'id' => '' ),
+                            'card_image' => array( 'url'=> santino_img( 'shwapno_santino_retail.jpg' ), 'id' => '' ),
                         ),
                         array(
                             'card_badge' => 'IN-STORE GRIND',
                             'card_title' => 'Custom Grind Precision',
                             'card_desc'  => 'Fresh on-demand grinding booths calibrated for Moka pot, Espresso, and French press.',
-                            'card_image' => array( 'url' => $uri . '/assets/images/imgi_218_blackeagle2.jpg', 'id' => '' ),
+                            'card_image' => array( 'url'=> santino_img( 'imgi_218_blackeagle2.jpg' ), 'id' => '' ),
                         ),
                         array(
                             'card_badge' => 'AROMA PROTECTION',
                             'card_title' => 'One-Way Valve Packaging',
                             'card_desc'  => 'Preserving volatile aromatics and releasing natural CO2 for maximum shelf freshness.',
-                            'card_image' => array( 'url' => $uri . '/assets/images/imgi_206_beans1.jpg', 'id' => '' ),
+                            'card_image' => array( 'url'=> santino_img( 'imgi_206_beans1.jpg' ), 'id' => '' ),
                         ),
                         array(
                             'card_badge' => 'NATIONWIDE REACH',
                             'card_title' => '100+ Outlet Superstore Network',
                             'card_desc'  => 'Consistently restocked weekly across prime residential and commercial zones.',
-                            'card_image' => array( 'url' => $uri . '/assets/images/imgi_209_office1.jpg', 'id' => '' ),
+                            'card_image' => array( 'url'=> santino_img( 'imgi_209_office1.jpg' ), 'id' => '' ),
                         ),
                     ),
                 ) ) ) ),
@@ -828,9 +871,32 @@ class Santino_Demo_Importer {
             \Elementor\Plugin::$instance->files_manager->clear_cache();
         }
 
+        // 7. Seed official Santino Navigation Menus (Header & Footers)
+        if ( function_exists( 'santino_setup_official_nav_menus' ) ) {
+            santino_setup_official_nav_menus( true );
+        }
+
         wp_send_json_success( array(
-            'message' => 'All 13 Pages, Elementor Structures, and Front Page settings have been imported successfully! Only theme data was created.',
+            'message' => 'All 13 Pages, Elementor Structures, Navigation Menus, and Front Page settings have been imported successfully!',
         ) );
+    }
+    public static function handle_ajax_import_menus_only() {
+        if ( ! empty( $_REQUEST['nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'santino_demo_import_nonce' ) ) {
+            wp_send_json_error( array( 'message' => 'Security token expired. Please refresh the page.' ) );
+        }
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => 'Permission denied.' ) );
+        }
+
+        if ( function_exists( 'santino_setup_official_nav_menus' ) ) {
+            santino_setup_official_nav_menus( true );
+            wp_send_json_success( array(
+                'message' => 'Official Santino Navigation Menus (Primary Header Mega Menu, Footer Quick Links, and Customer Care) have been created and assigned successfully!',
+            ) );
+        }
+
+        wp_send_json_error( array( 'message' => 'Menu setup engine missing.' ) );
     }
 }
 

@@ -660,7 +660,7 @@ h1, h2, h3, h4, h5, h6,
         
         <div class="col-lg-4 col-md-6 branch-item-col reveal" data-delay="100" data-region="gulshan">
           <div class="branch-card hover-lift">
-            <div class="branch-card-img" style="background-image: url('<?php echo santino_img('imgi_20_santino_-_250522-07574.jpg'); ?>');">
+            <div class="branch-card-img" style="background-image: url('<?php echo function_exists('santino_get_page_banner') ? santino_get_page_banner('menu', 'banner-signature-lattes.jpg') : santino_img('banner-signature-lattes.jpg'); ?>')";">
               <span class="branch-tag-badge">FLAGSHIP EXPERIENCE</span>
             </div>
             <div class="branch-card-body">

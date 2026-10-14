@@ -71,7 +71,7 @@ class Santino_Brand_Slider_Widget extends \Elementor\Widget_Base {
                 'label'   => esc_html__( 'Brand Logo', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::MEDIA,
                 'default' => array(
-                    'url' => SANTINO_URI . '/assets/images/Logo-Santino-Coffee-transparent.png',
+                    'url' => function_exists( 'santino_img' ) ? santino_img( 'Logo-Santino-Coffee-transparent.png' ) : '',
                 ),
             )
         );
@@ -106,8 +106,12 @@ class Santino_Brand_Slider_Widget extends \Elementor\Widget_Base {
                 <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 gap-lg-5">
                     <?php foreach ( $settings['brands_list'] as $item ) : ?>
                         <div class="brand-item text-center p-2">
-                            <span class="fw-bold fs-5 font-heading text-dark text-opacity-75"><?php echo esc_html( $item['brand_name'] ); ?></span>
-                            <span class="badge bg-light text-muted border ms-2 small"><?php echo esc_html( $item['country'] ); ?></span>
+                            <?php if ( ! empty( $item['logo']['url'] ) ) : ?>
+                                <img src="<?php echo esc_url( $item['logo']['url'] ); ?>" alt="<?php echo esc_attr( $item['brand_name'] ); ?>" style="max-height: 44px; width: auto; object-fit: contain;">
+                            <?php else : ?>
+                                <span class="fw-bold fs-5 font-heading text-dark text-opacity-75"><?php echo esc_html( $item['brand_name'] ); ?></span>
+                                <span class="badge bg-light text-muted border ms-2 small"><?php echo esc_html( $item['country'] ); ?></span>
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 </div>

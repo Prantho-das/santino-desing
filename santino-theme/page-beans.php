@@ -25,7 +25,7 @@ else :
 ?>
 
 <!-- MINIMAL CLEAN ARTISAN ROASTERY HERO -->
-  <section class="pro-banner-hero" style="background-image: url('<?php echo santino_img('imgi_4_pexels-sikunovruslan-11942442.jpg'); ?>'); background-position: center; min-height: 52vh;">
+  <section class="pro-banner-hero" style="background-image: url('<?php echo function_exists('santino_get_page_banner') ? santino_get_page_banner('beans', 'traditional-coffee-9kg_1.jpg') : santino_img('traditional-coffee-9kg_1.jpg'); ?>')"; background-position: center; min-height: 52vh;">
     <div class="pro-banner-overlay" style="background: linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.42) 100%);"></div>
     <div class="pro-banner-glow-line"></div>
     

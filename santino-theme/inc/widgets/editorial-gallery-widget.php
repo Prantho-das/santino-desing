@@ -181,7 +181,7 @@ class Santino_Editorial_Gallery_Widget extends \Elementor\Widget_Base {
                         if ( ! empty( $card['card_image']['url'] ) ) {
                             $img_src = $card['card_image']['url'];
                         } elseif ( ! empty( $card['card_image'] ) && is_string( $card['card_image'] ) ) {
-                            $img_src = function_exists( 'santino_img' ) ? santino_img( $card['card_image'] ) : ( SANTINO_URI . '/assets/images/' . $card['card_image'] );
+                            $img_src = function_exists( 'santino_img' ) ? santino_img( $card['card_image'] ) : '';
                         } else {
                             $img_src = function_exists( 'santino_img' ) ? santino_img( 'imgi_218_blackeagle2.jpg' ) : '';
                         }

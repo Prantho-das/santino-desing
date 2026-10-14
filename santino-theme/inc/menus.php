@@ -76,17 +76,24 @@ class Santino_Footer_Nav_Walker extends Walker_Nav_Menu {
     }
 }
 
+/**
+ * Primary Nav Fallback matching html-designs/index.html 100%
+ */
 function santino_primary_nav_fallback() {
     ?>
     <a href="<?php echo esc_url( home_url( '/our-story/' ) ); ?>" class="nav-link-custom <?php echo is_page( 'our-story' ) ? 'active' : ''; ?>">About Us</a>
     
+    <!-- MACHINE WITH NESTED DROPDOWN -->
     <div class="nav-item-dropdown">
       <a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-link-custom <?php echo is_page( 'machines' ) ? 'active' : ''; ?> d-flex align-items-center gap-1">
         <span>Machine</span>
         <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
       </a>
 
+      <!-- Level 1 Dropdown List -->
       <ul class="nav-nested-menu">
+        
+        <!-- 1. Nuova Simonelli -->
         <li class="nav-nested-item">
           <a href="<?php echo esc_url( home_url( '/machines/#nuova-simonelli' ) ); ?>" class="nav-nested-link">
             <span>Nuova Simonelli</span>
@@ -101,6 +108,7 @@ function santino_primary_nav_fallback() {
           </ul>
         </li>
 
+        <!-- 2. Victoria Arduino -->
         <li class="nav-nested-item">
           <a href="<?php echo esc_url( home_url( '/machines/#victoria-arduino' ) ); ?>" class="nav-nested-link">
             <span>Victoria Arduino</span>
@@ -116,6 +124,7 @@ function santino_primary_nav_fallback() {
           </ul>
         </li>
 
+        <!-- 3. CREM -->
         <li class="nav-nested-item">
           <a href="<?php echo esc_url( home_url( '/machines/#crem' ) ); ?>" class="nav-nested-link">
             <span>CREM</span>
@@ -128,6 +137,7 @@ function santino_primary_nav_fallback() {
           </ul>
         </li>
 
+        <!-- 4. Kalerm -->
         <li class="nav-nested-item">
           <a href="<?php echo esc_url( home_url( '/machines/#kalerm' ) ); ?>" class="nav-nested-link">
             <span>Kalerm</span>
@@ -141,6 +151,7 @@ function santino_primary_nav_fallback() {
           </ul>
         </li>
 
+        <!-- 5. Rex Royal -->
         <li class="nav-nested-item">
           <a href="<?php echo esc_url( home_url( '/machines/#rex-royal' ) ); ?>" class="nav-nested-link">
             <span>Rex Royal</span>
@@ -148,37 +159,38 @@ function santino_primary_nav_fallback() {
             <i class="bi bi-chevron-right"></i>
           </a>
           <ul class="nav-nested-submenu">
-            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">S500 Premium</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">S300 Office</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">S500 Compact</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">S300 Commercial</a></li>
           </ul>
         </li>
 
+        <!-- 6. 3TEMP -->
         <li class="nav-nested-item">
-          <a href="<?php echo esc_url( home_url( '/machines/#mahlkonig' ) ); ?>" class="nav-nested-link">
-            <span>Mahlkonig</span>
-            <span class="nav-nested-badge">GERMANY</span>
+          <a href="<?php echo esc_url( home_url( '/machines/#3temp' ) ); ?>" class="nav-nested-link">
+            <span>3TEMP</span>
+            <span class="nav-nested-badge">BREWER</span>
             <i class="bi bi-chevron-right"></i>
           </a>
           <ul class="nav-nested-submenu">
-            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">EK43 / EK43S</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">E80 Supreme</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">E65S GbW</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">Hipster Pulse</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">Hipster Profile</a></li>
           </ul>
         </li>
 
+        <!-- 7. CAYE Bionic Barista -->
         <li class="nav-nested-item">
-          <a href="<?php echo esc_url( home_url( '/machines/#dalla-corte' ) ); ?>" class="nav-nested-link">
-            <span>Dalla Corte</span>
-            <span class="nav-nested-badge">PRO</span>
+          <a href="<?php echo esc_url( home_url( '/machines/#caye' ) ); ?>" class="nav-nested-link">
+            <span>CAYE Bionic Barista</span>
+            <span class="nav-nested-badge">AI/ROBOT</span>
             <i class="bi bi-chevron-right"></i>
           </a>
           <ul class="nav-nested-submenu">
-            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">Zero Multi-Boiler</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">Mina Profiling</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">Icon Commercial</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">Robotic Kiosk System</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="nav-sub-link">Dual-Arm Barista Robot</a></li>
           </ul>
         </li>
 
+        <!-- 8. Grinders -->
         <li class="nav-nested-item">
           <a href="<?php echo esc_url( home_url( '/machines/#grinders' ) ); ?>" class="nav-nested-link">
             <span>Grinders</span>
@@ -191,24 +203,28 @@ function santino_primary_nav_fallback() {
           </ul>
         </li>
 
+        <!-- 9. Bubble Tea Shop Solutions -->
         <li class="nav-nested-item">
           <a href="<?php echo esc_url( home_url( '/machines/#bubble-tea' ) ); ?>" class="nav-nested-link">
             <span>Bubble Tea Shop Solutions</span>
           </a>
         </li>
 
+        <!-- 10. Blupura Water Solutions -->
         <li class="nav-nested-item">
           <a href="<?php echo esc_url( home_url( '/machines/#blupura' ) ); ?>" class="nav-nested-link">
             <span>Blupura Water Solutions</span>
           </a>
         </li>
 
+        <!-- 11. Others -->
         <li class="nav-nested-item">
           <a href="<?php echo esc_url( home_url( '/machines/#others' ) ); ?>" class="nav-nested-link">
             <span>Others</span>
           </a>
         </li>
 
+        <!-- 12. Technical Support -->
         <li class="nav-nested-item">
           <a href="<?php echo esc_url( home_url( '/#machine-services' ) ); ?>" class="nav-nested-link">
             <span>Technical Support</span>
@@ -223,6 +239,7 @@ function santino_primary_nav_fallback() {
             <li><a href="<?php echo esc_url( home_url( '/#machine-services' ) ); ?>" class="nav-sub-link">Descaling & Filtration</a></li>
           </ul>
         </li>
+
       </ul>
     </div>
 
@@ -233,109 +250,324 @@ function santino_primary_nav_fallback() {
     <?php
 }
 
-function santino_footer_quick_fallback() {
-    ?>
-    <ul class="footer-menu-list">
-      <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a></li>
-      <li><a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>">Machines</a></li>
-      <li><a href="<?php echo esc_url( home_url( '/beans/' ) ); ?>">Coffee Beans</a></li>
-      <li><a href="<?php echo esc_url( home_url( '/training/' ) ); ?>">Barista Academy</a></li>
-      <li><a href="<?php echo esc_url( home_url( '/office-cafe/' ) ); ?>">Horeca &amp; Office</a></li>
-      <li><a href="<?php echo esc_url( home_url( '/membership/' ) ); ?>">Club Membership</a></li>
-    </ul>
-    <?php
-}
+/**
+ * Comprehensive Santino Official Navigation Menu Engine
+ * Matches frontend design: About Us, Machine (12 Sub-brands), Beans, Training, Horeca, Office Cafe
+ */
+function santino_setup_official_nav_menus( $force = false ) {
+    $menu_name = 'Santino Primary Navigation';
+    $menu_obj  = wp_get_nav_menu_object( $menu_name );
 
-function santino_footer_care_fallback() {
-    ?>
-    <ul class="footer-menu-list">
-      <li><a href="<?php echo esc_url( home_url( '/office-cafe/#contact' ) ); ?>">24/7 AMC Support</a></li>
-      <li><a href="<?php echo esc_url( home_url( '/office-cafe/#contact' ) ); ?>">Commercial Consultation</a></li>
-      <li><a href="<?php echo esc_url( home_url( '/#availability' ) ); ?>">Find Cafes &amp; Outlets</a></li>
-      <li><a href="<?php echo esc_url( home_url( '/our-story/' ) ); ?>">Brand Heritage</a></li>
-      <li><a href="tel:+8801613334514">Direct Hotline</a></li>
-    </ul>
-    <?php
-}
+    if ( ! $menu_obj ) {
+        $primary_id = wp_create_nav_menu( $menu_name );
+    } else {
+        $primary_id = $menu_obj->term_id;
+        if ( $force ) {
+            $existing_items = wp_get_nav_menu_items( $primary_id );
+            if ( ! empty( $existing_items ) ) {
+                foreach ( $existing_items as $ei ) {
+                    wp_delete_post( $ei->ID, true );
+                }
+            }
+        }
+    }
 
-function santino_register_elementor_locations( $elementor_theme_manager ) {
-    $elementor_theme_manager->register_location( 'header' );
-    $elementor_theme_manager->register_location( 'footer' );
-}
-add_action( 'elementor/theme/register_locations', 'santino_register_elementor_locations' );
+    if ( ! is_wp_error( $primary_id ) && ( ! $menu_obj || $force ) ) {
+        // 1. About Us
+        wp_update_nav_menu_item( $primary_id, 0, array(
+            'menu-item-title'  => 'About Us',
+            'menu-item-url'    => home_url( '/our-story/' ),
+            'menu-item-status' => 'publish',
+        ) );
 
-function santino_seed_default_menus() {
-    $locations = get_theme_mod( 'nav_menu_locations' );
+        // 2. Machine (Parent with 12 Nested Submenus)
+        $mach_id = wp_update_nav_menu_item( $primary_id, 0, array(
+            'menu-item-title'  => 'Machine',
+            'menu-item-url'    => home_url( '/machines/' ),
+            'menu-item-status' => 'publish',
+        ) );
+
+        if ( $mach_id && ! is_wp_error( $mach_id ) ) {
+            // Nuova Simonelli
+            $ns_id = wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'Nuova Simonelli',
+                'menu-item-url'       => home_url( '/machines/#nuova-simonelli' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-attr-title'=> 'ITALY',
+                'menu-item-status'    => 'publish',
+            ) );
+            if ( $ns_id && ! is_wp_error( $ns_id ) ) {
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Appia Life', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $ns_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Aurelia Wave', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $ns_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Prontobar Touch', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $ns_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'MDJ Grinder', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $ns_id, 'menu-item-status' => 'publish' ) );
+            }
+
+            // Victoria Arduino
+            $va_id = wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'Victoria Arduino',
+                'menu-item-url'       => home_url( '/machines/#victoria-arduino' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-attr-title'=> 'FLAGSHIP',
+                'menu-item-status'    => 'publish',
+            ) );
+            if ( $va_id && ! is_wp_error( $va_id ) ) {
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'E1 Prima', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $va_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Maverick', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $va_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Eagle One', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $va_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Eagle Tempo', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $va_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'MY-Series Grinders', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $va_id, 'menu-item-status' => 'publish' ) );
+            }
+
+            // CREM
+            $crem_id = wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'CREM',
+                'menu-item-url'       => home_url( '/machines/#crem' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-status'    => 'publish',
+            ) );
+            if ( $crem_id && ! is_wp_error( $crem_id ) ) {
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'EX3', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $crem_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Diamant Pro', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $crem_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Megacrem', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $crem_id, 'menu-item-status' => 'publish' ) );
+            }
+
+            // Kalerm
+            $kal_id = wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'Kalerm',
+                'menu-item-url'       => home_url( '/machines/#kalerm' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-attr-title'=> 'SMART',
+                'menu-item-status'    => 'publish',
+            ) );
+            if ( $kal_id && ! is_wp_error( $kal_id ) ) {
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Y580C Smart', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $kal_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'K95L Commercial', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $kal_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'X580 Automatic', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $kal_id, 'menu-item-status' => 'publish' ) );
+            }
+
+            // Rex Royal
+            $rex_id = wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'Rex Royal',
+                'menu-item-url'       => home_url( '/machines/#rex-royal' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-attr-title'=> 'SWISS',
+                'menu-item-status'    => 'publish',
+            ) );
+            if ( $rex_id && ! is_wp_error( $rex_id ) ) {
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'S500 Compact', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $rex_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'S300 Commercial', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $rex_id, 'menu-item-status' => 'publish' ) );
+            }
+
+            // 3TEMP
+            $temp_id = wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => '3TEMP',
+                'menu-item-url'       => home_url( '/machines/#3temp' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-attr-title'=> 'BREWER',
+                'menu-item-status'    => 'publish',
+            ) );
+            if ( $temp_id && ! is_wp_error( $temp_id ) ) {
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Hipster Pulse', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $temp_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Hipster Profile', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $temp_id, 'menu-item-status' => 'publish' ) );
+            }
+
+            // CAYE Bionic Barista
+            $caye_id = wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'CAYE Bionic Barista',
+                'menu-item-url'       => home_url( '/machines/#caye' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-attr-title'=> 'AI/ROBOT',
+                'menu-item-status'    => 'publish',
+            ) );
+            if ( $caye_id && ! is_wp_error( $caye_id ) ) {
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Robotic Kiosk System', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $caye_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Dual-Arm Barista Robot', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $caye_id, 'menu-item-status' => 'publish' ) );
+            }
+
+            // Grinders
+            $grind_id = wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'Grinders',
+                'menu-item-url'       => home_url( '/machines/#grinders' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-status'    => 'publish',
+            ) );
+            if ( $grind_id && ! is_wp_error( $grind_id ) ) {
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Mythos One / Two', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $grind_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Eureka Helios', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $grind_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Fiorenzato F64', 'menu-item-url' => home_url( '/machines/' ), 'menu-item-parent-id' => $grind_id, 'menu-item-status' => 'publish' ) );
+            }
+
+            // Bubble Tea
+            wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'Bubble Tea Shop Solutions',
+                'menu-item-url'       => home_url( '/machines/#bubble-tea' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-status'    => 'publish',
+            ) );
+
+            // Blupura
+            wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'Blupura Water Solutions',
+                'menu-item-url'       => home_url( '/machines/#blupura' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-status'    => 'publish',
+            ) );
+
+            // Others
+            wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'Others',
+                'menu-item-url'       => home_url( '/machines/#others' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-status'    => 'publish',
+            ) );
+
+            // Technical Support
+            $tech_id = wp_update_nav_menu_item( $primary_id, 0, array(
+                'menu-item-title'     => 'Technical Support',
+                'menu-item-url'       => home_url( '/#machine-services' ),
+                'menu-item-parent-id' => $mach_id,
+                'menu-item-attr-title'=> '24/7 AMC',
+                'menu-item-status'    => 'publish',
+            ) );
+            if ( $tech_id && ! is_wp_error( $tech_id ) ) {
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Installation & Setup', 'menu-item-url' => home_url( '/#machine-services' ), 'menu-item-parent-id' => $tech_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Preventive AMC', 'menu-item-url' => home_url( '/#machine-services' ), 'menu-item-parent-id' => $tech_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Emergency Breakdown', 'menu-item-url' => home_url( '/#machine-services' ), 'menu-item-parent-id' => $tech_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => '100% Genuine Spare Parts', 'menu-item-url' => home_url( '/#machine-services' ), 'menu-item-parent-id' => $tech_id, 'menu-item-status' => 'publish' ) );
+                wp_update_nav_menu_item( $primary_id, 0, array( 'menu-item-title' => 'Descaling & Filtration', 'menu-item-url' => home_url( '/#machine-services' ), 'menu-item-parent-id' => $tech_id, 'menu-item-status' => 'publish' ) );
+            }
+        }
+
+        // 3. Beans
+        wp_update_nav_menu_item( $primary_id, 0, array(
+            'menu-item-title'  => 'Beans',
+            'menu-item-url'    => home_url( '/beans/' ),
+            'menu-item-status' => 'publish',
+        ) );
+
+        // 4. Training
+        wp_update_nav_menu_item( $primary_id, 0, array(
+            'menu-item-title'  => 'Training',
+            'menu-item-url'    => home_url( '/training/' ),
+            'menu-item-status' => 'publish',
+        ) );
+
+        // 5. Horeca
+        wp_update_nav_menu_item( $primary_id, 0, array(
+            'menu-item-title'  => 'Horeca',
+            'menu-item-url'    => home_url( '/horeca/' ),
+            'menu-item-status' => 'publish',
+        ) );
+
+        // 6. Office Cafe
+        wp_update_nav_menu_item( $primary_id, 0, array(
+            'menu-item-title'  => 'Office Cafe',
+            'menu-item-url'    => home_url( '/office-cafe/' ),
+            'menu-item-status' => 'publish',
+        ) );
+    }
+
+    // 2. Footer Quick Links
+    $quick_name = 'Santino Footer Quick Links';
+    $quick_obj  = wp_get_nav_menu_object( $quick_name );
+    if ( ! $quick_obj ) {
+        $quick_id = wp_create_nav_menu( $quick_name );
+    } else {
+        $quick_id = $quick_obj->term_id;
+        if ( $force ) {
+            $existing_q = wp_get_nav_menu_items( $quick_id );
+            if ( ! empty( $existing_q ) ) {
+                foreach ( $existing_q as $eq ) {
+                    wp_delete_post( $eq->ID, true );
+                }
+            }
+        }
+    }
+
+    if ( ! is_wp_error( $quick_id ) && ( ! $quick_obj || $force ) ) {
+        $q_items = array(
+            array( 'title' => 'Home', 'url' => home_url( '/' ) ),
+            array( 'title' => 'Commercial Machines', 'url' => home_url( '/machines/' ) ),
+            array( 'title' => 'Specialty Coffee Beans', 'url' => home_url( '/beans/' ) ),
+            array( 'title' => 'Barista Academy & SCA', 'url' => home_url( '/training/' ) ),
+            array( 'title' => 'HoReCa & Corporate Office', 'url' => home_url( '/office-cafe/' ) ),
+            array( 'title' => 'VIP Club Membership', 'url' => home_url( '/membership/' ) ),
+            array( 'title' => 'Cafe Menu & Delivery', 'url' => home_url( '/menu/' ) ),
+            array( 'title' => 'Certificate Verification', 'url' => home_url( '/certificate-verification/' ) ),
+        );
+        foreach ( $q_items as $q ) {
+            wp_update_nav_menu_item( $quick_id, 0, array(
+                'menu-item-title'  => $q['title'],
+                'menu-item-url'    => $q['url'],
+                'menu-item-status' => 'publish',
+            ) );
+        }
+    }
+
+    // 3. Footer Customer Care
+    $care_name = 'Santino Footer Customer Care';
+    $care_obj  = wp_get_nav_menu_object( $care_name );
+    if ( ! $care_obj ) {
+        $care_id = wp_create_nav_menu( $care_name );
+    } else {
+        $care_id = $care_obj->term_id;
+        if ( $force ) {
+            $existing_c = wp_get_nav_menu_items( $care_id );
+            if ( ! empty( $existing_c ) ) {
+                foreach ( $existing_c as $ec ) {
+                    wp_delete_post( $ec->ID, true );
+                }
+            }
+        }
+    }
+
+    if ( ! is_wp_error( $care_id ) && ( ! $care_obj || $force ) ) {
+        $c_items = array(
+            array( 'title' => '24/7 AMC Technical Support', 'url' => home_url( '/office-cafe/#contact' ) ),
+            array( 'title' => 'Commercial Coffee Consultation', 'url' => home_url( '/office-cafe/#contact' ) ),
+            array( 'title' => 'Retail Shelves at Shwapno', 'url' => home_url( '/swapno/' ) ),
+            array( 'title' => 'Our Roastery & Brand Story', 'url' => home_url( '/our-story/' ) ),
+            array( 'title' => 'Direct Hotline: +880 1613-334514', 'url' => 'tel:+8801613334514' ),
+        );
+        foreach ( $c_items as $c ) {
+            wp_update_nav_menu_item( $care_id, 0, array(
+                'menu-item-title'  => $c['title'],
+                'menu-item-url'    => $c['url'],
+                'menu-item-status' => 'publish',
+            ) );
+        }
+    }
+
+    // Force map to theme locations
+    $locations = get_theme_mod( 'nav_menu_locations', array() );
     if ( ! is_array( $locations ) ) {
         $locations = array();
     }
-
-    if ( empty( $locations['primary'] ) ) {
-        $menu_id = wp_create_nav_menu( 'Primary Navigation' );
-        if ( ! is_wp_error( $menu_id ) ) {
-            $items = array(
-                array( 'title' => 'About Us', 'url' => home_url( '/our-story/' ) ),
-                array( 'title' => 'Machines', 'url' => home_url( '/machines/' ) ),
-                array( 'title' => 'Beans', 'url' => home_url( '/beans/' ) ),
-                array( 'title' => 'Training', 'url' => home_url( '/training/' ) ),
-                array( 'title' => 'Horeca', 'url' => home_url( '/horeca/' ) ),
-                array( 'title' => 'Office Cafe', 'url' => home_url( '/office-cafe/' ) ),
-                array( 'title' => 'Membership', 'url' => home_url( '/membership/' ) ),
-            );
-            foreach ( $items as $item ) {
-                wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'  => $item['title'],
-                    'menu-item-url'    => $item['url'],
-                    'menu-item-status' => 'publish',
-                ) );
-            }
-            $locations['primary'] = $menu_id;
-        }
+    if ( ! is_wp_error( $primary_id ) ) {
+        $locations['primary'] = $primary_id;
     }
-
-    if ( empty( $locations['footer_quick'] ) ) {
-        $menu_id = wp_create_nav_menu( 'Footer Quick Links' );
-        if ( ! is_wp_error( $menu_id ) ) {
-            $items = array(
-                array( 'title' => 'Home', 'url' => home_url( '/' ) ),
-                array( 'title' => 'Machines', 'url' => home_url( '/machines/' ) ),
-                array( 'title' => 'Coffee Beans', 'url' => home_url( '/beans/' ) ),
-                array( 'title' => 'Barista Academy', 'url' => home_url( '/training/' ) ),
-                array( 'title' => 'Horeca & Office', 'url' => home_url( '/office-cafe/' ) ),
-                array( 'title' => 'Club Membership', 'url' => home_url( '/membership/' ) ),
-            );
-            foreach ( $items as $item ) {
-                wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'  => $item['title'],
-                    'menu-item-url'    => $item['url'],
-                    'menu-item-status' => 'publish',
-                ) );
-            }
-            $locations['footer_quick'] = $menu_id;
-        }
+    if ( ! is_wp_error( $quick_id ) ) {
+        $locations['footer_quick'] = $quick_id;
     }
-
-    if ( empty( $locations['footer_care'] ) ) {
-        $menu_id = wp_create_nav_menu( 'Footer Customer Care' );
-        if ( ! is_wp_error( $menu_id ) ) {
-            $items = array(
-                array( 'title' => '24/7 AMC Support', 'url' => home_url( '/office-cafe/#contact' ) ),
-                array( 'title' => 'Commercial Consultation', 'url' => home_url( '/office-cafe/#contact' ) ),
-                array( 'title' => 'Find Cafes & Outlets', 'url' => home_url( '/#availability' ) ),
-                array( 'title' => 'Brand Heritage', 'url' => home_url( '/our-story/' ) ),
-                array( 'title' => 'Direct Hotline', 'url' => 'tel:+8801613334514' ),
-            );
-            foreach ( $items as $item ) {
-                wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'  => $item['title'],
-                    'menu-item-url'    => $item['url'],
-                    'menu-item-status' => 'publish',
-                ) );
-            }
-            $locations['footer_care'] = $menu_id;
-        }
+    if ( ! is_wp_error( $care_id ) ) {
+        $locations['footer_care'] = $care_id;
     }
-
     set_theme_mod( 'nav_menu_locations', $locations );
+
+    return true;
 }
-add_action( 'after_switch_theme', 'santino_seed_default_menus' );
+
+/**
+ * Auto-Seed Menus on Theme Switch and First Admin Load
+ */
+add_action( 'after_switch_theme', function() {
+    santino_setup_official_nav_menus( true );
+} );
+
+add_action( 'admin_init', function() {
+    if ( ! get_option( 'santino_menus_v4_frontend_exact' ) ) {
+        santino_setup_official_nav_menus( true );
+        update_option( 'santino_menus_v4_frontend_exact', 1 );
+    }
+} );

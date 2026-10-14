@@ -125,7 +125,7 @@ class Santino_Outlets_Widget extends \Elementor\Widget_Base {
                 'label'   => esc_html__( 'Card Image', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::MEDIA,
                 'default' => array(
-                    'url' => SANTINO_URI . '/assets/images/shwapno_santino_retail.jpg',
+                    'url' => function_exists( 'santino_img' ) ? santino_img( 'shwapno_santino_retail.jpg' ) : '',
                 ),
             )
         );
@@ -143,7 +143,7 @@ class Santino_Outlets_Widget extends \Elementor\Widget_Base {
                         'description'  => 'Find Santino Coffee at your nearest Shwapno Superstore and enjoy your favorite brew.',
                         'location_tag' => 'Nationwide',
                         'link_url'     => array( 'url' => '/swapno/' ),
-                        'image'        => array( 'url' => SANTINO_URI . '/assets/images/shwapno_santino_retail.jpg' ),
+                        'image'        => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'shwapno_santino_retail.jpg' ) : '' ),
                     ),
                     array(
                         'name'         => 'BFC (Best Fried Chicken)',
@@ -151,7 +151,7 @@ class Santino_Outlets_Widget extends \Elementor\Widget_Base {
                         'description'  => 'Enjoy Santino Coffee at BFC outlets, where great food meets great coffee.',
                         'location_tag' => 'Nationwide',
                         'link_url'     => array( 'url' => '/bfc/' ),
-                        'image'        => array( 'url' => SANTINO_URI . '/assets/images/bfc_santino_foodservice.jpg' ),
+                        'image'        => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'bfc_santino_foodservice.jpg' ) : '' ),
                     ),
                 ),
                 'title_field' => '{{{ name }}} ({{{ partner_tag }}})',
@@ -188,7 +188,7 @@ class Santino_Outlets_Widget extends \Elementor\Widget_Base {
 
                 <div class="row g-4">
                     <?php foreach ( $outlets as $outlet ) : 
-                        $img_url = ! empty( $outlet['image']['url'] ) ? esc_url( $outlet['image']['url'] ) : '';
+                        $img_url = ! empty( $outlet['image']['url'] ) ? esc_url( $outlet['image']['url'] ) : ( function_exists('santino_img') ? santino_img('shwapno_santino_retail.jpg') : '' );
                         $link_url = ! empty( $outlet['link_url']['url'] ) ? esc_url( $outlet['link_url']['url'] ) : '#';
                     ?>
                         <div class="col-lg-6">

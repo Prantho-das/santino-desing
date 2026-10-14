@@ -98,7 +98,7 @@ class Santino_Machine_Grid_Widget extends \Elementor\Widget_Base {
                 'label'   => esc_html__( 'Image', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::MEDIA,
                 'default' => array(
-                    'url' => SANTINO_URI . '/assets/images/nuova-simonelli-appia-life_1.jpg',
+                    'url' => function_exists( 'santino_img' ) ? santino_img( 'nuova-simonelli-appia-life_1.jpg' ) : '',
                 ),
             )
         );
@@ -115,42 +115,42 @@ class Santino_Machine_Grid_Widget extends \Elementor\Widget_Base {
                         'brand_badge'   => 'ITALY',
                         'specs'         => '2 Group Volumetric | SIS Infusion | Auto Clean',
                         'capacity'      => '300-500 cups / day',
-                        'machine_image' => array( 'url' => SANTINO_URI . '/assets/images/nuova-simonelli-appia-life_1.jpg' ),
+                        'machine_image' => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'nuova-simonelli-appia-life_1.jpg' ) : '' ),
                     ),
                     array(
                         'machine_title' => 'Victoria Arduino E1 Prima',
                         'brand_badge'   => 'FLAGSHIP',
                         'specs'         => 'Single Group Specialty | App Controlled | NEO Engine',
                         'capacity'      => '150-250 cups / day',
-                        'machine_image' => array( 'url' => SANTINO_URI . '/assets/images/victoria-arduino-e1-prima_1.png' ),
+                        'machine_image' => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'victoria-arduino-e1-prima_1.png' ) : '' ),
                     ),
                     array(
                         'machine_title' => 'Kalerm K95L Smart Bean-to-Cup',
                         'brand_badge'   => 'AUTOMATIC',
                         'specs'         => 'Touchscreen | Fresh Milk Frother | Dual Boiler',
                         'capacity'      => '120-200 cups / day',
-                        'machine_image' => array( 'url' => SANTINO_URI . '/assets/images/kalerm-k95lt-plus_1.png' ),
+                        'machine_image' => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'kalerm-k95lt-plus_1.png' ) : '' ),
                     ),
                     array(
                         'machine_title' => 'CREM EX3 Professional Espresso',
                         'brand_badge'   => 'SWEDEN',
                         'specs'         => 'Dual PID Temperature Control | 1/2 Turn Rotary Steam',
                         'capacity'      => '250-400 cups / day',
-                        'machine_image' => array( 'url' => SANTINO_URI . '/assets/images/crem-ex3_1.jpg' ),
+                        'machine_image' => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'crem-ex3_1.jpg' ) : '' ),
                     ),
                     array(
                         'machine_title' => 'Victoria Arduino Black Eagle Maverick',
                         'brand_badge'   => 'WBC CHAMPION',
                         'specs'         => 'T3 PureBrew Technology | Gravimetric Scales',
                         'capacity'      => '400-800 cups / day',
-                        'machine_image' => array( 'url' => SANTINO_URI . '/assets/images/victoria-arduino-black-eagle-maverick_1.webp' ),
+                        'machine_image' => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'victoria-arduino-black-eagle-maverick_1.webp' ) : '' ),
                     ),
                     array(
                         'machine_title' => 'Rex-Royal S1 Fully Automatic',
                         'brand_badge'   => 'SWISS MADE',
                         'specs'         => 'Integrated Milk Foam System | High Volume Dispenser',
                         'capacity'      => '200-350 cups / day',
-                        'machine_image' => array( 'url' => SANTINO_URI . '/assets/images/rex-royal-s1_1.webp' ),
+                        'machine_image' => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'rex-royal-s1_1.webp' ) : '' ),
                     ),
                 ),
                 'title_field' => '{{{ machine_title }}}',
@@ -178,7 +178,8 @@ class Santino_Machine_Grid_Widget extends \Elementor\Widget_Base {
                                     <span class="badge bg-dark rounded-pill px-3 py-2 text-uppercase"><?php echo esc_html( $item['brand_badge'] ); ?></span>
                                 </div>
                                 <div class="text-center p-3">
-                                    <img src="<?php echo esc_url( $item['machine_image']['url'] ); ?>" alt="<?php echo esc_attr( $item['machine_title'] ); ?>" class="img-fluid" style="height: 220px; object-fit: contain;">
+                                    <?php $m_img = ! empty( $item['machine_image']['url'] ) ? esc_url( $item['machine_image']['url'] ) : ( function_exists('santino_img') ? santino_img( 'nuova-simonelli-appia-life_1.jpg' ) : '' ); ?>
+                                    <img src="<?php echo $m_img; ?>" alt="<?php echo esc_attr( $item['machine_title'] ); ?>" class="img-fluid" style="height: 220px; object-fit: contain;">
                                 </div>
                                 <div class="card-body px-2 pb-2">
                                     <h4 class="h5 fw-bold font-heading mb-2"><?php echo esc_html( $item['machine_title'] ); ?></h4>

@@ -96,7 +96,7 @@ class Santino_Story_Timeline_Widget extends \Elementor\Widget_Base {
                 'label'   => esc_html__( 'Roasting Showcase Image', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::MEDIA,
                 'default' => array(
-                    'url' => SANTINO_URI . '/assets/images/imgi_19_santino_-_250522-07313.jpg',
+                    'url' => function_exists( 'santino_img' ) ? santino_img( 'imgi_19_santino_-_250522-07313.jpg' ) : '',
                 ),
             )
         );

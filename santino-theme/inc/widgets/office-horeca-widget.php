@@ -54,6 +54,17 @@ class Santino_Office_Horeca_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        $this->add_control(
+            'showcase_image',
+            array(
+                'label'   => esc_html__( 'Office Cafe Setup Image', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::MEDIA,
+                'default' => array(
+                    'url' => function_exists( 'santino_img' ) ? santino_img( 'bd-office-coffee.jpg' ) : '',
+                ),
+            )
+        );
+
         $this->end_controls_section();
     }
 
@@ -91,7 +102,10 @@ class Santino_Office_Horeca_Widget extends \Elementor\Widget_Base {
 
                     <div class="col-lg-6">
                         <div class="p-4 rounded-4 bg-light shadow-sm text-center">
-                            <img src="<?php echo santino_img( 'bd-office-coffee.jpg' ); ?>" alt="Office Cafe Setup" class="img-fluid rounded-4">
+                            <?php
+                        $horeca_img = ! empty( $settings['showcase_image']['url'] ) ? esc_url( $settings['showcase_image']['url'] ) : ( function_exists('santino_img') ? santino_img( 'bd-office-coffee.jpg' ) : '' );
+                        ?>
+                        <img src="<?php echo $horeca_img; ?>" alt="<?php echo esc_attr( $settings['title'] ); ?>" class="img-fluid rounded-4">
                         </div>
                     </div>
                 </div>

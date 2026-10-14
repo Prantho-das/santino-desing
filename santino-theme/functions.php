@@ -75,18 +75,21 @@ function santino_enqueue_scripts() {
     // Google Fonts
     wp_enqueue_style( 'santino-fonts', 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Proza+Libre:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap', array(), null );
 
-    // Theme Custom CSS
-    wp_enqueue_style( 'santino-main-style', SANTINO_URI . '/assets/css/styles.css', array( 'bootstrap' ), SANTINO_VERSION );
-    wp_enqueue_style( 'santino-theme-style', get_stylesheet_uri(), array( 'santino-main-style' ), SANTINO_VERSION );
+    // Theme Custom CSS - Primary style.css + assets/css/styles.css fallback
+    wp_enqueue_style( 'santino-theme-style', get_stylesheet_uri(), array( 'bootstrap' ), SANTINO_VERSION );
+    if ( file_exists( SANTINO_DIR . '/assets/css/styles.css' ) ) {
+        wp_enqueue_style( 'santino-main-style', SANTINO_URI . '/assets/css/styles.css', array( 'santino-theme-style' ), SANTINO_VERSION );
+    }
 
     // Bootstrap JS
     wp_enqueue_script( 'bootstrap-bundle', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', true );
 
-    // Custom Script
-    wp_enqueue_script( 'santino-script', SANTINO_URI . '/assets/js/script.js', array( 'bootstrap-bundle' ), SANTINO_VERSION, true );
+    // Custom Script (Checks assets/js first, falls back to root script.js)
+    $script_src = file_exists( SANTINO_DIR . '/assets/js/script.js' ) ? ( SANTINO_URI . '/assets/js/script.js' ) : ( SANTINO_URI . '/script.js' );
+    $menu_src   = file_exists( SANTINO_DIR . '/assets/js/menu.js' ) ? ( SANTINO_URI . '/assets/js/menu.js' ) : ( SANTINO_URI . '/menu.js' );
 
-    // Menu System Script
-    wp_enqueue_script( 'santino-menu-js', SANTINO_URI . '/assets/js/menu.js', array( 'bootstrap-bundle', 'santino-script' ), SANTINO_VERSION, true );
+    wp_enqueue_script( 'santino-script', $script_src, array( 'bootstrap-bundle' ), SANTINO_VERSION, true );
+    wp_enqueue_script( 'santino-menu-js', $menu_src, array( 'bootstrap-bundle', 'santino-script' ), SANTINO_VERSION, true );
 
     // Localize AJAX parameters for Frontend
     wp_localize_script( 'santino-script', 'santino_ajax', array(
@@ -166,11 +169,99 @@ function santino_register_elementor_widgets( $widgets_manager ) {
 add_action( 'elementor/widgets/register', 'santino_register_elementor_widgets' );
 
 /**
- * Custom Helper to Output Image URL easily
+ * Custom Helper to Output Image URL easily with dynamic Media Library fallback
+ * and high quality category-aware placeholder images
  */
-function santino_img( $file ) {
-    return esc_url( SANTINO_URI . '/assets/images/' . ltrim( $file, '/' ) );
+function santino_img( $file = '' ) {
+    if ( empty( $file ) ) {
+        return esc_url( file_exists( SANTINO_DIR . '/placeholder.jpg' ) ? ( SANTINO_URI . '/placeholder.jpg' ) : ( SANTINO_URI . '/assets/images/placeholder.jpg' ) );
+    }
+
+    $clean_file = ltrim( $file, '/' );
+
+    // 1. Check if theme has Customizer override
+    $theme_mod_key = 'santino_img_' . sanitize_key( str_replace( array( '.', '-', '_' ), '_', $clean_file ) );
+    $custom_url = get_theme_mod( $theme_mod_key );
+    if ( $custom_url ) {
+        return esc_url( $custom_url );
+    }
+
+    // 2. Check if file exists in theme assets or root
+    if ( file_exists( SANTINO_DIR . '/assets/images/' . $clean_file ) ) {
+        return esc_url( SANTINO_URI . '/assets/images/' . $clean_file );
+    }
+    if ( file_exists( SANTINO_DIR . '/' . $clean_file ) ) {
+        return esc_url( SANTINO_URI . '/' . $clean_file );
+    }
+
+    // 3. Dynamic check in WordPress Media Library by filename or title
+    global $wpdb;
+    if ( $wpdb ) {
+        $attachment_id = $wpdb->get_var( $wpdb->prepare(
+            "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s LIMIT 1",
+            '%' . $wpdb->esc_like( $clean_file )
+        ) );
+        if ( ! $attachment_id ) {
+            $title_only = pathinfo( $clean_file, PATHINFO_FILENAME );
+            $attachment_id = $wpdb->get_var( $wpdb->prepare(
+                "SELECT ID FROM $wpdb->posts WHERE post_type = 'attachment' AND (post_name = %s OR post_title = %s) LIMIT 1",
+                sanitize_title( $title_only ),
+                $title_only
+            ) );
+        }
+        if ( $attachment_id ) {
+            $attachment_url = wp_get_attachment_url( $attachment_id );
+            if ( $attachment_url ) {
+                return esc_url( $attachment_url );
+            }
+        }
+    }
+
+    // 4. Category-Aware Premium Placeholder Image Fallback
+    $lower = strtolower( $clean_file );
+    if ( strpos( $lower, 'machine' ) !== false || strpos( $lower, 'blackeagle' ) !== false || strpos( $lower, 'simonelli' ) !== false || strpos( $lower, 'maverick' ) !== false || strpos( $lower, 'grinder' ) !== false || strpos( $lower, 'kalerm' ) !== false || strpos( $lower, 'crem' ) !== false || strpos( $lower, 'eagle' ) !== false ) {
+        $ph = file_exists( SANTINO_DIR . '/placeholder-machine.jpg' ) ? ( SANTINO_URI . '/placeholder-machine.jpg' ) : ( SANTINO_URI . '/placeholder.jpg' );
+        return esc_url( $ph );
+    }
+    if ( strpos( $lower, 'barista' ) !== false || strpos( $lower, 'train' ) !== false || strpos( $lower, 'latte' ) !== false || strpos( $lower, 'academy' ) !== false || strpos( $lower, 'cup' ) !== false ) {
+        $ph = file_exists( SANTINO_DIR . '/placeholder-barista.jpg' ) ? ( SANTINO_URI . '/placeholder-barista.jpg' ) : ( SANTINO_URI . '/placeholder.jpg' );
+        return esc_url( $ph );
+    }
+    if ( strpos( $lower, 'office' ) !== false || strpos( $lower, 'horeca' ) !== false || strpos( $lower, 'cafe' ) !== false || strpos( $lower, 'retail' ) !== false || strpos( $lower, 'swapno' ) !== false || strpos( $lower, 'shwapno' ) !== false ) {
+        $ph = file_exists( SANTINO_DIR . '/placeholder-cafe.jpg' ) ? ( SANTINO_URI . '/placeholder-cafe.jpg' ) : ( SANTINO_URI . '/placeholder.jpg' );
+        return esc_url( $ph );
+    }
+    if ( strpos( $lower, 'banner' ) !== false || strpos( $lower, 'hero' ) !== false || strpos( $lower, 'poster' ) !== false ) {
+        $ph = file_exists( SANTINO_DIR . '/placeholder-banner.jpg' ) ? ( SANTINO_URI . '/placeholder-banner.jpg' ) : ( SANTINO_URI . '/placeholder.jpg' );
+        return esc_url( $ph );
+    }
+
+    // 5. Default Universal Coffee Placeholder
+    $default_ph = file_exists( SANTINO_DIR . '/placeholder.jpg' ) ? ( SANTINO_URI . '/placeholder.jpg' ) : ( SANTINO_URI . '/assets/images/placeholder.jpg' );
+    return esc_url( $default_ph );
 }
+
+/**
+ * Intelligent 301 URL Aliases to ensure no Santino pages 404
+ */
+function santino_slug_redirects() {
+    if ( ! is_404() ) {
+        return;
+    }
+    $path = trim( wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' );
+    $redirects = array(
+        'coffee'   => 'beans',
+        'academy'  => 'training',
+        'vip'      => 'membership',
+        'about'    => 'our-story',
+        'services' => 'office-cafe',
+    );
+    if ( isset( $redirects[ $path ] ) ) {
+        wp_safe_redirect( home_url( '/' . $redirects[ $path ] . '/' ), 301 );
+        exit;
+    }
+}
+add_action( 'template_redirect', 'santino_slug_redirects' );
 
 /**
  * Include Elementor Installer & Dependency Notice
@@ -185,6 +276,7 @@ require_once SANTINO_DIR . '/inc/menus.php';
 require_once SANTINO_DIR . '/inc/leads-system.php';
 require_once SANTINO_DIR . '/inc/club-system.php';
 require_once SANTINO_DIR . '/inc/demo-importer.php';
+require_once SANTINO_DIR . '/inc/customizer.php';
 
 
 

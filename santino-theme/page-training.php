@@ -25,7 +25,7 @@ else :
 ?>
 
 <!-- MINIMAL CLEAN TRAINING HERO -->
-  <section class="pro-banner-hero" style="background-image: url('<?php echo santino_img('bd-barista-training.jpg'); ?>'); background-position: center; min-height: 52vh;">
+  <section class="pro-banner-hero" style="background-image: url('<?php echo function_exists('santino_get_page_banner') ? santino_get_page_banner('training', 'bd-barista-training.jpg') : santino_img('bd-barista-training.jpg'); ?>')"; background-position: center; min-height: 52vh;">
     <div class="pro-banner-overlay" style="background: linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.45) 100%);"></div>
     <div class="pro-banner-glow-line"></div>
     

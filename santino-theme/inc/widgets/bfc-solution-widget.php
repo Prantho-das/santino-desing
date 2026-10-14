@@ -64,6 +64,15 @@ class Santino_BFC_Solution_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        $this->add_control(
+            'hero_bg_image',
+            array(
+                'label'   => esc_html__( 'Hero Background Image', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::MEDIA,
+                'default' => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'bfc_santino_foodservice.jpg' ) : '' ),
+            )
+        );
+
         $this->end_controls_section();
 
         // Section 2: Stats Strip Controls
@@ -181,7 +190,10 @@ class Santino_BFC_Solution_Widget extends \Elementor\Widget_Base {
         ?>
 
         <!-- 1. MINIMAL CLEAN BFC HERO BANNER -->
-        <section class="pro-banner-hero pro-banner-bfc" style="background-image: url('<?php echo esc_url( $theme_uri . '/assets/images/bfc_santino_foodservice.jpg' ); ?>'); background-position: center 30%; min-height: 52vh;">
+        <?php
+        $bfc_hero_bg = ! empty( $s['hero_bg_image']['url'] ) ? esc_url( $s['hero_bg_image']['url'] ) : ( function_exists('santino_img') ? santino_img( 'bfc_santino_foodservice.jpg' ) : '' );
+        ?>
+        <section class="pro-banner-hero pro-banner-bfc" style="background-image: url('<?php echo $bfc_hero_bg; ?>'); background-position: center 30%; min-height: 52vh;">
             <div class="pro-banner-overlay" style="background: linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(11, 21, 20, 0.45) 100%);"></div>
             <div class="pro-banner-glow-line"></div>
             
@@ -248,7 +260,8 @@ class Santino_BFC_Solution_Widget extends \Elementor\Widget_Base {
                 <div class="row g-4">
                     <div class="col-lg-7">
                         <div class="editorial-gallery-item" style="min-height: 380px;">
-                            <img src="<?php echo esc_url( $theme_uri . '/assets/images/bfc_santino_foodservice.jpg' ); ?>" alt="Commercial Espresso Station" class="editorial-gallery-img">
+                            <?php $g1 = ! empty( $s['gallery_img_1']['url'] ) ? esc_url( $s['gallery_img_1']['url'] ) : ( function_exists('santino_img') ? santino_img( 'bfc_santino_foodservice.jpg' ) : '' ); ?>
+                            <img src="<?php echo $g1; ?>" alt="Commercial Espresso Station" class="editorial-gallery-img">
                             <div class="editorial-gallery-overlay">
                                 <span class="editorial-gallery-badge"><i class="bi bi-cup-hot-fill"></i> Live Counter Setup</span>
                                 <h3 class="editorial-gallery-title">Commercial 9-Bar Espresso Station</h3>
@@ -259,7 +272,8 @@ class Santino_BFC_Solution_Widget extends \Elementor\Widget_Base {
 
                     <div class="col-lg-5">
                         <div class="editorial-gallery-item" style="min-height: 380px;">
-                            <img src="<?php echo esc_url( $theme_uri . '/assets/images/imgi_20_santino_-_250522-07574.jpg' ); ?>" alt="Barista Latte Pour" class="editorial-gallery-img">
+                            <?php $g2 = ! empty( $s['gallery_img_2']['url'] ) ? esc_url( $s['gallery_img_2']['url'] ) : ( function_exists('santino_img') ? santino_img( 'imgi_20_santino_-_250522-07574.jpg' ) : '' ); ?>
+                            <img src="<?php echo $g2; ?>" alt="Barista Latte Pour" class="editorial-gallery-img">
                             <div class="editorial-gallery-overlay">
                                 <span class="editorial-gallery-badge" style="color: #64dfdf;"><i class="bi bi-droplet-fill"></i> Microfoam Steam</span>
                                 <h3 class="editorial-gallery-title">Velvety Textured Milk</h3>
@@ -270,7 +284,8 @@ class Santino_BFC_Solution_Widget extends \Elementor\Widget_Base {
 
                     <div class="col-md-6 col-lg-4">
                         <div class="editorial-gallery-item" style="min-height: 280px;">
-                            <img src="<?php echo esc_url( $theme_uri . '/assets/images/bd-barista-latte-art.jpg' ); ?>" alt="Master Drum Roastery" class="editorial-gallery-img">
+                            <?php $g3 = ! empty( $s['gallery_img_3']['url'] ) ? esc_url( $s['gallery_img_3']['url'] ) : ( function_exists('santino_img') ? santino_img( 'bd-barista-latte-art.jpg' ) : '' ); ?>
+                            <img src="<?php echo $g3; ?>" alt="Master Drum Roastery" class="editorial-gallery-img">
                             <div class="editorial-gallery-overlay">
                                 <span class="editorial-gallery-badge" style="color: #ffd166;"><i class="bi bi-fire"></i> Custom Roasts</span>
                                 <h3 class="editorial-gallery-title">BFC Signature Blend</h3>
@@ -281,7 +296,8 @@ class Santino_BFC_Solution_Widget extends \Elementor\Widget_Base {
 
                     <div class="col-md-6 col-lg-4">
                         <div class="editorial-gallery-item" style="min-height: 280px;">
-                            <img src="<?php echo esc_url( $theme_uri . '/assets/images/imgi_24_santino_-_250522-07240.jpg' ); ?>" alt="Barista Training" class="editorial-gallery-img">
+                            <?php $g4 = ! empty( $s['gallery_img_4']['url'] ) ? esc_url( $s['gallery_img_4']['url'] ) : ( function_exists('santino_img') ? santino_img( 'imgi_24_santino_-_250522-07240.jpg' ) : '' ); ?>
+                            <img src="<?php echo $g4; ?>" alt="Barista Training" class="editorial-gallery-img">
                             <div class="editorial-gallery-overlay">
                                 <span class="editorial-gallery-badge" style="color: #06d6a0;"><i class="bi bi-award-fill"></i> Barista Academy</span>
                                 <h3 class="editorial-gallery-title">Certified Staff Calibration</h3>
@@ -292,7 +308,8 @@ class Santino_BFC_Solution_Widget extends \Elementor\Widget_Base {
 
                     <div class="col-md-12 col-lg-4">
                         <div class="editorial-gallery-item" style="min-height: 280px;">
-                            <img src="<?php echo esc_url( $theme_uri . '/assets/images/imgi_25_santino_-_250522-07618.jpg' ); ?>" alt="Fast Service Velocity" class="editorial-gallery-img">
+                            <?php $g5 = ! empty( $s['gallery_img_5']['url'] ) ? esc_url( $s['gallery_img_5']['url'] ) : ( function_exists('santino_img') ? santino_img( 'imgi_25_santino_-_250522-07618.jpg' ) : '' ); ?>
+                            <img src="<?php echo $g5; ?>" alt="Fast Service Velocity" class="editorial-gallery-img">
                             <div class="editorial-gallery-overlay">
                                 <span class="editorial-gallery-badge" style="color: #ffb703;"><i class="bi bi-lightning-charge-fill"></i> Peak Velocity</span>
                                 <h3 class="editorial-gallery-title">Under 45s Serving Speed</h3>
@@ -353,10 +370,12 @@ class Santino_BFC_Solution_Widget extends \Elementor\Widget_Base {
                     <div class="col-lg-6">
                         <div class="row g-3">
                             <div class="col-6">
-                                <img src="<?php echo esc_url( $theme_uri . '/assets/images/bd-barista-latte-art.jpg' ); ?>" alt="Commercial Espresso Roastery" class="img-fluid rounded-4 shadow-sm w-100" style="height: 240px; object-fit: cover;">
+                                <?php $t1 = ! empty( $s['tech_img_1']['url'] ) ? esc_url( $s['tech_img_1']['url'] ) : ( function_exists('santino_img') ? santino_img( 'bd-barista-latte-art.jpg' ) : '' ); ?>
+                                <img src="<?php echo $t1; ?>" alt="Commercial Espresso Roastery" class="img-fluid rounded-4 shadow-sm w-100" style="height: 240px; object-fit: cover;">
                             </div>
                             <div class="col-6">
-                                <img src="<?php echo esc_url( $theme_uri . '/assets/images/imgi_141_EagleOne_e524e570-7076-4cbc-916e-ad851ca2de5c.jpg' ); ?>" alt="Italian Machine Technology" class="img-fluid rounded-4 shadow-sm w-100" style="height: 240px; object-fit: cover;">
+                                <?php $t2 = ! empty( $s['tech_img_2']['url'] ) ? esc_url( $s['tech_img_2']['url'] ) : ( function_exists('santino_img') ? santino_img( 'imgi_141_EagleOne_e524e570-7076-4cbc-916e-ad851ca2de5c.jpg' ) : '' ); ?>
+                                <img src="<?php echo $t2; ?>" alt="Italian Machine Technology" class="img-fluid rounded-4 shadow-sm w-100" style="height: 240px; object-fit: cover;">
                             </div>
                             <div class="col-12">
                                 <div class="p-4 rounded-4 text-white shadow-sm" style="background: linear-gradient(135deg, var(--santino-teal) 0%, #003633 100%);">

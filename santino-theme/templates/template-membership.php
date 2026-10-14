@@ -118,7 +118,7 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
 </style>
 
 <!-- MINIMAL CLEAN MEMBERSHIP HERO -->
-  <section class="pro-banner-hero position-relative overflow-hidden text-center" style="background-image: url('<?php echo santino_img('imgi_20_santino_-_250522-07574.jpg'); ?>'); background-position: center; background-size: cover; min-height: 56vh; display: flex; align-items: center; justify-content: center; padding: 80px 20px;">
+  <section class="pro-banner-hero position-relative overflow-hidden text-center" style="background-image: url('<?php echo function_exists('santino_get_page_banner') ? santino_get_page_banner('membership', 'imgi_20_santino_-_250522-07574.jpg') : santino_img('imgi_20_santino_-_250522-07574.jpg'); ?>')"; background-position: center; background-size: cover; min-height: 56vh; display: flex; align-items: center; justify-content: center; padding: 80px 20px;">
     <div class="pro-banner-overlay" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0, 38, 35, 0.7) 100%); z-index: 1;"></div>
     
     <div class="container position-relative" style="max-width: 820px; z-index: 2;">

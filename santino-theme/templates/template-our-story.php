@@ -514,9 +514,14 @@ h1, h2, h3, h4, h5, h6,
   <section class="story-video-hero position-relative overflow-hidden text-center">
     
     <div class="story-video-wrap">
-      <video class="story-video-bg" autoplay muted loop playsinline poster="<?php echo santino_img('imgi_20_santino_-_250522-07574.jpg'); ?>">
-        <source src="https://web.luckincdn.com/default/assets/ourstory-41023fc9.webm" type="video/webm">
-        <source src="https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/ab6140f6-129c-4ae9-aaa0-20190c43183b.mp4" type="video/mp4">
+      <?php
+      $story_vid = get_theme_mod( 'santino_story_video_mp4' );
+      if ( ! $story_vid ) $story_vid = get_theme_mod( 'santino_story_video_url', 'https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/ab6140f6-129c-4ae9-aaa0-20190c43183b.mp4' );
+      $story_poster = get_theme_mod( 'santino_story_poster_img' );
+      if ( ! $story_poster ) $story_poster = santino_img('imgi_20_santino_-_250522-07574.jpg');
+      ?>
+      <video class="story-video-bg" autoplay muted loop playsinline poster="<?php echo esc_url( $story_poster ); ?>">
+        <source src="<?php echo esc_url( $story_vid ); ?>" type="video/mp4">
       </video>
       <div class="story-video-overlay"></div>
     </div>
