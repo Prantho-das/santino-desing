@@ -47,6 +47,27 @@ function santino_theme_setup() {
 }
 add_action( 'after_setup_theme', 'santino_theme_setup' );
 
+function santino_is_elementor_page( $post_id = null ) {
+    if ( ! class_exists( '\Elementor\Plugin' ) ) {
+        return false;
+    }
+    if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+        return true;
+    }
+    if ( ! $post_id ) {
+        $post_id = get_the_ID() ? get_the_ID() : get_queried_object_id();
+    }
+    if ( ! $post_id ) {
+        return false;
+    }
+    $document = \Elementor\Plugin::$instance->documents->get( $post_id );
+    if ( $document && $document->is_built_with_elementor() ) {
+        return true;
+    }
+    return get_post_meta( $post_id, '_elementor_edit_mode', true ) === 'builder';
+}
+
+
 /**
  * Update WooCommerce Cart Count via AJAX
  */

@@ -17,6 +17,92 @@ class Santino_Demo_Importer {
         add_action( 'wp_ajax_santino_ajax_import_menus_only', array( __CLASS__, 'handle_ajax_import_menus_only' ) );
         add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_admin_assets' ) );
         add_action( 'admin_notices', array( __CLASS__, 'show_setup_prompt_notice' ) );
+        add_action( 'admin_init', array( __CLASS__, 'auto_seed_on_admin_edit' ) );
+        add_action( 'elementor/editor/init', array( __CLASS__, 'auto_seed_on_editor_load' ) );
+        add_action( 'template_redirect', array( __CLASS__, 'auto_seed_on_preview_load' ) );
+    }
+
+    public static function auto_seed_on_admin_edit() {
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' && ! empty( $_GET['post'] ) ) {
+            self::seed_single_page( intval( $_GET['post'] ) );
+        }
+    }
+
+    public static function auto_seed_on_editor_load() {
+        $post_id = 0;
+        if ( isset( $_GET['post'] ) ) {
+            $post_id = intval( $_GET['post'] );
+        } elseif ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+            $post_id = get_the_ID();
+        }
+        if ( $post_id ) {
+            self::seed_single_page( $post_id );
+        }
+    }
+
+    public static function auto_seed_on_preview_load() {
+        if ( isset( $_GET['elementor-preview'] ) ) {
+            self::seed_single_page( intval( $_GET['elementor-preview'] ) );
+        }
+    }
+
+    public static function seed_single_page( $post_id ) {
+        $post_id = intval( $post_id );
+        if ( ! $post_id ) return false;
+
+        $post = get_post( $post_id );
+        if ( ! $post || $post->post_type !== 'page' ) return false;
+
+        $existing = get_post_meta( $post_id, '_elementor_data', true );
+        if ( ! empty( $existing ) && $existing !== '[]' ) return false;
+
+        $slug = $post->post_name;
+        if ( intval( get_option( 'page_on_front' ) ) === $post_id ) {
+            $slug = 'home';
+        }
+
+        $tpl = get_post_meta( $post_id, '_wp_page_template', true );
+        if ( ! empty( $tpl ) && $tpl !== 'default' ) {
+            if ( strpos( $tpl, 'home' ) !== false ) $slug = 'home';
+            elseif ( strpos( $tpl, 'machine' ) !== false ) $slug = 'machines';
+            elseif ( strpos( $tpl, 'bean' ) !== false ) $slug = 'beans';
+            elseif ( strpos( $tpl, 'training' ) !== false ) $slug = 'training';
+            elseif ( strpos( $tpl, 'office' ) !== false ) $slug = 'office-cafe';
+            elseif ( strpos( $tpl, 'horeca' ) !== false ) $slug = 'horeca';
+            elseif ( strpos( $tpl, 'story' ) !== false ) $slug = 'our-story';
+            elseif ( strpos( $tpl, 'member' ) !== false ) $slug = 'membership';
+            elseif ( strpos( $tpl, 'menu' ) !== false ) $slug = 'menu';
+            elseif ( strpos( $tpl, 'brand' ) !== false ) $slug = 'brands';
+            elseif ( strpos( $tpl, 'bfc' ) !== false ) $slug = 'bfc';
+            elseif ( strpos( $tpl, 'swapno' ) !== false || strpos( $tpl, 'shwapno' ) !== false ) $slug = 'swapno';
+            elseif ( strpos( $tpl, 'cert' ) !== false ) $slug = 'certificate-verification';
+        }
+
+        $slug_aliases = array(
+            'specialty-coffee-beans'     => 'beans',
+            'commercial-coffee-machines' => 'machines',
+            'barista-training'           => 'training',
+            'academy'                    => 'training',
+            'vip'                        => 'membership',
+            'about'                      => 'our-story',
+            'services'                   => 'office-cafe',
+        );
+        if ( isset( $slug_aliases[ $slug ] ) ) {
+            $slug = $slug_aliases[ $slug ];
+        }
+
+        $structures = self::get_all_structures();
+        if ( isset( $structures[ $slug ] ) ) {
+            $json = wp_json_encode( $structures[ $slug ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+            update_post_meta( $post_id, '_elementor_data', $json );
+            update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
+            update_post_meta( $post_id, '_elementor_version', '3.25.0' );
+            if ( class_exists( '\Elementor\Plugin' ) ) {
+                \Elementor\Plugin::$instance->files_manager->clear_cache();
+            }
+            return true;
+        }
+        return false;
     }
 
     public static function register_admin_menu() {
@@ -467,7 +553,65 @@ class Santino_Demo_Importer {
         // 2. Build Elementor structures for all 13 pages
         $uri = get_template_directory_uri();
 
-        $structures = array(
+        $structures = self::get_all_structures();
+
+        // 3. Write Elementor JSON to each page
+        foreach ( $structures as $slug => $sections ) {
+            if ( isset( $created_page_ids[ $slug ] ) ) {
+                $pid = $created_page_ids[ $slug ];
+                $json = wp_json_encode( $sections, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+                update_post_meta( $pid, '_elementor_data', $json );
+                update_post_meta( $pid, '_elementor_edit_mode', 'builder' );
+                update_post_meta( $pid, '_elementor_version', '3.25.0' );
+            }
+        }
+
+        // 4. Set static front page to Home
+        if ( isset( $created_page_ids['home'] ) ) {
+            update_option( 'show_on_front', 'page' );
+            update_option( 'page_on_front', $created_page_ids['home'] );
+        }
+
+        // 5. Update Permalink structure
+        update_option( 'permalink_structure', '/%postname%/' );
+        flush_rewrite_rules();
+
+        // 6. Clear Elementor CSS cache
+        if ( class_exists( '\Elementor\Plugin' ) ) {
+            \Elementor\Plugin::$instance->files_manager->clear_cache();
+        }
+
+        // 7. Seed official Santino Navigation Menus (Header & Footers)
+        if ( function_exists( 'santino_setup_official_nav_menus' ) ) {
+            santino_setup_official_nav_menus( true );
+        }
+
+        wp_send_json_success( array(
+            'message' => 'All 13 Pages, Elementor Structures, Navigation Menus, and Front Page settings have been imported successfully!',
+        ) );
+    }
+    public static function handle_ajax_import_menus_only() {
+        if ( ! empty( $_REQUEST['nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'santino_demo_import_nonce' ) ) {
+            wp_send_json_error( array( 'message' => 'Security token expired. Please refresh the page.' ) );
+        }
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => 'Permission denied.' ) );
+        }
+
+        if ( function_exists( 'santino_setup_official_nav_menus' ) ) {
+            santino_setup_official_nav_menus( true );
+            wp_send_json_success( array(
+                'message' => 'Official Santino Navigation Menus (Primary Header Mega Menu, Footer Quick Links, and Customer Care) have been created and assigned successfully!',
+            ) );
+        }
+
+        wp_send_json_error( array( 'message' => 'Menu setup engine missing.' ) );
+    }
+
+    public static function get_all_structures() {
+        $uri = get_template_directory_uri();
+        return array(
             'home' => array(
                 self::build_sec( array( array( 'type' => 'santino_hero_banner', 'settings' => array() ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_brand_slider', 'settings' => array( 'title' => 'Global Brand Partners in Bangladesh' ) ) ) ),
@@ -844,59 +988,6 @@ class Santino_Demo_Importer {
                 self::build_sec( array( array( 'type' => 'santino_cta_banner', 'settings' => array( 'title' => 'Need Verification Assistance or Corporate Validation?' ) ) ) ),
             ),
         );
-
-        // 3. Write Elementor JSON to each page
-        foreach ( $structures as $slug => $sections ) {
-            if ( isset( $created_page_ids[ $slug ] ) ) {
-                $pid = $created_page_ids[ $slug ];
-                $json = wp_json_encode( $sections, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
-                update_post_meta( $pid, '_elementor_data', $json );
-                update_post_meta( $pid, '_elementor_edit_mode', 'builder' );
-                update_post_meta( $pid, '_elementor_version', '3.25.0' );
-            }
-        }
-
-        // 4. Set static front page to Home
-        if ( isset( $created_page_ids['home'] ) ) {
-            update_option( 'show_on_front', 'page' );
-            update_option( 'page_on_front', $created_page_ids['home'] );
-        }
-
-        // 5. Update Permalink structure
-        update_option( 'permalink_structure', '/%postname%/' );
-        flush_rewrite_rules();
-
-        // 6. Clear Elementor CSS cache
-        if ( class_exists( '\Elementor\Plugin' ) ) {
-            \Elementor\Plugin::$instance->files_manager->clear_cache();
-        }
-
-        // 7. Seed official Santino Navigation Menus (Header & Footers)
-        if ( function_exists( 'santino_setup_official_nav_menus' ) ) {
-            santino_setup_official_nav_menus( true );
-        }
-
-        wp_send_json_success( array(
-            'message' => 'All 13 Pages, Elementor Structures, Navigation Menus, and Front Page settings have been imported successfully!',
-        ) );
-    }
-    public static function handle_ajax_import_menus_only() {
-        if ( ! empty( $_REQUEST['nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'santino_demo_import_nonce' ) ) {
-            wp_send_json_error( array( 'message' => 'Security token expired. Please refresh the page.' ) );
-        }
-
-        if ( ! current_user_can( 'manage_options' ) ) {
-            wp_send_json_error( array( 'message' => 'Permission denied.' ) );
-        }
-
-        if ( function_exists( 'santino_setup_official_nav_menus' ) ) {
-            santino_setup_official_nav_menus( true );
-            wp_send_json_success( array(
-                'message' => 'Official Santino Navigation Menus (Primary Header Mega Menu, Footer Quick Links, and Customer Care) have been created and assigned successfully!',
-            ) );
-        }
-
-        wp_send_json_error( array( 'message' => 'Menu setup engine missing.' ) );
     }
 }
 
