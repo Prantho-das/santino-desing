@@ -464,10 +464,35 @@ class Santino_Demo_Importer {
             }
         }
 
-        // 2. Build Elementor structures for all 13 pages
-        $uri = get_template_directory_uri();
+        $structures = self::get_all_structures();
+        foreach ( $structures as $slug => $sections ) {
+            if ( isset( $created_page_ids[ $slug ] ) ) {
+                $pid = $created_page_ids[ $slug ];
+                $json = wp_json_encode( $sections, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+                update_post_meta( $pid, '_elementor_data', $json );
+                update_post_meta( $pid, '_elementor_edit_mode', 'builder' );
+                update_post_meta( $pid, '_elementor_version', '3.25.0' );
+            }
+        }
 
-        $structures = array(
+        if ( isset( $created_page_ids['home'] ) ) {
+            update_option( 'show_on_front', 'page' );
+            update_option( 'page_on_front', $created_page_ids['home'] );
+        }
+
+        if ( class_exists( '\Elementor\Plugin' ) ) {
+            \Elementor\Plugin::$instance->files_manager->clear_cache();
+        }
+
+        if ( function_exists( 'santino_setup_official_nav_menus' ) ) {
+            santino_setup_official_nav_menus( true );
+        }
+
+        wp_send_json_success( array( 'message' => 'Demo data imported successfully! All 13 pages configured with native Elementor structures.' ) );
+    }
+
+    public static function get_all_structures() {
+        return array(
             'home' => array(
                 self::build_sec( array( array( 'type' => 'santino_hero_banner', 'settings' => array() ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_cafe_menu', 'settings' => array() ) ) ),
@@ -508,7 +533,12 @@ class Santino_Demo_Importer {
                     'metric4_label' => 'Downtime Warranty',
                 ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_brand_slider', 'settings' => array( 'title' => 'Authorized Global Partners' ) ) ) ),
-                self::build_sec( array( array( 'type' => 'santino_machine_grid', 'settings' => array( 'section_title' => 'Engineered for Flawless Extraction' ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_machine_grid', 'settings' => array(
+                    'title'       => 'Engineered for Flawless Extraction',
+                    'badge'       => 'EQUIPMENT PORTFOLIO',
+                    'subtitle'    => 'Discover our comprehensive collection of traditional, superautomatic, and bionic coffee machinery',
+                    'layout_mode' => 'catalog',
+                ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_services', 'settings' => array( 'title' => '24/7 Technical Support & Preventative AMC' ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_cta_banner', 'settings' => array( 'title' => 'Book a Live Machine Demonstration at our Showroom' ) ) ) ),
             ),
@@ -820,9 +850,7 @@ class Santino_Demo_Importer {
                         ),
                     ),
                 ) ) ) ),
-                self::build_sec( array( array( 'type' => 'santino_coffee_beans', 'settings' => array( 'title' => 'Retail Whole Bean & Ground Coffee Selection' ) ) ) ),
-                self::build_sec( array( array( 'type' => 'santino_services', 'settings' => array( 'title' => 'In-Store Grinding Booths & Freshness Preservation' ) ) ) ),
-                self::build_sec( array( array( 'type' => 'santino_outlets', 'settings' => array( 'title' => 'Explore Santino Shelves at Shwapno Outlets' ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_swapno_retail', 'settings' => array() ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_faq_accordion', 'settings' => array( 'title' => 'Retail Coffee Freshness & Brewing FAQ' ) ) ) ),
                 self::build_sec( array( array( 'type' => 'santino_cta_banner', 'settings' => array( 'title' => 'Partner with Santino for Retail Distribution' ) ) ) ),
             ),
@@ -847,42 +875,8 @@ class Santino_Demo_Importer {
                 self::build_sec( array( array( 'type' => 'santino_cta_banner', 'settings' => array( 'title' => 'Need Verification Assistance or Corporate Validation?' ) ) ) ),
             ),
         );
-
-        // 3. Write Elementor JSON to each page
-        foreach ( $structures as $slug => $sections ) {
-            if ( isset( $created_page_ids[ $slug ] ) ) {
-                $pid = $created_page_ids[ $slug ];
-                $json = wp_json_encode( $sections, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
-                update_post_meta( $pid, '_elementor_data', $json );
-                update_post_meta( $pid, '_elementor_edit_mode', 'builder' );
-                update_post_meta( $pid, '_elementor_version', '3.25.0' );
-            }
-        }
-
-        // 4. Set static front page to Home
-        if ( isset( $created_page_ids['home'] ) ) {
-            update_option( 'show_on_front', 'page' );
-            update_option( 'page_on_front', $created_page_ids['home'] );
-        }
-
-        // 5. Update Permalink structure
-        update_option( 'permalink_structure', '/%postname%/' );
-        flush_rewrite_rules();
-
-        // 6. Clear Elementor CSS cache
-        if ( class_exists( '\Elementor\Plugin' ) ) {
-            \Elementor\Plugin::$instance->files_manager->clear_cache();
-        }
-
-        // 7. Seed official Santino Navigation Menus (Header & Footers)
-        if ( function_exists( 'santino_setup_official_nav_menus' ) ) {
-            santino_setup_official_nav_menus( true );
-        }
-
-        wp_send_json_success( array(
-            'message' => 'All 13 Pages, Elementor Structures, Navigation Menus, and Front Page settings have been imported successfully!',
-        ) );
     }
+
     public static function handle_ajax_import_menus_only() {
         if ( ! empty( $_REQUEST['nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'santino_demo_import_nonce' ) ) {
             wp_send_json_error( array( 'message' => 'Security token expired. Please refresh the page.' ) );
