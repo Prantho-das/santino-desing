@@ -12939,10 +12939,8 @@ html, body {
 }
 
 /* 6. Enforce Santino Theme Typography & Styling over Elementor Resets */
-.elementor [class*="elementor-widget-santino_"],
-.elementor-editor-active [class*="elementor-widget-santino_"] {
+.elementor [class*="elementor-widget-santino_"] {
   font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
-  color: var(--kp-text, #181818);
 }
 
 .elementor [class*="elementor-widget-santino_"] h1,
@@ -12952,24 +12950,62 @@ html, body {
 .elementor [class*="elementor-widget-santino_"] h5,
 .elementor [class*="elementor-widget-santino_"] h6 {
   font-family: var(--font-heading, 'Montserrat', sans-serif);
-  letter-spacing: -0.025em;
 }
 
 .elementor [class*="elementor-widget-santino_"] a {
   text-decoration: none;
 }
 
-/* 7. Ensure Elementor Editor Preview Canvas is Edge-to-Edge */
-.elementor-editor-active #elementor-preview-responsive-wrapper,
-.elementor-editor-active .elementor-edit-area-active {
-  max-width: 100% !important;
+/* 7. Ensure Hero Banner & Pro Banner text remains pristine white in Elementor */
+.hero-banner-section .hero-lifestyle-title,
+.elementor-widget-santino_hero_banner .hero-lifestyle-title {
+  color: #ffffff !important;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
-.elementor-editor-active body {
-  background: #ffffff !important;
+.hero-banner-section .hero-italic-serif,
+.elementor-widget-santino_hero_banner .hero-italic-serif {
+  color: #dfbe8d !important;
 }
 
-/* 8. Fix Bootstrap Carousel & Video backgrounds inside Elementor */
+.hero-banner-section .hero-lifestyle-desc,
+.elementor-widget-santino_hero_banner .hero-lifestyle-desc {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.hero-banner-section .hero-slider-eyebrow,
+.elementor-widget-santino_hero_banner .hero-slider-eyebrow {
+  color: #c5a880 !important;
+}
+
+.hero-banner-section .hero-features-strip,
+.elementor-widget-santino_hero_banner .hero-features-strip {
+  color: #ffffff !important;
+}
+
+.pro-banner-hero .pro-banner-title,
+.elementor-widget-santino_pro_banner .pro-banner-title {
+  color: #ffffff !important;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+.pro-banner-hero .pro-banner-desc,
+.elementor-widget-santino_pro_banner .pro-banner-desc {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* 8. Fix Bootstrap Carousel Visibility inside Elementor Editor */
+.hero-carousel .carousel-item {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.hero-carousel .carousel-item.active {
+  display: block !important;
+  opacity: 1 !important;
+}
+
 .elementor-widget-santino_hero_banner .hero-banner-section,
 .hero-banner-section {
   width: 100% !important;
@@ -12995,7 +13031,14 @@ html, body {
   object-fit: cover;
 }
 
-/* 9. Ensure All Section Backgrounds Stretch Edge-to-Edge */
+/* 9. Safety: Protect Elementor Navigator / Structure UI tree text brightness */
+.elementor-navigator,
+.elementor-navigator__element__title,
+.elementor-navigator__item {
+  color: #e0e5ea !important;
+}
+
+/* 10. Ensure All Section Backgrounds Stretch Edge-to-Edge */
 .brands-slider-section,
 .machine-grid-section,
 .beans-showcase-section,
