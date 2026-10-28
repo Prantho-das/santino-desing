@@ -12824,3 +12824,192 @@ h1, h2, h3, h4, h5, h6,
   background: var(--santino-teal, #00625d);
   color: #ffffff;
 }
+
+/* ==========================================================================
+   ELEMENTOR FULL-WIDTH & UNIVERSAL COMPATIBILITY ENGINE
+   ========================================================================== */
+
+/* 1. Global Page Width Resets for Elementor */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.site-main,
+#primary,
+.elementor,
+.elementor-inner,
+.elementor-section-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* 2. Remove Elementor default 20px bottom margin between widgets */
+.elementor-widget:not(:last-child) {
+  margin-bottom: 0 !important;
+}
+
+.elementor-element {
+  --widgets-spacing: 0px !important;
+}
+
+/* 3. Force Elementor Top Sections to Stretch 100% Full-Width */
+.elementor-section,
+.elementor-section.elementor-top-section {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Eliminate 1140px boxed container limitation in Elementor */
+.elementor-section.elementor-section-boxed > .elementor-container,
+.elementor-section.elementor-section-full_width > .elementor-container,
+.elementor-section > .elementor-container {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Modern Elementor Flexbox Containers (.e-con, .e-con-boxed, .e-con-full) */
+.e-con,
+.e-con.e-parent,
+.e-con-boxed,
+.e-con-boxed.e-parent,
+.e-con-full,
+.e-con-full.e-parent {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  --container-max-width: 100% !important;
+}
+
+/* 4. Eliminate Elementor column & widget wrap paddings */
+.elementor-column-gap-default > .elementor-column > .elementor-element-populated,
+.elementor-column-gap-narrow > .elementor-column > .elementor-element-populated,
+.elementor-column-gap-extended > .elementor-column > .elementor-element-populated,
+.elementor-column-gap-wide > .elementor-column > .elementor-element-populated,
+.elementor-column-gap-wider > .elementor-column > .elementor-element-populated {
+  padding: 0 !important;
+}
+
+.elementor-column,
+.elementor-column-wrap,
+.elementor-widget-wrap {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.elementor-widget,
+.elementor-widget-container {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* 5. Santino Widgets Universal Full-Width Stretch */
+[class*="elementor-widget-santino_"],
+.elementor-widget[class*="elementor-widget-santino_"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+[class*="elementor-widget-santino_"] > .elementor-widget-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 6. Enforce Santino Theme Typography & Styling over Elementor Resets */
+.elementor [class*="elementor-widget-santino_"],
+.elementor-editor-active [class*="elementor-widget-santino_"] {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  color: var(--kp-text, #181818);
+}
+
+.elementor [class*="elementor-widget-santino_"] h1,
+.elementor [class*="elementor-widget-santino_"] h2,
+.elementor [class*="elementor-widget-santino_"] h3,
+.elementor [class*="elementor-widget-santino_"] h4,
+.elementor [class*="elementor-widget-santino_"] h5,
+.elementor [class*="elementor-widget-santino_"] h6 {
+  font-family: var(--font-heading, 'Montserrat', sans-serif);
+  letter-spacing: -0.025em;
+}
+
+.elementor [class*="elementor-widget-santino_"] a {
+  text-decoration: none;
+}
+
+/* 7. Ensure Elementor Editor Preview Canvas is Edge-to-Edge */
+.elementor-editor-active #elementor-preview-responsive-wrapper,
+.elementor-editor-active .elementor-edit-area-active {
+  max-width: 100% !important;
+}
+
+.elementor-editor-active body {
+  background: #ffffff !important;
+}
+
+/* 8. Fix Bootstrap Carousel & Video backgrounds inside Elementor */
+.elementor-widget-santino_hero_banner .hero-banner-section,
+.hero-banner-section {
+  width: 100% !important;
+  min-height: 85vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.elementor-widget-santino_hero_banner .hero-video-wrap,
+.hero-video-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.elementor-widget-santino_hero_banner .hero-video-bg,
+.hero-video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 9. Ensure All Section Backgrounds Stretch Edge-to-Edge */
+.brands-slider-section,
+.machine-grid-section,
+.beans-showcase-section,
+.academy-section,
+.office-horeca-section,
+.outlets-section,
+.membership-section,
+.stats-section,
+.testimonials-section,
+.faq-section,
+.cta-banner-section,
+.pro-banner-hero {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+

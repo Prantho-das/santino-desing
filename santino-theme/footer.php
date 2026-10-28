@@ -128,12 +128,6 @@
     </div>
   </footer>
 
-  <?php 
-  // Load Reusable Components
-  get_template_part( 'template-parts/floating-bar' );
-  get_template_part( 'template-parts/modals' );
-  ?>
-
   <!-- MOBILE NATIVE APP BOTTOM NAVIGATION DOCK -->
   <nav class="mobile-app-dock d-flex d-lg-none" aria-label="Mobile Navigation">
     <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="app-dock-item <?php echo is_front_page() ? 'active' : ''; ?>">

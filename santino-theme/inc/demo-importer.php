@@ -449,14 +449,18 @@ class Santino_Demo_Importer {
             'id'       => $sec_id,
             'elType'   => 'section',
             'settings' => array(
-                'layout' => 'full_width',
-                'gap'    => 'no',
+                'layout'           => 'full_width',
+                'gap'              => 'no',
+                'stretch_section'  => 'section-stretched',
             ),
             'elements' => array(
                 array(
                     'id'       => $col_id,
                     'elType'   => 'column',
-                    'settings' => array( '_column_size' => 100 ),
+                    'settings' => array(
+                        '_column_size'          => 100,
+                        'space_between_widgets' => 0,
+                    ),
                     'elements' => $elems,
                 ),
             ),
