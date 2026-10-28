@@ -93,6 +93,24 @@ class Santino_Outlets_Widget extends \Elementor\Widget_Base {
         );
 
         $repeater->add_control(
+            'tag_icon',
+            array(
+                'label'   => esc_html__( 'Badge Icon Class', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'bi bi-shop',
+            )
+        );
+
+        $repeater->add_control(
+            'card_id',
+            array(
+                'label'   => esc_html__( 'Section ID (Optional)', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => '',
+            )
+        );
+
+        $repeater->add_control(
             'description',
             array(
                 'label'   => esc_html__( 'Description', 'santino' ),
@@ -140,6 +158,8 @@ class Santino_Outlets_Widget extends \Elementor\Widget_Base {
                     array(
                         'name'         => 'Shwapno Superstores',
                         'partner_tag'  => 'RETAIL PARTNER',
+                        'tag_icon'     => 'bi bi-shop',
+                        'card_id'      => 'swapno',
                         'description'  => 'Find Santino Coffee at your nearest Shwapno Superstore and enjoy your favorite brew.',
                         'location_tag' => 'Nationwide',
                         'link_url'     => array( 'url' => '/swapno/' ),
@@ -148,6 +168,8 @@ class Santino_Outlets_Widget extends \Elementor\Widget_Base {
                     array(
                         'name'         => 'BFC (Best Fried Chicken)',
                         'partner_tag'  => 'RESTAURANT PARTNER',
+                        'tag_icon'     => 'bi bi-cup-hot-fill',
+                        'card_id'      => 'bfc',
                         'description'  => 'Enjoy Santino Coffee at BFC outlets, where great food meets great coffee.',
                         'location_tag' => 'Nationwide',
                         'link_url'     => array( 'url' => '/bfc/' ),
@@ -190,12 +212,14 @@ class Santino_Outlets_Widget extends \Elementor\Widget_Base {
                     <?php foreach ( $outlets as $outlet ) : 
                         $img_url = ! empty( $outlet['image']['url'] ) ? esc_url( $outlet['image']['url'] ) : ( function_exists('santino_img') ? santino_img('shwapno_santino_retail.jpg') : '' );
                         $link_url = ! empty( $outlet['link_url']['url'] ) ? esc_url( $outlet['link_url']['url'] ) : '#';
+                        $card_id_attr = ! empty( $outlet['card_id'] ) ? ' id="' . esc_attr( $outlet['card_id'] ) . '"' : '';
+                        $tag_icon = ! empty( $outlet['tag_icon'] ) ? $outlet['tag_icon'] : 'bi bi-shop';
                     ?>
-                        <div class="col-lg-6">
+                        <div class="col-lg-6"<?php echo $card_id_attr; ?>>
                             <a href="<?php echo $link_url; ?>" class="outlet-card">
                                 <img src="<?php echo $img_url; ?>" alt="<?php echo esc_attr( $outlet['name'] ); ?>" class="outlet-card-img" loading="lazy">
                                 <div class="outlet-card-overlay"></div>
-                                <span class="outlet-partner-badge"><i class="bi bi-shop me-1"></i> <?php echo esc_html( $outlet['partner_tag'] ); ?></span>
+                                <span class="outlet-partner-badge"><i class="<?php echo esc_attr( $tag_icon ); ?> me-1"></i> <?php echo esc_html( $outlet['partner_tag'] ); ?></span>
                                 <div class="outlet-card-content">
                                     <h3 class="outlet-card-title"><?php echo esc_html( $outlet['name'] ); ?></h3>
                                     <p class="outlet-card-desc"><?php echo esc_html( $outlet['description'] ); ?></p>

@@ -237,6 +237,39 @@ class Santino_Cafe_Menu_Widget extends \Elementor\Widget_Base {
         $menu_url = ! empty( $settings['menu_url']['url'] ) ? esc_url( $settings['menu_url']['url'] ) : home_url( '/menu/' );
         ?>
         <section class="home-menu-preview-section py-5 position-relative" id="featured-menu">
+            <div class="floating-bg-icons" aria-hidden="true">
+                <div class="float-item leaf-green float-item-1" title="Coffee Leaf">
+                    <svg viewBox="0 0 64 64" fill="currentColor">
+                        <path d="M58.5 5.5C40.2 6.8 23 18.2 16.4 34.6c-2.3 5.7-3.4 12-3.4 18.4l-7.5 5.5 8.8.8c5.4-.1 10.8-1.5 15.6-4.1C47 47.1 57.3 28.5 58.5 5.5zM22.5 45.8c-2.6-3.8-4.2-8.3-4.8-12.9 6.2-4.5 13.5-7.5 21.2-8.7-7.8 7.3-13.4 15.9-16.4 21.6zm7.2-2.1c2.4-4.8 6.5-11.7 12.8-17.7 2.2-.4 4.5-.6 6.8-.7-.6 6.9-3.8 13.4-9 18.2-3.5 1.2-7.1 1.7-10.6.2z"/>
+                    </svg>
+                </div>
+                <div class="float-item float-item-2"><i class="bi bi-cup-hot-fill"></i></div>
+                <div class="float-item leaf-emerald float-item-3" title="Botanical Leaf">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22l1-2.3A4.49,4.49 0 0,0 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25V8.75C14,7.75 19,7 20,6.5C19,8 15,9.5 10,11.25V13.75C14.5,12.25 18,11 19,10.5C18,12 14,14 11,16.25V19C15,16.5 18,14.5 19,14C18,16 14,18.5 12,20C17,19.5 20,14 20,14C20,14 19,16 17,18C20.5,12.5 20,8 17,8Z"/>
+                    </svg>
+                </div>
+                <div class="float-item maroon float-item-4"><i class="bi bi-cup-straw"></i></div>
+                <div class="float-item leaf-green float-item-5" title="Coffee Leaf">
+                    <svg viewBox="0 0 64 64" fill="currentColor">
+                        <path d="M5.5 58.5C6.8 40.2 18.2 23 34.6 16.4c5.7-2.3 12-3.4 18.4-3.4l5.5-7.5.8 8.8c-.1 5.4-1.5 10.8-4.1 15.6C47.1 47 28.5 57.3 5.5 58.5zm40.3-36c-3.8-2.6-8.3-4.2-12.9-4.8-4.5 6.2-7.5 13.5-8.7 21.2 7.3-7.8 15.9-13.4 21.6-16.4zm-2.1 7.2c-4.8 2.4-11.7 6.5-17.7 12.8-.4 2.2-.6 4.5-.7 6.8 6.9-.6 13.4-3.8 18.2-9 1.2-3.5 1.7-7.1.2-10.6z"/>
+                    </svg>
+                </div>
+                <div class="float-item gold float-item-6"><i class="bi bi-stars"></i></div>
+                <div class="float-item leaf-emerald float-item-7" title="Fresh Leaf">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.5 2 2 6.5 2 12c0 3.5 1.8 6.6 4.6 8.4L6 22l3.6-.6C10.3 21.8 11.1 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm1 14.9V13h3.5l-5.5-7v3.9H7.5l5.5 7z" opacity="0.3"/>
+                        <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22l1-2.3A4.49,4.49 0 0,0 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25V8.75C14,7.75 19,7 20,6.5C19,8 15,9.5 10,11.25V13.75C14.5,12.25 18,11 19,10.5C18,12 14,14 11,16.25V19C15,16.5 18,14.5 19,14C18,16 14,18.5 12,20C17,19.5 20,14 20,14C20,14 19,16 17,18C20.5,12.5 20,8 17,8Z"/>
+                    </svg>
+                </div>
+                <div class="float-item gold float-item-8"><i class="bi bi-droplet-fill"></i></div>
+                <div class="float-item leaf-green float-item-9" title="Eco Leaf">
+                    <svg viewBox="0 0 64 64" fill="currentColor">
+                        <path d="M58.5 5.5C40.2 6.8 23 18.2 16.4 34.6c-2.3 5.7-3.4 12-3.4 18.4l-7.5 5.5 8.8.8c5.4-.1 10.8-1.5 15.6-4.1C47 47.1 57.3 28.5 58.5 5.5z"/>
+                    </svg>
+                </div>
+                <div class="float-item maroon float-item-10"><i class="bi bi-cup-hot"></i></div>
+            </div>
             <div class="container py-3">
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4">
                     <div>
@@ -275,6 +308,12 @@ class Santino_Cafe_Menu_Widget extends \Elementor\Widget_Base {
                         <?php foreach ( $drinks as $item ) : 
                             $img_url = ! empty( $item['image']['url'] ) ? esc_url( $item['image']['url'] ) : '';
                             $tag_class = ! empty( $item['tag_type'] ) ? $item['tag_type'] : 'hot-tag';
+                            $icon_class = 'bi bi-fire';
+                            if ( $tag_class === 'cold-tag' ) {
+                                $icon_class = 'bi bi-snow';
+                            } elseif ( $tag_class === 'frappe-tag' ) {
+                                $icon_class = 'bi bi-stars';
+                            }
                         ?>
                             <div class="menu-teaser-card">
                                 <div class="menu-teaser-img-box">
@@ -284,7 +323,7 @@ class Santino_Cafe_Menu_Widget extends \Elementor\Widget_Base {
                                     <div>
                                         <div class="d-flex justify-content-end">
                                             <span class="menu-card-tag <?php echo esc_attr( $tag_class ); ?>">
-                                                <i class="bi bi-fire"></i> <?php echo esc_html( $item['tag_text'] ); ?>
+                                                <i class="<?php echo esc_attr( $icon_class ); ?>"></i> <?php echo esc_html( $item['tag_text'] ); ?>
                                             </span>
                                         </div>
                                         <h4 class="menu-teaser-title"><?php echo esc_html( $item['name'] ); ?></h4>

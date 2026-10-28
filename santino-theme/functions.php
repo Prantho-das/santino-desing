@@ -99,6 +99,7 @@ function santino_enqueue_scripts() {
     ) );
 }
 add_action( 'wp_enqueue_scripts', 'santino_enqueue_scripts' );
+add_action( 'elementor/frontend/after_enqueue_styles', 'santino_enqueue_scripts' );
 
 /**
  * Register Custom Elementor Category
@@ -141,8 +142,11 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     require_once SANTINO_DIR . '/inc/widgets/floating-metrics-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/editorial-gallery-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/certificate-verification-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/partner-strip-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/machine-services-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/competitions-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/consultation-form-widget.php';
 
-    // Register Widgets
     $widgets_manager->register( new \Santino_Hero_Banner_Widget() );
     $widgets_manager->register( new \Santino_Pro_Banner_Widget() );
     $widgets_manager->register( new \Santino_Floating_Metrics_Widget() );
@@ -165,6 +169,10 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     $widgets_manager->register( new \Santino_Brands_Showcase_Widget() );
     $widgets_manager->register( new \Santino_BFC_Solution_Widget() );
     $widgets_manager->register( new \Santino_Swapno_Retail_Widget() );
+    $widgets_manager->register( new \Santino_Partner_Strip_Widget() );
+    $widgets_manager->register( new \Santino_Machine_Services_Widget() );
+    $widgets_manager->register( new \Santino_Competitions_Widget() );
+    $widgets_manager->register( new \Santino_Consultation_Form_Widget() );
 }
 add_action( 'elementor/widgets/register', 'santino_register_elementor_widgets' );
 

@@ -12839,3 +12839,16 @@ h1, h2, h3, h4, h5, h6,
   background: var(--santino-teal, #00625d);
   color: #ffffff;
 }
+
+.elementor-section.elementor-section-boxed > .elementor-container,
+.elementor-section.elementor-section-full_width > .elementor-container {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+.elementor-section {
+  padding: 0 !important;
+}
+.elementor-column-gap-no > .elementor-column > .elementor-widget-wrap {
+  padding: 0 !important;
+}
