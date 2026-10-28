@@ -146,6 +146,16 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     require_once SANTINO_DIR . '/inc/widgets/machine-services-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/competitions-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/consultation-form-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/office-cafe-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/horeca-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/training-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/swapno-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/our-story-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/membership-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/menu-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/brands-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/machines-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/beans-solution-widget.php';
 
     $widgets_manager->register( new \Santino_Hero_Banner_Widget() );
     $widgets_manager->register( new \Santino_Pro_Banner_Widget() );
@@ -173,6 +183,16 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     $widgets_manager->register( new \Santino_Machine_Services_Widget() );
     $widgets_manager->register( new \Santino_Competitions_Widget() );
     $widgets_manager->register( new \Santino_Consultation_Form_Widget() );
+    $widgets_manager->register( new \Santino_Office_Cafe_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Horeca_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Training_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Swapno_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Our_Story_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Membership_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Menu_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Brands_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Machines_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Beans_Solution_Widget() );
 }
 add_action( 'elementor/widgets/register', 'santino_register_elementor_widgets' );
 
