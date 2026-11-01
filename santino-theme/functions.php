@@ -302,7 +302,6 @@ require_once SANTINO_DIR . '/inc/elementor-installer.php';
 require_once SANTINO_DIR . '/inc/membership-system.php';
 require_once SANTINO_DIR . '/inc/menus.php';
 require_once SANTINO_DIR . '/inc/leads-system.php';
-require_once SANTINO_DIR . '/inc/club-system.php';
 require_once SANTINO_DIR . '/inc/demo-importer.php';
 require_once SANTINO_DIR . '/inc/customizer.php';
 

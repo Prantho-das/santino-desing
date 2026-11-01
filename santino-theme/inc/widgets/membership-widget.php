@@ -321,7 +321,7 @@ class Santino_Membership_Widget extends \Elementor\Widget_Base {
                             <h3 class="club-form-title">Become a Santino Club Member</h3>
                             <p class="club-form-subtitle">Get exclusive access, special pricing, and premium support — all in one place.</p>
 
-                            <form class="santino-inquiry-form" onsubmit="alert('Thank you! Your membership registration has been received.'); return false;">
+                            <form class="santino-inquiry-form">
                                 <input type="hidden" name="inquiry_type" value="home_club_registration">
                                 <div class="row g-3">
                                     <div class="col-md-6">
@@ -329,7 +329,7 @@ class Santino_Membership_Widget extends \Elementor\Widget_Base {
                                             <label class="club-input-label">FULL NAME <span class="text-danger">*</span></label>
                                             <div class="club-input-box">
                                                 <i class="bi bi-person club-input-icon"></i>
-                                                <input type="text" class="club-form-input" placeholder="e.g. Tanvir Ahmed" required>
+                                                <input type="text" name="name" class="club-form-input" placeholder="e.g. Tanvir Ahmed" required>
                                             </div>
                                         </div>
                                     </div>
@@ -339,7 +339,7 @@ class Santino_Membership_Widget extends \Elementor\Widget_Base {
                                             <label class="club-input-label">PHONE / WHATSAPP NUMBER <span class="text-danger">*</span></label>
                                             <div class="club-input-box">
                                                 <i class="bi bi-whatsapp club-input-icon"></i>
-                                                <input type="tel" class="club-form-input" placeholder="+880 17XX-XXXXXX" required>
+                                                <input type="tel" name="phone" class="club-form-input" placeholder="+880 17XX-XXXXXX" required>
                                             </div>
                                         </div>
                                     </div>
@@ -349,7 +349,7 @@ class Santino_Membership_Widget extends \Elementor\Widget_Base {
                                             <label class="club-input-label">EMAIL ADDRESS <span class="text-danger">*</span></label>
                                             <div class="club-input-box">
                                                 <i class="bi bi-envelope club-input-icon"></i>
-                                                <input type="email" class="club-form-input" placeholder="e.g. tanvir@company.com" required>
+                                                <input type="email" name="email" class="club-form-input" placeholder="e.g. tanvir@company.com" required>
                                             </div>
                                         </div>
                                     </div>
@@ -359,11 +359,11 @@ class Santino_Membership_Widget extends \Elementor\Widget_Base {
                                             <label class="club-input-label">BUSINESS TYPE</label>
                                             <div class="club-input-box">
                                                 <i class="bi bi-shop club-input-icon"></i>
-                                                <select class="club-form-select">
-                                                    <option value="cafe">Café / Coffee Shop</option>
-                                                    <option value="restaurant">Restaurant / Hotel</option>
-                                                    <option value="office">Corporate Office</option>
-                                                    <option value="individual">Home Barista / Individual</option>
+                                                <select name="business_type" class="club-form-select">
+                                                    <option value="Café / Coffee Shop">Café / Coffee Shop</option>
+                                                    <option value="Restaurant / Hotel">Restaurant / Hotel</option>
+                                                    <option value="Corporate Office">Corporate Office</option>
+                                                    <option value="Home Barista / Individual">Home Barista / Individual</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -374,7 +374,7 @@ class Santino_Membership_Widget extends \Elementor\Widget_Base {
                                             <label class="club-input-label">YOUR REQUIREMENTS &amp; QUESTIONS</label>
                                             <div class="club-input-box club-input-box-textarea">
                                                 <i class="bi bi-chat-left-text club-input-icon-textarea"></i>
-                                                <textarea class="club-form-textarea" placeholder="Tell us about your machine models of interest, monthly bean volume, or cafe launch timeline..."></textarea>
+                                                <textarea name="message" class="club-form-textarea" placeholder="Tell us about your machine models of interest, monthly bean volume, or cafe launch timeline..."></textarea>
                                             </div>
                                         </div>
                                     </div>

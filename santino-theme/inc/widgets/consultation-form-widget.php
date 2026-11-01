@@ -293,14 +293,15 @@ class Santino_Consultation_Form_Widget extends \Elementor\Widget_Base {
                                 <?php endif; ?>
                             </div>
 
-                            <form onsubmit="alert('Thank you! Your inquiry has been received. Our specialist will contact you shortly.'); return false;">
+                            <form class="santino-inquiry-form">
+                                <input type="hidden" name="inquiry_type" value="consultation_widget">
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="specialist-input-group">
                                             <label class="specialist-input-label">FULL NAME <span class="req-star">*</span></label>
                                             <div class="specialist-input-box">
                                                 <i class="bi bi-person specialist-field-icon"></i>
-                                                <input type="text" class="specialist-form-input" placeholder="e.g. Tanvir Ahmed" required>
+                                                <input type="text" name="name" class="specialist-form-input" placeholder="e.g. Tanvir Ahmed" required>
                                             </div>
                                         </div>
                                     </div>
@@ -310,7 +311,7 @@ class Santino_Consultation_Form_Widget extends \Elementor\Widget_Base {
                                             <label class="specialist-input-label">BUSINESS EMAIL <span class="req-star">*</span></label>
                                             <div class="specialist-input-box">
                                                 <i class="bi bi-envelope specialist-field-icon"></i>
-                                                <input type="email" class="specialist-form-input" placeholder="e.g. tanvir@company.com" required>
+                                                <input type="email" name="email" class="specialist-form-input" placeholder="e.g. tanvir@company.com" required>
                                             </div>
                                         </div>
                                     </div>
@@ -320,7 +321,7 @@ class Santino_Consultation_Form_Widget extends \Elementor\Widget_Base {
                                             <label class="specialist-input-label">PHONE / WHATSAPP NUMBER <span class="req-star">*</span></label>
                                             <div class="specialist-input-box">
                                                 <i class="bi bi-whatsapp specialist-field-icon"></i>
-                                                <input type="tel" class="specialist-form-input" placeholder="+880 17XX-XXXXXX" required>
+                                                <input type="tel" name="phone" class="specialist-form-input" placeholder="+880 17XX-XXXXXX" required>
                                             </div>
                                         </div>
                                     </div>
@@ -330,13 +331,13 @@ class Santino_Consultation_Form_Widget extends \Elementor\Widget_Base {
                                             <label class="specialist-input-label">BUSINESS TYPE</label>
                                             <div class="specialist-input-box">
                                                 <i class="bi bi-shop specialist-field-icon"></i>
-                                                <select class="specialist-form-input specialist-form-select">
-                                                    <option value="cafe">Café / Coffee Shop</option>
-                                                    <option value="restaurant">Restaurant / Hotel</option>
-                                                    <option value="office">Corporate Office</option>
-                                                    <option value="retail">Supermarket / Retail Resale</option>
-                                                    <option value="academy">Barista Academy / Training</option>
-                                                    <option value="other">Other Inquiries</option>
+                                                <select name="business_type" class="specialist-form-input specialist-form-select">
+                                                    <option value="Café / Coffee Shop">Café / Coffee Shop</option>
+                                                    <option value="Restaurant / Hotel">Restaurant / Hotel</option>
+                                                    <option value="Corporate Office">Corporate Office</option>
+                                                    <option value="Supermarket / Retail Resale">Supermarket / Retail Resale</option>
+                                                    <option value="Barista Academy / Training">Barista Academy / Training</option>
+                                                    <option value="Other Inquiries">Other Inquiries</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -347,7 +348,7 @@ class Santino_Consultation_Form_Widget extends \Elementor\Widget_Base {
                                             <label class="specialist-input-label">YOUR REQUIREMENTS &amp; QUESTIONS <span class="req-star">*</span></label>
                                             <div class="specialist-input-box specialist-input-box-textarea">
                                                 <i class="bi bi-chat-left-text specialist-field-icon-textarea"></i>
-                                                <textarea class="specialist-form-textarea" rows="3" placeholder="Tell us about your machine models of interest, monthly bean volume, or cafe launch timeline..." required></textarea>
+                                                <textarea name="message" class="specialist-form-textarea" rows="3" placeholder="Tell us about your machine models of interest, monthly bean volume, or cafe launch timeline..." required></textarea>
                                             </div>
                                         </div>
                                     </div>

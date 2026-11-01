@@ -600,15 +600,15 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                       <div class="d-flex justify-content-between align-items-start mb-3 position-relative" style="z-index: 2;">
                         <div>
                           <div class="small fw-bold text-uppercase" style="color: #dfbe8d; letter-spacing: 1.5px; font-size: 11px;">
-                            SANTINO ROASTERY • VIP CLUB
+                            SANTINO COFFEE CLUB
                           </div>
-                          <h4 class="font-heading fw-bold text-white mb-0 mt-1">Connoisseur Member</h4>
+                          <h4 class="font-heading fw-bold text-white mb-0 mt-1">Regular Member</h4>
                         </div>
                         <div class="gold-chip"></div>
                       </div>
 
                       <div class="mb-4 position-relative" style="z-index: 2;">
-                        <div class="font-monospace text-white-50 small" style="letter-spacing: 2px;">SNT-VIP-•••• ••••</div>
+                        <div class="font-monospace text-white-50 small" style="letter-spacing: 2px;">SNT-REG-•••• ••••</div>
                       </div>
 
                       <div class="p-3 rounded-4 mb-3 position-relative" style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(195, 153, 108, 0.25); z-index: 2;">
@@ -697,14 +697,14 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                       <div class="tab-pane fade show active" id="stamps-pane" role="tabpanel">
                         <div class="mb-4">
                           <h4 class="font-heading fw-bold text-dark mb-1">Check Your Live Stamp Progress</h4>
-                          <p class="text-muted small">Enter your Registered Phone Number or VIP Member ID below.</p>
+                          <p class="text-muted small">Enter your Registered Phone Number or Regular Member ID below.</p>
                         </div>
 
                         <form id="santinoLookupForm" class="mb-4">
                           <div class="portal-lookup-group">
                             <div class="portal-lookup-field">
                               <i class="bi bi-telephone text-teal"></i>
-                              <input type="text" name="query" placeholder="e.g. 01712345678 or SNT-VIP-XXXX" required>
+                              <input type="text" name="query" placeholder="e.g. 01712345678 or SNT-REG-XXXX" required>
                             </div>
                             <button type="submit" class="btn-lookup-action">
                               <span>LOOKUP</span> <i class="bi bi-arrow-right"></i>
@@ -717,7 +717,7 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                       <div class="tab-pane fade" id="invoice-pane" role="tabpanel">
                         <div class="mb-4">
                           <h4 class="font-heading fw-bold text-dark mb-1">Log Cafe Invoice / Memo Number</h4>
-                          <p class="text-muted small">Submit your receipt details. +1 Cup stamp will be credited to your card upon verification.</p>
+                          <p class="text-muted small">Submit your receipt details. Cups will be credited to your stamp card upon portal verification.</p>
                         </div>
                         <div id="invoiceResponseBox" style="display: none;" class="mb-4"></div>
                         <form id="santinoInvoiceForm">
@@ -727,12 +727,22 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                               <input type="text" name="invoice_number" class="form-control" placeholder="e.g. SNT-2026-9042" required>
                             </div>
                             <div class="col-md-6">
+                              <label class="form-label small fw-bold text-dark">No. of Cups Ordered *</label>
+                              <input type="number" name="cups" class="form-control" placeholder="e.g. 2 or 3" min="1" max="50" value="1" required>
+                            </div>
+                          </div>
+                          <div class="row g-3 mb-3">
+                            <div class="col-md-6">
                               <label class="form-label small fw-bold text-dark">Phone Number / WhatsApp *</label>
                               <input type="tel" name="phone" class="form-control" placeholder="017XXXXXXXX or +88017..." pattern="^(?:\+?880|0)?1[3-9]\d{8}$" required>
                             </div>
+                            <div class="col-md-6">
+                              <label class="form-label small fw-bold text-dark">Member ID (Optional)</label>
+                              <input type="text" name="member_id" class="form-control" placeholder="e.g. SNT-REG-XXXX">
+                            </div>
                           </div>
                           <div class="row g-3 mb-4">
-                            <div class="col-md-6">
+                            <div class="col-12">
                               <label class="form-label small fw-bold text-dark">Cafe Branch Visited</label>
                               <select name="branch" class="form-select">
                                 <option>Gulshan-2 Flagship Experience Center</option>
@@ -742,10 +752,6 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                                 <option>Uttara Liberty Tower</option>
                                 <option>Baridhara Diplomatic Enclave</option>
                               </select>
-                            </div>
-                            <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">VIP Member ID (Optional)</label>
-                              <input type="text" name="member_id" class="form-control" placeholder="e.g. SNT-VIP-XXXX">
                             </div>
                           </div>
                           <button type="submit" class="btn btn-portal-submit w-100 font-heading text-uppercase">
@@ -757,34 +763,56 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                       <div class="tab-pane fade" id="register-pane" role="tabpanel">
                         <div class="mb-4">
                           <h4 class="font-heading fw-bold text-dark mb-1">Register For Santino Coffee Club</h4>
-                          <p class="text-muted small">Fill in your details to immediately activate your digital stamp card and member perks.</p>
+                          <p class="text-muted small">Just your Mobile Number, Birthday &amp; Email to activate your digital stamp card.</p>
                         </div>
                         <div id="membershipResponseBox" style="display: none;" class="mb-4"></div>
                         <form id="santinoMembershipForm">
                           <div class="row g-3 mb-3">
+                            <div class="col-12">
+                              <label class="form-label small fw-bold text-dark">Mobile Number: *</label>
+                              <input type="tel" name="phone" id="santinoMemberPhone" class="form-control" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" required>
+                              <div class="form-text text-muted" style="font-size: 11px;">Same mobile number cannot be re-registered without portal permission.</div>
+                            </div>
+                          </div>
+                          <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">Full Name *</label>
-                              <input type="text" name="fullname" class="form-control" placeholder="Your Full Name" required>
+                              <label class="form-label small fw-bold text-dark">Birth Month *</label>
+                              <select name="birth_month" class="form-select" required>
+                                <option value="">Select Month</option>
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="March">March</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="August">August</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                              </select>
                             </div>
                             <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">Phone Number / WhatsApp *</label>
-                              <input type="tel" name="phone" id="santinoMemberPhone" class="form-control" placeholder="017XXXXXXXX or +88017XXXXXXXX" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" required>
+                              <label class="form-label small fw-bold text-dark">Birth Day *</label>
+                              <select name="birth_day" class="form-select" required>
+                                <option value="">Select Day</option>
+                                <?php for ( $d = 1; $d <= 31; $d++ ) : ?>
+                                  <option value="<?php echo sprintf( '%02d', $d ); ?>"><?php echo sprintf( '%02d', $d ); ?></option>
+                                <?php endfor; ?>
+                              </select>
                             </div>
                           </div>
                           <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">Email Address *</label>
+                            <div class="col-12">
+                              <label class="form-label small fw-bold text-dark">Email: *</label>
                               <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
-                            </div>
-                            <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">Address / Location *</label>
-                              <input type="text" name="address" class="form-control" placeholder="House, Road, Area, Dhaka" required>
                             </div>
                           </div>
                           <div class="form-check mb-4">
                             <input class="form-check-input" type="checkbox" id="termsCheck" checked required>
                             <label class="form-check-label small text-muted" for="termsCheck">
-                              I agree to join Santino Coffee Club to receive member perks, cupping invitations, and reward stamps.
+                              I agree to join Santino Coffee Club to receive reward stamps and complimentary cups.
                             </label>
                           </div>
                           <button type="submit" class="btn btn-portal-submit w-100 font-heading text-uppercase">
