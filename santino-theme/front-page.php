@@ -8,8 +8,8 @@
 
 get_header();
 
-$is_elementor_page = function_exists( 'santino_is_elementor_page' ) ? santino_is_elementor_page() : false;
-if ( ! $is_elementor_page && class_exists( '\Elementor\Plugin' ) ) {
+$is_elementor_page = false;
+if ( class_exists( '\Elementor\Plugin' ) ) {
     $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
     if ( ( $document && $document->is_built_with_elementor() ) || \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
         $is_elementor_page = true;
@@ -1688,7 +1688,7 @@ else :
                     <label class="club-input-label">FULL NAME <span class="text-danger">*</span></label>
                     <div class="club-input-box">
                       <i class="bi bi-person club-input-icon"></i>
-                      <input type="text" class="club-form-input" placeholder="e.g. Tanvir Ahmed" required>
+                      <input type="text" name="name" class="club-form-input" placeholder="e.g. Tanvir Ahmed" required>
                     </div>
                   </div>
                 </div>
@@ -1699,7 +1699,7 @@ else :
                     <label class="club-input-label">PHONE / WHATSAPP NUMBER <span class="text-danger">*</span></label>
                     <div class="club-input-box">
                       <i class="bi bi-whatsapp club-input-icon"></i>
-                      <input type="tel" class="club-form-input" placeholder="+880 17XX-XXXXXX" required>
+                      <input type="tel" name="phone" class="club-form-input" placeholder="+880 17XX-XXXXXX" required>
                     </div>
                   </div>
                 </div>
@@ -1710,7 +1710,7 @@ else :
                     <label class="club-input-label">EMAIL ADDRESS <span class="text-danger">*</span></label>
                     <div class="club-input-box">
                       <i class="bi bi-envelope club-input-icon"></i>
-                      <input type="email" class="club-form-input" placeholder="e.g. tanvir@company.com" required>
+                      <input type="email" name="email" class="club-form-input" placeholder="e.g. tanvir@company.com" required>
                     </div>
                   </div>
                 </div>
@@ -1721,7 +1721,7 @@ else :
                     <label class="club-input-label">BUSINESS TYPE</label>
                     <div class="club-input-box">
                       <i class="bi bi-shop club-input-icon"></i>
-                      <select class="club-form-select">
+                      <select name="business_type" class="club-form-select">
                         <option value="cafe">Café / Coffee Shop</option>
                         <option value="restaurant">Restaurant / Hotel</option>
                         <option value="office">Corporate Office</option>
@@ -1737,7 +1737,7 @@ else :
                     <label class="club-input-label">YOUR REQUIREMENTS &amp; QUESTIONS</label>
                     <div class="club-input-box club-input-box-textarea">
                       <i class="bi bi-chat-left-text club-input-icon-textarea"></i>
-                      <textarea class="club-form-textarea" placeholder="Tell us about your machine models of interest, monthly bean volume, or cafe launch timeline..."></textarea>
+                      <textarea name="message" class="club-form-textarea" placeholder="Tell us about your machine models of interest, monthly bean volume, or cafe launch timeline..."></textarea>
                     </div>
                   </div>
                 </div>
@@ -2026,7 +2026,8 @@ else :
               <p class="specialist-form-subtitle">Fill in your details below and our team will get back to you promptly with a tailored proposal.</p>
             </div>
 
-            <form onsubmit="alert('Thank you! Your inquiry has been received. Our specialist will contact you shortly.'); return false;">
+            <form class="santino-inquiry-form">
+              <input type="hidden" name="inquiry_type" value="coffee_specialist_consultation">
               <div class="row g-3">
                 
                 <!-- Full Name -->
@@ -2035,7 +2036,7 @@ else :
                     <label class="specialist-input-label">FULL NAME <span class="req-star">*</span></label>
                     <div class="specialist-input-box">
                       <i class="bi bi-person specialist-field-icon"></i>
-                      <input type="text" class="specialist-form-input" placeholder="e.g. Tanvir Ahmed" required>
+                      <input type="text" name="name" class="specialist-form-input" placeholder="e.g. Tanvir Ahmed" required>
                     </div>
                   </div>
                 </div>
@@ -2046,7 +2047,7 @@ else :
                     <label class="specialist-input-label">BUSINESS EMAIL <span class="req-star">*</span></label>
                     <div class="specialist-input-box">
                       <i class="bi bi-envelope specialist-field-icon"></i>
-                      <input type="email" class="specialist-form-input" placeholder="e.g. tanvir@company.com" required>
+                      <input type="email" name="email" class="specialist-form-input" placeholder="e.g. tanvir@company.com" required>
                     </div>
                   </div>
                 </div>
@@ -2057,7 +2058,7 @@ else :
                     <label class="specialist-input-label">PHONE / WHATSAPP NUMBER <span class="req-star">*</span></label>
                     <div class="specialist-input-box">
                       <i class="bi bi-whatsapp specialist-field-icon"></i>
-                      <input type="tel" class="specialist-form-input" placeholder="+880 17XX-XXXXXX" required>
+                      <input type="tel" name="phone" class="specialist-form-input" placeholder="+880 17XX-XXXXXX" required>
                     </div>
                   </div>
                 </div>
@@ -2068,13 +2069,13 @@ else :
                     <label class="specialist-input-label">BUSINESS TYPE</label>
                     <div class="specialist-input-box">
                       <i class="bi bi-shop specialist-field-icon"></i>
-                      <select class="specialist-form-input specialist-form-select">
-                        <option value="cafe">Café / Coffee Shop</option>
-                        <option value="restaurant">Restaurant / Hotel</option>
-                        <option value="office">Corporate Office</option>
-                        <option value="retail">Supermarket / Retail Resale</option>
-                        <option value="academy">Barista Academy / Training</option>
-                        <option value="other">Other Inquiries</option>
+                      <select name="business_type" class="specialist-form-input specialist-form-select">
+                        <option value="Café / Coffee Shop">Café / Coffee Shop</option>
+                        <option value="Restaurant / Hotel">Restaurant / Hotel</option>
+                        <option value="Corporate Office">Corporate Office</option>
+                        <option value="Supermarket / Retail Resale">Supermarket / Retail Resale</option>
+                        <option value="Barista Academy / Training">Barista Academy / Training</option>
+                        <option value="Other Inquiries">Other Inquiries</option>
                       </select>
                     </div>
                   </div>
@@ -2086,7 +2087,7 @@ else :
                     <label class="specialist-input-label">YOUR REQUIREMENTS &amp; QUESTIONS <span class="req-star">*</span></label>
                     <div class="specialist-input-box specialist-input-box-textarea">
                       <i class="bi bi-chat-left-text specialist-field-icon-textarea"></i>
-                      <textarea class="specialist-form-textarea" rows="3" placeholder="Tell us about your machine models of interest, monthly bean volume, or cafe launch timeline..." required></textarea>
+                      <textarea name="message" class="specialist-form-textarea" rows="3" placeholder="Tell us about your machine models of interest, monthly bean volume, or cafe launch timeline..." required></textarea>
                     </div>
                   </div>
                 </div>

@@ -8,10 +8,10 @@
 
 get_header();
 
-$is_elementor_page = function_exists( 'santino_is_elementor_page' ) ? santino_is_elementor_page() : false;
-if ( ! $is_elementor_page && class_exists( '\Elementor\Plugin' ) ) {
+$is_elementor_page = false;
+if ( class_exists( '\Elementor\Plugin' ) ) {
     $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
-    if ( ( $document && $document->is_built_with_elementor() ) || \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+    if ( $document && $document->is_built_with_elementor() ) {
         $is_elementor_page = true;
     }
 }

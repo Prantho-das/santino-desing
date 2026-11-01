@@ -303,17 +303,33 @@ class Santino_Hero_Banner_Widget extends \Elementor\Widget_Base {
                         } elseif ( ! empty( $slide['bg_video_url'] ) ) {
                             $video_src = $slide['bg_video_url'];
                         }
-                        $is_video = ( isset( $slide['bg_type'] ) && $slide['bg_type'] === 'video' ) && ! empty( $video_src );
+                        if ( empty( $video_src ) && isset( $slide['bg_type'] ) && $slide['bg_type'] === 'video' ) {
+                            if ( $index === 0 ) {
+                                $video_src = get_theme_mod( 'santino_hero_video_mp4', get_theme_mod( 'santino_hero_video_url' ) );
+                                if ( ! $video_src && file_exists( SANTINO_DIR . '/assets/videos/coffee_espresso_video.mp4' ) ) {
+                                    $video_src = SANTINO_URI . '/assets/videos/coffee_espresso_video.mp4';
+                                }
+                            } elseif ( $index === 3 ) {
+                                $video_src = get_theme_mod( 'santino_roasting_video_mp4', get_theme_mod( 'santino_roasting_video_url', 'https://web.luckincdn.com/default/assets/ourstory-41023fc9.webm' ) );
+                            } elseif ( $index === 4 ) {
+                                $video_src = get_theme_mod( 'santino_hero_video_mp4', get_theme_mod( 'santino_hero_video_url', 'https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/ab6140f6-129c-4ae9-aaa0-20190c43183b.mp4' ) );
+                            }
+                        }
+                        $is_video_slide = ( isset( $slide['bg_type'] ) && $slide['bg_type'] === 'video' );
                         $bg_img = ! empty( $slide['bg_image']['url'] ) ? esc_url( $slide['bg_image']['url'] ) : ( function_exists('santino_img') ? santino_img( 'bd-barista-latte-art.jpg' ) : '' );
                         $btn_url = ! empty( $slide['btn_url']['url'] ) ? esc_url( $slide['btn_url']['url'] ) : '#';
                         $is_modal = strpos( $btn_url, '#enquiryModal' ) !== false;
                     ?>
-                        <div class="carousel-item <?php echo esc_attr( $is_active ); ?> hero-carousel-item position-relative overflow-hidden" <?php if ( ! $is_video && $bg_img ) : ?>style="background-image: url('<?php echo $bg_img; ?>'); background-position: center 30%;"<?php endif; ?>>
-                            <?php if ( $is_video ) : ?>
+                        <div class="carousel-item <?php echo esc_attr( $is_active ); ?> hero-carousel-item <?php echo $is_video_slide ? 'position-relative overflow-hidden' : ''; ?>" <?php if ( ! $is_video_slide && $bg_img ) : ?>style="background-image: url('<?php echo $bg_img; ?>'); background-position: center 30%;"<?php endif; ?>>
+                            <?php if ( $is_video_slide ) : ?>
                                 <div class="hero-video-wrap">
-                                    <video class="hero-video-bg" autoplay muted loop playsinline poster="<?php echo $bg_img; ?>">
-                                        <source src="<?php echo esc_url( $video_src ); ?>" type="video/mp4">
-                                    </video>
+                                    <?php if ( ! empty( $video_src ) ) : ?>
+                                        <video class="hero-video-bg" autoplay muted loop playsinline poster="<?php echo $bg_img; ?>">
+                                            <source src="<?php echo esc_url( $video_src ); ?>" type="<?php echo ( strpos( $video_src, '.webm' ) !== false ) ? 'video/webm' : 'video/mp4'; ?>">
+                                        </video>
+                                    <?php else : ?>
+                                        <div class="hero-video-bg" style="background-image: url('<?php echo $bg_img; ?>'); background-size: cover; background-position: center;"></div>
+                                    <?php endif; ?>
                                 </div>
                             <?php endif; ?>
                             <div class="hero-overlay"></div>

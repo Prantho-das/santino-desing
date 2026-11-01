@@ -7,6 +7,8 @@ class Santino_Leads_System {
 
     public static function init() {
         add_action( 'init', array( __CLASS__, 'register_post_type' ) );
+        add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
+        add_action( 'save_post_santino_inquiry', array( __CLASS__, 'save_lead_meta' ) );
         add_action( 'wp_ajax_santino_submit_inquiry', array( __CLASS__, 'handle_inquiry_ajax' ) );
         add_action( 'wp_ajax_nopriv_santino_submit_inquiry', array( __CLASS__, 'handle_inquiry_ajax' ) );
         add_action( 'wp_ajax_santino_ajax_add_to_cart', array( __CLASS__, 'handle_ajax_add_to_cart' ) );
@@ -35,11 +37,116 @@ class Santino_Leads_System {
             'show_in_menu'       => true,
             'menu_position'      => 26,
             'menu_icon'          => 'dashicons-email-alt2',
-            'supports'           => array( 'title', 'custom-fields' ),
+            'supports'           => array( 'title' ),
             'capability_type'    => 'post',
         );
 
         register_post_type( 'santino_inquiry', $args );
+    }
+
+    public static function add_meta_boxes() {
+        add_meta_box(
+            'santino_inquiry_details_box',
+            __( 'Lead & Inquiry Information', 'santino' ),
+            array( __CLASS__, 'render_inquiry_meta_box' ),
+            'santino_inquiry',
+            'normal',
+            'high'
+        );
+    }
+
+    public static function render_inquiry_meta_box( $post ) {
+        wp_nonce_field( 'santino_save_lead_nonce', 'santino_lead_nonce' );
+
+        $name     = get_post_meta( $post->ID, '_inquiry_name', true );
+        $phone    = get_post_meta( $post->ID, '_inquiry_phone', true );
+        $email    = get_post_meta( $post->ID, '_inquiry_email', true );
+        $type     = get_post_meta( $post->ID, '_inquiry_type', true );
+        $b_type   = get_post_meta( $post->ID, '_inquiry_business_type', true );
+        $message  = get_post_meta( $post->ID, '_inquiry_message', true );
+        $details  = get_post_meta( $post->ID, '_inquiry_details', true );
+        $status   = get_post_meta( $post->ID, '_inquiry_status', true ) ?: 'new';
+        $clean_phone = preg_replace( '/[^0-9]/', '', $phone );
+        ?>
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; font-weight: bold;">Lead Status:</span>
+                    <select name="santino_inquiry_status" style="margin-left: 8px; font-weight: bold;">
+                        <option value="new" <?php selected( $status, 'new' ); ?>>🟡 New Lead</option>
+                        <option value="contacted" <?php selected( $status, 'contacted' ); ?>>🔵 Contacted</option>
+                        <option value="in_progress" <?php selected( $status, 'in_progress' ); ?>>🟣 Proposal Sent</option>
+                        <option value="won" <?php selected( $status, 'won' ); ?>>🟢 Converted / Client</option>
+                        <option value="closed" <?php selected( $status, 'closed' ); ?>>⚪ Closed / Unresponsive</option>
+                    </select>
+                </div>
+                <div>
+                    <?php if ( $phone ) : ?>
+                        <a href="https://wa.me/<?php echo esc_attr( $clean_phone ); ?>" target="_blank" class="button" style="background:#25D366; color:#fff; border-color:#20bd5a; font-weight:bold;">
+                            WhatsApp Chat →
+                        </a>
+                        <a href="tel:<?php echo esc_attr( $phone ); ?>" class="button button-primary" style="background:#00625d; border-color:#004d49;">
+                            Call Phone →
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <table class="form-table">
+            <tr>
+                <th style="width: 180px;"><label>Customer Name:</label></th>
+                <td><strong style="font-size: 15px; color: #0f172a;"><?php echo esc_html( $name ?: $post->post_title ); ?></strong></td>
+            </tr>
+            <tr>
+                <th><label>Phone / WhatsApp:</label></th>
+                <td><a href="tel:<?php echo esc_attr( $phone ); ?>" style="font-weight: bold; color: #00625d;"><?php echo esc_html( $phone ?: '—' ); ?></a></td>
+            </tr>
+            <tr>
+                <th><label>Email Address:</label></th>
+                <td><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ?: '—' ); ?></a></td>
+            </tr>
+            <tr>
+                <th><label>Inquiry Source / Page:</label></th>
+                <td><span style="background: #00625d; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: uppercase;"><?php echo esc_html( str_replace( '_', ' ', $type ) ); ?></span></td>
+            </tr>
+            <?php if ( $b_type ) : ?>
+            <tr>
+                <th><label>Business Type:</label></th>
+                <td><strong><?php echo esc_html( $b_type ); ?></strong></td>
+            </tr>
+            <?php endif; ?>
+            <?php if ( $message ) : ?>
+            <tr>
+                <th><label>Customer Message / Note:</label></th>
+                <td><div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; white-space: pre-wrap; font-size: 13px;"><?php echo esc_html( $message ); ?></div></td>
+            </tr>
+            <?php endif; ?>
+            <tr>
+                <th><label>All Submitted Fields:</label></th>
+                <td><div style="background: #f1f5f9; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 12px;"><?php echo esc_html( $details ?: 'No additional metadata' ); ?></div></td>
+            </tr>
+            <tr>
+                <th><label>Submission Date:</label></th>
+                <td><?php echo esc_html( get_the_date( 'F j, Y g:i a', $post ) ); ?></td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public static function save_lead_meta( $post_id ) {
+        if ( ! isset( $_POST['santino_lead_nonce'] ) || ! wp_verify_nonce( $_POST['santino_lead_nonce'], 'santino_save_lead_nonce' ) ) {
+            return;
+        }
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+            return;
+        }
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            return;
+        }
+        if ( isset( $_POST['santino_inquiry_status'] ) ) {
+            update_post_meta( $post_id, '_inquiry_status', sanitize_text_field( $_POST['santino_inquiry_status'] ) );
+        }
     }
 
     public static function set_columns( $columns ) {
@@ -48,6 +155,7 @@ class Santino_Leads_System {
             'title'      => 'Inquirer Name',
             'type'       => 'Inquiry Type / Page',
             'contact'    => 'Contact (Phone / Email)',
+            'status'     => 'Lead Status',
             'details'    => 'Request Details',
             'date'       => 'Submission Date',
         );
@@ -57,16 +165,28 @@ class Santino_Leads_System {
         switch ( $column ) {
             case 'type':
                 $type = get_post_meta( $post_id, '_inquiry_type', true );
-                echo '<span class="badge" style="background:#00625d;color:#fff;padding:4px 8px;border-radius:4px;">' . esc_html( strtoupper( $type ) ) . '</span>';
+                echo '<span class="badge" style="background:#00625d;color:#fff;padding:4px 8px;border-radius:4px;font-size:11px;">' . esc_html( strtoupper( str_replace( '_', ' ', $type ) ) ) . '</span>';
                 break;
             case 'contact':
                 $phone = get_post_meta( $post_id, '_inquiry_phone', true );
                 $email = get_post_meta( $post_id, '_inquiry_email', true );
-                echo '<strong>' . esc_html( $phone ) . '</strong><br><small>' . esc_html( $email ) . '</small>';
+                echo '<strong>' . esc_html( $phone ) . '</strong><br><small style="color:#64748b;">' . esc_html( $email ) . '</small>';
+                break;
+            case 'status':
+                $status = get_post_meta( $post_id, '_inquiry_status', true ) ?: 'new';
+                $colors = array(
+                    'new'         => array( '#854d0e', '#fef9c3', '🟡 NEW' ),
+                    'contacted'   => array( '#1e40af', '#dbeafe', '🔵 CONTACTED' ),
+                    'in_progress' => array( '#6b21a8', '#f3e8ff', '🟣 PROPOSAL' ),
+                    'won'         => array( '#15803d', '#dcfce7', '🟢 WON' ),
+                    'closed'      => array( '#475569', '#f1f5f9', '⚪ CLOSED' ),
+                );
+                $info = $colors[ $status ] ?? array( '#475569', '#f1f5f9', strtoupper( $status ) );
+                echo '<span style="color:' . $info[0] . '; background:' . $info[1] . '; padding:3px 8px; border-radius:6px; font-weight:bold; font-size:11px;">' . esc_html( $info[2] ) . '</span>';
                 break;
             case 'details':
                 $details = get_post_meta( $post_id, '_inquiry_details', true );
-                echo esc_html( wp_trim_words( $details, 15 ) );
+                echo esc_html( wp_trim_words( $details, 12 ) );
                 break;
         }
     }
@@ -80,8 +200,13 @@ class Santino_Leads_System {
         $phone   = isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '';
         $email   = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
         $type    = isset( $_POST['inquiry_type'] ) ? sanitize_text_field( wp_unslash( $_POST['inquiry_type'] ) ) : ( isset( $_POST['type'] ) ? sanitize_text_field( wp_unslash( $_POST['type'] ) ) : 'general' );
+        $b_type  = isset( $_POST['business_type'] ) ? sanitize_text_field( wp_unslash( $_POST['business_type'] ) ) : '';
+        $msg     = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
         
         $details_parts = array();
+        if ( ! empty( $b_type ) ) {
+            $details_parts[] = 'Business Type: ' . $b_type;
+        }
         if ( ! empty( $_POST['company'] ) ) {
             $details_parts[] = 'Company/Org: ' . sanitize_text_field( wp_unslash( $_POST['company'] ) );
         }
@@ -100,8 +225,8 @@ class Santino_Leads_System {
         if ( ! empty( $_POST['preferred_date'] ) ) {
             $details_parts[] = 'Date: ' . sanitize_text_field( wp_unslash( $_POST['preferred_date'] ) );
         }
-        if ( ! empty( $_POST['message'] ) ) {
-            $details_parts[] = 'Message/Notes: ' . sanitize_textarea_field( wp_unslash( $_POST['message'] ) );
+        if ( ! empty( $msg ) ) {
+            $details_parts[] = 'Message/Notes: ' . $msg;
         }
         if ( ! empty( $_POST['details'] ) ) {
             $details_parts[] = 'Details: ' . sanitize_textarea_field( wp_unslash( $_POST['details'] ) );
@@ -127,7 +252,10 @@ class Santino_Leads_System {
         update_post_meta( $post_id, '_inquiry_phone', $phone );
         update_post_meta( $post_id, '_inquiry_email', $email );
         update_post_meta( $post_id, '_inquiry_type', $type );
+        update_post_meta( $post_id, '_inquiry_business_type', $b_type );
+        update_post_meta( $post_id, '_inquiry_message', $msg );
         update_post_meta( $post_id, '_inquiry_details', $details );
+        update_post_meta( $post_id, '_inquiry_status', 'new' );
 
         wp_send_json_success( array(
             'message' => 'Thank you, ' . esc_html( $name ) . '! Your request has been received. Our team will contact you shortly.',

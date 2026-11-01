@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // VIP Membership AJAX Submission with Phone Validation
+  // Regular Membership AJAX Submission with Phone Validation
   const membershipForm = document.getElementById('santinoMembershipForm');
   if (membershipForm) {
     const phoneInput = membershipForm.querySelector('input[name="phone"]');
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const originalText = submitBtn ? submitBtn.innerHTML : 'Submit';
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing VIP Application...';
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing Application...';
       }
 
       const formData = new FormData(this);
@@ -198,30 +198,41 @@ document.addEventListener('DOMContentLoaded', () => {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
         }
+        const resBox = document.getElementById('membershipResponseBox');
         if (data.success) {
-          const resBox = document.getElementById('membershipResponseBox');
           if (resBox) {
             resBox.style.display = 'block';
             resBox.innerHTML = `
               <div class="alert alert-success rounded-4 p-4 text-center shadow-sm">
                 <i class="bi bi-patch-check-fill text-success fs-1 d-block mb-2"></i>
-                <h4 class="fw-bold mb-2">VIP Membership Application Received!</h4>
+                <h4 class="fw-bold mb-2">Membership Activated!</h4>
                 <p class="mb-3 text-muted">${data.data.message}</p>
                 <div class="p-3 bg-white rounded-3 border d-inline-block text-dark text-start">
-                  <div class="small text-muted text-uppercase">Your Santino VIP Member ID</div>
+                  <div class="small text-muted text-uppercase">Santino Member ID</div>
                   <div class="fs-4 fw-bold text-success font-monospace">${data.data.member_id}</div>
-                  <div class="small text-muted mt-1">Tier: <strong>${data.data.tier}</strong> | Welcome Bonus: <strong>100 Pts</strong></div>
+                  <div class="small text-muted mt-1">Tier: <strong>${data.data.tier}</strong></div>
                 </div>
               </div>
             `;
             membershipForm.reset();
             resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
-            alert(data.data.message + '\nYour VIP ID: ' + data.data.member_id);
+            alert(data.data.message + '\nYour ID: ' + data.data.member_id);
             membershipForm.reset();
           }
         } else {
-          alert(data.data ? data.data.message : 'Error submitting form.');
+          if (resBox) {
+            resBox.style.display = 'block';
+            resBox.innerHTML = `
+              <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm">
+                <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-1"></i>
+                <strong>${data.data ? data.data.message : 'Error submitting form.'}</strong>
+              </div>
+            `;
+            resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else {
+            alert(data.data ? data.data.message : 'Error submitting form.');
+          }
         }
       })
       .catch(err => {
@@ -235,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Invoice Submission Form
+  // Invoice Submission Form (Supports Cups Count)
   const invoiceForm = document.getElementById('santinoInvoiceForm');
   if (invoiceForm) {
     invoiceForm.addEventListener('submit', function(e) {
@@ -274,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <i class="bi bi-receipt-cutoff text-success fs-1 d-block mb-2"></i>
                 <h4 class="fw-bold mb-2">Invoice Logged Successfully!</h4>
                 <p class="mb-0 text-muted">${data.data.message}</p>
-                <div class="mt-3 badge bg-warning text-dark px-3 py-2 fs-6">Status: ⏳ PENDING ADMIN VERIFICATION</div>
+                <div class="mt-3 badge bg-warning text-dark px-3 py-2 fs-6">Status: ⏳ PENDING PORTAL VERIFICATION</div>
               </div>
             `;
             invoiceForm.reset();
@@ -292,6 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>${data.data ? data.data.message : 'Error submitting invoice.'}</strong>
               </div>
             `;
+            resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
             alert(data.data ? data.data.message : 'Error submitting invoice.');
           }
@@ -308,7 +320,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Stamp Card Live Lookup Form
+    });
+  }
+
+  // Stamp Card Live Lookup Form (Shows Remaining Cups Modulo 5 & Vouchers)
   const lookupForm = document.getElementById('santinoLookupForm');
   if (lookupForm) {
     lookupForm.addEventListener('submit', function(e) {
@@ -373,13 +388,60 @@ document.addEventListener('DOMContentLoaded', () => {
           if (d.vouchers && d.vouchers.length > 0) {
             vouchersHtml = `
               <div class="mt-4 p-3.5 rounded-4 border" style="background: rgba(195, 153, 108, 0.1); border-color: rgba(195, 153, 108, 0.35) !important;">
-                <h6 class="fw-bold mb-2" style="color: #dfbe8d;"><i class="bi bi-gift-fill me-1.5"></i> Active Free Coffee Vouchers:</h6>
-                <div class="d-flex flex-wrap gap-2">
+                <h6 class="fw-bold mb-2.5" style="color: #dfbe8d;"><i class="bi bi-gift-fill me-1.5"></i> Free Coffee Vouchers:</h6>
+                <div class="d-flex flex-column gap-2">
                   ${d.vouchers.map(v => `
-                    <div class="p-2.5 rounded-3 d-flex align-items-center gap-2 border" style="background: #091715; border-color: rgba(195,153,108,0.3) !important;">
-                      <code class="fs-6 fw-bold" style="color: #dfbe8d;">${v.code}</code>
-                      <span class="badge ${v.status === 'unused' ? 'bg-success' : 'bg-secondary'}" style="font-size: 10px;">${v.status.toUpperCase()}</span>
+                    <div class="p-2.5 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2 border" style="background: #091715; border-color: rgba(195,153,108,0.3) !important;">
+                      <div class="d-flex align-items-center gap-2">
+                        <code class="fs-6 fw-bold" style="color: #dfbe8d;">${v.code}</code>
+                        <span class="badge ${v.status === 'unused' ? 'bg-success' : (v.status === 'pending_redemption' ? 'bg-warning text-dark' : 'bg-secondary')}" style="font-size: 10px;">
+                          ${v.status === 'unused' ? 'UNUSED' : (v.status === 'pending_redemption' ? '⏳ PENDING PORTAL APPROVAL' : '✓ REDEEMED')}
+                        </span>
+                      </div>
+                      ${v.status === 'unused' ? `
+                        <div class="small fw-bold px-2.5 py-1 rounded-pill" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.3); font-size: 11px;">
+                          <i class="bi bi-shop me-1 text-teal"></i> Show to Barista to Redeem
+                        </div>
+                      ` : ''}
                     </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          let redeemsHtml = '';
+          if (d.redeems && d.redeems.length > 0) {
+            redeemsHtml = `
+              <div class="mt-3 p-3.5 rounded-4 border" style="background: rgba(0, 98, 93, 0.15); border-color: rgba(0, 98, 93, 0.4) !important;">
+                <h6 class="fw-bold mb-2 text-white"><i class="bi bi-clock-history me-1.5" style="color: #dfbe8d;"></i> Recent Redeem Requests:</h6>
+                <div class="d-flex flex-column gap-2">
+                  ${d.redeems.map(r => `
+                    <div class="p-2.5 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2 border" style="background: #071917; border-color: rgba(255,255,255,0.1) !important;">
+                      <div>
+                        <span class="fw-bold text-white small">${r.item}</span>
+                        <div class="text-white-50" style="font-size: 11px;">#${r.code} • ${r.branch} • ${r.date}</div>
+                      </div>
+                      <span class="badge ${r.status === 'approved' ? 'bg-success' : (r.status === 'rejected' ? 'bg-danger' : 'bg-warning text-dark')}" style="font-size: 10px;">
+                        ${r.status === 'approved' ? '✓ APPROVED (Served)' : (r.status === 'rejected' ? '✗ REJECTED' : '⏳ PENDING PORTAL APPROVAL')}
+                      </span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          let invoicesHtml = '';
+          if (d.invoices && d.invoices.length > 0) {
+            invoicesHtml = `
+              <div class="mt-3 p-3 rounded-4 border" style="background: rgba(0, 0, 0, 0.25); border-color: rgba(255,255,255,0.1) !important;">
+                <div class="small fw-bold text-white-50 mb-1.5"><i class="bi bi-receipt me-1"></i> Recent Invoices:</div>
+                <div class="d-flex flex-wrap gap-2">
+                  ${d.invoices.map(inv => `
+                    <span class="badge p-2 rounded-2 border ${inv.status === 'approved' ? 'border-success text-success' : 'border-warning text-warning'}" style="background: rgba(0,0,0,0.5); font-size: 11px;">
+                      #${inv.invoice_no} (${inv.cups} Cups) - ${inv.status === 'approved' ? '✓ Approved' : '⏳ Pending'}
+                    </span>
                   `).join('')}
                 </div>
               </div>
@@ -392,26 +454,30 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
                   <span class="badge px-3 py-1.5 fw-bold text-uppercase rounded-pill" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 11px;">
-                    <i class="bi bi-patch-check-fill me-1"></i> SANTINO VIP MEMBER
+                    <i class="bi bi-patch-check-fill me-1"></i> SANTINO REGULAR MEMBER
                   </span>
                   <h3 class="fw-bold text-white mt-2 mb-0 font-heading">${d.name}</h3>
-                  <div class="text-white-50 font-monospace small mt-1">VIP ID: <strong style="color: #dfbe8d;">${d.member_id}</strong> | Phone: ${d.phone}</div>
+                  <div class="text-white-50 font-monospace small mt-1">
+                    ID: <strong style="color: #dfbe8d;">${d.member_id}</strong> | Phone: ${d.phone} ${d.birthday ? '| Birthday: ' + d.birthday : ''}
+                  </div>
                 </div>
                 <div class="text-end">
                   <div class="display-6 fw-bold mb-0 font-heading" style="color: #dfbe8d;">${stamps}/5</div>
-                  <div class="small text-white-50">Approved Stamps</div>
+                  <div class="small text-white-50">Card Stamps</div>
                 </div>
               </div>
 
               <div class="p-3.5 p-md-4 rounded-4 mt-3 shadow-lg border" style="background: rgba(6, 20, 18, 0.9); border-color: rgba(195, 153, 108, 0.3) !important;">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                   <h6 class="fw-bold mb-0 text-white font-heading"><i class="bi bi-cup-hot-fill me-1.5" style="color: #dfbe8d;"></i> Digital Stamp Progress</h6>
-                  <span class="small fw-bold" style="color: #dfbe8d;">${5 - stamps === 0 ? '🎉 Free 6th Coffee Unlocked!' : (5 - stamps) + ' cups to next FREE COFFEE'}</span>
+                  <span class="small fw-bold" style="color: #dfbe8d;">${5 - stamps === 0 ? '🎉 Free 1 Cup Coffee Unlocked!' : (5 - stamps) + ' cups remaining to next FREE COFFEE'}</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center py-2 px-1 gap-2">
                   ${cupsHtml}
                 </div>
                 ${vouchersHtml}
+                ${redeemsHtml}
+                ${invoicesHtml}
               </div>
             </div>
           `;

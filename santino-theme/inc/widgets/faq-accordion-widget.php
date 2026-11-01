@@ -1,10 +1,4 @@
 <?php
-/**
- * Elementor FAQ Accordion Widget
- *
- * @package Santino
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -31,8 +25,17 @@ class Santino_FAQ_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_content',
             array(
-                'label' => esc_html__( 'FAQ Items', 'santino' ),
+                'label' => esc_html__( 'FAQ Header & Items', 'santino' ),
                 'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control(
+            'badge',
+            array(
+                'label'   => esc_html__( 'Badge Text', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'FREQUENTLY ASKED QUESTIONS',
             )
         );
 
@@ -45,6 +48,15 @@ class Santino_FAQ_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        $this->add_control(
+            'subtitle',
+            array(
+                'label'   => esc_html__( 'Subtitle', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXTAREA,
+                'default' => 'Everything you need to know about Santino equipment & roastery',
+            )
+        );
+
         $repeater = new \Elementor\Repeater();
 
         $repeater->add_control(
@@ -52,7 +64,7 @@ class Santino_FAQ_Widget extends \Elementor\Widget_Base {
             array(
                 'label'   => esc_html__( 'Question', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::TEXT,
-                'default' => 'Do you provide official manufacturer warranty in Bangladesh?',
+                'default' => 'Why choose Santino Coffee?',
             )
         );
 
@@ -61,7 +73,7 @@ class Santino_FAQ_Widget extends \Elementor\Widget_Base {
             array(
                 'label'   => esc_html__( 'Answer', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::TEXTAREA,
-                'default' => 'Yes, as the authorized distributor for Nuova Simonelli, Victoria Arduino, and CREM, all our machines come with official 1-year manufacturer warranty and free AMC visits.',
+                'default' => 'Santino Coffee bridges heritage and innovation to empower coffee businesses across Asia.',
             )
         );
 
@@ -73,16 +85,20 @@ class Santino_FAQ_Widget extends \Elementor\Widget_Base {
                 'fields'      => $repeater->get_controls(),
                 'default'     => array(
                     array(
-                        'question' => 'Do you provide official manufacturer warranty in Bangladesh?',
-                        'answer'   => 'Yes, as the authorized distributor, all our commercial espresso machines come with official manufacturer warranty and free quarterly preventive maintenance visits.',
+                        'question' => 'Why choose Santino Coffee?',
+                        'answer'   => 'Santino Coffee bridges heritage and innovation to empower coffee businesses across Asia. With decades of roasting experience, FSSC22000 certification, and authorized distribution of Victoria Arduino and Nuova Simonelli, we provide complete, reliable coffee solutions.',
                     ),
                     array(
-                        'question' => 'How quickly does your AMC support respond to machine breakdown?',
-                        'answer'   => 'In Dhaka metropolitan area, our emergency technical team responds within 2-4 hours. We carry OEM spare parts to fix on the spot or provide a temporary backup machine.',
+                        'question' => 'What coffee equipment and solutions do you provide?',
+                        'answer'   => 'We supply commercial espresso machines, superautomatics, CAYE Bionic Barista robots, precision grinders, 3TEMP batch brewers, Rainforest Alliance certified coffee beans, OEM private label roasting, and full café setup consulting.',
                     ),
                     array(
-                        'question' => 'Can I customize coffee bean roast profiles for my cafe chain?',
-                        'answer'   => 'Absolutely. Our head roaster collaborates directly with you to craft custom signature blends and roast profiles tailored to your menu, cup size, and customer taste.',
+                        'question' => 'Do you offer barista academy certification and competition coaching?',
+                        'answer'   => 'Yes, our certified trainers lead foundational espresso workshops, advanced latte art masterclasses, and WBC (World Barista Championship) & WBrC competition mentorship.',
+                    ),
+                    array(
+                        'question' => 'What after-sales service and preventive maintenance is available?',
+                        'answer'   => 'We provide dedicated technical support, scheduled preventive maintenance contracts, on-site diagnostics, and genuine OEM parts to ensure uninterrupted beverage service.',
                     ),
                 ),
                 'title_field' => '{{{ question }}}',
@@ -95,29 +111,46 @@ class Santino_FAQ_Widget extends \Elementor\Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
         $widget_id = $this->get_id();
+        $faqs = ! empty( $settings['faqs_list'] ) ? $settings['faqs_list'] : array();
         ?>
-        <section class="faq-section py-5 bg-white">
-            <div class="container-fluid px-lg-5" style="max-width: 900px;">
-                <div class="text-center mb-5">
-                    <h2 class="display-6 fw-bold font-heading text-dark"><?php echo esc_html( $settings['title'] ); ?></h2>
+        <section class="faq-section" id="faqs">
+            <div class="container">
+                <div class="sec-heading-center">
+                    <?php if ( ! empty( $settings['badge'] ) ) : ?>
+                        <div class="sec-pill-badge-wrap mb-2">
+                            <span class="sec-pill-line"></span>
+                            <span class="sec-pill-badge"><i class="bi bi-question-circle-fill me-1"></i> <?php echo esc_html( $settings['badge'] ); ?></span>
+                            <span class="sec-pill-line"></span>
+                        </div>
+                    <?php endif; ?>
+                    <h2 class="sec-title"><?php echo esc_html( $settings['title'] ); ?></h2>
+                    <?php if ( ! empty( $settings['subtitle'] ) ) : ?>
+                        <div class="sec-subtitle"><?php echo esc_html( $settings['subtitle'] ); ?></div>
+                    <?php endif; ?>
                 </div>
 
-                <div class="accordion" id="faqAccordion-<?php echo esc_attr( $widget_id ); ?>">
-                    <?php foreach ( $settings['faqs_list'] as $index => $item ) : ?>
-                        <?php $collapse_id = 'collapse-' . $widget_id . '-' . $index; ?>
-                        <div class="accordion-item border rounded-4 mb-3 overflow-hidden shadow-sm">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button <?php echo $index === 0 ? '' : 'collapsed'; ?> fw-bold font-heading text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#<?php echo esc_attr( $collapse_id ); ?>">
-                                    <?php echo esc_html( $item['question'] ); ?>
-                                </button>
-                            </h2>
-                            <div id="<?php echo esc_attr( $collapse_id ); ?>" class="accordion-collapse collapse <?php echo $index === 0 ? 'show' : ''; ?>" data-bs-parent="#faqAccordion-<?php echo esc_attr( $widget_id ); ?>">
-                                <div class="accordion-body text-muted">
-                                    <?php echo wp_kses_post( $item['answer'] ); ?>
+                <div class="row justify-content-center">
+                    <div class="col-lg-9">
+                        <div class="accordion" id="faqAccordion-<?php echo esc_attr( $widget_id ); ?>">
+                            <?php foreach ( $faqs as $index => $item ) : 
+                                $collapse_id = 'faqK-' . $widget_id . '-' . $index;
+                                $is_open = $index === 0;
+                            ?>
+                                <div class="accordion-item mb-3 border rounded-3 overflow-hidden shadow-sm">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button <?php echo $is_open ? '' : 'collapsed'; ?> fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#<?php echo esc_attr( $collapse_id ); ?>">
+                                            <?php echo esc_html( $item['question'] ); ?>
+                                        </button>
+                                    </h2>
+                                    <div id="<?php echo esc_attr( $collapse_id ); ?>" class="accordion-collapse collapse <?php echo $is_open ? 'show' : ''; ?>" data-bs-parent="#faqAccordion-<?php echo esc_attr( $widget_id ); ?>">
+                                        <div class="accordion-body text-muted">
+                                            <?php echo wp_kses_post( $item['answer'] ); ?>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php endforeach; ?>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
         </section>

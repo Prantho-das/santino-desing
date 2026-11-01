@@ -8,10 +8,10 @@
 
 get_header();
 
-$is_elementor_page = function_exists( 'santino_is_elementor_page' ) ? santino_is_elementor_page() : false;
-if ( ! $is_elementor_page && class_exists( '\Elementor\Plugin' ) ) {
+$is_elementor_page = false;
+if ( class_exists( '\Elementor\Plugin' ) ) {
     $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
-    if ( ( $document && $document->is_built_with_elementor() ) || \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+    if ( $document && $document->is_built_with_elementor() ) {
         $is_elementor_page = true;
     }
 }
@@ -643,6 +643,74 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
   box-shadow: 0 8px 20px rgba(0, 98, 93, 0.3);
 }
 
+.portal-lookup-group {
+  display: flex !important;
+  align-items: center !important;
+  background: #ffffff !important;
+  border: 1.5px solid #d5e5e0 !important;
+  border-radius: 50px !important;
+  padding: 6px 8px 6px 20px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 10px rgba(0, 98, 93, 0.04) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.portal-lookup-group:focus-within {
+  border-color: var(--santino-teal, #00625d) !important;
+  box-shadow: 0 0 0 4px rgba(0, 98, 93, 0.12), 0 4px 16px rgba(0, 98, 93, 0.08) !important;
+}
+.portal-lookup-field {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+.portal-lookup-field i {
+  color: var(--santino-teal, #00625d) !important;
+  font-size: 1.15rem !important;
+}
+.portal-lookup-field input {
+  width: 100% !important;
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif) !important;
+  font-size: 0.95rem !important;
+  color: #1a2b28 !important;
+  padding: 8px 0 !important;
+}
+.btn-lookup-action {
+  background: var(--santino-teal, #00625d) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-family: var(--kp-font-title, 'Montserrat', sans-serif) !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.6px !important;
+  text-transform: uppercase !important;
+  padding: 10px 24px !important;
+  border-radius: 50px !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(0, 98, 93, 0.25) !important;
+  transition: all 0.25s ease !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+.btn-lookup-action:hover {
+  background: #004d49 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 20px rgba(0, 98, 93, 0.35) !important;
+}
+
 .floating-bg-icons {
   position: absolute !important;
   top: 0 !important;
@@ -749,16 +817,16 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
               <div class="d-flex justify-content-between align-items-start mb-3 position-relative" style="z-index: 2;">
                 <div>
                   <div class="small fw-bold text-uppercase" style="color: #dfbe8d; letter-spacing: 1.5px; font-size: 11px;">
-                    SANTINO ROASTERY &bull; VIP CLUB
+                    SANTINO COFFEE CLUB
                   </div>
-                  <h4 class="font-heading fw-bold text-white mb-0 mt-1">Connoisseur Member</h4>
+                  <h4 class="font-heading fw-bold text-white mb-0 mt-1">Regular Member</h4>
                 </div>
                 <div class="gold-chip"></div>
               </div>
 
               <!-- Card ID & Tagline -->
               <div class="mb-4 position-relative" style="z-index: 2;">
-                <div class="font-monospace text-white-50 small" style="letter-spacing: 2px;">SNT-VIP-•••• ••••</div>
+                <div class="font-monospace text-white-50 small" style="letter-spacing: 2px;">SNT-REG-•••• ••••</div>
               </div>
 
               <!-- 5-Cup Physical Stamp Grid Inside Card -->
@@ -814,12 +882,12 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
                 <div class="col-4 border-start border-end">
                   <div class="fs-4 text-teal mb-1"><i class="bi bi-receipt"></i></div>
                   <div class="fw-bold small text-dark">2. Log Memo</div>
-                  <div class="text-muted" style="font-size: 10px;">Submit invoice #</div>
+                  <div class="text-muted" style="font-size: 10px;">Submit invoice &amp; cups</div>
                 </div>
                 <div class="col-4">
                   <div class="fs-4 text-teal mb-1" style="color: #c3996c !important;"><i class="bi bi-gift"></i></div>
                   <div class="fw-bold small text-dark">3. Get Free Cup</div>
-                  <div class="text-muted" style="font-size: 10px;">Instant voucher</div>
+                  <div class="text-muted" style="font-size: 10px;">Buy 5, Get 1 Free</div>
                 </div>
               </div>
             </div>
@@ -856,14 +924,14 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
               <div class="tab-pane fade show active" id="stamps-pane" role="tabpanel">
                 <div class="mb-4">
                   <h4 class="font-heading fw-bold text-dark mb-1">Check Your Live Stamp Progress</h4>
-                  <p class="text-muted small">Enter your Registered Phone Number or VIP Member ID below.</p>
+                  <p class="text-muted small">Enter your Registered Phone Number or Member ID below.</p>
                 </div>
 
                 <form id="santinoLookupForm" class="mb-4">
                   <div class="portal-lookup-group">
                     <div class="portal-lookup-field">
                       <i class="bi bi-telephone text-teal"></i>
-                      <input type="text" name="query" placeholder="e.g. 01712345678 or SNT-VIP-XXXX" required>
+                      <input type="text" name="query" placeholder="e.g. 01712345678 or SNT-REG-XXXX" required>
                     </div>
                     <button type="submit" class="btn-lookup-action">
                       <span>LOOKUP</span> <i class="bi bi-arrow-right"></i>
@@ -878,25 +946,29 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
               <div class="tab-pane fade" id="invoice-pane" role="tabpanel">
                 <div class="mb-4">
                   <h4 class="font-heading fw-bold text-dark mb-1">Log Cafe Invoice / Memo Number</h4>
-                  <p class="text-muted small">Submit your receipt details. +1 Cup stamp will be credited to your card upon verification.</p>
+                  <p class="text-muted small">Submit your receipt details. Each approved cup credits your 5-cup stamp progress.</p>
                 </div>
 
                 <div id="invoiceResponseBox" style="display: none;" class="mb-4"></div>
 
                 <form id="santinoInvoiceForm">
                   <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <label class="form-label small fw-bold text-dark">Invoice / Memo Number *</label>
                       <input type="text" name="invoice_number" class="form-control" placeholder="e.g. SNT-2026-9042" required>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
+                      <label class="form-label small fw-bold text-dark">No. of Cups *</label>
+                      <input type="number" name="cups" class="form-control" min="1" max="50" value="1" style="font-weight: bold; color: #00625d;" required>
+                    </div>
+                    <div class="col-md-4">
                       <label class="form-label small fw-bold text-dark">Phone Number / WhatsApp *</label>
-                      <input type="tel" name="phone" class="form-control" placeholder="017XXXXXXXX or +88017..." pattern="^(?:\+?880|0)?1[3-9]\d{8}$" title="Please enter a valid Bangladeshi phone number" required>
+                      <input type="tel" name="phone" class="form-control" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" title="Please enter a valid Bangladeshi phone number" required>
                     </div>
                   </div>
 
                   <div class="row g-3 mb-4">
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                       <label class="form-label small fw-bold text-dark">Cafe Branch Visited</label>
                       <select name="branch" class="form-select">
                         <option>Gulshan-2 Flagship Experience Center</option>
@@ -907,9 +979,9 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
                         <option>Baridhara Diplomatic Enclave</option>
                       </select>
                     </div>
-                    <div class="col-md-6">
-                      <label class="form-label small fw-bold text-dark">VIP Member ID (Optional)</label>
-                      <input type="text" name="member_id" class="form-control" placeholder="e.g. SNT-VIP-XXXX">
+                    <div class="col-md-5">
+                      <label class="form-label small fw-bold text-dark">Member ID (Optional)</label>
+                      <input type="text" name="member_id" class="form-control" placeholder="e.g. SNT-REG-XXXX">
                     </div>
                   </div>
 
@@ -919,50 +991,77 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
                 </form>
               </div>
 
-              <!-- TAB 3: REGISTER FOR COFFEE CLUB -->
+              <!-- TAB 4: REGISTER FOR COFFEE CLUB -->
               <div class="tab-pane fade" id="register-pane" role="tabpanel">
                 <div class="mb-4">
                   <h4 class="font-heading fw-bold text-dark mb-1">Register For Santino Coffee Club</h4>
-                  <p class="text-muted small">Fill in your details to immediately activate your digital stamp card and member perks.</p>
+                  <p class="text-muted small">Join Regular Membership to activate your 5-cup digital coffee stamp card.</p>
                 </div>
 
                 <div id="membershipResponseBox" style="display: none;" class="mb-4"></div>
 
                 <form id="santinoMembershipForm">
                   <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                      <label class="form-label small fw-bold text-dark">Full Name *</label>
-                      <input type="text" name="fullname" class="form-control" placeholder="Your Full Name" required>
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label small fw-bold text-dark">Phone Number / WhatsApp *</label>
+                    <div class="col-md-12">
+                      <label class="form-label small fw-bold text-dark">Mobile Number / WhatsApp *</label>
                       <input type="tel" name="phone" id="santinoMemberPhone" class="form-control" placeholder="017XXXXXXXX or +88017XXXXXXXX" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" title="Please enter a valid Bangladeshi phone number" required>
                     </div>
                   </div>
 
-                  <div class="row g-3 mb-4">
+                  <div class="row g-3 mb-3">
                     <div class="col-md-6">
-                      <label class="form-label small fw-bold text-dark">Email Address *</label>
-                      <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                      <label class="form-label small fw-bold text-dark">Birth Month *</label>
+                      <select name="birth_month" class="form-select" required>
+                        <option value="">Select Birth Month</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                      </select>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label small fw-bold text-dark">Address / Location *</label>
-                      <input type="text" name="address" class="form-control" placeholder="House, Road, Area, Dhaka" required>
+                      <label class="form-label small fw-bold text-dark">Birth Day *</label>
+                      <select name="birth_day" class="form-select" required>
+                        <option value="">Select Birth Day</option>
+                        <?php for ( $d = 1; $d <= 31; $d++ ) : ?>
+                          <option value="<?php echo sprintf( '%02d', $d ); ?>"><?php echo sprintf( '%02d', $d ); ?></option>
+                        <?php endfor; ?>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row g-3 mb-4">
+                    <div class="col-md-12">
+                      <label class="form-label small fw-bold text-dark">Email Address *</label>
+                      <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
                     </div>
                   </div>
 
                   <div class="form-check mb-4">
                     <input class="form-check-input" type="checkbox" id="termsCheck" checked required>
                     <label class="form-check-label small text-muted" for="termsCheck">
-                      I agree to join Santino Coffee Club to receive member perks, cupping invitations, and reward stamps.
+                      I agree to join Santino Coffee Club Regular Membership to receive reward stamps.
                     </label>
                   </div>
 
                   <button type="submit" class="btn btn-portal-submit w-100 font-heading text-uppercase">
-                    Register For Santino Coffee Club →
+                    Register For Coffee Club Regular Membership →
                   </button>
                 </form>
               </div>
+
+            </div>
+
+          </div>
+        </div>
 
             </div>
 
