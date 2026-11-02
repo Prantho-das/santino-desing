@@ -125,6 +125,7 @@ function santino_enqueue_scripts() {
         'ajax_url'  => admin_url( 'admin-ajax.php' ),
         'nonce'     => wp_create_nonce( 'santino_frontend_nonce' ),
         'theme_uri' => SANTINO_URI,
+        'branches'  => class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_cafe_branches() : array(),
     ) );
 }
 add_action( 'wp_enqueue_scripts', 'santino_enqueue_scripts' );
@@ -329,6 +330,7 @@ require_once SANTINO_DIR . '/inc/elementor-installer.php';
  * Include Santino VIP Membership Backend Engine
  */
 require_once SANTINO_DIR . '/inc/membership-system.php';
+require_once SANTINO_DIR . '/inc/certificate-system.php';
 require_once SANTINO_DIR . '/inc/menus.php';
 require_once SANTINO_DIR . '/inc/leads-system.php';
 require_once SANTINO_DIR . '/inc/demo-importer.php';

@@ -459,8 +459,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         </span>
                       </div>
                       ${v.status === 'unused' ? `
-                        <div class="text-white-50 d-flex align-items-center gap-1.5 mt-1" style="font-size: 11px;">
-                          <i class="bi bi-shop text-teal" style="color: #dfbe8d;"></i> <span>কাউন্টারে এই কোডটি দেখিয়ে আপনার ফ্রি কফি গ্রহণ করুন।</span>
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-2 pt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important;">
+                          <span class="text-white-50" style="font-size: 11px;">
+                            <i class="bi bi-gift text-warning me-1"></i> অনলাইন রিডিম রিকোয়েস্ট পাঠান:
+                          </span>
+                          <button type="button" class="btn btn-sm fw-bold px-3 py-1 rounded-pill santino-open-redeem-btn" data-voucher="${v.code}" data-phone="${d.phone}" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 11px; border: none;">
+                            🎁 কফি রিডিম করুন
+                          </button>
                         </div>
                       ` : ''}
                     </div>
@@ -530,12 +535,17 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
 
               ${hasUnusedVoucher ? `
-                <div class="p-3 rounded-4 mb-3 d-flex align-items-center gap-2.5 border" style="background: linear-gradient(135deg, rgba(223, 190, 141, 0.25) 0%, rgba(195, 153, 108, 0.12) 100%); border-color: rgba(223, 190, 141, 0.5) !important;">
-                  <div style="font-size: 26px; line-height: 1;">🎁</div>
-                  <div class="flex-grow-1" style="min-width: 0;">
-                    <div class="fw-bold text-white" style="font-size: 13px; color: #dfbe8d !important;">🎉 ফ্রি ১ কাপ কফি রিওয়ার্ড আনলকড!</div>
-                    <div class="text-white-50" style="font-size: 11px;">৫টি কাপ সম্পন্ন হওয়ায় ১টি ফ্রি কফি ভাউচার পেয়েছেন। নিচের ভাউচার কোডটি দেখিয়ে কাউন্টার থেকে কফি নিন।</div>
+                <div class="p-3 rounded-4 mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2.5 border" style="background: linear-gradient(135deg, rgba(223, 190, 141, 0.25) 0%, rgba(195, 153, 108, 0.12) 100%); border-color: rgba(223, 190, 141, 0.5) !important;">
+                  <div class="d-flex align-items-center gap-2.5" style="min-width: 0; flex: 1;">
+                    <div style="font-size: 26px; line-height: 1;">🎁</div>
+                    <div style="min-width: 0;">
+                      <div class="fw-bold text-white" style="font-size: 13px; color: #dfbe8d !important;">🎉 ফ্রি ১ কাপ কফি রিওয়ার্ড আনলকড!</div>
+                      <div class="text-white-50" style="font-size: 11px;">৫টি কাপ সম্পন্ন হওয়ায় ১টি ফ্রি কফি ভাউচার পেয়েছেন। এখান থেকেই সরাসরি রিডিম রিকোয়েস্ট পাঠান।</div>
+                    </div>
                   </div>
+                  <button type="button" class="btn btn-sm fw-bold px-3 py-1.5 rounded-pill santino-open-redeem-btn flex-shrink-0" data-voucher="${(d.vouchers && d.vouchers.find(v => v.status === 'unused')) ? d.vouchers.find(v => v.status === 'unused').code : ''}" data-phone="${d.phone}" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; border: none; font-size: 11px;">
+                    🎁 রিডিম রিকোয়েস্ট পাঠান &rarr;
+                  </button>
                 </div>
               ` : ''}
 
@@ -576,7 +586,266 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  // Frontend Free Coffee Redeem Modal Handler
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.santino-open-redeem-btn');
+    if (!btn) return;
+    e.preventDefault();
+
+    const voucherCode = btn.getAttribute('data-voucher') || '';
+    const phone = btn.getAttribute('data-phone') || '';
+
+    let modalEl = document.getElementById('santinoRedeemModal');
+    if (!modalEl) {
+      modalEl = document.createElement('div');
+      modalEl.id = 'santinoRedeemModal';
+      modalEl.className = 'modal fade';
+      modalEl.tabIndex = -1;
+      modalEl.setAttribute('aria-hidden', 'true');
+      modalEl.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content rounded-4 border-0 shadow-lg text-white" style="background: #0b1f1d; border: 1px solid rgba(195,153,108,0.4) !important;">
+            <div class="modal-header border-bottom" style="border-color: rgba(255,255,255,0.1) !important;">
+              <h5 class="modal-title fw-bold font-heading text-white" style="font-size: 16px;">
+                <i class="bi bi-gift-fill me-1" style="color: #dfbe8d;"></i> ফ্রি কফি রিডিম রিকোয়েস্ট (Claim Free Coffee)
+              </h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="santinoFrontendRedeemForm">
+              <div class="modal-body p-4">
+                <div class="mb-3">
+                  <label class="form-label small text-white-50">মেম্বার মোবাইল নম্বর</label>
+                  <input type="text" id="santinoRedeemPhone" name="phone" class="form-control" readonly style="background: rgba(255,255,255,0.06); color: #dfbe8d; border-color: rgba(255,255,255,0.15); font-weight: bold; font-family: monospace;">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small text-white-50">ভাউচার কোড</label>
+                  <input type="text" id="santinoRedeemVoucher" name="voucher_code" class="form-control" readonly style="background: rgba(255,255,255,0.06); color: #dfbe8d; border-color: rgba(255,255,255,0.15); font-weight: bold; font-family: monospace;">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small text-white-50">যে কফি আইটেমটি নিতে চান (Select Free Beverage)</label>
+                  <select id="santinoRedeemItem" name="free_item" class="form-select" required style="background: #112c29; color: #fff; border-color: #00625d;">
+                    <option value="Handcrafted Cappuccino">Handcrafted Cappuccino</option>
+                    <option value="Cafe Latte">Cafe Latte</option>
+                    <option value="Classic Americano">Classic Americano</option>
+                    <option value="Spanish Latte">Spanish Latte</option>
+                    <option value="Caramel Macchiato">Caramel Macchiato</option>
+                    <option value="Flat White">Flat White</option>
+                    <option value="Hot Mocha">Hot Mocha</option>
+                    <option value="Iced Signature Latte">Iced Signature Latte</option>
+                    <option value="Cold Brew Reserve">Cold Brew Reserve</option>
+                    <option value="Hot Chocolate">Hot Chocolate</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small text-white-50">যে ক্যাফে ব্রাঞ্চ থেকে কফি সংগ্রহ করবেন (Select Cafe Branch)</label>
+                  <select id="santinoRedeemBranch" name="branch" class="form-select" required style="background: #112c29; color: #fff; border-color: #00625d;">
+                  </select>
+                </div>
+                <div class="alert alert-info rounded-3 p-2.5 mb-0" style="background: rgba(0, 98, 93, 0.2); border: 1px solid rgba(0, 98, 93, 0.4); font-size: 11px; color: #dfbe8d;">
+                  <i class="bi bi-info-circle me-1"></i> রিকোয়েস্ট পাঠানোর পর পোর্টালে স্ট্যাটাস আপডেট হবে এবং বারিস্তা আপনার কোড নিশ্চিত করে কফি সার্ভ করবে।
+                </div>
+              </div>
+              <div class="modal-footer border-top" style="border-color: rgba(255,255,255,0.1) !important;">
+                <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-3" data-bs-dismiss="modal">বাতিল</button>
+                <button type="submit" id="santinoRedeemSubmitBtn" class="btn btn-sm fw-bold rounded-pill px-4" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; border:none;">
+                  ✓ রিকোয়েস্ট নিশ্চিত করুন
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modalEl);
+
+      const redeemForm = document.getElementById('santinoFrontendRedeemForm');
+      redeemForm.addEventListener('submit', function(evt) {
+        evt.preventDefault();
+        const submitBtn = document.getElementById('santinoRedeemSubmitBtn');
+        const origText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> সাবমিট হচ্ছে...';
+
+        const formData = new FormData(this);
+        formData.append('action', 'santino_submit_redeem');
+        if (typeof santino_ajax !== 'undefined') {
+          formData.append('security', santino_ajax.nonce);
+        }
+
+        const ajaxUrl = (typeof santino_ajax !== 'undefined') ? santino_ajax.ajax_url : '/wp-admin/admin-ajax.php';
+
+        fetch(ajaxUrl, {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(resData => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origText;
+          if (resData.success) {
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+              const modalInstance = bootstrap.Modal.getInstance(modalEl);
+              if (modalInstance) modalInstance.hide();
+            } else {
+              modalEl.classList.remove('show');
+              modalEl.style.display = 'none';
+              document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+            }
+            alert(resData.data ? resData.data.message : 'ফ্রি কফি রিডিম রিকোয়েস্ট সফলভাবে জমা হয়েছে!');
+            const lookupForm = document.getElementById('santinoLookupForm');
+            if (lookupForm) {
+              lookupForm.dispatchEvent(new Event('submit'));
+            }
+          } else {
+            alert(resData.data ? resData.data.message : 'রিডিম রিকোয়েস্ট জমা দেওয়া সম্ভব হয়নি।');
+          }
+        })
+        .catch(err => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origText;
+          console.error('Redeem error:', err);
+          alert('নেটওয়ার্ক সমস্যার কারণে রিকোয়েস্ট পাঠানো যায়নি। আবার চেষ্টা করুন।');
+        });
+      });
+    }
+
+    document.getElementById('santinoRedeemPhone').value = phone;
+    document.getElementById('santinoRedeemVoucher').value = voucherCode;
+
+    const branchSelect = document.getElementById('santinoRedeemBranch');
+    const branches = (typeof santino_ajax !== 'undefined' && Array.isArray(santino_ajax.branches) && santino_ajax.branches.length > 0)
+      ? santino_ajax.branches
+      : [
+          'Gulshan-2 Flagship Experience Center',
+          'Banani Borak Mehnur',
+          'Tejgaon Roastery & Lab',
+          'Dhanmondi Ahmed & Kazi Tower',
+          'Uttara Liberty Tower',
+          'Baridhara Diplomatic Enclave'
+        ];
+    branchSelect.innerHTML = branches.map(b => `<option value="${b}">${b}</option>`).join('');
+
+    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    } else {
+      modalEl.classList.add('show');
+      modalEl.style.display = 'block';
+    }
+  });
 });
+
+// Global Certificate Verification Helper
+window.handleCertVerify = function(e) {
+  if (e) e.preventDefault();
+  const inputEl = document.getElementById('certIdInput');
+  if (!inputEl) return false;
+  const query = inputEl.value.trim().toUpperCase();
+  const btn = document.getElementById('btnVerifySubmit');
+  const notFoundEl = document.getElementById('certNotFound');
+  const resultEl = document.getElementById('certResultDisplay');
+
+  if (!query) return false;
+
+  const originalBtnHtml = btn ? btn.innerHTML : 'Verify Now';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span><span>Verifying...</span>';
+  }
+
+  const ajaxUrl = (typeof santino_ajax !== 'undefined' && santino_ajax.ajax_url) ? santino_ajax.ajax_url : '/wp-admin/admin-ajax.php';
+  const formData = new FormData();
+  formData.append('action', 'santino_verify_certificate');
+  formData.append('cert_id', query);
+
+  fetch(ajaxUrl, {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(json => {
+    if (json.success && json.data) {
+      const data = json.data;
+      if (notFoundEl) notFoundEl.style.display = 'none';
+
+      const setEl = (id, txt) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = txt;
+      };
+
+      setEl('certCandidateName', data.name);
+      setEl('certDisplayId', data.id);
+      setEl('certInstituteTitle', data.institute);
+      setEl('certCourseName', data.course);
+      setEl('certDuration', data.duration);
+      setEl('certIssueDate', data.issueDate);
+      setEl('certStandard', data.standard);
+      setEl('certGrade', data.grade);
+      setEl('certTrainer', data.trainer);
+      setEl('certHash', 'HASH: ' + data.hash);
+
+      if (resultEl) {
+        resultEl.style.display = 'block';
+        resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    } else {
+      if (resultEl) resultEl.style.display = 'none';
+      const msg = (json.data && json.data.message) ? json.data.message : ('No record found for ID "' + query + '". Please verify the certificate serial code and try again.');
+      const notFoundMsg = document.getElementById('notFoundMessage');
+      if (notFoundMsg) notFoundMsg.textContent = msg;
+      if (notFoundEl) {
+        notFoundEl.style.display = 'block';
+        notFoundEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  })
+  .catch(err => {
+    console.error('Cert verify error:', err);
+    if (resultEl) resultEl.style.display = 'none';
+    const notFoundMsg = document.getElementById('notFoundMessage');
+    if (notFoundMsg) notFoundMsg.textContent = 'Could not verify certificate due to network error. Please try again.';
+    if (notFoundEl) notFoundEl.style.display = 'block';
+  })
+  .finally(() => {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalBtnHtml;
+    }
+  });
+
+  return false;
+};
+
+window.fillAndVerify = function(id) {
+  const input = document.getElementById('certIdInput');
+  if (input) {
+    input.value = id;
+    window.handleCertVerify();
+  }
+};
+
+window.resetVerification = function() {
+  const input = document.getElementById('certIdInput');
+  if (input) input.value = '';
+  const result = document.getElementById('certResultDisplay');
+  if (result) result.style.display = 'none';
+  const notFound = document.getElementById('certNotFound');
+  if (notFound) notFound.style.display = 'none';
+  if (input) input.focus();
+};
+
+window.shareRecord = function() {
+  const certIdEl = document.getElementById('certDisplayId');
+  const certId = certIdEl ? certIdEl.textContent : '';
+  const url = window.location.origin + window.location.pathname + '?id=' + encodeURIComponent(certId);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      alert('Verification link copied to clipboard: ' + url);
+    });
+  } else {
+    prompt('Copy this link:', url);
+  }
+};
 
 // Global Helpers for Machines & Beans Filtering
 window.filterMachines = function(cat, btn) {

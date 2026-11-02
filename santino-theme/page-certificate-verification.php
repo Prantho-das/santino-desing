@@ -489,91 +489,69 @@ else :
 </div>
 
 <script>
-// DEMO CERTIFICATE DATABASE
-const SANTINO_CERT_DB = {
-  "SNT-2025-001": {
-    id: "SNT-2025-001",
-    name: "Mohammed Tanvir Hossain",
-    course: "Barista Advance Professional & Sensory Lab",
-    duration: "18 Days (54 Contact Hours)",
-    issueDate: "12 October 2025",
-    standard: "WBC & SCA Protocols / ISO 9001:2015",
-    grade: "Distinction (Grade A+)",
-    institute: "Santino Barista Academy • ISO 9001:2015",
-    trainer: "Master Barista Trainer, Santino Academy",
-    hash: "9A8F-42CD-81E0"
-  },
-  "BBTA-2025-042": {
-    id: "BBTA-2025-042",
-    name: "Sadia Afrin Chowdhury",
-    course: "Professional Barista Intermediate & Latte Art",
-    duration: "7 Days (21 Contact Hours)",
-    issueDate: "24 September 2025",
-    standard: "BBTA Standard Calibration / ISO 9001:2015",
-    grade: "Passed with Honors (94%)",
-    institute: "Bangladesh Barista Training Academy (BBTA)",
-    trainer: "Senior Barista Specialist, BBTA",
-    hash: "3F18-BC90-117A"
-  },
-  "SNT-ADV-108": {
-    id: "SNT-ADV-108",
-    name: "Kamrul Islam",
-    course: "Espresso Science, Grinder Dial-In & Roastery Management",
-    duration: "12 Days (36 Contact Hours)",
-    issueDate: "05 August 2025",
-    standard: "Victoria Arduino Commercial Standards",
-    grade: "Distinction (Grade A)",
-    institute: "Santino Barista Academy & Technical Lab",
-    trainer: "Authorized VA Technical Instructor",
-    hash: "77BC-0044-8F21"
-  },
-  "BBTA-PIZ-204": {
-    id: "BBTA-PIZ-204",
-    name: "Farhan Rahman",
-    course: "Artisan Pizza & Bakery Masterclass",
-    duration: "1 Day Intensive (4 Hours)",
-    issueDate: "18 January 2025",
-    standard: "Professional Culinary Craft / BBTA Certified",
-    grade: "Certified Participant",
-    institute: "BBTA Culinary Division",
-    trainer: "Executive Pastry & Pizza Chef",
-    hash: "55C1-90E2-AA43"
-  }
-};
+const CERT_AJAX_URL = (typeof santino_ajax !== 'undefined' && santino_ajax.ajax_url) ? santino_ajax.ajax_url : '/wp-admin/admin-ajax.php';
 
-function handleCertVerify(e) {
+async function handleCertVerify(e) {
   if (e) e.preventDefault();
   const inputEl = document.getElementById('certIdInput');
   const query = inputEl.value.trim().toUpperCase();
-  
+  const btn = document.getElementById('btnVerifySubmit');
   const notFoundEl = document.getElementById('certNotFound');
   const resultEl = document.getElementById('certResultDisplay');
-  
+
   if (!query) return false;
 
-  const data = SANTINO_CERT_DB[query];
+  const originalBtnHtml = btn ? btn.innerHTML : 'Verify Now';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span><span>Verifying...</span>';
+  }
 
-  if (data) {
-    notFoundEl.style.display = 'none';
-    
-    document.getElementById('certCandidateName').textContent = data.name;
-    document.getElementById('certDisplayId').textContent = data.id;
-    document.getElementById('certInstituteTitle').textContent = data.institute;
-    document.getElementById('certCourseName').textContent = data.course;
-    document.getElementById('certDuration').textContent = data.duration;
-    document.getElementById('certIssueDate').textContent = data.issueDate;
-    document.getElementById('certStandard').textContent = data.standard;
-    document.getElementById('certGrade').textContent = data.grade;
-    document.getElementById('certTrainer').textContent = data.trainer;
-    document.getElementById('certHash').textContent = 'HASH: ' + data.hash;
+  try {
+    const formData = new FormData();
+    formData.append('action', 'santino_verify_certificate');
+    formData.append('cert_id', query);
 
-    resultEl.style.display = 'block';
-    resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  } else {
+    const res = await fetch(CERT_AJAX_URL, {
+      method: 'POST',
+      body: formData
+    });
+    const json = await res.json();
+
+    if (json.success && json.data) {
+      const data = json.data;
+      notFoundEl.style.display = 'none';
+
+      document.getElementById('certCandidateName').textContent = data.name;
+      document.getElementById('certDisplayId').textContent = data.id;
+      document.getElementById('certInstituteTitle').textContent = data.institute;
+      document.getElementById('certCourseName').textContent = data.course;
+      document.getElementById('certDuration').textContent = data.duration;
+      document.getElementById('certIssueDate').textContent = data.issueDate;
+      document.getElementById('certStandard').textContent = data.standard;
+      document.getElementById('certGrade').textContent = data.grade;
+      document.getElementById('certTrainer').textContent = data.trainer;
+      document.getElementById('certHash').textContent = 'HASH: ' + data.hash;
+
+      resultEl.style.display = 'block';
+      resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      resultEl.style.display = 'none';
+      const msg = (json.data && json.data.message) ? json.data.message : ('No record found for ID "' + query + '". Please verify the certificate serial code and try again.');
+      document.getElementById('notFoundMessage').textContent = msg;
+      notFoundEl.style.display = 'block';
+      notFoundEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  } catch (err) {
+    console.error('Cert verify error:', err);
     resultEl.style.display = 'none';
-    document.getElementById('notFoundMessage').textContent = 'No record found for ID "' + query + '". Please verify the certificate serial code and try again.';
+    document.getElementById('notFoundMessage').textContent = 'Could not verify certificate due to network error. Please try again.';
     notFoundEl.style.display = 'block';
-    notFoundEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalBtnHtml;
+    }
   }
   return false;
 }

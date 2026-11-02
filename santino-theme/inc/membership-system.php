@@ -288,12 +288,9 @@ class Santino_Membership_System {
 
                         <label style="font-weight: bold; font-size: 12px; color: #065f46;">Branch:</label>
                         <select name="branch" style="font-size: 12px; height: 32px; border-radius: 6px; border: 1px solid #059669;">
-                            <option value="Gulshan-2 Flagship Experience Center">Gulshan-2 Flagship</option>
-                            <option value="Banani Borak Mehnur">Banani Borak Mehnur</option>
-                            <option value="Tejgaon Roastery & Lab">Tejgaon Roastery & Lab</option>
-                            <option value="Dhanmondi Ahmed & Kazi Tower">Dhanmondi</option>
-                            <option value="Uttara Liberty Tower">Uttara</option>
-                            <option value="Baridhara Diplomatic Enclave">Baridhara</option>
+                            <?php foreach ( self::get_cafe_branches() as $b ) : ?>
+                                <option value="<?php echo esc_attr( $b ); ?>"><?php echo esc_html( $b ); ?></option>
+                            <?php endforeach; ?>
                         </select>
 
                         <button type="submit" class="button button-primary" style="background: #059669; border-color: #047857; font-weight: bold; padding: 0 14px; height: 32px; line-height: 30px;" onclick="return confirm('Confirm serving 1 free coffee to this member and deducting from balance?');">
@@ -1535,12 +1532,185 @@ class Santino_Membership_System {
 
         add_submenu_page(
             'edit.php?post_type=santino_member',
+            __( 'Cafe Branches', 'santino' ),
+            __( 'Cafe Branches', 'santino' ),
+            'manage_options',
+            'santino-cafe-branches',
+            array( __CLASS__, 'render_cafe_branches_page' )
+        );
+
+        add_submenu_page(
+            'edit.php?post_type=santino_member',
             __( 'Loyalty Analytics & Stamp Engine', 'santino' ),
             __( 'Loyalty Reports', 'santino' ),
             'manage_options',
             'santino-loyalty-stats',
             array( __CLASS__, 'render_loyalty_dashboard' )
         );
+    }
+
+    public static function get_cafe_branches() {
+        $branches = get_option( 'santino_cafe_branches', array() );
+        if ( empty( $branches ) || ! is_array( $branches ) ) {
+            $branches = array(
+                'Gulshan-2 Flagship Experience Center',
+                'Banani Borak Mehnur',
+                'Tejgaon Roastery & Lab',
+                'Dhanmondi Ahmed & Kazi Tower',
+                'Uttara Liberty Tower',
+                'Baridhara Diplomatic Enclave',
+            );
+        }
+        return array_values( array_filter( array_map( 'trim', $branches ) ) );
+    }
+
+    public static function save_cafe_branches( $branches ) {
+        if ( ! is_array( $branches ) ) {
+            return false;
+        }
+        $clean = array_values( array_filter( array_map( 'sanitize_text_field', array_map( 'trim', $branches ) ) ) );
+        return update_option( 'santino_cafe_branches', $clean );
+    }
+
+    public static function render_cafe_branches_page() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'Access denied' );
+        }
+
+        $notice = '';
+
+        if ( isset( $_POST['santino_branch_action'] ) && check_admin_referer( 'santino_branches_nonce' ) ) {
+            $action = sanitize_text_field( $_POST['santino_branch_action'] );
+            $current = self::get_cafe_branches();
+
+            if ( 'add' === $action ) {
+                $new_branch = sanitize_text_field( wp_unslash( $_POST['new_branch_name'] ?? '' ) );
+                if ( ! empty( $new_branch ) && ! in_array( $new_branch, $current, true ) ) {
+                    $current[] = $new_branch;
+                    self::save_cafe_branches( $current );
+                    $notice = '<div class="notice notice-success is-dismissible"><p><strong>Branch added successfully:</strong> ' . esc_html( $new_branch ) . '</p></div>';
+                }
+            } elseif ( 'delete' === $action ) {
+                $del_branch = sanitize_text_field( wp_unslash( $_POST['del_branch_name'] ?? '' ) );
+                $current = array_values( array_diff( $current, array( $del_branch ) ) );
+                self::save_cafe_branches( $current );
+                $notice = '<div class="notice notice-warning is-dismissible"><p><strong>Branch removed:</strong> ' . esc_html( $del_branch ) . '</p></div>';
+            } elseif ( 'bulk_save' === $action ) {
+                $raw_lines = sanitize_textarea_field( wp_unslash( $_POST['bulk_branches'] ?? '' ) );
+                $lines = array_filter( array_map( 'trim', explode( "\n", $raw_lines ) ) );
+                if ( ! empty( $lines ) ) {
+                    self::save_cafe_branches( $lines );
+                    $notice = '<div class="notice notice-success is-dismissible"><p><strong>Branches updated successfully!</strong></p></div>';
+                }
+            } elseif ( 'reset' === $action ) {
+                delete_option( 'santino_cafe_branches' );
+                $notice = '<div class="notice notice-info is-dismissible"><p><strong>Branches reset to default list.</strong></p></div>';
+            }
+        }
+
+        $branches = self::get_cafe_branches();
+        ?>
+        <div class="wrap" style="max-width: 1000px;">
+            <h1 style="display:flex; align-items:center; gap:10px; margin-bottom: 20px;">
+                <span class="dashicons dashicons-store" style="font-size:30px; width:30px; height:30px; color:#00625d;"></span>
+                <?php _e( 'Santino Cafe Branches Management', 'santino' ); ?>
+            </h1>
+
+            <?php echo $notice; ?>
+
+            <p class="description" style="font-size:14px; margin-bottom: 24px;">
+                <?php _e( 'Manage the active Santino cafe locations displayed in the frontend Stamp Card, Invoice Submission, Free Coffee Redeem, and Machines Consultation forms.', 'santino' ); ?>
+            </p>
+
+            <div style="display:grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start;">
+                <div class="card" style="padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin:0;">
+                    <h2 style="margin-top:0; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; font-size:16px;">
+                        <?php _e( 'Active Branches List', 'santino' ); ?> (<?php echo count( $branches ); ?>)
+                    </h2>
+
+                    <table class="wp-list-table widefat fixed striped" style="margin-top: 15px; border-radius: 6px; overflow: hidden;">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">#</th>
+                                <th><?php _e( 'Branch Name & Location', 'santino' ); ?></th>
+                                <th style="width: 100px; text-align: center;"><?php _e( 'Action', 'santino' ); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ( $branches as $idx => $b ) : ?>
+                                <tr>
+                                    <td style="font-weight: bold; color: #64748b;"><?php echo $idx + 1; ?></td>
+                                    <td>
+                                        <strong style="color: #0f172a; font-size: 14px;"><?php echo esc_html( $b ); ?></strong>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <form method="post" style="display:inline;" onsubmit="return confirm('Remove branch: <?php echo esc_js( $b ); ?>?');">
+                                            <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
+                                            <input type="hidden" name="santino_branch_action" value="delete">
+                                            <input type="hidden" name="del_branch_name" value="<?php echo esc_attr( $b ); ?>">
+                                            <button type="submit" class="button button-link-delete" style="color: #dc2626; font-size: 12px;">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                        <h3 style="font-size: 14px; margin-bottom: 8px;"><?php _e( 'Bulk Edit All Branches (One per line):', 'santino' ); ?></h3>
+                        <form method="post">
+                            <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
+                            <input type="hidden" name="santino_branch_action" value="bulk_save">
+                            <textarea name="bulk_branches" rows="7" class="large-text code" style="padding: 10px; font-size: 13px;"><?php echo esc_textarea( implode( "\n", $branches ) ); ?></textarea>
+                            <p class="submit" style="margin-top: 10px; padding:0;">
+                                <button type="submit" class="button button-primary" style="background:#00625d; border-color:#004d49; font-weight:bold;">
+                                    <?php _e( 'Save Bulk Changes', 'santino' ); ?>
+                                </button>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card" style="padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin:0 0 20px 0;">
+                        <h2 style="margin-top:0; font-size:16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+                            <?php _e( '+ Add New Branch', 'santino' ); ?>
+                        </h2>
+                        <form method="post" style="margin-top: 15px;">
+                            <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
+                            <input type="hidden" name="santino_branch_action" value="add">
+                            <p>
+                                <label for="new_branch_name" style="font-weight:600; display:block; margin-bottom:6px;">
+                                    <?php _e( 'Branch / Outlet Title:', 'santino' ); ?>
+                                </label>
+                                <input type="text" id="new_branch_name" name="new_branch_name" class="regular-text" style="width:100%; padding:8px 10px;" placeholder="e.g. Uttara Sector 3 Roastery" required>
+                            </p>
+                            <button type="submit" class="button button-primary w-100" style="background:#059669; border-color:#047857; width:100%; font-weight:bold; height:36px;">
+                                + <?php _e( 'Add Branch', 'santino' ); ?>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="card" style="padding: 16px; border-radius: 8px; background: #fffdf5; border-color: #fde68a; margin:0;">
+                        <h3 style="margin-top:0; font-size:14px; color: #92400e;">
+                            <span class="dashicons dashicons-info" style="color: #d97706;"></span>
+                            <?php _e( 'Default Branches', 'santino' ); ?>
+                        </h3>
+                        <p class="description" style="font-size:12px; line-height: 1.5; color: #78350f;">
+                            <?php _e( 'Want to revert back to default flagship branches? Click reset below.', 'santino' ); ?>
+                        </p>
+                        <form method="post" onsubmit="return confirm('Reset all branches to default list?');">
+                            <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
+                            <input type="hidden" name="santino_branch_action" value="reset">
+                            <button type="submit" class="button button-secondary" style="font-size:12px;">
+                                <?php _e( 'Reset to Defaults', 'santino' ); ?>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
     }
 
     public static function render_loyalty_dashboard() {

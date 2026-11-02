@@ -975,12 +975,11 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
                     <div class="col-md-7">
                       <label class="form-label small fw-bold text-dark">Cafe Branch Visited</label>
                       <select name="branch" class="form-select">
-                        <option>Gulshan-2 Flagship Experience Center</option>
-                        <option>Banani Borak Mehnur</option>
-                        <option>Tejgaon Roastery &amp; Lab</option>
-                        <option>Dhanmondi Ahmed &amp; Kazi Tower</option>
-                        <option>Uttara Liberty Tower</option>
-                        <option>Baridhara Diplomatic Enclave</option>
+                        <?php 
+                        $cafe_branches = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_cafe_branches() : array( 'Gulshan-2 Flagship Experience Center' );
+                        foreach ( $cafe_branches as $b ) : ?>
+                          <option value="<?php echo esc_attr( $b ); ?>"><?php echo esc_html( $b ); ?></option>
+                        <?php endforeach; ?>
                       </select>
                     </div>
                     <div class="col-md-5">
