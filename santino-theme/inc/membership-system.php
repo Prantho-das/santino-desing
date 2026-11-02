@@ -64,6 +64,17 @@ class Santino_Membership_System {
         // Shortcodes
         add_shortcode( 'santino_stamp_portal', array( __CLASS__, 'render_stamp_portal_shortcode' ) );
         add_shortcode( 'santino_vip_card', array( __CLASS__, 'render_vip_card_shortcode' ) );
+
+        add_action( 'post_edit_form_tag', array( __CLASS__, 'add_post_enctype' ) );
+    }
+
+    public static function add_post_enctype() {
+        echo ' enctype="multipart/form-data"';
+    }
+
+    public static function is_valid_bd_phone( $phone ) {
+        $clean = preg_replace( '/[\s\-\(\)\.]/', '', $phone );
+        return (bool) preg_match( '/^(?:\+?880|0)1[3-9]\d{8}$/', $clean );
     }
 
     /**
@@ -106,7 +117,7 @@ class Santino_Membership_System {
             'public'        => false,
             'show_ui'       => true,
             'show_in_menu'  => 'edit.php?post_type=santino_member',
-            'supports'      => array( 'title' ),
+            'supports'      => array( 'title', 'thumbnail' ),
         ) );
 
         // Free Coffee Vouchers CPT
@@ -382,6 +393,29 @@ class Santino_Membership_System {
                 <td><input type="text" name="santino_invoice_number" value="<?php echo esc_attr( $invoice_no ); ?>" class="regular-text" style="font-size: 1.1em; font-weight: bold; color: #0f172a;"></td>
             </tr>
             <tr>
+                <th><label><?php _e( 'Receipt / Memo Photo', 'santino' ); ?></label></th>
+                <td>
+                    <?php
+                    $img_url = get_post_meta( $post->ID, '_santino_invoice_image_url', true );
+                    if ( ! $img_url && has_post_thumbnail( $post->ID ) ) {
+                        $img_url = get_the_post_thumbnail_url( $post->ID, 'large' );
+                    }
+                    if ( $img_url ) :
+                    ?>
+                        <div style="margin-bottom: 12px;">
+                            <a href="<?php echo esc_url( $img_url ); ?>" target="_blank" title="Open Full Photo in New Window">
+                                <img src="<?php echo esc_url( $img_url ); ?>" style="max-height: 280px; max-width: 100%; border-radius: 8px; border: 1px solid #cbd5e1; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); display: block; margin-bottom: 8px;">
+                            </a>
+                            <a href="<?php echo esc_url( $img_url ); ?>" target="_blank" class="button button-small" style="font-weight: 600;">🔍 View Full Image</a>
+                        </div>
+                    <?php else : ?>
+                        <p style="color: #64748b; font-style: italic; margin-bottom: 8px;"><?php _e( 'No customer receipt photo uploaded.', 'santino' ); ?></p>
+                    <?php endif; ?>
+                    <label style="font-size: 12px; color: #475569; display: block; margin-top: 6px; font-weight: 600;"><?php _e( 'Upload / Replace Memo Photo:', 'santino' ); ?></label>
+                    <input type="file" name="santino_invoice_admin_image" accept="image/*">
+                </td>
+            </tr>
+            <tr>
                 <th><label><?php _e( 'Number of Cups', 'santino' ); ?></label></th>
                 <td><input type="number" name="santino_invoice_cups" min="1" max="50" value="<?php echo esc_attr( $cups ); ?>" style="width: 80px; font-weight:bold; font-size:14px;"> ☕ (কয় কাপ কফি নেওয়া হয়েছে)</td>
             </tr>
@@ -532,8 +566,32 @@ class Santino_Membership_System {
             if ( isset( $_POST['santino_invoice_phone'] ) ) {
                 update_post_meta( $post_id, '_santino_invoice_phone', sanitize_text_field( $_POST['santino_invoice_phone'] ) );
             }
+            if ( isset( $_POST['santino_invoice_member_id'] ) ) {
+                update_post_meta( $post_id, '_santino_invoice_member_id', sanitize_text_field( $_POST['santino_invoice_member_id'] ) );
+            }
+            if ( isset( $_POST['santino_invoice_branch'] ) ) {
+                update_post_meta( $post_id, '_santino_invoice_branch', sanitize_text_field( $_POST['santino_invoice_branch'] ) );
+            }
+            if ( ! empty( $_FILES['santino_invoice_admin_image']['name'] ) ) {
+                require_once( ABSPATH . 'wp-admin/includes/image.php' );
+                require_once( ABSPATH . 'wp-admin/includes/file.php' );
+                require_once( ABSPATH . 'wp-admin/includes/media.php' );
+                $att_id = media_handle_upload( 'santino_invoice_admin_image', $post_id );
+                if ( ! is_wp_error( $att_id ) ) {
+                    $url = wp_get_attachment_url( $att_id );
+                    update_post_meta( $post_id, '_santino_invoice_image_id', $att_id );
+                    update_post_meta( $post_id, '_santino_invoice_image_url', $url );
+                    set_post_thumbnail( $post_id, $att_id );
+                }
+            }
             if ( isset( $_POST['santino_invoice_status'] ) ) {
-                update_post_meta( $post_id, '_santino_invoice_status', sanitize_text_field( $_POST['santino_invoice_status'] ) );
+                $new_status  = sanitize_text_field( $_POST['santino_invoice_status'] );
+                $prev_status = get_post_meta( $post_id, '_santino_invoice_status', true );
+                update_post_meta( $post_id, '_santino_invoice_status', $new_status );
+                if ( $new_status === 'approved' && $prev_status !== 'approved' ) {
+                    update_post_meta( $post_id, '_santino_invoice_approved_at', current_time( 'mysql' ) );
+                    self::credit_invoice_cups_to_member( $post_id );
+                }
             }
             if ( isset( $_POST['santino_invoice_admin_note'] ) ) {
                 update_post_meta( $post_id, '_santino_invoice_admin_note', sanitize_textarea_field( $_POST['santino_invoice_admin_note'] ) );
@@ -610,15 +668,16 @@ class Santino_Membership_System {
 
     public static function set_invoice_columns( $columns ) {
         return array(
-            'cb'          => $columns['cb'],
-            'title'       => __( 'Invoice Record', 'santino' ),
-            'invoice_no'  => __( 'Invoice #', 'santino' ),
-            'cups'        => __( 'Cups', 'santino' ),
-            'phone'       => __( 'Customer Phone', 'santino' ),
-            'branch'      => __( 'Cafe Branch', 'santino' ),
-            'status'      => __( 'Verification Status', 'santino' ),
-            'actions'     => __( 'Quick Action', 'santino' ),
-            'date'        => __( 'Submitted Date', 'santino' ),
+            'cb'            => $columns['cb'],
+            'title'         => __( 'Invoice Record', 'santino' ),
+            'invoice_no'    => __( 'Invoice #', 'santino' ),
+            'receipt_photo' => __( 'Receipt Photo', 'santino' ),
+            'cups'          => __( 'Cups', 'santino' ),
+            'phone'         => __( 'Customer Phone', 'santino' ),
+            'branch'        => __( 'Cafe Branch', 'santino' ),
+            'status'        => __( 'Verification Status', 'santino' ),
+            'actions'       => __( 'Quick Action', 'santino' ),
+            'date'          => __( 'Submitted Date', 'santino' ),
         );
     }
 
@@ -627,6 +686,17 @@ class Santino_Membership_System {
             case 'invoice_no':
                 $no = get_post_meta( $post_id, '_santino_invoice_number', true );
                 echo '<strong style="font-family:monospace; font-size:13px; color:#0f172a;">' . esc_html( $no ) . '</strong>';
+                break;
+            case 'receipt_photo':
+                $img_url = get_post_meta( $post_id, '_santino_invoice_image_url', true );
+                if ( ! $img_url && has_post_thumbnail( $post_id ) ) {
+                    $img_url = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
+                }
+                if ( $img_url ) {
+                    echo '<a href="' . esc_url( $img_url ) . '" target="_blank" title="View Full Receipt Memo" style="display:inline-block;"><img src="' . esc_url( $img_url ) . '" style="width:45px; height:45px; object-fit:cover; border-radius:6px; border:1px solid #cbd5e1; box-shadow:0 1px 3px rgba(0,0,0,0.1); vertical-align:middle;"></a>';
+                } else {
+                    echo '<span style="color:#94a3b8; font-size:11px;">No Photo</span>';
+                }
                 break;
             case 'cups':
                 $cups = intval( get_post_meta( $post_id, '_santino_invoice_cups', true ) ?: 1 );
@@ -714,31 +784,30 @@ class Santino_Membership_System {
     /**
      * 4. Admin Invoice Approval Action (5-Cup Reward Engine with Cup Calculations)
      */
-    public static function handle_admin_approve_invoice() {
-        $invoice_id = intval( $_GET['invoice_id'] ?? 0 );
-        check_admin_referer( 'santino_approve_' . $invoice_id );
-
-        if ( ! current_user_can( 'edit_posts' ) ) {
-            wp_die( 'Permission denied' );
+    public static function credit_invoice_cups_to_member( $invoice_id, $cups = null ) {
+        $already_credited = get_post_meta( $invoice_id, '_santino_invoice_stamps_credited', true );
+        if ( $already_credited === 'yes' ) {
+            return false;
         }
 
-        // Check if already approved
-        $current_status = get_post_meta( $invoice_id, '_santino_invoice_status', true );
-        if ( $current_status === 'approved' ) {
-            wp_redirect( admin_url( 'edit.php?post_type=santino_invoice&approved=already' ) );
-            exit;
+        if ( $cups === null ) {
+            $cups = max( 1, intval( get_post_meta( $invoice_id, '_santino_invoice_cups', true ) ?: 1 ) );
         }
 
-        // Mark invoice approved
-        update_post_meta( $invoice_id, '_santino_invoice_status', 'approved' );
-        update_post_meta( $invoice_id, '_santino_invoice_approved_at', current_time( 'mysql' ) );
+        $phone          = get_post_meta( $invoice_id, '_santino_invoice_phone', true );
+        $member_id_str  = get_post_meta( $invoice_id, '_santino_invoice_member_id', true );
+        $member_post_id = get_post_meta( $invoice_id, '_santino_invoice_member_post_id', true );
 
-        $phone         = get_post_meta( $invoice_id, '_santino_invoice_phone', true );
-        $member_id_str = get_post_meta( $invoice_id, '_santino_invoice_member_id', true );
-        $cups          = max( 1, intval( get_post_meta( $invoice_id, '_santino_invoice_cups', true ) ?: 1 ) );
-
-        // Find matching member
-        $member = self::find_member_by_phone_or_id( $phone, $member_id_str );
+        $member = null;
+        if ( ! empty( $member_post_id ) ) {
+            $m_post = get_post( $member_post_id );
+            if ( $m_post && $m_post->post_type === 'santino_member' ) {
+                $member = $m_post;
+            }
+        }
+        if ( ! $member ) {
+            $member = self::find_member_by_phone_or_id( $phone, $member_id_str );
+        }
 
         if ( $member ) {
             $member_post_id   = $member->ID;
@@ -758,10 +827,38 @@ class Santino_Membership_System {
                 for ( $v = 0; $v < $vouchers_won; $v++ ) {
                     self::generate_free_coffee_voucher( $member_post_id, $member->post_title, $phone );
                 }
-
-                wp_redirect( admin_url( 'edit.php?post_type=santino_invoice&approved=free_coffee_issued' ) );
-                exit;
             }
+
+            update_post_meta( $invoice_id, '_santino_invoice_stamps_credited', 'yes' );
+            update_post_meta( $invoice_id, '_santino_invoice_member_post_id', $member_post_id );
+            return $vouchers_won;
+        }
+
+        return false;
+    }
+
+    public static function handle_admin_approve_invoice() {
+        $invoice_id = intval( $_GET['invoice_id'] ?? 0 );
+        check_admin_referer( 'santino_approve_' . $invoice_id );
+
+        if ( ! current_user_can( 'edit_posts' ) ) {
+            wp_die( 'Permission denied' );
+        }
+
+        $current_status = get_post_meta( $invoice_id, '_santino_invoice_status', true );
+        if ( $current_status === 'approved' ) {
+            wp_redirect( admin_url( 'edit.php?post_type=santino_invoice&approved=already' ) );
+            exit;
+        }
+
+        update_post_meta( $invoice_id, '_santino_invoice_status', 'approved' );
+        update_post_meta( $invoice_id, '_santino_invoice_approved_at', current_time( 'mysql' ) );
+
+        $vouchers_won = self::credit_invoice_cups_to_member( $invoice_id );
+
+        if ( $vouchers_won !== false && $vouchers_won > 0 ) {
+            wp_redirect( admin_url( 'edit.php?post_type=santino_invoice&approved=free_coffee_issued' ) );
+            exit;
         }
 
         wp_redirect( admin_url( 'edit.php?post_type=santino_invoice&approved=1' ) );
@@ -942,10 +1039,11 @@ class Santino_Membership_System {
     public static function find_member_by_phone_or_id( $phone, $member_id_str = '' ) {
         $clean_phone = preg_replace( '/[^0-9]/', '', $phone );
         
-        // 1. Search by VIP ID
+        // 1. Search by Member ID
         if ( ! empty( $member_id_str ) ) {
             $q = new WP_Query( array(
                 'post_type'      => 'santino_member',
+                'post_status'    => array( 'publish', 'draft', 'pending', 'private' ),
                 'posts_per_page' => 1,
                 'meta_query'     => array(
                     array(
@@ -960,16 +1058,21 @@ class Santino_Membership_System {
             }
         }
 
-        // 2. Search by Phone
+        // 2. Search by Phone (matches full clean phone or 10-digit BD suffix)
         if ( ! empty( $clean_phone ) ) {
+            $phone_suffix = substr( $clean_phone, -10 );
             $all_members = get_posts( array(
                 'post_type'      => 'santino_member',
+                'post_status'    => array( 'publish', 'draft', 'pending', 'private' ),
                 'posts_per_page' => -1,
             ) );
             foreach ( $all_members as $m ) {
                 $m_phone = preg_replace( '/[^0-9]/', '', get_post_meta( $m->ID, '_santino_member_phone', true ) );
-                if ( ! empty( $m_phone ) && ( str_ends_with( $m_phone, substr( $clean_phone, -10 ) ) || str_ends_with( $clean_phone, substr( $m_phone, -10 ) ) ) ) {
-                    return $m;
+                if ( ! empty( $m_phone ) ) {
+                    $m_suffix = substr( $m_phone, -10 );
+                    if ( $m_phone === $clean_phone || $m_suffix === $phone_suffix ) {
+                        return $m;
+                    }
                 }
             }
         }
@@ -995,9 +1098,8 @@ class Santino_Membership_System {
         }
 
         // Phone validation (BD format)
-        $clean_phone_check = preg_replace( '/[\s-]/', '', $phone );
-        if ( ! preg_match( '/^(?:\+?880|0)?1[3-9]\d{8}$/', $clean_phone_check ) ) {
-            wp_send_json_error( array( 'message' => __( 'Invalid phone number format. Please enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX).', 'santino' ) ) );
+        if ( ! self::is_valid_bd_phone( $phone ) ) {
+            wp_send_json_error( array( 'message' => __( 'দয়া করে সঠিক ১১ ডিজিটের বাংলাদেশি মোবাইল নম্বর প্রদান করুন (যেমন: 017XXXXXXXX)।', 'santino' ) ) );
         }
 
         // Check if phone already registered
@@ -1068,8 +1170,12 @@ class Santino_Membership_System {
         $branch     = sanitize_text_field( $_POST['branch'] ?? 'Gulshan-2 Flagship Experience Center' );
         $cups       = max( 1, intval( $_POST['cups'] ?? 1 ) );
 
-        if ( empty( $invoice_no ) || ( empty( $phone ) && empty( $member_id ) ) ) {
-            wp_send_json_error( array( 'message' => __( 'Please provide Invoice Number and your Phone Number / VIP ID.', 'santino' ) ) );
+        if ( empty( $invoice_no ) ) {
+            wp_send_json_error( array( 'message' => __( 'দয়া করে ইনভয়েস/মেমো নম্বর প্রদান করুন।', 'santino' ) ) );
+        }
+
+        if ( empty( $phone ) || ! self::is_valid_bd_phone( $phone ) ) {
+            wp_send_json_error( array( 'message' => __( 'দয়া করে সঠিক ১১ ডিজিটের বাংলাদেশি মোবাইল নম্বর প্রদান করুন (যেমন: 017XXXXXXXX)।', 'santino' ) ) );
         }
 
         // Check if invoice already submitted
@@ -1119,6 +1225,26 @@ class Santino_Membership_System {
             wp_send_json_error( array( 'message' => __( 'Could not submit invoice. Please try again.', 'santino' ) ) );
         }
 
+        // Handle Invoice Image Upload
+        if ( ! empty( $_FILES['invoice_image']['name'] ) ) {
+            require_once( ABSPATH . 'wp-admin/includes/image.php' );
+            require_once( ABSPATH . 'wp-admin/includes/file.php' );
+            require_once( ABSPATH . 'wp-admin/includes/media.php' );
+
+            $attachment_id = media_handle_upload( 'invoice_image', $inv_post_id );
+            if ( ! is_wp_error( $attachment_id ) ) {
+                $img_url = wp_get_attachment_url( $attachment_id );
+                update_post_meta( $inv_post_id, '_santino_invoice_image_id', $attachment_id );
+                update_post_meta( $inv_post_id, '_santino_invoice_image_url', $img_url );
+                set_post_thumbnail( $inv_post_id, $attachment_id );
+            }
+        }
+
+        $member_post_id = $member ? $member->ID : ( ! empty( $m_id ) ? $m_id : 0 );
+        if ( $member_post_id ) {
+            update_post_meta( $inv_post_id, '_santino_invoice_member_post_id', $member_post_id );
+        }
+
         update_post_meta( $inv_post_id, '_santino_invoice_number', $invoice_no );
         update_post_meta( $inv_post_id, '_santino_invoice_cups', $cups );
         update_post_meta( $inv_post_id, '_santino_invoice_phone', $phone );
@@ -1148,9 +1274,8 @@ class Santino_Membership_System {
             wp_send_json_error( array( 'message' => __( 'দয়া করে আপনার মোবাইল নম্বর এবং ফ্রি কফি আইটেম সিলেক্ট করুন।', 'santino' ) ) );
         }
 
-        $clean_phone_check = preg_replace( '/[\s-]/', '', $phone );
-        if ( ! preg_match( '/^(?:\+?880|0)?1[3-9]\d{8}$/', $clean_phone_check ) ) {
-            wp_send_json_error( array( 'message' => __( '১১ ডিজিটের সঠিক মোবাইল নম্বর প্রদান করুন।', 'santino' ) ) );
+        if ( ! self::is_valid_bd_phone( $phone ) ) {
+            wp_send_json_error( array( 'message' => __( 'দয়া করে সঠিক ১১ ডিজিটের বাংলাদেশি মোবাইল নম্বর প্রদান করুন (যেমন: 017XXXXXXXX)।', 'santino' ) ) );
         }
 
         $member = self::find_member_by_phone_or_id( $phone );

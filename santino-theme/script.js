@@ -246,11 +246,73 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Invoice Submission Form (Supports Cups Count)
+  // Stepper handlers for Cups count
+  document.addEventListener('click', function(e) {
+    const plusBtn = e.target.closest('.santino-cup-plus');
+    const minusBtn = e.target.closest('.santino-cup-minus');
+    if (plusBtn) {
+      e.preventDefault();
+      const input = plusBtn.closest('.input-group')?.querySelector('.santino-cups-input') || document.querySelector('input[name="cups"]');
+      if (input) {
+        let val = parseInt(input.value) || 1;
+        if (val < 50) input.value = val + 1;
+      }
+    }
+    if (minusBtn) {
+      e.preventDefault();
+      const input = minusBtn.closest('.input-group')?.querySelector('.santino-cups-input') || document.querySelector('input[name="cups"]');
+      if (input) {
+        let val = parseInt(input.value) || 1;
+        if (val > 1) input.value = val - 1;
+      }
+    }
+  });
+
+  // Real-time BD Phone live validation
+  document.addEventListener('input', function(e) {
+    if (e.target && (e.target.type === 'tel' || e.target.name === 'phone' || e.target.classList.contains('santino-phone-validate'))) {
+      const clean = e.target.value.trim().replace(/[\s\-\(\)\.]/g, '');
+      const bdPhoneRegex = /^(?:\+?880|0)1[3-9]\d{8}$/;
+      if (clean.length >= 11) {
+        if (bdPhoneRegex.test(clean)) {
+          e.target.setCustomValidity('');
+          e.target.classList.remove('is-invalid');
+          e.target.classList.add('is-valid');
+        } else {
+          e.target.setCustomValidity('সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন (013-019)');
+          e.target.classList.remove('is-valid');
+          e.target.classList.add('is-invalid');
+        }
+      } else {
+        e.target.setCustomValidity('');
+        e.target.classList.remove('is-valid', 'is-invalid');
+      }
+    }
+  });
+
+  // Invoice Submission Form (Supports Cups Count, Stepper & Receipt Image)
   const invoiceForm = document.getElementById('santinoInvoiceForm');
   if (invoiceForm) {
     invoiceForm.addEventListener('submit', function(e) {
       e.preventDefault();
+
+      const phoneField = this.querySelector('input[name="phone"]');
+      if (phoneField) {
+        const cleanPhone = phoneField.value.trim().replace(/[\s\-\(\)\.]/g, '');
+        const bdPhoneRegex = /^(?:\+?880|0)1[3-9]\d{8}$/;
+        if (!bdPhoneRegex.test(cleanPhone)) {
+          phoneField.focus();
+          phoneField.setCustomValidity('দয়া করে সঠিক ১১ ডিজিটের বাংলাদেশি মোবাইল নম্বর প্রদান করুন (যেমন: 017XXXXXXXX)');
+          phoneField.reportValidity();
+          return;
+        } else {
+          phoneField.setCustomValidity('');
+        }
+      }
+
+      const cupsInput = this.querySelector('input[name="cups"]');
+      const cupsVal = cupsInput ? (parseInt(cupsInput.value) || 1) : 1;
+
       const submitBtn = this.querySelector('button[type="submit"]');
       const originalText = submitBtn ? submitBtn.innerHTML : 'Submit Invoice';
       if (submitBtn) {
@@ -259,6 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const formData = new FormData(this);
+      formData.set('cups', cupsVal);
       formData.append('action', 'santino_submit_invoice');
       if (typeof santino_ajax !== 'undefined') {
         formData.append('security', santino_ajax.nonce);
@@ -289,6 +352,8 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             `;
             invoiceForm.reset();
+            const resetCups = invoiceForm.querySelector('input[name="cups"]');
+            if (resetCups) resetCups.value = 1;
             resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
             alert(data.data.message);
@@ -320,8 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-    });
-  }
 
   // Stamp Card Live Lookup Form (Shows Remaining Cups Modulo 5 & Vouchers)
   const lookupForm = document.getElementById('santinoLookupForm');

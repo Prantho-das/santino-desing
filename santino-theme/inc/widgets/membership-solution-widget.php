@@ -720,7 +720,7 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                           <p class="text-muted small">Submit your receipt details. Cups will be credited to your stamp card upon portal verification.</p>
                         </div>
                         <div id="invoiceResponseBox" style="display: none;" class="mb-4"></div>
-                        <form id="santinoInvoiceForm">
+                        <form id="santinoInvoiceForm" enctype="multipart/form-data">
                           <div class="row g-3 mb-3">
                             <div class="col-md-6">
                               <label class="form-label small fw-bold text-dark">Invoice / Memo Number *</label>
@@ -728,20 +728,24 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                             </div>
                             <div class="col-md-6">
                               <label class="form-label small fw-bold text-dark">No. of Cups Ordered *</label>
-                              <input type="number" name="cups" class="form-control" placeholder="e.g. 2 or 3" min="1" max="50" value="1" required>
+                              <div class="input-group">
+                                <button class="btn btn-outline-secondary px-2 santino-cup-minus" type="button" style="font-weight: bold; border-color: #cbd5e1;">−</button>
+                                <input type="number" name="cups" class="form-control text-center santino-cups-input" min="1" max="50" value="1" style="font-weight: bold; color: #00625d;" required>
+                                <button class="btn btn-outline-secondary px-2 santino-cup-plus" type="button" style="font-weight: bold; border-color: #cbd5e1;">+</button>
+                              </div>
                             </div>
                           </div>
                           <div class="row g-3 mb-3">
                             <div class="col-md-6">
                               <label class="form-label small fw-bold text-dark">Phone Number / WhatsApp *</label>
-                              <input type="tel" name="phone" class="form-control" placeholder="017XXXXXXXX or +88017..." pattern="^(?:\+?880|0)?1[3-9]\d{8}$" required>
+                              <input type="tel" name="phone" class="form-control santino-phone-validate" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)1[3-9]\d{8}$" maxlength="15" title="Please enter a valid 11-digit Bangladeshi phone number" required>
                             </div>
                             <div class="col-md-6">
                               <label class="form-label small fw-bold text-dark">Member ID (Optional)</label>
                               <input type="text" name="member_id" class="form-control" placeholder="e.g. SNT-REG-XXXX">
                             </div>
                           </div>
-                          <div class="row g-3 mb-4">
+                          <div class="row g-3 mb-3">
                             <div class="col-12">
                               <label class="form-label small fw-bold text-dark">Cafe Branch Visited</label>
                               <select name="branch" class="form-select">
@@ -753,6 +757,11 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                                 <option>Baridhara Diplomatic Enclave</option>
                               </select>
                             </div>
+                          </div>
+                          <div class="mb-4">
+                            <label class="form-label small fw-bold text-dark"><i class="bi bi-camera me-1 text-teal"></i> Upload Invoice / Memo Photo (Optional)</label>
+                            <input type="file" name="invoice_image" id="santinoInvoiceImage" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg">
+                            <div class="form-text text-muted small" style="font-size: 0.78rem;">Upload photo of your physical cafe bill/memo for fast verification (JPG, PNG, WebP).</div>
                           </div>
                           <button type="submit" class="btn btn-portal-submit w-100 font-heading text-uppercase">
                             Submit Invoice For Stamp Verification →

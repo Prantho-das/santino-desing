@@ -237,6 +237,11 @@ class Santino_Leads_System {
             wp_send_json_error( array( 'message' => 'Please provide your name and phone number.' ) );
         }
 
+        $clean_phone = preg_replace( '/[\s\-\(\)\.]/', '', $phone );
+        if ( ! preg_match( '/^(?:\+?880|0)1[3-9]\d{8}$/', $clean_phone ) ) {
+            wp_send_json_error( array( 'message' => 'দয়া করে সঠিক ১১ ডিজিটের বাংলাদেশি মোবাইল নম্বর দিন (যেমন: 017XXXXXXXX).' ) );
+        }
+
         $post_title = $name . ' (' . ucfirst( str_replace( '_', ' ', $type ) ) . ')';
         $post_id = wp_insert_post( array(
             'post_title'  => $post_title,
