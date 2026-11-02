@@ -274,18 +274,16 @@ class Santino_Membership_System {
                         <input type="hidden" name="member_id" value="<?php echo esc_attr( $post->ID ); ?>">
                         
                         <label style="font-weight: bold; font-size: 12px; color: #065f46;">Drink:</label>
+                        <?php 
+                        $redeem_drinks = class_exists( 'Santino_Handcrafted_Items_System' ) 
+                            ? Santino_Handcrafted_Items_System::get_redeemable_items() 
+                            : array( 'Handcrafted Cappuccino', 'Signature Caffe Latte', 'Spanish Latte', 'Classic Americano', 'Caramel Macchiato', 'Flat White', 'Hot Mocha', 'Iced Signature Latte' );
+                        ?>
                         <select name="free_item" required style="font-size: 12px; height: 32px; border-radius: 6px; border: 1px solid #059669; font-weight: 500;">
                             <option value="">-- Choose Free Item --</option>
-                            <option value="Handcrafted Cappuccino">Handcrafted Cappuccino</option>
-                            <option value="Signature Caffe Latte">Signature Caffe Latte</option>
-                            <option value="Spanish Latte">Spanish Latte</option>
-                            <option value="Classic Americano">Classic Americano</option>
-                            <option value="Caramel Macchiato">Caramel Macchiato</option>
-                            <option value="Flat White">Flat White</option>
-                            <option value="Iced Signature Latte">Iced Signature Latte</option>
-                            <option value="Iced Americano">Iced Americano</option>
-                            <option value="Cold Brew Reserve">Cold Brew Reserve</option>
-                            <option value="Hot Mocha">Hot Mocha</option>
+                            <?php foreach ( $redeem_drinks as $rd ) : ?>
+                                <option value="<?php echo esc_attr( $rd ); ?>"><?php echo esc_html( $rd ); ?></option>
+                            <?php endforeach; ?>
                         </select>
 
                         <label style="font-weight: bold; font-size: 12px; color: #065f46;">Branch:</label>
