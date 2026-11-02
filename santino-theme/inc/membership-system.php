@@ -638,7 +638,8 @@ class Santino_Membership_System {
                 echo '<strong style="color:#00625d; font-family:monospace;">' . esc_html( get_post_meta( $post_id, '_santino_member_id', true ) ?: 'N/A' ) . '</strong>';
                 break;
             case 'phone':
-                echo esc_html( get_post_meta( $post_id, '_santino_member_phone', true ) ?: '—' );
+                $m_raw_phone = get_post_meta( $post_id, '_santino_member_phone', true );
+                echo esc_html( self::normalize_phone( $m_raw_phone ) ?: '—' );
                 break;
             case 'birthday':
                 $b = get_post_meta( $post_id, '_santino_member_birthday', true );
@@ -703,7 +704,8 @@ class Santino_Membership_System {
                 echo '<strong style="color:#00625d; font-size:13px;">' . esc_html( $cups ) . ' ☕</strong>';
                 break;
             case 'phone':
-                echo esc_html( get_post_meta( $post_id, '_santino_invoice_phone', true ) ?: '—' );
+                $inv_raw_phone = get_post_meta( $post_id, '_santino_invoice_phone', true );
+                echo esc_html( self::normalize_phone( $inv_raw_phone ) ?: '—' );
                 break;
             case 'branch':
                 echo esc_html( get_post_meta( $post_id, '_santino_invoice_branch', true ) ?: 'Santino Flagship' );
@@ -1034,10 +1036,25 @@ class Santino_Membership_System {
     }
 
     /**
+     * Helper: Normalize Phone Number to canonical BD format (01XXXXXXXXX)
+     */
+    public static function normalize_phone( $phone ) {
+        $clean = preg_replace( '/[^0-9]/', '', (string) $phone );
+        if ( strlen( $clean ) === 13 && substr( $clean, 0, 3 ) === '880' ) {
+            $clean = substr( $clean, 2 );
+        } elseif ( strlen( $clean ) === 10 && substr( $clean, 0, 1 ) === '1' ) {
+            $clean = '0' . $clean;
+        } elseif ( strlen( $clean ) === 14 && substr( $clean, 0, 4 ) === '0880' ) {
+            $clean = substr( $clean, 3 );
+        }
+        return $clean;
+    }
+
+    /**
      * Helper: Find Member by Phone or VIP ID
      */
     public static function find_member_by_phone_or_id( $phone, $member_id_str = '' ) {
-        $clean_phone = preg_replace( '/[^0-9]/', '', $phone );
+        $clean_phone = self::normalize_phone( $phone );
         
         // 1. Search by Member ID
         if ( ! empty( $member_id_str ) ) {
@@ -1058,7 +1075,7 @@ class Santino_Membership_System {
             }
         }
 
-        // 2. Search by Phone (matches full clean phone or 10-digit BD suffix)
+        // 2. Search by Phone (matches normalized phone or 10-digit BD suffix)
         if ( ! empty( $clean_phone ) ) {
             $phone_suffix = substr( $clean_phone, -10 );
             $all_members = get_posts( array(
@@ -1067,7 +1084,8 @@ class Santino_Membership_System {
                 'posts_per_page' => -1,
             ) );
             foreach ( $all_members as $m ) {
-                $m_phone = preg_replace( '/[^0-9]/', '', get_post_meta( $m->ID, '_santino_member_phone', true ) );
+                $raw_m_phone = get_post_meta( $m->ID, '_santino_member_phone', true );
+                $m_phone = self::normalize_phone( $raw_m_phone );
                 if ( ! empty( $m_phone ) ) {
                     $m_suffix = substr( $m_phone, -10 );
                     if ( $m_phone === $clean_phone || $m_suffix === $phone_suffix ) {
@@ -1087,7 +1105,7 @@ class Santino_Membership_System {
     public static function handle_ajax_membership_apply() {
         check_ajax_referer( 'santino_frontend_nonce', 'security' );
 
-        $phone       = sanitize_text_field( $_POST['phone'] ?? '' );
+        $phone       = self::normalize_phone( sanitize_text_field( $_POST['phone'] ?? '' ) );
         $email       = sanitize_email( $_POST['email'] ?? '' );
         $birth_month = sanitize_text_field( $_POST['birth_month'] ?? '' );
         $birth_day   = sanitize_text_field( $_POST['birth_day'] ?? '' );
@@ -1105,24 +1123,28 @@ class Santino_Membership_System {
         // Check if phone already registered
         $existing = self::find_member_by_phone_or_id( $phone );
         if ( $existing ) {
-            $allow_reregister = get_post_meta( $existing->ID, '_santino_allow_reregister', true );
-            if ( $allow_reregister !== 'yes' ) {
-                wp_send_json_error( array(
-                    'message' => __( 'এই মোবাইল নম্বরটি দিয়ে ইতিমধ্যে মেম্বারশিপ রেজিস্ট্রেশন করা হয়েছে। পোর্টাল/অ্যাডমিন এর অনুমতি ছাড়া একই নম্বর দিয়ে ২য় বার রেজিস্ট্রেশন করা যাবে না।', 'santino' ),
-                ) );
-            } else {
-                // Admin permitted re-registration / update
+            $allow_reregister  = get_post_meta( $existing->ID, '_santino_allow_reregister', true );
+            $existing_birthday = get_post_meta( $existing->ID, '_santino_member_birthday', true );
+            $existing_email    = get_post_meta( $existing->ID, '_santino_member_email', true );
+
+            // If auto-enrolled from invoice (birthday/email missing) or admin allowed re-registration:
+            if ( $allow_reregister === 'yes' || empty( $existing_birthday ) || empty( $existing_email ) ) {
                 update_post_meta( $existing->ID, '_santino_allow_reregister', 'no' );
                 update_post_meta( $existing->ID, '_santino_member_email', $email );
                 update_post_meta( $existing->ID, '_santino_member_birth_month', $birth_month );
                 update_post_meta( $existing->ID, '_santino_member_birth_day', $birth_day );
                 update_post_meta( $existing->ID, '_santino_member_birthday', $birth_month . ' - ' . $birth_day );
+                update_post_meta( $existing->ID, '_santino_member_status', 'active' );
                 $exist_id = get_post_meta( $existing->ID, '_santino_member_id', true );
                 wp_send_json_success( array(
                     'message'   => __( 'আপনার মেম্বারশিপ প্রোফাইল সফলভাবে আপডেট করা হয়েছে!', 'santino' ),
                     'member_id' => $exist_id,
                     'name'      => $existing->post_title,
                     'tier'      => 'REGULAR MEMBER',
+                ) );
+            } else {
+                wp_send_json_error( array(
+                    'message' => __( 'এই মোবাইল নম্বরটি দিয়ে ইতিমধ্যে মেম্বারশিপ রেজিস্ট্রেশন করা হয়েছে। পোর্টাল/অ্যাডমিন এর অনুমতি ছাড়া একই নম্বর দিয়ে ২য় বার রেজিস্ট্রেশন করা যাবে না।', 'santino' ),
                 ) );
             }
         }
@@ -1165,7 +1187,7 @@ class Santino_Membership_System {
         check_ajax_referer( 'santino_frontend_nonce', 'security' );
 
         $invoice_no = sanitize_text_field( $_POST['invoice_number'] ?? '' );
-        $phone      = sanitize_text_field( $_POST['phone'] ?? '' );
+        $phone      = self::normalize_phone( sanitize_text_field( $_POST['phone'] ?? '' ) );
         $member_id  = sanitize_text_field( $_POST['member_id'] ?? '' );
         $branch     = sanitize_text_field( $_POST['branch'] ?? 'Gulshan-2 Flagship Experience Center' );
         $cups       = max( 1, intval( $_POST['cups'] ?? 1 ) );
@@ -1198,7 +1220,7 @@ class Santino_Membership_System {
         // Verify member exists or create on the fly
         $member = self::find_member_by_phone_or_id( $phone, $member_id );
         if ( ! $member && ! empty( $phone ) ) {
-            // Auto-enroll member
+            // Auto-enroll member with complete profile defaults
             $new_vip_id = 'SNT-REG-' . strtoupper( wp_generate_password( 6, false ) );
             $m_id = wp_insert_post( array(
                 'post_title'   => 'Regular Member (' . $phone . ')',
@@ -1207,8 +1229,12 @@ class Santino_Membership_System {
             ) );
             update_post_meta( $m_id, '_santino_member_id', $new_vip_id );
             update_post_meta( $m_id, '_santino_member_phone', $phone );
+            update_post_meta( $m_id, '_santino_member_status', 'active' );
             update_post_meta( $m_id, '_santino_member_tier', 'regular' );
+            update_post_meta( $m_id, '_santino_allow_reregister', 'yes' );
             update_post_meta( $m_id, '_santino_cup_stamps', 0 );
+            update_post_meta( $m_id, '_santino_total_approved_cups', 0 );
+            update_post_meta( $m_id, '_santino_total_free_coffees', 0 );
             $member_id = $new_vip_id;
         } elseif ( $member ) {
             $member_id = get_post_meta( $member->ID, '_santino_member_id', true );
@@ -1254,9 +1280,10 @@ class Santino_Membership_System {
         update_post_meta( $inv_post_id, '_santino_invoice_submitted_at', current_time( 'mysql' ) );
 
         wp_send_json_success( array(
-            'message'    => sprintf( __( 'Invoice #%s (%d Cups) submitted successfully! Admin verification will credit your stamp balance.', 'santino' ), $invoice_no, $cups ),
+            'message'    => sprintf( __( 'Invoice #%s (%d Cups) submitted successfully! Member ID: %s. Admin verification will credit your stamp balance.', 'santino' ), $invoice_no, $cups, $member_id ),
             'invoice_no' => $invoice_no,
             'cups'       => $cups,
+            'member_id'  => $member_id,
             'status'     => 'pending',
         ) );
     }

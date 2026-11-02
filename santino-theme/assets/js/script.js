@@ -344,11 +344,13 @@ document.addEventListener('DOMContentLoaded', () => {
           if (resBox) {
             resBox.style.display = 'block';
             resBox.innerHTML = `
-              <div class="alert alert-success rounded-4 p-4 text-center shadow-sm">
-                <i class="bi bi-receipt-cutoff text-success fs-1 d-block mb-2"></i>
-                <h4 class="fw-bold mb-2">Invoice Logged Successfully!</h4>
-                <p class="mb-0 text-muted">${data.data.message}</p>
-                <div class="mt-3 badge bg-warning text-dark px-3 py-2 fs-6">Status: ⏳ PENDING PORTAL VERIFICATION</div>
+              <div class="alert alert-success rounded-4 p-3 p-md-4 text-center shadow-sm border-0" style="background: #e8f5e9; border: 1px solid #c8e6c9 !important;">
+                <i class="bi bi-receipt-cutoff text-success fs-2 d-block mb-2"></i>
+                <h4 class="fw-bold mb-2 text-dark font-heading" style="font-size: 1.2rem;">Invoice Logged Successfully!</h4>
+                <p class="mb-2 text-muted small" style="line-height: 1.5;">${data.data.message}</p>
+                <div class="mt-2 d-inline-block px-3 py-1.5 rounded-pill fw-bold text-dark text-wrap" style="background: #fef08a; color: #854d0e !important; font-size: 0.78rem; line-height: 1.35; max-width: 100%; word-break: break-word; border: 1px solid #fde047;">
+                  ⏳ Status: Pending Portal Verification
+                </div>
               </div>
             `;
             invoiceForm.reset();
@@ -363,9 +365,9 @@ document.addEventListener('DOMContentLoaded', () => {
           if (resBox) {
             resBox.style.display = 'block';
             resBox.innerHTML = `
-              <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm">
+              <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm text-wrap" style="word-break: break-word;">
                 <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-1"></i>
-                <strong>${data.data ? data.data.message : 'Error submitting invoice.'}</strong>
+                <strong class="small">${data.data ? data.data.message : 'Error submitting invoice.'}</strong>
               </div>
             `;
             resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
