@@ -129,7 +129,7 @@ class Santino_Membership_System {
             ),
             'public'        => false,
             'show_ui'       => true,
-            'show_in_menu'  => 'edit.php?post_type=santino_member',
+            'show_in_menu'  => false,
             'supports'      => array( 'title' ),
         ) );
 
@@ -348,17 +348,21 @@ class Santino_Membership_System {
     public static function render_invoice_meta_box( $post ) {
         wp_nonce_field( 'santino_save_invoice_meta', 'santino_invoice_nonce' );
 
+        global $pagenow;
+        $is_new = ( $pagenow === 'post-new.php' || empty( $post->ID ) || $post->post_status === 'auto-draft' );
+
         $invoice_no = get_post_meta( $post->ID, '_santino_invoice_number', true );
         $phone      = get_post_meta( $post->ID, '_santino_invoice_phone', true );
         $member_id  = get_post_meta( $post->ID, '_santino_invoice_member_id', true );
         $branch     = get_post_meta( $post->ID, '_santino_invoice_branch', true );
         $cups       = max( 1, intval( get_post_meta( $post->ID, '_santino_invoice_cups', true ) ?: 1 ) );
-        $status     = get_post_meta( $post->ID, '_santino_invoice_status', true ) ?: 'pending';
+        $status     = $is_new ? '' : ( get_post_meta( $post->ID, '_santino_invoice_status', true ) ?: 'pending' );
         $admin_note = get_post_meta( $post->ID, '_santino_invoice_admin_note', true );
 
         $approve_url = wp_nonce_url( admin_url( 'admin.php?action=santino_approve_invoice&invoice_id=' . $post->ID ), 'santino_approve_' . $post->ID );
         $reject_url  = wp_nonce_url( admin_url( 'admin.php?action=santino_reject_invoice&invoice_id=' . $post->ID ), 'santino_reject_' . $post->ID );
         ?>
+        <?php if ( ! $is_new ) : ?>
         <div style="background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #cbd5e1;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
@@ -386,6 +390,11 @@ class Santino_Membership_System {
                 <?php endif; ?>
             </div>
         </div>
+        <?php else : ?>
+        <div style="background: #f8fafc; padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #cbd5e1; color: #64748b; font-size: 13px;">
+            ℹ️ <strong>New Invoice Record:</strong> Verification and stamp approval actions will become active after this record is saved.
+        </div>
+        <?php endif; ?>
 
         <table class="form-table">
             <tr>
@@ -452,16 +461,20 @@ class Santino_Membership_System {
     public static function render_redeem_meta_box( $post ) {
         wp_nonce_field( 'santino_save_redeem_meta', 'santino_redeem_nonce' );
 
+        global $pagenow;
+        $is_new = ( $pagenow === 'post-new.php' || empty( $post->ID ) || $post->post_status === 'auto-draft' );
+
         $code       = get_post_meta( $post->ID, '_santino_redeem_code', true );
         $phone      = get_post_meta( $post->ID, '_santino_redeem_phone', true );
         $item       = get_post_meta( $post->ID, '_santino_redeem_item', true );
         $branch     = get_post_meta( $post->ID, '_santino_redeem_branch', true );
-        $status     = get_post_meta( $post->ID, '_santino_redeem_status', true ) ?: 'pending';
+        $status     = $is_new ? '' : ( get_post_meta( $post->ID, '_santino_redeem_status', true ) ?: 'pending' );
         $voucher_no = get_post_meta( $post->ID, '_santino_redeem_voucher_code', true );
 
         $approve_url = wp_nonce_url( admin_url( 'admin.php?action=santino_approve_redeem&redeem_id=' . $post->ID ), 'santino_approve_redeem_' . $post->ID );
         $reject_url  = wp_nonce_url( admin_url( 'admin.php?action=santino_reject_redeem&redeem_id=' . $post->ID ), 'santino_reject_redeem_' . $post->ID );
         ?>
+        <?php if ( ! $is_new ) : ?>
         <div style="background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #cbd5e1;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
@@ -489,6 +502,11 @@ class Santino_Membership_System {
                 <?php endif; ?>
             </div>
         </div>
+        <?php else : ?>
+        <div style="background: #f8fafc; padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #cbd5e1; color: #64748b; font-size: 13px;">
+            ℹ️ <strong>New Redeem Request:</strong> Barista approval/rejection actions will become available after this record is submitted or saved.
+        </div>
+        <?php endif; ?>
 
         <table class="form-table">
             <tr>
@@ -1505,48 +1523,430 @@ class Santino_Membership_System {
     }
 
     public static function render_loyalty_dashboard() {
-        $total_members  = wp_count_posts( 'santino_member' )->publish ?? 0;
-        $total_invoices = wp_count_posts( 'santino_invoice' )->publish ?? 0;
-        $total_vouchers = wp_count_posts( 'santino_voucher' )->publish ?? 0;
-        $pending        = self::get_pending_invoices_count();
+        global $wpdb;
+
+        $total_members  = (int) ( wp_count_posts( 'santino_member' )->publish ?? 0 );
+        $total_invoices = (int) ( wp_count_posts( 'santino_invoice' )->publish ?? 0 );
+        $total_vouchers = (int) ( wp_count_posts( 'santino_voucher' )->publish ?? 0 );
+        $pending_inv    = self::get_pending_invoices_count();
+        $pending_red    = self::get_pending_redeems_count();
+
+        $total_approved_cups = (int) $wpdb->get_var( "
+            SELECT SUM(CAST(pm.meta_value AS UNSIGNED)) 
+            FROM {$wpdb->postmeta} pm 
+            INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id 
+            INNER JOIN {$wpdb->postmeta} pm_st ON pm_st.post_id = p.ID AND pm_st.meta_key = '_santino_invoice_status'
+            WHERE p.post_type = 'santino_invoice' 
+              AND p.post_status = 'publish' 
+              AND pm.meta_key = '_santino_invoice_cups' 
+              AND pm_st.meta_value = 'approved'
+        " );
+
+        $total_redeemed_cups = (int) $wpdb->get_var( "
+            SELECT COUNT(*) 
+            FROM {$wpdb->postmeta} pm 
+            INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id 
+            WHERE p.post_type = 'santino_redeem' 
+              AND p.post_status = 'publish' 
+              AND pm.meta_key = '_santino_redeem_status' 
+              AND pm.meta_value = 'approved'
+        " );
+
+        $inv_status_rows = $wpdb->get_results( "
+            SELECT pm.meta_value as status_key, COUNT(*) as cnt
+            FROM {$wpdb->postmeta} pm
+            INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+            WHERE p.post_type = 'santino_invoice' AND p.post_status = 'publish' AND pm.meta_key = '_santino_invoice_status'
+            GROUP BY pm.meta_value
+        " );
+        $inv_status_counts = array( 'approved' => 0, 'pending' => 0, 'rejected' => 0 );
+        if ( ! empty( $inv_status_rows ) ) {
+            foreach ( $inv_status_rows as $row ) {
+                $inv_status_counts[ $row->status_key ] = (int) $row->cnt;
+            }
+        }
+
+        $branch_rows = $wpdb->get_results( "
+            SELECT 
+                COALESCE(NULLIF(TRIM(pm_b.meta_value), ''), 'Main / Website') as branch_name,
+                COUNT(p.ID) as total_invoices,
+                SUM(CASE WHEN pm_st.meta_value = 'approved' THEN CAST(COALESCE(pm_c.meta_value, 1) AS UNSIGNED) ELSE 0 END) as approved_cups,
+                SUM(CASE WHEN pm_st.meta_value = 'approved' THEN 1 ELSE 0 END) as approved_invoices
+            FROM {$wpdb->posts} p
+            LEFT JOIN {$wpdb->postmeta} pm_b ON pm_b.post_id = p.ID AND pm_b.meta_key = '_santino_invoice_branch'
+            LEFT JOIN {$wpdb->postmeta} pm_st ON pm_st.post_id = p.ID AND pm_st.meta_key = '_santino_invoice_status'
+            LEFT JOIN {$wpdb->postmeta} pm_c ON pm_c.post_id = p.ID AND pm_c.meta_key = '_santino_invoice_cups'
+            WHERE p.post_type = 'santino_invoice' AND p.post_status = 'publish'
+            GROUP BY branch_name
+            ORDER BY approved_cups DESC, total_invoices DESC
+        " );
+
+        $leaderboard = $wpdb->get_results( "
+            SELECT 
+                p.ID, 
+                p.post_title as member_name,
+                pm_p.meta_value as phone,
+                pm_id.meta_value as member_id,
+                CAST(COALESCE(pm_c.meta_value, 0) AS UNSIGNED) as total_cups,
+                CAST(COALESCE(pm_s.meta_value, 0) AS UNSIGNED) as stamps,
+                CAST(COALESCE(pm_f.meta_value, 0) AS UNSIGNED) as free_coffees
+            FROM {$wpdb->posts} p
+            LEFT JOIN {$wpdb->postmeta} pm_p ON pm_p.post_id = p.ID AND pm_p.meta_key = '_santino_member_phone'
+            LEFT JOIN {$wpdb->postmeta} pm_id ON pm_id.post_id = p.ID AND pm_id.meta_key = '_santino_member_id'
+            LEFT JOIN {$wpdb->postmeta} pm_c ON pm_c.post_id = p.ID AND pm_c.meta_key = '_santino_total_approved_cups'
+            LEFT JOIN {$wpdb->postmeta} pm_s ON pm_s.post_id = p.ID AND pm_s.meta_key = '_santino_cup_stamps'
+            LEFT JOIN {$wpdb->postmeta} pm_f ON pm_f.post_id = p.ID AND pm_f.meta_key = '_santino_total_free_coffees'
+            WHERE p.post_type = 'santino_member' AND p.post_status = 'publish'
+            ORDER BY total_cups DESC, free_coffees DESC, stamps DESC
+            LIMIT 10
+        " );
+
+        $recent_invoices = get_posts( array(
+            'post_type'      => 'santino_invoice',
+            'post_status'    => 'publish',
+            'posts_per_page' => 10,
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        ) );
+
+        $recent_vouchers = get_posts( array(
+            'post_type'      => 'santino_voucher',
+            'post_status'    => 'publish',
+            'posts_per_page' => 8,
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        ) );
         ?>
-        <div class="wrap" style="max-width: 1100px; margin-top: 20px;">
-            <h1 style="font-weight: 800; color: #00625d; display: flex; align-items: center; gap: 10px;">
-                ☕ Santino "Buy 5, Get 1 Free" Coffee Loyalty Engine
-            </h1>
-            <p class="description">Real-time tracking of coffee invoices, cup stamps, and free reward vouchers.</p>
+        <style>
+            .loyalty-report-wrap { max-width: 1300px; margin: 20px auto 40px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; }
+            .loyalty-grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin: 22px 0; }
+            .loyalty-card { background: #fff; padding: 20px 22px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
+            .loyalty-card-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+            .loyalty-label { color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+            .loyalty-value { font-size: 30px; font-weight: 800; color: #0f172a; line-height: 1.1; }
+            .loyalty-sub { font-size: 12px; color: #94a3b8; margin-top: 6px; font-weight: 500; }
+            .loyalty-section { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.04); padding: 24px; margin-bottom: 24px; }
+            .loyalty-title { font-size: 16px; font-weight: 700; color: #0f172a; margin: 0 0 16px; display: flex; align-items: center; justify-content: space-between; }
+            .loyalty-table { width: 100%; border-collapse: collapse; text-align: left; }
+            .loyalty-table th { background: #f8fafc; color: #475569; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 14px; border-bottom: 1px solid #e2e8f0; }
+            .loyalty-table td { padding: 12px 14px; border-bottom: 1px solid #f1f5f9; font-size: 13px; color: #334155; vertical-align: middle; }
+            .loyalty-table tr:hover td { background: #f8fafc; }
+            .badge-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+            .badge-approved { background: #dcfce7; color: #15803d; }
+            .badge-pending { background: #fef9c3; color: #854d0e; }
+            .badge-rejected { background: #fee2e2; color: #b91c1c; }
+            .badge-voucher { background: #fdf2f8; color: #db2777; font-family: monospace; }
+        </style>
 
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 24px 0;">
-                <div style="background: #fff; padding: 20px; border-radius: 12px; border-left: 4px solid #00625d; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                    <div style="color: #64748b; font-size: 12px; font-weight: 700; text-transform: uppercase;">Total VIP Members</div>
-                    <div style="font-size: 32px; font-weight: 800; color: #0f172a; margin-top: 6px;"><?php echo esc_html( $total_members ); ?></div>
+        <div class="wrap loyalty-report-wrap">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 8px;">
+                <div>
+                    <h1 style="font-size: 26px; font-weight: 800; color: #00625d; margin: 0; display: flex; align-items: center; gap: 10px;">
+                        ☕ Santino Club — Executive Loyalty & Stamp Report
+                    </h1>
+                    <p style="margin: 4px 0 0; color: #64748b; font-size: 14px;">Complete real-time analytics across cafe branches, verified cup throughput, member milestones, and rewards.</p>
                 </div>
-
-                <div style="background: #fff; padding: 20px; border-radius: 12px; border-left: 4px solid <?php echo ( $pending > 0 ) ? '#f59e0b' : '#10b981'; ?>; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                    <div style="color: #64748b; font-size: 12px; font-weight: 700; text-transform: uppercase;">Pending Invoices</div>
-                    <div style="font-size: 32px; font-weight: 800; color: <?php echo ( $pending > 0 ) ? '#f59e0b' : '#10b981'; ?>; margin-top: 6px;"><?php echo esc_html( $pending ); ?></div>
-                </div>
-
-                <div style="background: #fff; padding: 20px; border-radius: 12px; border-left: 4px solid #6366f1; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                    <div style="color: #64748b; font-size: 12px; font-weight: 700; text-transform: uppercase;">Total Invoices Logged</div>
-                    <div style="font-size: 32px; font-weight: 800; color: #0f172a; margin-top: 6px;"><?php echo esc_html( $total_invoices ); ?></div>
-                </div>
-
-                <div style="background: #fff; padding: 20px; border-radius: 12px; border-left: 4px solid #ec4899; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                    <div style="color: #64748b; font-size: 12px; font-weight: 700; text-transform: uppercase;">Free Coffees Awarded</div>
-                    <div style="font-size: 32px; font-weight: 800; color: #ec4899; margin-top: 6px;"><?php echo esc_html( $total_vouchers ); ?></div>
+                <div style="display: flex; gap: 10px;">
+                    <a href="<?php echo admin_url( 'edit.php?post_type=santino_invoice' ); ?>" class="button button-primary" style="background: #00625d; border-color: #004d49; font-weight: 700;">
+                        Verify Invoices <?php echo ( $pending_inv > 0 ) ? '(' . $pending_inv . ' Pending)' : ''; ?>
+                    </a>
+                    <a href="<?php echo admin_url( 'edit.php?post_type=santino_redeem' ); ?>" class="button" style="font-weight: 600;">
+                        Redeem Approvals <?php echo ( $pending_red > 0 ) ? '(' . $pending_red . ' Pending)' : ''; ?>
+                    </a>
                 </div>
             </div>
 
-            <div style="background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                <h3 style="margin-top: 0; color: #0f172a;">How Admin Invoice Verification Works:</h3>
-                <ol style="line-height: 1.8; color: #334155;">
-                    <li>When a customer drinks coffee and submits their invoice number from the website, it appears in <a href="<?php echo admin_url( 'edit.php?post_type=santino_invoice' ); ?>"><strong>Invoices & Stamps</strong></a> with <code>⏳ PENDING CHECK</code> status.</li>
-                    <li>Admin/Barista clicks <strong>[Approve]</strong> after checking the cash counter receipt.</li>
-                    <li>The system immediately adds <strong>+1 ☕ Stamp</strong> to the customer's digital card.</li>
-                    <li>When the customer completes <strong>5 Approved Cups</strong>, the system automatically resets the stamp card and issues a <strong>Free Coffee Voucher</strong> (<code>FREE-CUP-XXXX</code>).</li>
-                </ol>
+            <!-- KPI Metric Cards Grid -->
+            <div class="loyalty-grid-6">
+                <div class="loyalty-card">
+                    <div class="loyalty-card-accent" style="background: #00625d;"></div>
+                    <div class="loyalty-label">VIP Club Members</div>
+                    <div class="loyalty-value"><?php echo esc_html( number_format_i18n( $total_members ) ); ?></div>
+                    <div class="loyalty-sub">Total enrolled members</div>
+                </div>
+
+                <div class="loyalty-card">
+                    <div class="loyalty-card-accent" style="background: #0284c7;"></div>
+                    <div class="loyalty-label">Verified Cups Drank</div>
+                    <div class="loyalty-value" style="color: #0284c7;"><?php echo esc_html( number_format_i18n( $total_approved_cups ) ); ?> ☕</div>
+                    <div class="loyalty-sub">Approved cups across cafe</div>
+                </div>
+
+                <div class="loyalty-card">
+                    <div class="loyalty-card-accent" style="background: <?php echo ( $pending_inv > 0 ) ? '#f59e0b' : '#10b981'; ?>;"></div>
+                    <div class="loyalty-label">Pending Verifications</div>
+                    <div class="loyalty-value" style="color: <?php echo ( $pending_inv > 0 ) ? '#f59e0b' : '#10b981'; ?>;">
+                        <?php echo esc_html( $pending_inv ); ?>
+                    </div>
+                    <div class="loyalty-sub"><?php echo ( $pending_inv > 0 ) ? 'Awaiting cashier check' : 'All clear (Up to date)'; ?></div>
+                </div>
+
+                <div class="loyalty-card">
+                    <div class="loyalty-card-accent" style="background: #6366f1;"></div>
+                    <div class="loyalty-label">Total Invoices</div>
+                    <div class="loyalty-value"><?php echo esc_html( number_format_i18n( $total_invoices ) ); ?></div>
+                    <div class="loyalty-sub"><?php echo esc_html( $inv_status_counts['approved'] ); ?> Approved / <?php echo esc_html( $inv_status_counts['rejected'] ); ?> Rejected</div>
+                </div>
+
+                <div class="loyalty-card">
+                    <div class="loyalty-card-accent" style="background: #ec4899;"></div>
+                    <div class="loyalty-label">Free Vouchers Awarded</div>
+                    <div class="loyalty-value" style="color: #ec4899;"><?php echo esc_html( number_format_i18n( $total_vouchers ) ); ?> 🎟️</div>
+                    <div class="loyalty-sub">5-cups cycle completions</div>
+                </div>
+
+                <div class="loyalty-card">
+                    <div class="loyalty-card-accent" style="background: #10b981;"></div>
+                    <div class="loyalty-label">Free Cups Served</div>
+                    <div class="loyalty-value" style="color: #10b981;"><?php echo esc_html( number_format_i18n( $total_redeemed_cups ) ); ?> 🎁</div>
+                    <div class="loyalty-sub"><?php echo esc_html( $pending_red ); ?> Pending authorizations</div>
+                </div>
             </div>
+
+            <!-- Two Column Layout: Branch Matrix & Member Leaderboard -->
+            <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; margin-bottom: 24px; align-items: start;">
+                <!-- Branch Performance Breakdown -->
+                <div class="loyalty-section" style="margin-bottom: 0;">
+                    <div class="loyalty-title">
+                        <span>🏢 Branch-wise Loyalty Performance</span>
+                        <span style="font-size: 12px; font-weight: 500; color: #64748b;"><?php echo count( $branch_rows ); ?> Branches Active</span>
+                    </div>
+                    <?php if ( ! empty( $branch_rows ) ) : ?>
+                    <table class="loyalty-table">
+                        <thead>
+                            <tr>
+                                <th>Branch Name</th>
+                                <th style="text-align: center;">Invoices</th>
+                                <th style="text-align: right;">Approved Cups</th>
+                                <th style="text-align: right;">Share</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ( $branch_rows as $br ) : 
+                                $share = ( $total_approved_cups > 0 ) ? round( ( $br->approved_cups / $total_approved_cups ) * 100, 1 ) : 0;
+                            ?>
+                            <tr>
+                                <td>
+                                    <strong><?php echo esc_html( $br->branch_name ); ?></strong>
+                                    <div style="font-size: 11px; color: #94a3b8;"><?php echo esc_html( $br->approved_invoices ); ?> verified orders</div>
+                                </td>
+                                <td style="text-align: center; font-weight: 600; color: #334155;">
+                                    <?php echo esc_html( $br->total_invoices ); ?>
+                                </td>
+                                <td style="text-align: right; font-weight: 700; color: #00625d;">
+                                    <?php echo esc_html( number_format_i18n( $br->approved_cups ) ); ?> ☕
+                                </td>
+                                <td style="text-align: right; width: 110px;">
+                                    <div style="display: flex; align-items: center; gap: 6px; justify-content: flex-end;">
+                                        <div style="width: 50px; background: #e2e8f0; height: 6px; border-radius: 3px; overflow: hidden;">
+                                            <div style="background: #00625d; height: 100%; width: <?php echo esc_attr( $share ); ?>%;"></div>
+                                        </div>
+                                        <span style="font-size: 11px; font-weight: 600; color: #64748b; min-width: 32px;"><?php echo esc_html( $share ); ?>%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php else : ?>
+                        <p style="color: #64748b; margin: 12px 0; font-size: 13px;">No branch logs recorded yet.</p>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Top Loyal Members Leaderboard -->
+                <div class="loyalty-section" style="margin-bottom: 0;">
+                    <div class="loyalty-title">
+                        <span>🏆 Top Coffee VIPs (Leaderboard)</span>
+                        <a href="<?php echo admin_url( 'edit.php?post_type=santino_member' ); ?>" style="font-size: 12px; font-weight: 600; color: #00625d; text-decoration: none;">View All Members →</a>
+                    </div>
+                    <?php if ( ! empty( $leaderboard ) ) : ?>
+                    <table class="loyalty-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 32px;">#</th>
+                                <th>VIP Member</th>
+                                <th style="text-align: center;">Stamp Card</th>
+                                <th style="text-align: right;">Lifetime Cups</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $rank = 1;
+                            foreach ( $leaderboard as $mb ) : 
+                                $badge_color = ( $rank === 1 ) ? '#f59e0b' : ( ( $rank === 2 ) ? '#94a3b8' : ( ( $rank === 3 ) ? '#b45309' : '#cbd5e1' ) );
+                            ?>
+                            <tr>
+                                <td style="font-weight: 800; color: <?php echo esc_attr( $badge_color ); ?>; font-size: 14px;">
+                                    #<?php echo $rank++; ?>
+                                </td>
+                                <td>
+                                    <a href="<?php echo esc_url( get_edit_post_link( $mb->ID ) ); ?>" style="font-weight: 700; color: #0f172a; text-decoration: none;">
+                                        <?php echo esc_html( $mb->member_name ); ?>
+                                    </a>
+                                    <div style="font-size: 11px; color: #64748b;">
+                                        <?php echo esc_html( self::normalize_phone( $mb->phone ) ); ?> 
+                                        <?php if ( ! empty( $mb->member_id ) ) : ?>
+                                            &bull; <code style="font-size: 10px; color: #00625d;"><?php echo esc_html( $mb->member_id ); ?></code>
+                                        <?php endif; ?>
+                                    </div>
+                                </td>
+                                <td style="text-align: center;">
+                                    <div style="display: flex; gap: 2px; justify-content: center;">
+                                        <?php for ( $s = 1; $s <= 5; $s++ ) : ?>
+                                            <span style="font-size: 11px;"><?php echo ( $s <= $mb->stamps ) ? '☕' : '⚪'; ?></span>
+                                        <?php endfor; ?>
+                                    </div>
+                                    <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;"><?php echo esc_html( $mb->stamps ); ?>/5 stamps</div>
+                                </td>
+                                <td style="text-align: right;">
+                                    <strong style="color: #00625d; font-size: 14px;"><?php echo esc_html( $mb->total_cups ); ?></strong> ☕
+                                    <?php if ( $mb->free_coffees > 0 ) : ?>
+                                        <div style="font-size: 10px; color: #ec4899; font-weight: 700;">+<?php echo esc_html( $mb->free_coffees ); ?> Free won</div>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php else : ?>
+                        <p style="color: #64748b; margin: 12px 0; font-size: 13px;">No members with cup activity yet.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Recent Invoices Audit Stream -->
+            <div class="loyalty-section">
+                <div class="loyalty-title">
+                    <span>🧾 Live Invoices Audit Stream (Recent Submissions)</span>
+                    <a href="<?php echo admin_url( 'edit.php?post_type=santino_invoice' ); ?>" style="font-size: 12px; font-weight: 600; color: #00625d; text-decoration: none;">View All Invoices →</a>
+                </div>
+                <?php if ( ! empty( $recent_invoices ) ) : ?>
+                <table class="loyalty-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Memo / Invoice #</th>
+                            <th>Receipt Photo</th>
+                            <th>Customer Phone</th>
+                            <th>Branch</th>
+                            <th style="text-align: center;">Cups</th>
+                            <th>Verification Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ( $recent_invoices as $inv_post ) : 
+                            $inv_no  = get_post_meta( $inv_post->ID, '_santino_invoice_number', true );
+                            $phone   = get_post_meta( $inv_post->ID, '_santino_invoice_phone', true );
+                            $branch  = get_post_meta( $inv_post->ID, '_santino_invoice_branch', true );
+                            $cups    = max( 1, intval( get_post_meta( $inv_post->ID, '_santino_invoice_cups', true ) ?: 1 ) );
+                            $status  = get_post_meta( $inv_post->ID, '_santino_invoice_status', true ) ?: 'pending';
+                            $img_url = get_post_meta( $inv_post->ID, '_santino_invoice_image_url', true ) ?: get_the_post_thumbnail_url( $inv_post->ID, 'thumbnail' );
+                            $approve_url = wp_nonce_url( admin_url( 'admin.php?action=santino_approve_invoice&invoice_id=' . $inv_post->ID ), 'santino_approve_' . $inv_post->ID );
+                        ?>
+                        <tr>
+                            <td style="color: #64748b; font-size: 12px;">
+                                <?php echo esc_html( get_the_date( 'M j, Y - H:i', $inv_post ) ); ?>
+                            </td>
+                            <td>
+                                <a href="<?php echo esc_url( get_edit_post_link( $inv_post->ID ) ); ?>" style="font-weight: 700; color: #0f172a; text-decoration: none; font-size: 13px;">
+                                    <?php echo esc_html( $inv_no ?: $inv_post->post_title ); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <?php if ( $img_url ) : ?>
+                                    <a href="<?php echo esc_url( $img_url ); ?>" target="_blank" title="View Full Receipt">
+                                        <img src="<?php echo esc_url( $img_url ); ?>" style="width: 38px; height: 38px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; vertical-align: middle;">
+                                    </a>
+                                <?php else : ?>
+                                    <span style="color: #94a3b8; font-size: 11px;">No Photo</span>
+                                <?php endif; ?>
+                            </td>
+                            <td style="font-weight: 600;">
+                                <?php echo esc_html( self::normalize_phone( $phone ) ); ?>
+                            </td>
+                            <td style="color: #475569;">
+                                <?php echo esc_html( $branch ?: '—' ); ?>
+                            </td>
+                            <td style="text-align: center;">
+                                <strong style="color: #00625d; font-size: 13px;"><?php echo esc_html( $cups ); ?></strong> ☕
+                            </td>
+                            <td>
+                                <?php if ( $status === 'approved' ) : ?>
+                                    <span class="badge-pill badge-approved">✓ APPROVED</span>
+                                <?php elseif ( $status === 'rejected' ) : ?>
+                                    <span class="badge-pill badge-rejected">✗ REJECTED</span>
+                                <?php else : ?>
+                                    <span class="badge-pill badge-pending">⏳ PENDING</span>
+                                <?php endif; ?>
+                            </td>
+                            <td style="text-align: right;">
+                                <?php if ( $status === 'pending' ) : ?>
+                                    <a href="<?php echo esc_url( $approve_url ); ?>" class="button button-small button-primary" style="background: #00625d; border-color: #004d49; font-weight: 700;">
+                                        ✓ Approve
+                                    </a>
+                                <?php else : ?>
+                                    <a href="<?php echo esc_url( get_edit_post_link( $inv_post->ID ) ); ?>" class="button button-small">View</a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <?php else : ?>
+                    <p style="color: #64748b; margin: 12px 0; font-size: 13px;">No invoice submissions yet.</p>
+                <?php endif; ?>
+            </div>
+
+            <!-- Free Vouchers Activity -->
+            <?php if ( ! empty( $recent_vouchers ) ) : ?>
+            <div class="loyalty-section" style="margin-bottom: 0;">
+                <div class="loyalty-title">
+                    <span>🎟️ Free Coffee Reward Vouchers (Latest Generated)</span>
+                </div>
+                <table class="loyalty-table">
+                    <thead>
+                        <tr>
+                            <th>Voucher Code</th>
+                            <th>Member Phone</th>
+                            <th>Status</th>
+                            <th>Awarded Date</th>
+                            <th>Redeemed Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ( $recent_vouchers as $v_post ) : 
+                            $v_code   = get_post_meta( $v_post->ID, '_santino_voucher_code', true ) ?: $v_post->post_title;
+                            $v_phone  = get_post_meta( $v_post->ID, '_santino_voucher_phone', true );
+                            $v_status = get_post_meta( $v_post->ID, '_santino_voucher_status', true ) ?: 'unused';
+                            $v_red_at = get_post_meta( $v_post->ID, '_santino_voucher_redeemed_at', true );
+                        ?>
+                        <tr>
+                            <td>
+                                <strong class="badge-pill badge-voucher" style="font-size: 12px;"><?php echo esc_html( $v_code ); ?></strong>
+                            </td>
+                            <td>
+                                <?php echo esc_html( self::normalize_phone( $v_phone ) ); ?>
+                            </td>
+                            <td>
+                                <?php if ( $v_status === 'redeemed' ) : ?>
+                                    <span class="badge-pill badge-approved">✓ REDEEMED / SERVED</span>
+                                <?php else : ?>
+                                    <span class="badge-pill badge-pending" style="background: #fdf2f8; color: #db2777;">ACTIVE / READY TO CLAIM</span>
+                                <?php endif; ?>
+                            </td>
+                            <td style="color: #64748b; font-size: 12px;">
+                                <?php echo esc_html( get_the_date( 'M j, Y - H:i', $v_post ) ); ?>
+                            </td>
+                            <td style="color: #64748b; font-size: 12px;">
+                                <?php echo esc_html( $v_red_at ? date( 'M j, Y - H:i', strtotime( $v_red_at ) ) : '—' ); ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php endif; ?>
         </div>
         <?php
     }
