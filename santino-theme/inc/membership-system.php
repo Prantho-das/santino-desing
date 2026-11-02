@@ -331,62 +331,6 @@ class Santino_Membership_System {
                 <td><input type="number" name="santino_cup_stamps" min="0" max="5" value="<?php echo esc_attr( $stamps ); ?>" style="width: 80px;"></td>
             </tr>
         </table>
-
-        <?php
-        $lookup_url = home_url( '/membership/?query=' . urlencode( $phone ?: $member_id ) );
-        $gen_page_url = admin_url( 'edit.php?post_type=santino_member&page=santino-qr-generator&member_id=' . $post->ID );
-        ?>
-        <div style="margin-top: 24px; padding: 20px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
-            <div id="memberMetaQrBox" style="background: #fff; padding: 12px; border: 2px dashed #00625d; border-radius: 10px; text-align: center; min-width: 140px;">
-                <div id="memberMetaQrCode"></div>
-                <div style="font-size: 11px; font-weight: bold; color: #00625d; margin-top: 6px;">SCAN FOR STAMPS</div>
-            </div>
-            <div style="flex: 1; min-width: 250px;">
-                <h4 style="margin: 0 0 6px 0; color: #00625d; font-size: 15px;">📱 Member Digital QR Pass</h4>
-                <p style="margin: 0 0 12px 0; color: #64748b; font-size: 13px;">
-                    Scan with any mobile camera at the cafe counter to instantly look up this member's stamp progress and log invoices.
-                </p>
-                <div style="font-size: 12px; font-family: monospace; background: #f1f5f9; padding: 6px 10px; border-radius: 6px; word-break: break-all; margin-bottom: 12px;">
-                    <?php echo esc_html( $lookup_url ); ?>
-                </div>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <a href="<?php echo esc_url( $gen_page_url ); ?>" class="button button-primary" style="background: #00625d; border-color: #004d49;">
-                        ⚡ Open in QR Generator &amp; Print Card
-                    </a>
-                    <button type="button" class="button" onclick="downloadMemberMetaQr()">
-                        ⬇ Download QR PNG
-                    </button>
-                </div>
-            </div>
-        </div>
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var qrTarget = document.getElementById('memberMetaQrCode');
-            if (qrTarget && typeof QRCode !== 'undefined') {
-                new QRCode(qrTarget, {
-                    text: '<?php echo esc_js( $lookup_url ); ?>',
-                    width: 128,
-                    height: 128,
-                    colorDark: '#00625d',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-            } else if (qrTarget) {
-                qrTarget.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=128x128&color=00625d&data=<?php echo urlencode( $lookup_url ); ?>" width="128" height="128" />';
-            }
-        });
-        function downloadMemberMetaQr() {
-            var canvas = document.querySelector('#memberMetaQrCode canvas');
-            var img = document.querySelector('#memberMetaQrCode img');
-            var dataUrl = canvas ? canvas.toDataURL('image/png') : (img ? img.src : '');
-            if (dataUrl) {
-                var a = document.createElement('a');
-                a.href = dataUrl;
-                a.download = 'santino-qr-<?php echo esc_js( $member_id ); ?>.png';
-                a.click();
-            }
-        }
-        </script>
         <?php
     }
 
@@ -621,7 +565,6 @@ class Santino_Membership_System {
             'cb'            => $columns['cb'],
             'title'         => __( 'Member', 'santino' ),
             'member_id'     => __( 'Member ID', 'santino' ),
-            'qr_pass'       => __( 'QR Pass', 'santino' ),
             'phone'         => __( 'Mobile', 'santino' ),
             'birthday'      => __( 'Birthday', 'santino' ),
             'email'         => __( 'Email', 'santino' ),
@@ -635,17 +578,6 @@ class Santino_Membership_System {
         switch ( $column ) {
             case 'member_id':
                 echo '<strong style="color:#00625d; font-family:monospace;">' . esc_html( get_post_meta( $post_id, '_santino_member_id', true ) ?: 'N/A' ) . '</strong>';
-                break;
-            case 'qr_pass':
-                $phone = get_post_meta( $post_id, '_santino_member_phone', true );
-                $mid   = get_post_meta( $post_id, '_santino_member_id', true );
-                $q_url = home_url( '/membership/?query=' . urlencode( $phone ?: $mid ) );
-                $gen_link = admin_url( 'edit.php?post_type=santino_member&page=santino-qr-generator&member_id=' . $post_id );
-                $qr_img = 'https://api.qrserver.com/v1/create-qr-code/?size=60x60&color=00625d&data=' . urlencode( $q_url );
-                echo '<a href="' . esc_url( $gen_link ) . '" title="View / Print Member QR Pass" style="display:inline-flex; align-items:center; gap:5px; text-decoration:none; padding:3px 8px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px;">';
-                echo '<img src="' . esc_url( $qr_img ) . '" width="20" height="20" style="vertical-align:middle; border-radius:2px;" alt="QR" />';
-                echo '<span style="font-size:11px; font-weight:bold; color:#00625d;">Print QR</span>';
-                echo '</a>';
                 break;
             case 'phone':
                 echo esc_html( get_post_meta( $post_id, '_santino_member_phone', true ) ?: '—' );
