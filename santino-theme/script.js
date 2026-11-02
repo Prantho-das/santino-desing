@@ -246,6 +246,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // URL Hash Deep Linking for Membership / Portal Tabs
+  const handleTabHash = () => {
+    const rawHash = (window.location.hash || '').toLowerCase().replace('#', '').trim();
+    if (!rawHash) return;
+
+    let targetBtn = null;
+
+    if (rawHash === 'invoice' || rawHash === 'log-invoice' || rawHash === 'invoice-pane' || rawHash === 'invoice-tab') {
+      targetBtn = document.getElementById('invoice-tab');
+    } else if (rawHash === 'register' || rawHash === 'join' || rawHash === 'register-pane' || rawHash === 'register-tab' || rawHash === 'coffee-club') {
+      targetBtn = document.getElementById('register-tab');
+    } else if (rawHash === 'stamps' || rawHash === 'stamps-pane' || rawHash === 'stamps-tab' || rawHash === 'check' || rawHash === 'lookup' || rawHash === 'stamp-status') {
+      targetBtn = document.getElementById('stamps-tab');
+    } else {
+      targetBtn = document.querySelector(`button[data-bs-target="#${rawHash}"], button[data-bs-target="#${rawHash}-pane"], button#${rawHash}-tab, #${rawHash}`);
+    }
+
+    if (targetBtn && (targetBtn.getAttribute('data-bs-toggle') === 'pill' || targetBtn.getAttribute('data-bs-toggle') === 'tab')) {
+      if (typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+        const tab = new bootstrap.Tab(targetBtn);
+        tab.show();
+      } else {
+        targetBtn.click();
+      }
+      setTimeout(() => {
+        const tabsWrapper = targetBtn.closest('.portal-card') || targetBtn.closest('#loyaltyTabs') || targetBtn;
+        tabsWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+    }
+  };
+
+  handleTabHash();
+  window.addEventListener('hashchange', handleTabHash);
+
+  document.querySelectorAll('#loyaltyTabs button[data-bs-toggle="pill"], .portal-tabs button[data-bs-toggle="pill"]').forEach(btn => {
+    btn.addEventListener('shown.bs.tab', function(e) {
+      const targetId = (e.target.getAttribute('data-bs-target') || '').replace('#', '').replace('-pane', '');
+      if (targetId && history.replaceState) {
+        history.replaceState(null, null, '#' + targetId);
+      }
+    });
+  });
+
   // Stepper handlers for Cups count
   document.addEventListener('click', function(e) {
     const plusBtn = e.target.closest('.santino-cup-plus');
