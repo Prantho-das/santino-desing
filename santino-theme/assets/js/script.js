@@ -497,9 +497,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="p-2.5 rounded-3 border" style="background: #091715; border-color: rgba(195,153,108,0.3) !important;">
                       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
                         <code class="fs-6 fw-bold px-2 py-0.5 rounded" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; letter-spacing: 0.5px;">${v.code}</code>
-                        <span class="badge ${v.status === 'unused' ? 'bg-success' : (v.status === 'pending_redemption' ? 'bg-warning text-dark' : 'bg-secondary')}" style="font-size: 10px;">
-                          ${v.status === 'unused' ? '✓ UNUSED / READY TO CLAIM' : (v.status === 'pending_redemption' ? '⏳ PENDING PORTAL APPROVAL' : '✓ REDEEMED')}
-                        </span>
+                        <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                           <button type="button" class="btn btn-outline-light btn-sm fw-bold px-2.5 py-0.5 rounded-pill santino-download-voucher-btn" data-code="${v.code}" data-name="${d.name}" data-phone="${d.phone}" data-id="${d.member_id}" data-type="voucher" data-status="${v.status}" style="font-size: 10px; border-color: rgba(223,190,141,0.4); color: #dfbe8d;">
+                            📥 ডাউনলোড / Download
+                          </button>
+                          <span class="badge ${v.status === 'unused' ? 'bg-success' : (v.status === 'pending_redemption' ? 'bg-warning text-dark' : 'bg-secondary')}" style="font-size: 10px;">
+                            ${v.status === 'unused' ? '✓ UNUSED / READY TO CLAIM' : (v.status === 'pending_redemption' ? '⏳ PENDING PORTAL APPROVAL' : '✓ REDEEMED')}
+                          </span>
+                        </div>
                       </div>
                       ${v.status === 'unused' ? `
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-2 pt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important;">
@@ -530,9 +535,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="fw-bold text-white small">${r.item}</span>
                         <div class="text-white-50" style="font-size: 11px;">#${r.code} • ${r.branch} • ${r.date}</div>
                       </div>
-                      <span class="badge ${r.status === 'approved' ? 'bg-success' : (r.status === 'rejected' ? 'bg-danger' : 'bg-warning text-dark')}" style="font-size: 10px;">
-                        ${r.status === 'approved' ? '✓ APPROVED (Served)' : (r.status === 'rejected' ? '✗ REJECTED' : '⏳ PENDING PORTAL APPROVAL')}
-                      </span>
+                      <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                        <button type="button" class="btn btn-outline-light btn-sm fw-bold px-2.5 py-0.5 rounded-pill santino-download-voucher-btn" data-code="${r.code}" data-name="${d.name}" data-phone="${d.phone}" data-id="${d.member_id}" data-item="${r.item}" data-branch="${r.branch}" data-date="${r.date}" data-type="redeem" data-status="${r.status}" style="font-size: 10px; border-color: rgba(223,190,141,0.4); color: #dfbe8d;">
+                          📥 স্লিপ ডাউনলোড
+                        </button>
+                        <span class="badge ${r.status === 'approved' ? 'bg-success' : (r.status === 'rejected' ? 'bg-danger' : 'bg-warning text-dark')}" style="font-size: 10px;">
+                          ${r.status === 'approved' ? '✓ APPROVED (Served)' : (r.status === 'rejected' ? '✗ REJECTED' : '⏳ PENDING PORTAL APPROVAL')}
+                        </span>
+                      </div>
                     </div>
                   `).join('')}
                 </div>
@@ -889,6 +899,283 @@ window.shareRecord = function() {
     prompt('Copy this link:', url);
   }
 };
+
+// Global Digital Voucher & Redeem Slip Generator & Downloader
+window.generateAndDownloadSantinoVoucher = function(info) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1100;
+  canvas.height = 560;
+  const ctx = canvas.getContext('2d');
+
+  const bgGrad = ctx.createLinearGradient(0, 0, 1100, 560);
+  bgGrad.addColorStop(0, '#041816');
+  bgGrad.addColorStop(0.5, '#08332f');
+  bgGrad.addColorStop(1, '#020d0c');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, 1100, 560);
+
+  const radialGlow = ctx.createRadialGradient(250, 150, 20, 250, 150, 450);
+  radialGlow.addColorStop(0, 'rgba(195, 153, 108, 0.22)');
+  radialGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = radialGlow;
+  ctx.fillRect(0, 0, 1100, 560);
+
+  ctx.strokeStyle = '#c3996c';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(16, 16, 1068, 528);
+
+  ctx.strokeStyle = 'rgba(223, 190, 141, 0.45)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([8, 6]);
+  ctx.strokeRect(28, 28, 1044, 504);
+  ctx.setLineDash([]);
+
+  ctx.strokeStyle = 'rgba(223, 190, 141, 0.5)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([8, 8]);
+  ctx.beginPath();
+  ctx.moveTo(740, 28);
+  ctx.lineTo(740, 532);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.fillStyle = '#0f172a';
+  ctx.beginPath();
+  ctx.arc(740, 28, 20, 0, Math.PI);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(740, 532, 20, Math.PI, 0);
+  ctx.fill();
+
+  ctx.fillStyle = '#dfbe8d';
+  ctx.font = 'bold 16px "Montserrat", sans-serif';
+  ctx.fillText('SANTINO SPECIALTY COFFEE ROASTERS', 55, 75);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '13px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('VIP REWARD PROGRAM • DIGITAL COFFEE PASS', 55, 98);
+
+  const lineGrad = ctx.createLinearGradient(55, 115, 680, 115);
+  lineGrad.addColorStop(0, '#dfbe8d');
+  lineGrad.addColorStop(1, 'rgba(223, 190, 141, 0)');
+  ctx.strokeStyle = lineGrad;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(55, 115);
+  ctx.lineTo(680, 115);
+  ctx.stroke();
+
+  ctx.fillStyle = '#dfbe8d';
+  ctx.font = 'bold 36px "Montserrat", sans-serif';
+  if (info.type === 'redeem') {
+    ctx.fillText('FREE COFFEE REDEEM SLIP', 55, 168);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Item: ' + (info.item || 'Handcrafted Cappuccino'), 55, 204);
+  } else {
+    ctx.fillText('1 FREE HANDCRAFTED COFFEE', 55, 168);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Complimentary Beverage Reward (5-Cup Stamp Completion)', 55, 204);
+  }
+
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+  ctx.fillRect(55, 235, 630, 200);
+  ctx.strokeStyle = 'rgba(223, 190, 141, 0.3)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(55, 235, 630, 200);
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '12px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('MEMBER NAME', 80, 268);
+  ctx.fillText('PHONE NUMBER', 380, 268);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText(info.name || 'Valued Regular Member', 80, 296);
+  ctx.fillText(info.phone || '017XXXXXXXX', 380, 296);
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '12px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('MEMBERSHIP VIP ID', 80, 345);
+  ctx.fillText('OUTLET / LOCATION', 380, 345);
+
+  ctx.fillStyle = '#dfbe8d';
+  ctx.font = 'bold 16px "Courier New", monospace';
+  ctx.fillText(info.id || 'SNT-REG-VIP', 80, 372);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText(info.branch || 'Valid Across All Santino Outlets', 380, 372);
+
+  ctx.fillStyle = '#64748b';
+  ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('Status: ' + (info.status || 'Active').toUpperCase() + (info.date ? ' • Date: ' + info.date : ''), 80, 412);
+
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+  ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('Present this official digital voucher pass to the barista before placing your order. Non-transferable.', 55, 478);
+  ctx.fillText('Santino Specialty Coffee • ISO Accredited Barista Standards • support: sales@santino.com.bd', 55, 498);
+
+  ctx.fillStyle = 'rgba(223, 190, 141, 0.12)';
+  ctx.fillRect(765, 55, 285, 120);
+  ctx.strokeStyle = 'rgba(223, 190, 141, 0.4)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(765, 55, 285, 120);
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = 'bold 12px "Montserrat", sans-serif';
+  ctx.fillText('OFFICIAL SERIAL CODE', 810, 85);
+
+  ctx.fillStyle = '#dfbe8d';
+  ctx.font = 'bold 22px "Courier New", monospace';
+  ctx.fillText(info.code || 'FREE-CUP-XXXXXX', 785, 125);
+
+  const isApprovedOrUnused = info.status === 'unused' || info.status === 'approved';
+  ctx.fillStyle = isApprovedOrUnused ? '#059669' : '#d97706';
+  ctx.fillRect(765, 195, 285, 34);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText(isApprovedOrUnused ? '✓ AUTHENTICATED VOUCHER' : '⏳ ' + (info.status || 'PENDING').toUpperCase(), 805, 217);
+
+  const barX = 765;
+  const barY = 250;
+  const barW = 285;
+  const barH = 110;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(barX, barY, barW, barH);
+
+  ctx.fillStyle = '#000000';
+  let curX = barX + 12;
+  const seedStr = (info.code || 'SANTINO') + (info.phone || '8801');
+  for (let i = 0; i < 48; i++) {
+    const charCode = seedStr.charCodeAt(i % seedStr.length) + i;
+    const w = (charCode % 4) + 1.8;
+    const gap = (charCode % 3) + 2;
+    if (curX + w < barX + barW - 12) {
+      ctx.fillRect(curX, barY + 10, w, barH - 30);
+      curX += w + gap;
+    }
+  }
+  ctx.font = 'bold 11px "Courier New", monospace';
+  ctx.fillStyle = '#333333';
+  ctx.fillText(info.code || 'FREE-CUP-XXXX', barX + 50, barY + barH - 8);
+
+  ctx.strokeStyle = 'rgba(223, 190, 141, 0.6)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.arc(905, 440, 50, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.fillStyle = '#dfbe8d';
+  ctx.font = 'bold 10px "Montserrat", sans-serif';
+  ctx.fillText('SANTINO ROASTERY', 855, 425);
+  ctx.fillText('VIP STAMP CARD', 860, 442);
+  ctx.fillText('VERIFIED 2026', 868, 458);
+
+  const dataUrl = canvas.toDataURL('image/png');
+  const filename = `Santino-${info.type === 'redeem' ? 'Redeem-Slip' : 'Free-Coffee-Voucher'}-${info.code || 'PASS'}.png`;
+
+  const link = document.createElement('a');
+  link.download = filename;
+  link.href = dataUrl;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  let previewModal = document.getElementById('santinoVoucherPreviewModal');
+  if (!previewModal) {
+    previewModal = document.createElement('div');
+    previewModal.id = 'santinoVoucherPreviewModal';
+    previewModal.className = 'modal fade';
+    previewModal.tabIndex = -1;
+    previewModal.innerHTML = `
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 border-0 shadow-2xl text-white" style="background: #061917; border: 1px solid rgba(195,153,108,0.4) !important;">
+          <div class="modal-header border-bottom" style="border-color: rgba(255,255,255,0.1) !important;">
+            <h5 class="modal-title fw-bold text-white font-heading" style="font-size: 16px;">
+              🎉 ভাউচার কার্ড প্রস্তুত (Digital Voucher Pass)
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body p-3 p-md-4 text-center">
+            <p class="small text-white-50 mb-3">আপনার ভাউচার ইমেজটি ডাউনলোড হয়েছে। কাউন্টারে এই ছবি বা কোডটি দেখিয়ে ফ্রি কফি সংগ্রহ করুন।</p>
+            <div class="rounded-3 overflow-hidden shadow-lg border" style="border-color: rgba(195,153,108,0.4) !important;">
+              <img id="santinoVoucherPreviewImg" src="" alt="Santino Voucher" class="img-fluid w-100" style="display: block;">
+            </div>
+          </div>
+          <div class="modal-footer border-top d-flex justify-content-between" style="border-color: rgba(255,255,255,0.1) !important;">
+            <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-3" data-bs-dismiss="modal">বন্ধ করুন</button>
+            <div class="d-flex gap-2">
+              <button type="button" id="santinoVoucherPrintBtn" class="btn btn-outline-warning btn-sm fw-bold rounded-pill px-3">
+                🖨️ প্রিন্ট করুন
+              </button>
+              <a id="santinoVoucherDownloadAgainBtn" href="" download="" class="btn btn-sm fw-bold rounded-pill px-3" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; text-decoration: none;">
+                📥 আবার ডাউনলোড
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(previewModal);
+
+    document.getElementById('santinoVoucherPrintBtn').addEventListener('click', function() {
+      const img = document.getElementById('santinoVoucherPreviewImg');
+      const win = window.open('', '_blank');
+      win.document.write(`
+        <html>
+          <head>
+            <title>Print Santino Coffee Voucher</title>
+            <style>
+              body { margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #fff; }
+              img { max-width: 90%; height: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+            </style>
+          </head>
+          <body onload="window.print(); window.close();">
+            <img src="${img.src}">
+          </body>
+        </html>
+      `);
+      win.document.close();
+    });
+  }
+
+  document.getElementById('santinoVoucherPreviewImg').src = dataUrl;
+  const downAgain = document.getElementById('santinoVoucherDownloadAgainBtn');
+  downAgain.href = dataUrl;
+  downAgain.download = filename;
+
+  if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+    const modal = new bootstrap.Modal(previewModal);
+    modal.show();
+  } else {
+    previewModal.classList.add('show');
+    previewModal.style.display = 'block';
+  }
+};
+
+// Listen for Voucher / Redeem download clicks
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.santino-download-voucher-btn');
+  if (!btn) return;
+  e.preventDefault();
+
+  const info = {
+    code: btn.getAttribute('data-code') || '',
+    name: btn.getAttribute('data-name') || '',
+    phone: btn.getAttribute('data-phone') || '',
+    id: btn.getAttribute('data-id') || '',
+    type: btn.getAttribute('data-type') || 'voucher',
+    status: btn.getAttribute('data-status') || 'unused',
+    item: btn.getAttribute('data-item') || '',
+    branch: btn.getAttribute('data-branch') || '',
+    date: btn.getAttribute('data-date') || ''
+  };
+
+  window.generateAndDownloadSantinoVoucher(info);
+});
 
 // Global Helpers for Machines & Beans Filtering
 window.filterMachines = function(cat, btn) {
