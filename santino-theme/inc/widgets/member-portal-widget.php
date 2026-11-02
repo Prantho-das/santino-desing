@@ -182,13 +182,22 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
         $settings = $this->get_settings_for_display();
 
         $show_hero   = ( $settings['show_hero'] ?? 'yes' ) === 'yes';
-        $hero_bg_url = ! empty( $settings['hero_bg_image']['url'] ) 
-            ? $settings['hero_bg_image']['url'] 
-            : ( function_exists( 'santino_get_page_banner' ) ? santino_get_page_banner( 'santino-member', 'imgi_20_santino_-_250522-07574.jpg' ) : ( function_exists( 'santino_img' ) ? santino_img( 'imgi_20_santino_-_250522-07574.jpg' ) : '' ) );
+        $hero_bg_url = '';
+        if ( ! empty( $settings['hero_bg_image']['url'] ) ) {
+            $hero_bg_url = $settings['hero_bg_image']['url'];
+        } elseif ( function_exists( 'santino_get_page_banner' ) ) {
+            $hero_bg_url = santino_get_page_banner( 'santino-member', 'imgi_20_santino_-_250522-07574.jpg' );
+        }
+        if ( empty( $hero_bg_url ) && function_exists( 'santino_img' ) ) {
+            $hero_bg_url = santino_img( 'imgi_20_santino_-_250522-07574.jpg' );
+        }
+        if ( $hero_bg_url ) {
+            $hero_bg_url = set_url_scheme( $hero_bg_url );
+        }
 
-        $hero_badge  = $settings['hero_badge'] ?: 'SANTINO VIP MEMBER PORTAL';
-        $hero_title  = $settings['hero_title'] ?: 'Santino Member Club & Rewards';
-        $hero_desc   = $settings['hero_desc'] ?: 'Track your 5-cup coffee stamps, upload cafe invoices, and claim your free 6th handcrafted cup across Santino partner cafes.';
+        $hero_badge  = ! empty( $settings['hero_badge'] ) ? $settings['hero_badge'] : 'SANTINO VIP MEMBER PORTAL';
+        $hero_title  = ! empty( $settings['hero_title'] ) ? $settings['hero_title'] : 'Santino Member Club &amp; Rewards';
+        $hero_desc   = ! empty( $settings['hero_desc'] ) ? $settings['hero_desc'] : 'Track your 5-cup coffee stamps, upload cafe invoices, and claim your free 6th handcrafted cup across Santino partner cafes.';
 
         $btn1_text   = $settings['hero_btn1_text'] ?: 'Check Stamp Card';
         $btn1_url    = ! empty( $settings['hero_btn1_url']['url'] ) ? $settings['hero_btn1_url']['url'] : '#clubPortal';
@@ -521,16 +530,16 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
             <div class="container position-relative" style="max-width: 840px; z-index: 2;">
               <div class="sec-pill-badge-wrap light mb-3">
                 <span class="sec-pill-line"></span>
-                <span class="sec-pill-badge" style="background: rgba(223, 190, 141, 0.2); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.35);"><i class="bi bi-gem me-1 text-warning"></i> <?php echo esc_html( $hero_badge ); ?></span>
+                <span class="sec-pill-badge" style="background: rgba(223, 190, 141, 0.2); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.35);"><i class="bi bi-gem me-1 text-warning"></i> <?php echo wp_kses_post( $hero_badge ); ?></span>
                 <span class="sec-pill-line"></span>
               </div>
 
               <h1 class="pro-banner-title mb-3" style="font-family: var(--kp-font-title, 'Montserrat', sans-serif); font-size: clamp(2.3rem, 4.5vw, 3.6rem); font-weight: 900; line-height: 1.18; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 14px rgba(0,0,0,0.5);">
-                <?php echo esc_html( $hero_title ); ?>
+                <?php echo wp_kses_post( $hero_title ); ?>
               </h1>
 
               <p class="pro-banner-desc mb-4" style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); max-width: 640px; font-size: 1.08rem; line-height: 1.65; color: rgba(255, 255, 255, 0.92); margin: 0 auto; text-shadow: 0 1px 8px rgba(0,0,0,0.4);">
-                <?php echo esc_html( $hero_desc ); ?>
+                <?php echo wp_kses_post( $hero_desc ); ?>
               </p>
 
               <div class="pro-banner-actions d-flex justify-content-center align-items-center gap-3 flex-wrap">

@@ -31,6 +31,16 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
         );
 
         $this->add_control(
+            'show_hero',
+            array(
+                'label'        => esc_html__( 'Show Hero Banner', 'santino' ),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'default'      => 'yes',
+                'return_value' => 'yes',
+            )
+        );
+
+        $this->add_control(
             'hero_badge',
             array(
                 'label'   => esc_html__( 'Badge Text', 'santino' ),
@@ -42,9 +52,10 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'hero_title',
             array(
-                'label'   => esc_html__( 'Hero Title', 'santino' ),
-                'type'    => \Elementor\Controls_Manager::TEXT,
-                'default' => 'Exclusive Connoisseur Privileges',
+                'label'       => esc_html__( 'Hero Title', 'santino' ),
+                'type'        => \Elementor\Controls_Manager::TEXT,
+                'default'     => 'Exclusive Connoisseur <span style="color: #dfbe8d;">Privileges</span>',
+                'description' => esc_html__( 'HTML tags like <span> or <br> are supported for gold highlight accent.', 'santino' ),
             )
         );
 
@@ -115,16 +126,6 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
             array(
                 'label' => esc_html__( 'Sections Visibility & Metrics', 'santino' ),
                 'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
-            )
-        );
-
-        $this->add_control(
-            'show_hero',
-            array(
-                'label'        => esc_html__( 'Show Hero Banner', 'santino' ),
-                'type'         => \Elementor\Controls_Manager::SWITCHER,
-                'default'      => 'yes',
-                'return_value' => 'yes',
             )
         );
 
@@ -494,14 +495,27 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
         </style>
 
         <?php
-        $hero_bg_url = ! empty( $settings['hero_bg_image']['url'] ) 
-            ? $settings['hero_bg_image']['url'] 
-            : ( function_exists('santino_get_page_banner') ? santino_get_page_banner('membership', 'imgi_20_santino_-_250522-07574.jpg') : santino_img('imgi_20_santino_-_250522-07574.jpg') );
-        $btn1_text = ! empty( $settings['hero_btn1_text'] ) ? $settings['hero_btn1_text'] : 'Join Coffee Club';
-        $btn1_url  = ! empty( $settings['hero_btn1_url']['url'] ) ? $settings['hero_btn1_url']['url'] : '#clubPortal';
-        $btn2_text = ! empty( $settings['hero_btn2_text'] ) ? $settings['hero_btn2_text'] : 'Explore Perks';
-        $btn2_url  = ! empty( $settings['hero_btn2_url']['url'] ) ? $settings['hero_btn2_url']['url'] : '#perks';
-        $show_hero = ( $settings['show_hero'] ?? 'yes' ) === 'yes';
+        $hero_bg_url = '';
+        if ( ! empty( $settings['hero_bg_image']['url'] ) ) {
+            $hero_bg_url = $settings['hero_bg_image']['url'];
+        } elseif ( function_exists( 'santino_get_page_banner' ) ) {
+            $hero_bg_url = santino_get_page_banner( 'membership', 'imgi_20_santino_-_250522-07574.jpg' );
+        }
+        if ( empty( $hero_bg_url ) && function_exists( 'santino_img' ) ) {
+            $hero_bg_url = santino_img( 'imgi_20_santino_-_250522-07574.jpg' );
+        }
+        if ( $hero_bg_url ) {
+            $hero_bg_url = set_url_scheme( $hero_bg_url );
+        }
+
+        $hero_badge  = ! empty( $settings['hero_badge'] ) ? $settings['hero_badge'] : 'SANTINO VIP COFFEE CLUB';
+        $hero_title  = ! empty( $settings['hero_title'] ) ? $settings['hero_title'] : 'Exclusive Connoisseur <span style="color: #dfbe8d;">Privileges</span>';
+        $hero_desc   = ! empty( $settings['hero_desc'] ) ? $settings['hero_desc'] : 'Private cupping sessions, seasonal micro-lot allocations, and 15% VIP artisan bean discounts across Bangladesh.';
+        $btn1_text   = ! empty( $settings['hero_btn1_text'] ) ? $settings['hero_btn1_text'] : 'Join Coffee Club';
+        $btn1_url    = ! empty( $settings['hero_btn1_url']['url'] ) ? $settings['hero_btn1_url']['url'] : '#clubPortal';
+        $btn2_text   = ! empty( $settings['hero_btn2_text'] ) ? $settings['hero_btn2_text'] : 'Explore Perks';
+        $btn2_url    = ! empty( $settings['hero_btn2_url']['url'] ) ? $settings['hero_btn2_url']['url'] : '#perks';
+        $show_hero   = ( $settings['show_hero'] ?? 'yes' ) === 'yes';
         $show_metrics = ( $settings['show_metrics'] ?? 'yes' ) === 'yes';
         ?>
 
@@ -513,16 +527,16 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
             <div class="container position-relative" style="max-width: 820px; z-index: 2;">
               <div class="sec-pill-badge-wrap light mb-3">
                 <span class="sec-pill-line"></span>
-                <span class="sec-pill-badge"><i class="bi bi-gem me-1 text-warning"></i> <?php echo esc_html( $settings['hero_badge'] ); ?></span>
+                <span class="sec-pill-badge"><i class="bi bi-gem me-1 text-warning"></i> <?php echo wp_kses_post( $hero_badge ); ?></span>
                 <span class="sec-pill-line"></span>
               </div>
 
               <h1 class="pro-banner-title mb-3" style="font-family: var(--kp-font-title, 'Montserrat', sans-serif); font-size: clamp(2.3rem, 4.5vw, 3.6rem); font-weight: 900; line-height: 1.18; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 14px rgba(0,0,0,0.5);">
-                <?php echo esc_html( $settings['hero_title'] ); ?>
+                <?php echo wp_kses_post( $hero_title ); ?>
               </h1>
 
               <p class="pro-banner-desc mb-4" style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); max-width: 640px; font-size: 1.08rem; line-height: 1.65; color: rgba(255, 255, 255, 0.92); margin: 0 auto; text-shadow: 0 1px 8px rgba(0,0,0,0.4);">
-                <?php echo esc_html( $settings['hero_desc'] ); ?>
+                <?php echo wp_kses_post( $hero_desc ); ?>
               </p>
 
               <div class="pro-banner-actions d-flex justify-content-center align-items-center gap-3 flex-wrap">

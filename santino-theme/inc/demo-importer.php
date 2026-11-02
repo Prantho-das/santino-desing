@@ -419,6 +419,10 @@ class Santino_Demo_Importer {
                 'title'    => 'VIP Coffee Club Membership',
                 'template' => 'templates/template-membership.php',
             ),
+            'santino-member' => array(
+                'title'    => 'Santino Member Portal',
+                'template' => 'templates/template-santino-member.php',
+            ),
             'menu' => array(
                 'title'    => 'Beverage & Cafe Menu',
                 'template' => 'templates/template-menu.php',
@@ -537,6 +541,10 @@ class Santino_Demo_Importer {
 
             'membership' => array(
                 self::build_sec( array( array( 'type' => 'santino_membership_solution', 'settings' => array() ) ) ),
+            ),
+
+            'santino-member' => array(
+                self::build_sec( array( array( 'type' => 'santino_member_portal', 'settings' => array() ) ) ),
             ),
 
             'menu' => array(
