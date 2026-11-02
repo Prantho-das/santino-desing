@@ -57,6 +57,107 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        $this->add_control(
+            'hero_bg_image',
+            array(
+                'label'   => esc_html__( 'Hero Background Image', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::MEDIA,
+                'default' => array(
+                    'url' => '',
+                ),
+            )
+        );
+
+        $this->add_control(
+            'hero_btn1_text',
+            array(
+                'label'   => esc_html__( 'Primary Button Text', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Join Coffee Club',
+            )
+        );
+
+        $this->add_control(
+            'hero_btn1_url',
+            array(
+                'label'   => esc_html__( 'Primary Button Link', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::URL,
+                'default' => array(
+                    'url' => '#clubPortal',
+                ),
+            )
+        );
+
+        $this->add_control(
+            'hero_btn2_text',
+            array(
+                'label'   => esc_html__( 'Secondary Button Text', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Explore Perks',
+            )
+        );
+
+        $this->add_control(
+            'hero_btn2_url',
+            array(
+                'label'   => esc_html__( 'Secondary Button Link', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::URL,
+                'default' => array(
+                    'url' => '#perks',
+                ),
+            )
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_display_options',
+            array(
+                'label' => esc_html__( 'Sections Visibility & Metrics', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control(
+            'show_hero',
+            array(
+                'label'        => esc_html__( 'Show Hero Banner', 'santino' ),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'default'      => 'yes',
+                'return_value' => 'yes',
+            )
+        );
+
+        $this->add_control(
+            'show_metrics',
+            array(
+                'label'        => esc_html__( 'Show Floating Metrics', 'santino' ),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'default'      => 'yes',
+                'return_value' => 'yes',
+            )
+        );
+
+        $this->add_control(
+            'show_perks',
+            array(
+                'label'        => esc_html__( 'Show Perks Cards', 'santino' ),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'default'      => 'yes',
+                'return_value' => 'yes',
+            )
+        );
+
+        $this->add_control(
+            'show_portal',
+            array(
+                'label'        => esc_html__( 'Show VIP Club Portal Section', 'santino' ),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'default'      => 'yes',
+                'return_value' => 'yes',
+            )
+        );
+
         $this->end_controls_section();
     }
 
@@ -392,8 +493,21 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
         }
         </style>
 
+        <?php
+        $hero_bg_url = ! empty( $settings['hero_bg_image']['url'] ) 
+            ? $settings['hero_bg_image']['url'] 
+            : ( function_exists('santino_get_page_banner') ? santino_get_page_banner('membership', 'imgi_20_santino_-_250522-07574.jpg') : santino_img('imgi_20_santino_-_250522-07574.jpg') );
+        $btn1_text = ! empty( $settings['hero_btn1_text'] ) ? $settings['hero_btn1_text'] : 'Join Coffee Club';
+        $btn1_url  = ! empty( $settings['hero_btn1_url']['url'] ) ? $settings['hero_btn1_url']['url'] : '#clubPortal';
+        $btn2_text = ! empty( $settings['hero_btn2_text'] ) ? $settings['hero_btn2_text'] : 'Explore Perks';
+        $btn2_url  = ! empty( $settings['hero_btn2_url']['url'] ) ? $settings['hero_btn2_url']['url'] : '#perks';
+        $show_hero = ( $settings['show_hero'] ?? 'yes' ) === 'yes';
+        $show_metrics = ( $settings['show_metrics'] ?? 'yes' ) === 'yes';
+        ?>
+
         <div class="membership-page-wrap">
-          <section class="pro-banner-hero position-relative overflow-hidden text-center" style="background-image: url('<?php echo function_exists('santino_get_page_banner') ? santino_get_page_banner('membership', 'imgi_20_santino_-_250522-07574.jpg') : santino_img('imgi_20_santino_-_250522-07574.jpg'); ?>'); background-position: center; background-size: cover; min-height: 56vh; display: flex; align-items: center; justify-content: center; padding: 80px 20px;">
+          <?php if ( $show_hero ) : ?>
+          <section class="pro-banner-hero position-relative overflow-hidden text-center" style="background-image: url('<?php echo esc_url( $hero_bg_url ); ?>'); background-position: center; background-size: cover; min-height: 56vh; display: flex; align-items: center; justify-content: center; padding: 80px 20px;">
             <div class="pro-banner-overlay" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0, 38, 35, 0.7) 100%); z-index: 1;"></div>
             
             <div class="container position-relative" style="max-width: 820px; z-index: 2;">
@@ -412,18 +526,20 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
               </p>
 
               <div class="pro-banner-actions d-flex justify-content-center align-items-center gap-3 flex-wrap">
-                <a href="#clubPortal" class="btn-hero-lifestyle">
-                  <span>Join Coffee Club</span>
+                <a href="<?php echo esc_url( $btn1_url ); ?>" class="btn-hero-lifestyle">
+                  <span><?php echo esc_html( $btn1_text ); ?></span>
                   <i class="bi bi-arrow-right"></i>
                 </a>
-                <a href="#perks" class="btn-hero-outline">
+                <a href="<?php echo esc_url( $btn2_url ); ?>" class="btn-hero-outline">
                   <i class="bi bi-arrow-down-short text-warning"></i>
-                  <span>Explore Perks</span>
+                  <span><?php echo esc_html( $btn2_text ); ?></span>
                 </a>
               </div>
             </div>
           </section>
+          <?php endif; ?>
 
+          <?php if ( $show_metrics ) : ?>
           <div class="story-metrics-floating-wrap">
             <div class="container">
               <div class="row g-3 g-md-4 text-center justify-content-center">
@@ -458,6 +574,7 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
               </div>
             </div>
           </div>
+          <?php endif; ?>
 
           <section class="py-5 perks-section position-relative overflow-hidden" id="perks">
             <div class="container py-lg-4">

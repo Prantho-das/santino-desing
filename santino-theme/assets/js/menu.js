@@ -1,6 +1,6 @@
 // Santino Coffee - Menu & Order Management System
 
-const menuProducts = [
+let menuProducts = [
   // 1. Hot & Cold Hero Items (Official Poster Items)
   {
     id: 'hero-cappuccino',
@@ -300,6 +300,11 @@ const menuProducts = [
     roast: 'Artisan Pastry'
   }
 ];
+
+// Dynamic override from WordPress Handcrafted Items Backend
+if (typeof santino_menu_data !== 'undefined' && Array.isArray(santino_menu_data.items) && santino_menu_data.items.length > 0) {
+  menuProducts = santino_menu_data.items;
+}
 
 // Shopping Cart State
 let shoppingCart = [];

@@ -42,6 +42,8 @@ class Santino_Membership_System {
         add_action( 'admin_action_santino_approve_redeem', array( __CLASS__, 'handle_admin_approve_redeem' ) );
         add_action( 'admin_action_santino_reject_redeem', array( __CLASS__, 'handle_admin_reject_redeem' ) );
         add_action( 'admin_action_santino_direct_redeem', array( __CLASS__, 'handle_admin_direct_redeem' ) );
+        add_action( 'admin_action_santino_print_redeem_voucher', array( __CLASS__, 'handle_admin_print_redeem_voucher' ) );
+        add_action( 'template_redirect', array( __CLASS__, 'handle_public_print_redeem_voucher' ) );
         add_action( 'admin_notices', array( __CLASS__, 'render_admin_notices' ) );
 
         // AJAX Handlers
@@ -806,12 +808,16 @@ class Santino_Membership_System {
                 }
                 break;
             case 'actions':
-                $status = get_post_meta( $post_id, '_santino_redeem_status', true ) ?: 'pending';
+                $status    = get_post_meta( $post_id, '_santino_redeem_status', true ) ?: 'pending';
+                $print_url = admin_url( 'admin.php?action=santino_print_redeem_voucher&redeem_id=' . $post_id );
                 if ( $status === 'pending' ) {
                     $approve_url = wp_nonce_url( admin_url( 'admin.php?action=santino_approve_redeem&redeem_id=' . $post_id ), 'santino_approve_redeem_' . $post_id );
                     $reject_url  = wp_nonce_url( admin_url( 'admin.php?action=santino_reject_redeem&redeem_id=' . $post_id ), 'santino_reject_redeem_' . $post_id );
-                    echo '<a href="' . esc_url( $approve_url ) . '" class="button button-small button-primary" style="background:#15803d; border-color:#166534;">✓ Approve & Serve</a> ';
-                    echo '<a href="' . esc_url( $reject_url ) . '" class="button button-small" style="color:#b91c1c;">Reject</a>';
+                    echo '<a href="' . esc_url( $approve_url ) . '" class="button button-small button-primary" style="background:#15803d; border-color:#166534;">✓ Approve</a> ';
+                    echo '<a href="' . esc_url( $reject_url ) . '" class="button button-small" style="color:#b91c1c;">Reject</a> ';
+                    echo '<a href="' . esc_url( $print_url ) . '" target="_blank" class="button button-small" title="Print Slip" style="color:#00625d; border-color:#00625d;">🖨️</a>';
+                } elseif ( $status === 'approved' ) {
+                    echo '<a href="' . esc_url( $print_url ) . '" target="_blank" class="button button-small button-primary" style="background:#00625d; border-color:#004d49; font-weight:bold;">🖨️ Print 6th Cup Slip</a>';
                 } else {
                     echo '—';
                 }
@@ -941,7 +947,7 @@ class Santino_Membership_System {
             }
         }
 
-        wp_redirect( admin_url( 'edit.php?post_type=santino_redeem&approved=1' ) );
+        wp_redirect( admin_url( 'edit.php?post_type=santino_redeem&approved=1&print_id=' . $redeem_id ) );
         exit;
     }
 
@@ -1036,18 +1042,235 @@ class Santino_Membership_System {
             }
         }
 
-        wp_redirect( add_query_arg( array( 'post' => $member_id, 'action' => 'edit', 'redeem_success' => '1', 'served_item' => urlencode( $item ) ), admin_url( 'post.php' ) ) );
+        wp_redirect( add_query_arg( array( 'post' => $member_id, 'action' => 'edit', 'redeem_success' => '1', 'served_item' => urlencode( $item ), 'print_id' => $redeem_id ), admin_url( 'post.php' ) ) );
         exit;
     }
 
     public static function render_admin_notices() {
+        if ( isset( $_GET['approved'] ) && isset( $_GET['print_id'] ) ) {
+            $p_id  = intval( $_GET['print_id'] );
+            $p_url = admin_url( 'admin.php?action=santino_print_redeem_voucher&redeem_id=' . $p_id );
+            echo '<div class="notice notice-success is-dismissible" style="border-left-color: #15803d;"><p><strong>✓ 6th Cup Free Redeem Approved!</strong> Voucher is ready for barista fulfillment. <a href="' . esc_url( $p_url ) . '" target="_blank" class="button button-primary button-small" style="background:#00625d; border-color:#004d49; margin-left:10px;">🖨️ Print 6th Cup POS Slip</a></p><script>window.open(' . json_encode( $p_url ) . ', "_blank");</script></div>';
+        }
         if ( isset( $_GET['redeem_success'] ) ) {
-            $item = isset( $_GET['served_item'] ) ? sanitize_text_field( $_GET['served_item'] ) : 'Free Coffee';
-            echo '<div class="notice notice-success is-dismissible" style="border-left-color: #059669;"><p><strong>✓ Free Cup Served!</strong> 1 Free Beverage (<strong>' . esc_html( $item ) . '</strong>) was successfully served and deducted from member balance.</p></div>';
+            $item  = isset( $_GET['served_item'] ) ? sanitize_text_field( $_GET['served_item'] ) : 'Free Coffee';
+            $p_btn = '';
+            if ( isset( $_GET['print_id'] ) ) {
+                $p_url = admin_url( 'admin.php?action=santino_print_redeem_voucher&redeem_id=' . intval( $_GET['print_id'] ) );
+                $p_btn = ' <a href="' . esc_url( $p_url ) . '" target="_blank" class="button button-primary button-small" style="background:#00625d; border-color:#004d49; margin-left:10px;">🖨️ Print 6th Cup POS Slip</a><script>window.open(' . json_encode( $p_url ) . ', "_blank");</script>';
+            }
+            echo '<div class="notice notice-success is-dismissible" style="border-left-color: #059669;"><p><strong>✓ Free Cup Served!</strong> 1 Free Beverage (<strong>' . esc_html( $item ) . '</strong>) was successfully served and deducted from member balance.' . $p_btn . '</p></div>';
         }
         if ( isset( $_GET['redeem_error'] ) && $_GET['redeem_error'] === 'no_balance' ) {
             echo '<div class="notice notice-error is-dismissible"><p><strong>✗ Redeem Error:</strong> Member has 0 free cups available.</p></div>';
         }
+    }
+
+    public static function handle_admin_print_redeem_voucher() {
+        if ( ! current_user_can( 'edit_posts' ) ) {
+            wp_die( 'Permission denied' );
+        }
+        $redeem_id = intval( $_GET['redeem_id'] ?? 0 );
+        self::render_printable_voucher_slip( $redeem_id );
+    }
+
+    public static function handle_public_print_redeem_voucher() {
+        if ( isset( $_GET['santino_print_voucher'] ) && ! empty( $_GET['redeem_id'] ) ) {
+            $redeem_id = intval( $_GET['redeem_id'] );
+            self::render_printable_voucher_slip( $redeem_id );
+        }
+    }
+
+    public static function render_printable_voucher_slip( $redeem_id ) {
+        $redeem = get_post( $redeem_id );
+        if ( ! $redeem || $redeem->post_type !== 'santino_redeem' ) {
+            wp_die( 'Redeem record not found.' );
+        }
+
+        $code        = get_post_meta( $redeem_id, '_santino_redeem_code', true ) ?: ( 'RDM-' . $redeem_id );
+        $phone       = get_post_meta( $redeem_id, '_santino_redeem_phone', true ) ?: '—';
+        $item        = get_post_meta( $redeem_id, '_santino_redeem_item', true ) ?: 'Handcrafted Coffee';
+        $branch      = get_post_meta( $redeem_id, '_santino_redeem_branch', true ) ?: 'Santino Flagship';
+        $v_code      = get_post_meta( $redeem_id, '_santino_redeem_voucher_code', true ) ?: 'FREE-CUP-REWARD';
+        $status      = get_post_meta( $redeem_id, '_santino_redeem_status', true ) ?: 'pending';
+        $member_id   = intval( get_post_meta( $redeem_id, '_santino_redeem_member_id', true ) );
+        $member_code = $member_id ? get_post_meta( $member_id, '_santino_member_id', true ) : 'SNT-MEMBER';
+        $date        = get_the_date( 'Y-m-d H:i', $redeem );
+        $logo_url    = function_exists( 'santino_img' ) ? santino_img( 'logo.png' ) : '';
+
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>6th Cup Free Voucher - <?php echo esc_html( $code ); ?></title>
+            <style>
+                @page {
+                    size: 80mm auto;
+                    margin: 0;
+                }
+                body {
+                    margin: 0;
+                    padding: 12px 14px;
+                    font-family: 'Courier New', Courier, monospace, -apple-system, BlinkMacSystemFont, sans-serif;
+                    width: 76mm;
+                    color: #000;
+                    background: #fff;
+                    font-size: 13px;
+                    line-height: 1.35;
+                }
+                .text-center { text-align: center; }
+                .text-end { text-align: right; }
+                .fw-bold { font-weight: bold; }
+                .divider {
+                    border-top: 1px dashed #000;
+                    margin: 8px 0;
+                }
+                .double-divider {
+                    border-top: 2px double #000;
+                    margin: 8px 0;
+                }
+                .logo {
+                    max-height: 48px;
+                    max-width: 140px;
+                    display: block;
+                    margin: 0 auto 6px;
+                }
+                .badge-free {
+                    display: inline-block;
+                    border: 1.5px solid #000;
+                    padding: 3px 8px;
+                    font-weight: 900;
+                    font-size: 13px;
+                    letter-spacing: 1px;
+                    margin: 4px 0;
+                }
+                .barcode-box {
+                    text-align: center;
+                    letter-spacing: 5px;
+                    font-size: 18px;
+                    font-weight: 900;
+                    padding: 6px 0;
+                    border: 1px solid #000;
+                    margin: 6px 0;
+                }
+                .row {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 3px;
+                }
+                .no-print-bar {
+                    margin-bottom: 12px;
+                    text-align: center;
+                    padding-bottom: 8px;
+                    border-bottom: 1px solid #ccc;
+                }
+                .btn-print {
+                    background: #00625d;
+                    color: #fff;
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    font-size: 13px;
+                }
+                @media print {
+                    .no-print-bar { display: none !important; }
+                    body { width: 100%; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="no-print-bar">
+                <button class="btn-print" onclick="window.print();">🖨️ প্রিন্ট করুন (Print Slip)</button>
+            </div>
+
+            <div class="text-center">
+                <?php if ( $logo_url ) : ?>
+                    <img src="<?php echo esc_url( $logo_url ); ?>" alt="Santino Coffee" class="logo">
+                <?php endif; ?>
+                <div class="fw-bold" style="font-size: 15px; letter-spacing: 0.5px;">SANTINO COFFEE ROASTERS</div>
+                <div style="font-size: 11px;">VIP COFFEE CLUB LOYALTY REWARDS</div>
+                <div class="badge-free">*** 6TH CUP FREE REWARD ***</div>
+            </div>
+
+            <div class="double-divider"></div>
+
+            <div class="row">
+                <span>REDEEM SLIP:</span>
+                <span class="fw-bold"><?php echo esc_html( $code ); ?></span>
+            </div>
+            <div class="row">
+                <span>VOUCHER CODE:</span>
+                <span class="fw-bold"><?php echo esc_html( $v_code ); ?></span>
+            </div>
+            <div class="row">
+                <span>DATE & TIME:</span>
+                <span><?php echo esc_html( $date ); ?></span>
+            </div>
+            <div class="row">
+                <span>BRANCH:</span>
+                <span><?php echo esc_html( $branch ); ?></span>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="row">
+                <span>MEMBER MOBILE:</span>
+                <span class="fw-bold"><?php echo esc_html( $phone ); ?></span>
+            </div>
+            <div class="row">
+                <span>MEMBER ID:</span>
+                <span><?php echo esc_html( $member_code ); ?></span>
+            </div>
+            <div class="row">
+                <span>STATUS:</span>
+                <span class="fw-bold"><?php echo strtoupper( esc_html( $status ) ); ?></span>
+            </div>
+
+            <div class="divider"></div>
+
+            <div style="margin: 6px 0;">
+                <div class="fw-bold" style="font-size: 14px;">FREE BEVERAGE ITEM:</div>
+                <div class="fw-bold" style="font-size: 16px; margin-top: 2px;">★ <?php echo esc_html( $item ); ?></div>
+            </div>
+            <div class="row" style="font-size: 14px; margin-top: 4px;">
+                <span>AMOUNT PAYABLE:</span>
+                <span class="fw-bold">TK. 0.00 (100% FREE)</span>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="barcode-box">
+                ||| | |||| | ||| || ||| |
+                <div style="font-size: 11px; letter-spacing: 2px; font-weight: normal; margin-top: 2px;"><?php echo esc_html( $code ); ?></div>
+            </div>
+
+            <div class="text-center" style="font-size: 10.5px; margin: 8px 0;">
+                <div>Buy 5 Cups, Get 1 Free Promo</div>
+                <div>Thank you for choosing Santino Coffee!</div>
+            </div>
+
+            <div style="margin-top: 25px; padding-top: 6px; border-top: 1px dashed #000;">
+                <div class="row" style="font-size: 11px;">
+                    <span>Barista Signature:</span>
+                    <span>___________________</span>
+                </div>
+            </div>
+
+            <script>
+                window.addEventListener('load', function() {
+                    setTimeout(function() {
+                        window.print();
+                    }, 500);
+                });
+            </script>
+        </body>
+        </html>
+        <?php
+        exit;
     }
 
     public static function generate_free_coffee_voucher( $member_id, $member_name, $phone ) {
@@ -1393,12 +1616,19 @@ class Santino_Membership_System {
         update_post_meta( $redeem_post_id, '_santino_redeem_status', 'pending' );
         update_post_meta( $redeem_post_id, '_santino_redeem_created_at', current_time( 'mysql' ) );
 
+        $print_url = add_query_arg( array(
+            'santino_print_voucher' => '1',
+            'redeem_id'             => $redeem_post_id,
+        ), home_url( '/' ) );
+
         wp_send_json_success( array(
             'message'     => sprintf( __( 'ফ্রি কাপ রিডিম রিকোয়েস্ট সফলভাবে জমা হয়েছে! (Redeem ID: %s)। পোর্টাল/অ্যাডমিন অ্যাপ্রুভ করলে বারিস্তা আপনাকে ফ্রি %s প্রদান করবে।', 'santino' ), $redeem_code, $free_item ),
+            'redeem_id'   => $redeem_post_id,
             'redeem_code' => $redeem_code,
             'free_item'   => $free_item,
             'branch'      => $branch,
             'status'      => 'pending',
+            'print_url'   => $print_url,
         ) );
     }
 

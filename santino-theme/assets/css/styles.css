@@ -45,6 +45,19 @@
   --kp-shadow-dark: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
+.site-header .santino-header-logo {
+  height: 64px !important;
+  max-height: 72px !important;
+  width: auto !important;
+  object-fit: contain !important;
+}
+@media (max-width: 991.98px) {
+  .site-header .santino-header-logo {
+    height: 50px !important;
+    max-height: 56px !important;
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

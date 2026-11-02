@@ -120,12 +120,20 @@ function santino_enqueue_scripts() {
     wp_enqueue_script( 'santino-script', $script_src, array( 'bootstrap-bundle' ), SANTINO_VERSION, true );
     wp_enqueue_script( 'santino-menu-js', $menu_src, array( 'bootstrap-bundle', 'santino-script' ), SANTINO_VERSION, true );
 
+    $menu_items   = class_exists( 'Santino_Handcrafted_Items_System' ) ? Santino_Handcrafted_Items_System::get_all_menu_items() : array();
+    $redeem_items = class_exists( 'Santino_Handcrafted_Items_System' ) ? Santino_Handcrafted_Items_System::get_redeemable_items() : array();
+
     // Localize AJAX parameters for Frontend
     wp_localize_script( 'santino-script', 'santino_ajax', array(
-        'ajax_url'  => admin_url( 'admin-ajax.php' ),
-        'nonce'     => wp_create_nonce( 'santino_frontend_nonce' ),
-        'theme_uri' => SANTINO_URI,
-        'branches'  => class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_cafe_branches() : array(),
+        'ajax_url'     => admin_url( 'admin-ajax.php' ),
+        'nonce'        => wp_create_nonce( 'santino_frontend_nonce' ),
+        'theme_uri'    => SANTINO_URI,
+        'branches'     => class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_cafe_branches() : array(),
+        'redeem_items' => $redeem_items,
+    ) );
+
+    wp_localize_script( 'santino-menu-js', 'santino_menu_data', array(
+        'items' => $menu_items,
     ) );
 }
 add_action( 'wp_enqueue_scripts', 'santino_enqueue_scripts' );
@@ -182,6 +190,7 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     require_once SANTINO_DIR . '/inc/widgets/swapno-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/our-story-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/membership-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/member-portal-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/menu-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/brands-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/machines-solution-widget.php';
@@ -219,6 +228,7 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     $widgets_manager->register( new \Santino_Swapno_Solution_Widget() );
     $widgets_manager->register( new \Santino_Our_Story_Solution_Widget() );
     $widgets_manager->register( new \Santino_Membership_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Member_Portal_Widget() );
     $widgets_manager->register( new \Santino_Menu_Solution_Widget() );
     $widgets_manager->register( new \Santino_Brands_Solution_Widget() );
     $widgets_manager->register( new \Santino_Machines_Solution_Widget() );
@@ -325,6 +335,11 @@ add_action( 'template_redirect', 'santino_slug_redirects' );
  * Include Elementor Installer & Dependency Notice
  */
 require_once SANTINO_DIR . '/inc/elementor-installer.php';
+
+/**
+ * Include Santino Handcrafted Items Backend Engine
+ */
+require_once SANTINO_DIR . '/inc/handcrafted-items-system.php';
 
 /**
  * Include Santino VIP Membership Backend Engine

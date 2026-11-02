@@ -50,7 +50,7 @@
               $logo_url = SANTINO_URI . '/assets/images/Logo-Santino-Coffee-transparent.png';
           }
           if ( $logo_url ) : ?>
-            <img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height: 48px; width: auto; object-fit: contain;">
+            <img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="santino-header-logo" style="height: 64px; max-height: 70px; width: auto; object-fit: contain; transition: height 0.25s ease;">
           <?php else : ?>
             <span class="fs-4 fw-bold font-heading text-dark">Santino<span style="color: #c5a059;">.</span></span>
           <?php endif; ?>

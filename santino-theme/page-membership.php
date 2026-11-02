@@ -9,7 +9,9 @@
 get_header();
 
 $is_elementor_page = false;
-if ( class_exists( '\Elementor\Plugin' ) ) {
+if ( function_exists( 'santino_is_elementor_page' ) && santino_is_elementor_page() ) {
+    $is_elementor_page = true;
+} elseif ( class_exists( '\Elementor\Plugin' ) ) {
     $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
     if ( $document && $document->is_built_with_elementor() ) {
         $is_elementor_page = true;

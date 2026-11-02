@@ -744,7 +744,13 @@ document.addEventListener('DOMContentLoaded', () => {
               modalEl.style.display = 'none';
               document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
             }
-            alert(resData.data ? resData.data.message : 'ফ্রি কফি রিডিম রিকোয়েস্ট সফলভাবে জমা হয়েছে!');
+            if (resData.data && resData.data.print_url) {
+              if (confirm((resData.data.message || 'ফ্রি কফি রিডিম সফল হয়েছে!') + '\n\nআপনি কি ৬ষ্ঠ কাপ ফ্রি ভাউচার স্লিপ এখনই প্রিন্ট করতে চান? (Print 6th Cup Free POS Slip?)')) {
+                window.open(resData.data.print_url, '_blank');
+              }
+            } else {
+              alert(resData.data ? resData.data.message : 'ফ্রি কফি রিডিম রিকোয়েস্ট সফলভাবে জমা হয়েছে!');
+            }
             const lookupForm = document.getElementById('santinoLookupForm');
             if (lookupForm) {
               lookupForm.dispatchEvent(new Event('submit'));
@@ -764,6 +770,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('santinoRedeemPhone').value = phone;
     document.getElementById('santinoRedeemVoucher').value = voucherCode;
+
+    const itemSelect = document.getElementById('santinoRedeemItem');
+    if (itemSelect && typeof santino_ajax !== 'undefined' && Array.isArray(santino_ajax.redeem_items) && santino_ajax.redeem_items.length > 0) {
+      itemSelect.innerHTML = santino_ajax.redeem_items.map(it => `<option value="${it}">${it}</option>`).join('');
+    }
 
     const branchSelect = document.getElementById('santinoRedeemBranch');
     const branches = (typeof santino_ajax !== 'undefined' && Array.isArray(santino_ajax.branches) && santino_ajax.branches.length > 0)
