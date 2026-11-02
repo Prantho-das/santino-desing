@@ -428,44 +428,39 @@ document.addEventListener('DOMContentLoaded', () => {
           const stamps = d.stamps;
           let cupsHtml = '';
           for (let i = 1; i <= 5; i++) {
-            if (i <= stamps) {
-              cupsHtml += `
-                <div class="stamp-cup-item active text-center flex-1">
-                  <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); display: inline-flex; align-items: center; justify-content: center; font-size: 22px; color: #041a18; box-shadow: 0 0 16px rgba(223, 190, 141, 0.5); border: 2px solid #ffffff;">
-                    ☕
-                  </div>
-                  <div class="small fw-bold mt-1" style="color: #dfbe8d; font-size: 11px;">Cup ${i} ✓</div>
+            const isActive = i <= stamps;
+            cupsHtml += `
+              <div class="stamp-cup-item text-center flex-grow-1" style="min-width: 0; max-width: 20%;">
+                <div style="width: 100%; max-width: 46px; min-width: 34px; aspect-ratio: 1 / 1; margin: 0 auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 4.2vw, 20px); border: 2px solid ${isActive ? '#ffffff' : 'rgba(195, 153, 108, 0.35)'}; background: ${isActive ? 'linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%)' : 'rgba(0, 98, 93, 0.25)'}; color: ${isActive ? '#041a18' : 'rgba(255,255,255,0.45)'}; box-shadow: ${isActive ? '0 0 12px rgba(223, 190, 141, 0.45)' : 'none'};">
+                  ${isActive ? '☕' : i}
                 </div>
-              `;
-            } else {
-              cupsHtml += `
-                <div class="stamp-cup-item text-center flex-1">
-                  <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(0, 98, 93, 0.25); border: 2px dashed rgba(195, 153, 108, 0.35); display: inline-flex; align-items: center; justify-content: center; font-size: 18px; color: rgba(255,255,255,0.4);">
-                    ${i}
-                  </div>
-                  <div class="small text-white-50 mt-1" style="font-size: 11px;">Cup ${i}</div>
+                <div class="text-truncate mt-1.5" style="font-size: clamp(9px, 2.5vw, 11px); font-weight: 700; color: ${isActive ? '#dfbe8d' : 'rgba(255,255,255,0.45)'};">
+                  Cup ${i}${isActive ? ' ✓' : ''}
                 </div>
-              `;
-            }
+              </div>
+            `;
           }
 
           let vouchersHtml = '';
           if (d.vouchers && d.vouchers.length > 0) {
             vouchersHtml = `
-              <div class="mt-4 p-3.5 rounded-4 border" style="background: rgba(195, 153, 108, 0.1); border-color: rgba(195, 153, 108, 0.35) !important;">
-                <h6 class="fw-bold mb-2.5" style="color: #dfbe8d;"><i class="bi bi-gift-fill me-1.5"></i> Free Coffee Vouchers:</h6>
+              <div class="mt-3 p-3 rounded-4 border" style="background: rgba(195, 153, 108, 0.1); border-color: rgba(195, 153, 108, 0.35) !important;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="fw-bold mb-0 text-white" style="font-size: 12px;"><i class="bi bi-gift-fill me-1" style="color: #dfbe8d;"></i> Free Coffee Vouchers:</h6>
+                  <span class="text-white-50" style="font-size: 10px;">${d.vouchers.filter(v => v.status === 'unused').length} Active</span>
+                </div>
                 <div class="d-flex flex-column gap-2">
                   ${d.vouchers.map(v => `
-                    <div class="p-2.5 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2 border" style="background: #091715; border-color: rgba(195,153,108,0.3) !important;">
-                      <div class="d-flex align-items-center gap-2">
-                        <code class="fs-6 fw-bold" style="color: #dfbe8d;">${v.code}</code>
+                    <div class="p-2.5 rounded-3 border" style="background: #091715; border-color: rgba(195,153,108,0.3) !important;">
+                      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
+                        <code class="fs-6 fw-bold px-2 py-0.5 rounded" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; letter-spacing: 0.5px;">${v.code}</code>
                         <span class="badge ${v.status === 'unused' ? 'bg-success' : (v.status === 'pending_redemption' ? 'bg-warning text-dark' : 'bg-secondary')}" style="font-size: 10px;">
-                          ${v.status === 'unused' ? 'UNUSED' : (v.status === 'pending_redemption' ? '⏳ PENDING PORTAL APPROVAL' : '✓ REDEEMED')}
+                          ${v.status === 'unused' ? '✓ UNUSED / READY TO CLAIM' : (v.status === 'pending_redemption' ? '⏳ PENDING PORTAL APPROVAL' : '✓ REDEEMED')}
                         </span>
                       </div>
                       ${v.status === 'unused' ? `
-                        <div class="small fw-bold px-2.5 py-1 rounded-pill" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.3); font-size: 11px;">
-                          <i class="bi bi-shop me-1 text-teal"></i> Show to Barista to Redeem
+                        <div class="text-white-50 d-flex align-items-center gap-1.5 mt-1" style="font-size: 11px;">
+                          <i class="bi bi-shop text-teal" style="color: #dfbe8d;"></i> <span>কাউন্টারে এই কোডটি দেখিয়ে আপনার ফ্রি কফি গ্রহণ করুন।</span>
                         </div>
                       ` : ''}
                     </div>
@@ -478,8 +473,8 @@ document.addEventListener('DOMContentLoaded', () => {
           let redeemsHtml = '';
           if (d.redeems && d.redeems.length > 0) {
             redeemsHtml = `
-              <div class="mt-3 p-3.5 rounded-4 border" style="background: rgba(0, 98, 93, 0.15); border-color: rgba(0, 98, 93, 0.4) !important;">
-                <h6 class="fw-bold mb-2 text-white"><i class="bi bi-clock-history me-1.5" style="color: #dfbe8d;"></i> Recent Redeem Requests:</h6>
+              <div class="mt-3 p-3 rounded-4 border" style="background: rgba(0, 98, 93, 0.15); border-color: rgba(0, 98, 93, 0.4) !important;">
+                <h6 class="fw-bold mb-2 text-white" style="font-size: 12px;"><i class="bi bi-clock-history me-1.5" style="color: #dfbe8d;"></i> Recent Redeem Requests:</h6>
                 <div class="d-flex flex-column gap-2">
                   ${d.redeems.map(r => `
                     <div class="p-2.5 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2 border" style="background: #071917; border-color: rgba(255,255,255,0.1) !important;">
@@ -500,12 +495,12 @@ document.addEventListener('DOMContentLoaded', () => {
           let invoicesHtml = '';
           if (d.invoices && d.invoices.length > 0) {
             invoicesHtml = `
-              <div class="mt-3 p-3 rounded-4 border" style="background: rgba(0, 0, 0, 0.25); border-color: rgba(255,255,255,0.1) !important;">
-                <div class="small fw-bold text-white-50 mb-1.5"><i class="bi bi-receipt me-1"></i> Recent Invoices:</div>
-                <div class="d-flex flex-wrap gap-2">
+              <div class="mt-3 p-3 rounded-4 border" style="background: rgba(0, 0, 0, 0.25); border-color: rgba(255,255,255,0.08) !important;">
+                <div class="small fw-bold text-white-50 mb-2" style="font-size: 11px;"><i class="bi bi-receipt me-1"></i> Recent Approved Invoices:</div>
+                <div class="d-flex flex-wrap gap-1.5">
                   ${d.invoices.map(inv => `
-                    <span class="badge p-2 rounded-2 border ${inv.status === 'approved' ? 'border-success text-success' : 'border-warning text-warning'}" style="background: rgba(0,0,0,0.5); font-size: 11px;">
-                      #${inv.invoice_no} (${inv.cups} Cups) - ${inv.status === 'approved' ? '✓ Approved' : '⏳ Pending'}
+                    <span class="badge p-2 rounded-2 border text-wrap text-start ${inv.status === 'approved' ? 'border-success text-success' : 'border-warning text-warning'}" style="background: rgba(0,0,0,0.5); font-size: 11px; line-height: 1.4;">
+                      #${inv.invoice_no} (${inv.cups} ${inv.cups > 1 ? 'Cups' : 'Cup'}) • ${inv.status === 'approved' ? '✓ Approved' : '⏳ Pending'}
                     </span>
                   `).join('')}
                 </div>
@@ -513,32 +508,52 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
           }
 
+          const hasUnusedVoucher = d.vouchers && d.vouchers.some(v => v.status === 'unused');
+
           cardBox.style.display = 'block';
           cardBox.innerHTML = `
-            <div class="card border rounded-4 shadow-2xl p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: radial-gradient(circle at 80% 20%, #005c56 0%, #071d1b 60%, #04100e 100%); border-color: rgba(195, 153, 108, 0.45) !important; color: #fff;">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                  <span class="badge px-3 py-1.5 fw-bold text-uppercase rounded-pill" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 11px;">
+            <div class="card border rounded-4 shadow-2xl p-3 p-sm-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: radial-gradient(circle at 80% 20%, #005c56 0%, #071d1b 60%, #04100e 100%); border-color: rgba(195, 153, 108, 0.45) !important; color: #fff;">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                <div style="min-width: 0; flex: 1;">
+                  <span class="badge px-2.5 py-1 fw-bold text-uppercase rounded-pill" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 10px;">
                     <i class="bi bi-patch-check-fill me-1"></i> SANTINO REGULAR MEMBER
                   </span>
-                  <h3 class="fw-bold text-white mt-2 mb-0 font-heading">${d.name}</h3>
-                  <div class="text-white-50 font-monospace small mt-1">
-                    ID: <strong style="color: #dfbe8d;">${d.member_id}</strong> | Phone: ${d.phone} ${d.birthday ? '| Birthday: ' + d.birthday : ''}
+                  <h3 class="fw-bold text-white mt-1.5 mb-0 font-heading text-truncate" style="font-size: clamp(18px, 5vw, 24px);">${d.name}</h3>
+                  <div class="text-white-50 font-monospace small mt-1" style="font-size: 11px; word-break: break-all;">
+                    ID: <strong style="color: #dfbe8d;">${d.member_id}</strong> • ${d.phone}
                   </div>
                 </div>
-                <div class="text-end">
-                  <div class="display-6 fw-bold mb-0 font-heading" style="color: #dfbe8d;">${stamps}/5</div>
-                  <div class="small text-white-50">Card Stamps</div>
+                <div class="text-end ps-2 flex-shrink-0">
+                  <div class="fw-bold mb-0 font-heading" style="color: #dfbe8d; font-size: clamp(24px, 7vw, 36px); line-height: 1;">${stamps}/5</div>
+                  <div class="text-white-50" style="font-size: 11px;">Card Stamps</div>
                 </div>
               </div>
 
-              <div class="p-3.5 p-md-4 rounded-4 mt-3 shadow-lg border" style="background: rgba(6, 20, 18, 0.9); border-color: rgba(195, 153, 108, 0.3) !important;">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h6 class="fw-bold mb-0 text-white font-heading"><i class="bi bi-cup-hot-fill me-1.5" style="color: #dfbe8d;"></i> Digital Stamp Progress</h6>
-                  <span class="small fw-bold" style="color: #dfbe8d;">${5 - stamps === 0 ? '🎉 Free 1 Cup Coffee Unlocked!' : (5 - stamps) + ' cups remaining to next FREE COFFEE'}</span>
+              ${hasUnusedVoucher ? `
+                <div class="p-3 rounded-4 mb-3 d-flex align-items-center gap-2.5 border" style="background: linear-gradient(135deg, rgba(223, 190, 141, 0.25) 0%, rgba(195, 153, 108, 0.12) 100%); border-color: rgba(223, 190, 141, 0.5) !important;">
+                  <div style="font-size: 26px; line-height: 1;">🎁</div>
+                  <div class="flex-grow-1" style="min-width: 0;">
+                    <div class="fw-bold text-white" style="font-size: 13px; color: #dfbe8d !important;">🎉 ফ্রি ১ কাপ কফি রিওয়ার্ড আনলকড!</div>
+                    <div class="text-white-50" style="font-size: 11px;">৫টি কাপ সম্পন্ন হওয়ায় ১টি ফ্রি কফি ভাউচার পেয়েছেন। নিচের ভাউচার কোডটি দেখিয়ে কাউন্টার থেকে কফি নিন।</div>
+                  </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center py-2 px-1 gap-2">
+              ` : ''}
+
+              <div class="p-3 p-md-4 rounded-4 mt-2 shadow-lg border" style="background: rgba(6, 20, 18, 0.9); border-color: rgba(195, 153, 108, 0.3) !important;">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-1.5 mb-2.5">
+                  <h6 class="fw-bold mb-0 text-white font-heading" style="font-size: 13px;">
+                    <i class="bi bi-cup-hot-fill me-1" style="color: #dfbe8d;"></i> Digital Stamp Card
+                  </h6>
+                  <span class="badge px-2 py-1 rounded-pill" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.3); font-size: 10px; font-weight: 600;">
+                    ${5 - stamps === 0 ? '🎉 Free Coffee Ready!' : (5 - stamps) + ' cups to next free coffee'}
+                  </span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center py-2 px-0" style="gap: 4px; width: 100%;">
                   ${cupsHtml}
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-2.5 pt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important; font-size: 11px;">
+                  <span class="text-white-50">মোট অনুমোদিত কফি: <strong class="text-white">${d.total_cups || stamps} কাপ</strong></span>
+                  <span class="text-white-50">অর্জিত ফ্রি কফি: <strong style="color: #dfbe8d;">${d.total_free || 0} টি</strong></span>
                 </div>
                 ${vouchersHtml}
                 ${redeemsHtml}

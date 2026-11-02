@@ -492,7 +492,7 @@ class Santino_Membership_System {
                 
                 <?php if ( $status === 'pending' ) : ?>
                     <div style="display: flex; gap: 10px;">
-                        <a href="<?php echo esc_url( $approve_url ); ?>" class="button button-primary" style="background: #15803d; border-color: #166534; font-weight: bold;">
+                        <a href="<?php echo esc_url( $approve_url ); ?>" class="button button-primary" style="background: #15803d; border-color: #166534; font-weight: bold;" onclick="var itemVal = document.getElementById('santino_redeem_item_input').value; if(itemVal) { this.href += '&served_item=' + encodeURIComponent(itemVal); }">
                             ✓ Approve Free Cup Delivery (Barista Can Serve Coffee)
                         </a>
                         <a href="<?php echo esc_url( $reject_url ); ?>" class="button" style="color: #b91c1c; border-color: #b91c1c;" onclick="return confirm('Reject this redeem request?');">
@@ -518,8 +518,26 @@ class Santino_Membership_System {
                 <td><input type="text" name="santino_redeem_phone" value="<?php echo esc_attr( $phone ); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label><?php _e( 'Selected Free Item', 'santino' ); ?></label></th>
-                <td><input type="text" name="santino_redeem_item" value="<?php echo esc_attr( $item ); ?>" class="regular-text" style="font-weight:bold; color:#0f172a;"></td>
+                <th><label><?php _e( 'Served Free Item / Beverage', 'santino' ); ?></label></th>
+                <td>
+                    <input type="text" id="santino_redeem_item_input" name="santino_redeem_item" value="<?php echo esc_attr( $item ?: 'Cappuccino' ); ?>" class="regular-text" style="font-weight:bold; color:#00625d; font-size:14px;">
+                    <p class="description" style="margin-top:6px; color:#475569;">কাস্টমার কোন ফ্রি কফি/আইটেমটি খাচ্ছে তা লিখে দিন বা নিচের বাটনে ক্লিক করুন:</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
+                        <?php 
+                        $popular_coffees = array( 'Cappuccino', 'Cafe Latte', 'Americano', 'Spanish Latte', 'Caramel Macchiato', 'Cafe Mocha', 'Flat White', 'Iced Latte', 'Cold Brew', 'Hot Chocolate' );
+                        foreach ( $popular_coffees as $coffee ) : ?>
+                            <button type="button" class="button button-small" onclick="document.getElementById('santino_redeem_item_input').value='<?php echo esc_js( $coffee ); ?>';" style="border-radius:12px; font-size:12px;">
+                                ☕ <?php echo esc_html( $coffee ); ?>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th><label><?php _e( 'Barista / Counter Notes', 'santino' ); ?></label></th>
+                <td>
+                    <input type="text" name="santino_redeem_note" value="<?php echo esc_attr( get_post_meta( $post->ID, '_santino_redeem_note', true ) ); ?>" class="regular-text" placeholder="যেমন: Barista: Karim / Almond milk / Extra hot">
+                </td>
             </tr>
             <tr>
                 <th><label><?php _e( 'Cafe Branch', 'santino' ); ?></label></th>
@@ -629,6 +647,9 @@ class Santino_Membership_System {
             }
             if ( isset( $_POST['santino_redeem_branch'] ) ) {
                 update_post_meta( $post_id, '_santino_redeem_branch', sanitize_text_field( $_POST['santino_redeem_branch'] ) );
+            }
+            if ( isset( $_POST['santino_redeem_note'] ) ) {
+                update_post_meta( $post_id, '_santino_redeem_note', sanitize_text_field( $_POST['santino_redeem_note'] ) );
             }
         }
     }
