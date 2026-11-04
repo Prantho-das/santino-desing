@@ -405,149 +405,38 @@ else :
       </div>
 
       <!-- Menu Horizontal Slider Track -->
-      <div class="menu-teaser-slider-wrapper">
+            <div class="menu-teaser-slider-wrapper">
         <div class="menu-teaser-track" id="menuTeaserTrack">
-          
-          <!-- Item 1: Hot Cappuccino -->
+          <?php
+          $dynamic_teaser_items = class_exists( 'Santino_Handcrafted_Items_System' ) ? Santino_Handcrafted_Items_System::get_all_menu_items() : array();
+          if ( ! empty( $dynamic_teaser_items ) ) :
+            foreach ( $dynamic_teaser_items as $d_item ) :
+              $d_tag_class = ( ( $d_item['type'] ?? 'hot' ) === 'iced' ) ? 'cold-tag' : 'hot-tag';
+              $d_tag_icon  = ( ( $d_item['type'] ?? 'hot' ) === 'iced' ) ? 'bi-snow' : 'bi-fire';
+              $d_tag_label = ! empty( $d_item['tag'] ) ? $d_item['tag'] : ( ( ( $d_item['type'] ?? 'hot' ) === 'iced' ) ? 'Cold Favorite' : 'Hot Classic' );
+          ?>
           <div class="menu-teaser-card">
             <div class="menu-teaser-img-box">
-              <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&auto=format&fit=crop&q=80" alt="Cappuccino">
+              <img src="<?php echo esc_url( $d_item['img'] ); ?>" alt="<?php echo esc_attr( $d_item['name'] ); ?>" loading="lazy">
             </div>
             <div class="menu-teaser-info">
               <div>
                 <div class="d-flex justify-content-end">
-                  <span class="menu-card-tag hot-tag"><i class="bi bi-fire"></i> Hot Classic</span>
+                  <span class="menu-card-tag <?php echo esc_attr( $d_tag_class ); ?>"><i class="bi <?php echo esc_attr( $d_tag_icon ); ?>"></i> <?php echo esc_html( $d_tag_label ); ?></span>
                 </div>
-                <h4 class="menu-teaser-title">Cappuccino</h4>
-                <p class="menu-teaser-desc">Velvety micro-foam espresso with rich aroma & smooth taste.</p>
+                <h4 class="menu-teaser-title"><?php echo esc_html( $d_item['name'] ); ?></h4>
+                <p class="menu-teaser-desc"><?php echo esc_html( $d_item['desc'] ); ?></p>
               </div>
               <div class="menu-teaser-price-row">
-                <div class="price-val"><span class="currency">Tk.</span> 170 <small class="text-muted fs-8">/ Reg</small></div>
-                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+                <div class="price-val"><span class="currency">Tk.</span> <?php echo esc_html( $d_item['price'] ); ?> <small class="text-muted fs-8">/ <?php echo esc_html( wp_trim_words( $d_item['roast'], 2, '' ) ); ?></small></div>
+                <a href="<?php echo esc_url( home_url( "/menu/" ) ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
               </div>
             </div>
           </div>
-
-          <!-- Item 2: Iced Latte -->
-          <div class="menu-teaser-card">
-            <div class="menu-teaser-img-box">
-              <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&auto=format&fit=crop&q=80" alt="Iced Latte">
-            </div>
-            <div class="menu-teaser-info">
-              <div>
-                <div class="d-flex justify-content-end">
-                  <span class="menu-card-tag cold-tag"><i class="bi bi-snow"></i> Cold Favorite</span>
-                </div>
-                <h4 class="menu-teaser-title">Iced Latte</h4>
-                <p class="menu-teaser-desc">Smooth chilled milk layered over double shot fresh espresso.</p>
-              </div>
-              <div class="menu-teaser-price-row">
-                <div class="price-val"><span class="currency">Tk.</span> 200 <small class="text-muted fs-8">/ Large</small></div>
-                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item 3: Iced Mocha -->
-          <div class="menu-teaser-card">
-            <div class="menu-teaser-img-box">
-              <img src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=700&auto=format&fit=crop&q=85" alt="Iced Mocha" loading="lazy">
-            </div>
-            <div class="menu-teaser-info">
-              <div>
-                <div class="d-flex justify-content-end">
-                  <span class="menu-card-tag cold-tag"><i class="bi bi-snow"></i> Rich Cocoa</span>
-                </div>
-                <h4 class="menu-teaser-title">Iced Mocha</h4>
-                <p class="menu-teaser-desc">Premium dark chocolate syrup drizzle with iced espresso and cream.</p>
-              </div>
-              <div class="menu-teaser-price-row">
-                <div class="price-val"><span class="currency">Tk.</span> 210 <small class="text-muted fs-8">/ Large</small></div>
-                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item 4: Mocha Frappe -->
-          <div class="menu-teaser-card">
-            <div class="menu-teaser-img-box">
-              <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&auto=format&fit=crop&q=80" alt="Mocha Frappe">
-            </div>
-            <div class="menu-teaser-info">
-              <div>
-                <div class="d-flex justify-content-end">
-                  <span class="menu-card-tag frappe-tag"><i class="bi bi-stars"></i> Hero Item</span>
-                </div>
-                <h4 class="menu-teaser-title">Mocha Frappe</h4>
-                <p class="menu-teaser-desc">Blended iced coffee topped with whipped cream and rich chocolate fudge.</p>
-              </div>
-              <div class="menu-teaser-price-row">
-                <div class="price-val"><span class="currency">Tk.</span> 230 <small class="text-muted fs-8">/ Large</small></div>
-                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item 5: Hazelnut Frappe -->
-          <div class="menu-teaser-card">
-            <div class="menu-teaser-img-box">
-              <img src="https://images.unsplash.com/photo-1579888944880-d98341245702?w=600&auto=format&fit=crop&q=80" alt="Hazelnut Frappe">
-            </div>
-            <div class="menu-teaser-info">
-              <div>
-                <div class="d-flex justify-content-end">
-                  <span class="menu-card-tag frappe-tag"><i class="bi bi-stars"></i> Signature</span>
-                </div>
-                <h4 class="menu-teaser-title">Hazelnut Frappe</h4>
-                <p class="menu-teaser-desc">Roasted hazelnut blend with crushed ice, coffee essence & whipped peak.</p>
-              </div>
-              <div class="menu-teaser-price-row">
-                <div class="price-val"><span class="currency">Tk.</span> 230 <small class="text-muted fs-8">/ Large</small></div>
-                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item 6: Americano -->
-          <div class="menu-teaser-card">
-            <div class="menu-teaser-img-box">
-              <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&auto=format&fit=crop&q=80" alt="Americano">
-            </div>
-            <div class="menu-teaser-info">
-              <div>
-                <div class="d-flex justify-content-end">
-                  <span class="menu-card-tag hot-tag"><i class="bi bi-fire"></i> Bold Brew</span>
-                </div>
-                <h4 class="menu-teaser-title">Americano</h4>
-                <p class="menu-teaser-desc">Double-shot artisan espresso lengthened with purified hot water.</p>
-              </div>
-              <div class="menu-teaser-price-row">
-                <div class="price-val"><span class="currency">Tk.</span> 140 <small class="text-muted fs-8">/ Reg</small></div>
-                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item 7: Iced Chocolate -->
-          <div class="menu-teaser-card">
-            <div class="menu-teaser-img-box">
-              <img src="https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=600&auto=format&fit=crop&q=80" alt="Iced Chocolate">
-            </div>
-            <div class="menu-teaser-info">
-              <div>
-                <div class="d-flex justify-content-end">
-                  <span class="menu-card-tag cold-tag"><i class="bi bi-snow"></i> Sweet Sip</span>
-                </div>
-                <h4 class="menu-teaser-title">Iced Chocolate</h4>
-                <p class="menu-teaser-desc">Indulgent dark chocolate blended creamy with ice cold milk.</p>
-              </div>
-              <div class="menu-teaser-price-row">
-                <div class="price-val"><span class="currency">Tk.</span> 190 <small class="text-muted fs-8">/ Large</small></div>
-                <a href="<?php echo esc_url( home_url("/menu/") ); ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
-              </div>
-            </div>
-          </div>
-
+          <?php
+            endforeach;
+          endif;
+          ?>
         </div>
       </div>
 

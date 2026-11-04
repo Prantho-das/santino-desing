@@ -305,15 +305,46 @@ class Santino_Cafe_Menu_Widget extends \Elementor\Widget_Base {
 
                 <div class="menu-teaser-slider-wrapper">
                     <div class="menu-teaser-track" id="menuTeaserTrack">
-                        <?php foreach ( $drinks as $item ) : 
-                            $img_url = ! empty( $item['image']['url'] ) ? esc_url( $item['image']['url'] ) : '';
-                            $tag_class = ! empty( $item['tag_type'] ) ? $item['tag_type'] : 'hot-tag';
-                            $icon_class = 'bi bi-fire';
-                            if ( $tag_class === 'cold-tag' ) {
-                                $icon_class = 'bi bi-snow';
-                            } elseif ( $tag_class === 'frappe-tag' ) {
-                                $icon_class = 'bi bi-stars';
-                            }
+                        <?php 
+                        $dynamic_items = class_exists( 'Santino_Handcrafted_Items_System' ) ? Santino_Handcrafted_Items_System::get_all_menu_items() : array();
+                        if ( ! empty( $dynamic_items ) ) :
+                            foreach ( $dynamic_items as $d_item ) :
+                                $tag_class  = ( ( $d_item['type'] ?? 'hot' ) === 'iced' ) ? 'cold-tag' : 'hot-tag';
+                                $icon_class = ( ( $d_item['type'] ?? 'hot' ) === 'iced' ) ? 'bi bi-snow' : 'bi bi-fire';
+                                $tag_text   = ! empty( $d_item['tag'] ) ? $d_item['tag'] : ( ( ( $d_item['type'] ?? 'hot' ) === 'iced' ) ? 'Cold Favorite' : 'Hot Classic' );
+                        ?>
+                            <div class="menu-teaser-card">
+                                <div class="menu-teaser-img-box">
+                                    <img src="<?php echo esc_url( $d_item['img'] ); ?>" alt="<?php echo esc_attr( $d_item['name'] ); ?>" loading="lazy">
+                                </div>
+                                <div class="menu-teaser-info">
+                                    <div>
+                                        <div class="d-flex justify-content-end">
+                                            <span class="menu-card-tag <?php echo esc_attr( $tag_class ); ?>">
+                                                <i class="<?php echo esc_attr( $icon_class ); ?>"></i> <?php echo esc_html( $tag_text ); ?>
+                                            </span>
+                                        </div>
+                                        <h4 class="menu-teaser-title"><?php echo esc_html( $d_item['name'] ); ?></h4>
+                                        <p class="menu-teaser-desc"><?php echo esc_html( $d_item['desc'] ); ?></p>
+                                    </div>
+                                    <div class="menu-teaser-price-row">
+                                        <div class="price-val"><span class="currency">Tk.</span> <?php echo esc_html( $d_item['price'] ); ?> <small class="text-muted fs-8">/ <?php echo esc_html( wp_trim_words( $d_item['roast'], 2, '' ) ); ?></small></div>
+                                        <a href="<?php echo $menu_url; ?>" class="menu-add-btn" title="View in Menu"><i class="bi bi-plus-lg"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php 
+                            endforeach;
+                        else :
+                            foreach ( $drinks as $item ) : 
+                                $img_url = ! empty( $item['image']['url'] ) ? esc_url( $item['image']['url'] ) : '';
+                                $tag_class = ! empty( $item['tag_type'] ) ? $item['tag_type'] : 'hot-tag';
+                                $icon_class = 'bi bi-fire';
+                                if ( $tag_class === 'cold-tag' ) {
+                                    $icon_class = 'bi bi-snow';
+                                } elseif ( $tag_class === 'frappe-tag' ) {
+                                    $icon_class = 'bi bi-stars';
+                                }
                         ?>
                             <div class="menu-teaser-card">
                                 <div class="menu-teaser-img-box">
@@ -335,7 +366,10 @@ class Santino_Cafe_Menu_Widget extends \Elementor\Widget_Base {
                                     </div>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
+                        <?php 
+                            endforeach;
+                        endif; 
+                        ?>
                     </div>
                 </div>
 

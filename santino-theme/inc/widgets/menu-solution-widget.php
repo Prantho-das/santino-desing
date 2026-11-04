@@ -1108,6 +1108,9 @@ class Santino_Menu_Solution_Widget extends \Elementor\Widget_Base {
               window.santino_menu_data = window.santino_menu_data || {};
               window.santino_menu_data.items = <?php echo json_encode( $dynamic_items ); ?>;
               window.santino_order_btn_text = <?php echo json_encode( $order_btn_text ); ?>;
+              if (typeof menuProducts !== 'undefined' && Array.isArray(window.santino_menu_data.items)) {
+                menuProducts = window.santino_menu_data.items;
+              }
               </script>
             </div>
           </section>

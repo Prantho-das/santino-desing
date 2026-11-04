@@ -575,7 +575,45 @@ h1, h2, h3, h4, h5, h6,
       </div>
 
       <div class="row g-4" id="menuItemsGrid">
+        <?php
+        $dynamic_menu_items = class_exists( 'Santino_Handcrafted_Items_System' ) ? Santino_Handcrafted_Items_System::get_all_menu_items() : array();
+        if ( ! empty( $dynamic_menu_items ) ) :
+          foreach ( $dynamic_menu_items as $m_item ) :
+            $m_badge = ! empty( $m_item['tag'] ) ? $m_item['tag'] : 'Handcrafted';
+            $m_class = ! empty( $m_item['badgeClass'] ) ? $m_item['badgeClass'] : 'badge-teal';
+            $m_price = is_numeric( $m_item['price'] ?? '' ) ? '৳ ' . $m_item['price'] : $m_item['price'];
+            $m_desc  = ! empty( $m_item['roast'] ) ? $m_item['roast'] : ( $m_item['desc'] ?? '' );
+        ?>
+        <div class="col-md-6 col-lg-4">
+          <div class="menu-product-card">
+            <div class="menu-card-image-wrap">
+              <span class="menu-badge-pill <?php echo esc_attr( $m_class ); ?>"><?php echo esc_html( $m_badge ); ?></span>
+              <img src="<?php echo esc_url( $m_item['img'] ); ?>" alt="<?php echo esc_attr( $m_item['name'] ); ?>" class="menu-card-img" loading="lazy">
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-taste-notes"><?php echo esc_html( $m_desc ); ?></div>
+              <h4 class="menu-item-name"><?php echo esc_html( $m_item['name'] ); ?></h4>
+              <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                <span class="menu-item-price"><?php echo esc_html( $m_price ); ?></span>
+                <?php if ( ! empty( $m_item['calories'] ) ) : ?>
+                <span class="menu-item-cal text-muted small ms-1"><?php echo esc_html( $m_item['calories'] ); ?></span>
+                <?php endif; ?>
+              </div>
+            </div>
+          </div>
+        </div>
+        <?php
+          endforeach;
+        endif;
+        ?>
       </div>
+      <script>
+      window.santino_menu_data = window.santino_menu_data || {};
+      window.santino_menu_data.items = <?php echo json_encode( $dynamic_menu_items ); ?>;
+      if (typeof menuProducts !== 'undefined' && Array.isArray(window.santino_menu_data.items)) {
+        menuProducts = window.santino_menu_data.items;
+      }
+      </script>
 
       <div id="noResultsBox" class="text-center py-5 d-none">
         <i class="bi bi-cup-straw text-muted" style="font-size: 4rem;"></i>

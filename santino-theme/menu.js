@@ -324,10 +324,11 @@ document.addEventListener('DOMContentLoaded', () => {
 function getMenuImgUrl(img) {
   if (!img) return '';
   if (img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:')) return img;
+  const clean = img.replace(/^images\//, '').replace(/^assets\/images\//, '').replace(/^\/assets\/images\//, '').replace(/^\/assets\//, '');
   if (typeof santino_ajax !== 'undefined' && santino_ajax.theme_uri) {
-    return santino_ajax.theme_uri + '/assets/' + img;
+    return santino_ajax.theme_uri + '/assets/images/' + clean;
   }
-  return img;
+  return 'images/' + clean;
 }
 
 // Render Menu Cards
@@ -398,7 +399,12 @@ function initCategoryTabs() {
       if (filter === 'all') {
         renderMenuGrid(menuProducts);
       } else {
-        const filtered = menuProducts.filter(p => p.category === filter);
+        const filtered = menuProducts.filter(p => {
+          if (p.category === filter) return true;
+          if (filter === 'bakery' && (p.category === 'bakery' || p.category === 'pastry-bakery')) return true;
+          if (filter === 'soe-espresso' && (p.category === 'soe-espresso' || p.category === 'specialty-espresso')) return true;
+          return false;
+        });
         renderMenuGrid(filtered);
       }
     });
@@ -689,3 +695,24 @@ function initBranchFilters() {
     });
   });
 }
+
+window.filterByCategory = function(cat) {
+  const tab = document.querySelector('.btn-cat-tab[data-filter="' + cat + '"]');
+  if (tab) {
+    tab.click();
+    const section = document.getElementById('menuGridSection');
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    const heading = document.getElementById('currentCategoryHeading');
+    if (heading) heading.innerText = cat.replace(/-/g, ' ').toUpperCase();
+    const filtered = menuProducts.filter(function(p) {
+      if (p.category === cat) return true;
+      if (cat === 'bakery' && (p.category === 'bakery' || p.category === 'pastry-bakery')) return true;
+      if (cat === 'soe-espresso' && (p.category === 'soe-espresso' || p.category === 'specialty-espresso')) return true;
+      return false;
+    });
+    renderMenuGrid(filtered);
+    const section = document.getElementById('menuGridSection');
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
+  }
+};

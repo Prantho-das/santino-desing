@@ -277,6 +277,11 @@ class Santino_Handcrafted_Items_System {
         $items = array();
         foreach ( $posts as $p ) {
             $cat   = get_post_meta( $p->ID, '_santino_item_category', true ) ?: 'barista-coffee';
+            if ( $cat === 'pastry-bakery' ) {
+                $cat = 'bakery';
+            } elseif ( $cat === 'specialty-espresso' ) {
+                $cat = 'soe-espresso';
+            }
             $price = intval( get_post_meta( $p->ID, '_santino_item_price', true ) ?: 170 );
             $tag   = get_post_meta( $p->ID, '_santino_item_tag', true ) ?: '';
             $roast = get_post_meta( $p->ID, '_santino_item_roast', true ) ?: ( 'Tk. ' . $price );
@@ -288,12 +293,40 @@ class Santino_Handcrafted_Items_System {
 
             $img_url = get_the_post_thumbnail_url( $p->ID, 'medium' );
             if ( ! $img_url ) {
-                $custom_name = sanitize_title( $p->post_title );
-                if ( file_exists( SANTINO_DIR . '/assets/images/menu-' . $custom_name . '.jpg' ) ) {
-                    $img_url = SANTINO_URI . '/assets/images/menu-' . $custom_name . '.jpg';
-                } else {
-                    $img_url = function_exists( 'santino_img' ) ? santino_img( 'menu-cappuccino-hot.jpg' ) : ( SANTINO_URI . '/placeholder.jpg' );
+                $custom_img = get_post_meta( $p->ID, '_santino_item_custom_img', true );
+                if ( ! empty( $custom_img ) ) {
+                    $img_url = $custom_img;
                 }
+            }
+            if ( ! $img_url ) {
+                $title_lower = strtolower( $p->post_title );
+                $img_map = array(
+                    'cappuccino'   => 'menu-cappuccino-hot.jpg',
+                    'iced latte'   => 'menu-iced-latte.jpg',
+                    'hot mocha'    => 'menu-hot-mocha.jpg',
+                    'iced mocha'   => 'menu-iced-mocha.jpg',
+                    'mocha frappe' => 'menu-mocha-frappe.jpg',
+                    'hazelnut'     => 'menu-hazelnut-frappe.jpg',
+                    'coconut'      => 'menu-raw-coconut-latte.jpg',
+                    'caramel'      => 'menu-caramel-macchiato.jpg',
+                    'macchiato'    => 'menu-caramel-macchiato.jpg',
+                    'americano'    => 'menu-americano.jpg',
+                    'pour-over'    => 'menu-pourover-v60.jpg',
+                    'v60'          => 'menu-pourover-v60.jpg',
+                    'croissant'    => 'menu-croissant.jpg',
+                    'flat white'   => 'menu-flat-white.jpg',
+                    'matcha'       => 'menu-matcha-latte.jpg',
+                    'chocolate'    => 'menu-iced-chocolate.jpg',
+                );
+                foreach ( $img_map as $kw => $fname ) {
+                    if ( strpos( $title_lower, $kw ) !== false ) {
+                        $img_url = function_exists( 'santino_img' ) ? santino_img( $fname ) : ( SANTINO_URI . '/assets/images/' . $fname );
+                        break;
+                    }
+                }
+            }
+            if ( ! $img_url ) {
+                $img_url = function_exists( 'santino_img' ) ? santino_img( 'menu-cappuccino-hot.jpg' ) : ( SANTINO_URI . '/placeholder.jpg' );
             }
 
             $badgeClass = 'badge-teal';
