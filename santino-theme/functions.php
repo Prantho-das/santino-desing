@@ -47,8 +47,9 @@ function santino_theme_setup() {
     }
 
     register_nav_menus( array(
-        'primary' => __( 'Primary Header Navigation', 'santino' ),
-        'topbar'  => __( 'Top Contact Bar Menu', 'santino' ),
+        'primary'      => __( 'Primary Header Navigation', 'santino' ),
+        'second_bar'   => __( 'Secondary Sub Header Bar', 'santino' ),
+        'topbar'       => __( 'Top Contact Bar Menu', 'santino' ),
         'footer_quick' => __( 'Footer Quick Links', 'santino' ),
         'footer_care'  => __( 'Footer Customer Care', 'santino' ),
     ) );
@@ -90,6 +91,9 @@ function santino_woocommerce_header_add_to_cart_fragment( $fragments ) {
     return $fragments;
 }
 add_filter( 'woocommerce_add_to_cart_fragments', 'santino_woocommerce_header_add_to_cart_fragment' );
+
+add_filter( 'woocommerce_is_purchasable', '__return_false' );
+add_filter( 'woocommerce_loop_add_to_cart_link', '__return_empty_string' );
 
 /**
  * Register CSS and JS

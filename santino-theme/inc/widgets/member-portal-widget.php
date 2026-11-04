@@ -10,7 +10,7 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__( 'Santino VIP Member Portal & Stamp Card', 'santino' );
+        return esc_html__( 'Santino: /santino-member/ All Sections & Portal', 'santino' );
     }
 
     public function get_icon() {
@@ -175,6 +175,135 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        $this->add_control(
+            'tab1_title',
+            array(
+                'label'   => esc_html__( 'Tab 1 Heading', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Check Your Live Stamp Progress',
+            )
+        );
+        $this->add_control(
+            'tab1_desc',
+            array(
+                'label'   => esc_html__( 'Tab 1 Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Enter your Registered Phone Number or Member ID below.',
+            )
+        );
+
+        $this->add_control(
+            'tab2_title',
+            array(
+                'label'   => esc_html__( 'Tab 2 Heading', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Log Cafe Invoice / Memo Number',
+            )
+        );
+        $this->add_control(
+            'tab2_desc',
+            array(
+                'label'   => esc_html__( 'Tab 2 Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Submit your receipt details. Each approved cup credits your 5-cup stamp progress.',
+            )
+        );
+
+        $this->add_control(
+            'tab3_title',
+            array(
+                'label'   => esc_html__( 'Tab 3 Heading', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Santino Regular Member Enrollment',
+            )
+        );
+        $this->add_control(
+            'tab3_desc',
+            array(
+                'label'   => esc_html__( 'Tab 3 Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Complete 5 cups of handcrafted coffee across Dhaka branches to enjoy your 6th cup free.',
+            )
+        );
+
+        $this->end_controls_section();
+
+        // 3. BOTTOM CTA SECTION
+        $this->start_controls_section(
+            'section_bottom_cta',
+            array(
+                'label' => esc_html__( 'Bottom CTA (Visit Cafes)', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control(
+            'show_bottom_cta',
+            array(
+                'label'        => esc_html__( 'Show Bottom CTA Section', 'santino' ),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'default'      => 'no',
+                'return_value' => 'yes',
+            )
+        );
+
+        $this->add_control(
+            'cta_badge',
+            array(
+                'label'   => esc_html__( 'Badge Text', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'VISIT OUR CAFES',
+            )
+        );
+
+        $this->add_control(
+            'cta_title',
+            array(
+                'label'   => esc_html__( 'Title', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Taste The',
+            )
+        );
+
+        $this->add_control(
+            'cta_title_accent',
+            array(
+                'label'   => esc_html__( 'Title Accent', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Santino Difference',
+            )
+        );
+
+        $this->add_control(
+            'cta_desc',
+            array(
+                'label'   => esc_html__( 'Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXTAREA,
+                'default' => 'Discover our signature handcrafted beverages, artisanal roasts, and modern cafe ambiance across Dhaka.',
+            )
+        );
+
+        $this->add_control(
+            'cta_btn_text',
+            array(
+                'label'       => esc_html__( 'Button Text (Blank to Hide)', 'santino' ),
+                'type'        => \Elementor\Controls_Manager::TEXT,
+                'default'     => 'Explore Drinks Menu',
+                'description' => esc_html__( 'Leave blank if you want to hide this button completely.', 'santino' ),
+            )
+        );
+
+        $this->add_control(
+            'cta_btn_url',
+            array(
+                'label'   => esc_html__( 'Button URL', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::URL,
+                'default' => array(
+                    'url' => '/menu/',
+                ),
+            )
+        );
+
         $this->end_controls_section();
     }
 
@@ -199,9 +328,9 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
         $hero_title  = ! empty( $settings['hero_title'] ) ? $settings['hero_title'] : 'Santino Member Club &amp; Rewards';
         $hero_desc   = ! empty( $settings['hero_desc'] ) ? $settings['hero_desc'] : 'Track your 5-cup coffee stamps, upload cafe invoices, and claim your free 6th handcrafted cup across Santino partner cafes.';
 
-        $btn1_text   = $settings['hero_btn1_text'] ?: 'Check Stamp Card';
+        $btn1_text   = isset( $settings['hero_btn1_text'] ) ? trim( (string) $settings['hero_btn1_text'] ) : '';
         $btn1_url    = ! empty( $settings['hero_btn1_url']['url'] ) ? $settings['hero_btn1_url']['url'] : '#clubPortal';
-        $btn2_text   = $settings['hero_btn2_text'] ?: 'Log Invoice Memo';
+        $btn2_text   = isset( $settings['hero_btn2_text'] ) ? trim( (string) $settings['hero_btn2_text'] ) : '';
         $btn2_url    = ! empty( $settings['hero_btn2_url']['url'] ) ? $settings['hero_btn2_url']['url'] : '#invoice-tab';
 
         $portal_badge = $settings['portal_badge'] ?: 'VIP LOYALTY REWARDS';
@@ -542,21 +671,28 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                 <?php echo wp_kses_post( $hero_desc ); ?>
               </p>
 
+              <?php if ( ! empty( $btn1_text ) || ! empty( $btn2_text ) ) : ?>
               <div class="pro-banner-actions d-flex justify-content-center align-items-center gap-3 flex-wrap">
+                <?php if ( ! empty( $btn1_text ) ) : ?>
                 <a href="<?php echo esc_url( $btn1_url ); ?>" class="btn-hero-lifestyle">
                   <span><?php echo esc_html( $btn1_text ); ?></span>
                   <i class="bi bi-arrow-right"></i>
                 </a>
+                <?php endif; ?>
+                <?php if ( ! empty( $btn2_text ) ) : ?>
                 <a href="<?php echo esc_url( $btn2_url ); ?>" class="btn-hero-outline">
                   <i class="bi bi-receipt-cutoff text-warning"></i>
                   <span><?php echo esc_html( $btn2_text ); ?></span>
                 </a>
+                <?php endif; ?>
               </div>
+              <?php endif; ?>
             </div>
           </section>
           <?php endif; ?>
 
           <!-- 2-COLUMN VIP LOYALTY PORTAL SECTION -->
+          <div id="stamps"></div>
           <section class="standalone-portal-section position-relative overflow-hidden" id="clubPortal">
             <!-- Floating Background Icons -->
             <div class="floating-bg-icons" aria-hidden="true">
@@ -582,12 +718,12 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                 </p>
               </div>
 
-              <div class="row g-4 align-items-stretch justify-content-center">
+              <div class="row g-4 align-items-start justify-content-center">
                 <!-- LEFT COLUMN: Stamp Card Display -->
                 <div class="col-lg-5">
-                  <div class="d-flex flex-column justify-content-between h-100">
+                  <div class="d-flex flex-column gap-3">
                     <!-- Luxury Gold/Teal Card -->
-                    <div class="vip-card-surface mb-4">
+                    <div class="vip-card-surface">
                       <i class="bi bi-cup-hot vip-card-watermark"></i>
                       
                       <!-- Card Top Header -->
@@ -697,8 +833,8 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                       <!-- TAB 1: CHECK STAMP STATUS -->
                       <div class="tab-pane fade show active" id="stamps-pane" role="tabpanel">
                         <div class="mb-4">
-                          <h4 class="font-heading fw-bold text-dark mb-1">Check Your Live Stamp Progress</h4>
-                          <p class="text-muted small">Enter your Registered Phone Number or Member ID below.</p>
+                          <h4 class="font-heading fw-bold text-dark mb-1"><?php echo esc_html( $settings['tab1_title'] ?? 'Check Your Live Stamp Progress' ); ?></h4>
+                          <p class="text-muted small"><?php echo esc_html( $settings['tab1_desc'] ?? 'Enter your Registered Phone Number or Member ID below.' ); ?></p>
                         </div>
 
                         <form id="santinoLookupForm" class="mb-4">
@@ -719,8 +855,8 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                       <!-- TAB 2: LOG INVOICE NUMBER -->
                       <div class="tab-pane fade" id="invoice-pane" role="tabpanel">
                         <div class="mb-4">
-                          <h4 class="font-heading fw-bold text-dark mb-1">Log Cafe Invoice / Memo Number</h4>
-                          <p class="text-muted small">Submit your receipt details. Each approved cup credits your 5-cup stamp progress.</p>
+                          <h4 class="font-heading fw-bold text-dark mb-1"><?php echo esc_html( $settings['tab2_title'] ?? 'Log Cafe Invoice / Memo Number' ); ?></h4>
+                          <p class="text-muted small"><?php echo esc_html( $settings['tab2_desc'] ?? 'Submit your receipt details. Each approved cup credits your 5-cup stamp progress.' ); ?></p>
                         </div>
 
                         <div id="invoiceResponseBox" style="display: none;" class="mb-4"></div>
@@ -732,7 +868,7 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                               <input type="text" name="invoice_number" class="form-control" placeholder="e.g. SNT-2026-9042" required>
                             </div>
                             <div class="col-md-3">
-                              <label class="form-label small fw-bold text-dark">No. of Cups *</label>
+                              <label class="form-label small fw-bold text-dark">No. of Items / Cups *</label>
                               <div class="input-group">
                                 <button class="btn btn-outline-secondary px-2 santino-cup-minus" type="button" style="font-weight: bold; border-color: #cbd5e1;">−</button>
                                 <input type="number" name="cups" class="form-control text-center santino-cups-input" min="1" max="50" value="1" style="font-weight: bold; color: #00625d;" required>
@@ -746,7 +882,22 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                           </div>
 
                           <div class="row g-3 mb-3">
-                            <div class="col-md-7">
+                            <div class="col-md-12">
+                              <label class="form-label small fw-bold text-dark"><i class="bi bi-cup-hot-fill me-1" style="color: #00625d;"></i> Items Ordered / Consumed *</label>
+                              <select name="items_consumed" class="form-select" required>
+                                <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
+                                <?php 
+                                $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
+                                foreach ( $ordered_items as $item_choice ) : ?>
+                                  <option value="<?php echo esc_attr( $item_choice ); ?>"><?php echo esc_html( $item_choice ); ?></option>
+                                <?php endforeach; ?>
+                              </select>
+                              <div class="form-text text-muted" style="font-size: 11px;">Select the handcrafted coffee or bakery item on your receipt.</div>
+                            </div>
+                          </div>
+
+                          <div class="row g-3 mb-3">
+                            <div class="col-md-12">
                               <label class="form-label small fw-bold text-dark">Cafe Branch Visited</label>
                               <select name="branch" class="form-select">
                                 <?php 
@@ -756,16 +907,12 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                                 <?php endforeach; ?>
                               </select>
                             </div>
-                            <div class="col-md-5">
-                              <label class="form-label small fw-bold text-dark">Member ID (Optional)</label>
-                              <input type="text" name="member_id" class="form-control" placeholder="e.g. SNT-REG-XXXX">
-                            </div>
                           </div>
 
                           <div class="mb-4">
-                            <label class="form-label small fw-bold text-dark"><i class="bi bi-camera me-1" style="color: #00625d;"></i> Upload Invoice / Memo Photo (Optional)</label>
-                            <input type="file" name="invoice_image" id="santinoInvoiceImage" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg">
-                            <div class="form-text text-muted small" style="font-size: 0.78rem;">Upload photo of your physical cafe bill/memo for fast verification (JPG, PNG, WebP).</div>
+                            <label class="form-label small fw-bold text-dark"><i class="bi bi-camera-fill me-1" style="color: #00625d;"></i> Upload Invoice / Memo Photo * (Mandatory)</label>
+                            <input type="file" name="invoice_image" id="santinoInvoiceImage" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg" required>
+                            <div class="form-text text-muted small" style="font-size: 0.78rem;">Upload photo of your physical cafe bill/memo for fast verification (JPG, PNG, WebP) - Required.</div>
                           </div>
 
                           <button type="submit" class="btn btn-portal-submit w-100 font-heading text-uppercase">
@@ -784,6 +931,13 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                         <div id="membershipResponseBox" style="display: none;" class="mb-4"></div>
 
                         <form id="santinoMembershipForm">
+                          <div class="row g-3 mb-3">
+                            <div class="col-md-12">
+                              <label class="form-label small fw-bold text-dark">Full Name *</label>
+                              <input type="text" name="name" class="form-control" placeholder="Enter your full name" required>
+                            </div>
+                          </div>
+
                           <div class="row g-3 mb-3">
                             <div class="col-md-12">
                               <label class="form-label small fw-bold text-dark">Mobile Number: *</label>
@@ -847,6 +1001,48 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
               </div>
             </div>
           </section>
+
+          <?php 
+          $show_bottom_cta = ( $settings['show_bottom_cta'] ?? 'no' ) === 'yes';
+          if ( $show_bottom_cta ) :
+            $cta_badge  = ! empty( $settings['cta_badge'] ) ? $settings['cta_badge'] : '';
+            $cta_title  = ! empty( $settings['cta_title'] ) ? $settings['cta_title'] : 'Taste The';
+            $cta_accent = ! empty( $settings['cta_title_accent'] ) ? $settings['cta_title_accent'] : 'Santino Difference';
+            $cta_desc   = ! empty( $settings['cta_desc'] ) ? $settings['cta_desc'] : '';
+            $cta_btn    = isset( $settings['cta_btn_text'] ) ? trim( (string) $settings['cta_btn_text'] ) : '';
+            $cta_url    = ! empty( $settings['cta_btn_url']['url'] ) ? $settings['cta_btn_url']['url'] : home_url( '/menu/' );
+          ?>
+          <section class="py-5 bg-white text-center border-top">
+            <div class="container py-4" style="max-width: 700px;">
+              <?php if ( ! empty( $cta_badge ) ) : ?>
+              <div class="sec-pill-badge-wrap mb-2">
+                <span class="sec-pill-line"></span>
+                <span class="sec-pill-badge"><i class="bi bi-cup-hot-fill me-1"></i> <?php echo esc_html( $cta_badge ); ?></span>
+                <span class="sec-pill-line"></span>
+              </div>
+              <?php endif; ?>
+              <h2 class="sec-title mb-2">
+                <?php echo esc_html( $cta_title ); ?> 
+                <?php if ( ! empty( $cta_accent ) ) : ?>
+                  <span class="sec-title-accent"><?php echo esc_html( $cta_accent ); ?></span>
+                <?php endif; ?>
+              </h2>
+              <?php if ( ! empty( $cta_desc ) ) : ?>
+              <p class="text-muted mb-4" style="font-size: 0.98rem; max-width: 540px; margin: 0 auto; line-height: 1.6;">
+                <?php echo esc_html( $cta_desc ); ?>
+              </p>
+              <?php endif; ?>
+              <?php if ( ! empty( $cta_btn ) ) : ?>
+              <div class="d-flex justify-content-center">
+                <a href="<?php echo esc_url( $cta_url ); ?>" class="btn-hero-lifestyle">
+                  <span><?php echo esc_html( $cta_btn ); ?></span>
+                  <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+              <?php endif; ?>
+            </div>
+          </section>
+          <?php endif; ?>
         </div>
         <?php
     }

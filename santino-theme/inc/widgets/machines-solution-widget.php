@@ -10,7 +10,7 @@ class Santino_Machines_Solution_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__( 'Santino Commercial Machines Solution', 'santino' );
+        return esc_html__( 'Santino: /machines/ All Sections & Equipment', 'santino' );
     }
 
     public function get_icon() {
@@ -54,6 +54,63 @@ class Santino_Machines_Solution_Widget extends \Elementor\Widget_Base {
                 'label'   => esc_html__( 'Hero Description', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::TEXTAREA,
                 'default' => 'Official Italian espresso machines, automated coffee stations, and 4-hour on-site tech SLA.',
+            )
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_grid',
+            array(
+                'label' => esc_html__( 'Commercial Machines Grid', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control(
+            'show_grid',
+            array(
+                'label'        => esc_html__( 'Show Machines Grid', 'santino' ),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'default'      => 'yes',
+                'return_value' => 'yes',
+            )
+        );
+
+        $this->add_control(
+            'grid_badge',
+            array(
+                'label'   => esc_html__( 'Badge Text', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'EQUIPMENT PORTFOLIO',
+            )
+        );
+
+        $this->add_control(
+            'grid_title',
+            array(
+                'label'   => esc_html__( 'Title', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Engineered for Flawless Extraction',
+            )
+        );
+
+        $this->add_control(
+            'grid_desc',
+            array(
+                'label'   => esc_html__( 'Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXTAREA,
+                'default' => 'Discover our comprehensive collection of traditional, superautomatic, and bionic coffee machinery',
+            )
+        );
+
+        $this->add_control(
+            'machine_btn_text',
+            array(
+                'label'       => esc_html__( 'Card Button Text (Blank to Hide)', 'santino' ),
+                'type'        => \Elementor\Controls_Manager::TEXT,
+                'default'     => '',
+                'description' => esc_html__( 'Leave blank to hide the button completely.', 'santino' ),
             )
         );
 
@@ -281,19 +338,91 @@ class Santino_Machines_Solution_Widget extends \Elementor\Widget_Base {
             </div>
           </div>
 
+          <?php
+          $show_grid        = ( $settings['show_grid'] ?? 'yes' ) === 'yes';
+          $grid_badge       = ! empty( $settings['grid_badge'] ) ? $settings['grid_badge'] : '';
+          $grid_title       = ! empty( $settings['grid_title'] ) ? $settings['grid_title'] : 'Engineered for Flawless Extraction';
+          $grid_desc        = ! empty( $settings['grid_desc'] ) ? $settings['grid_desc'] : '';
+          $machine_btn_text = isset( $settings['machine_btn_text'] ) ? trim( (string) $settings['machine_btn_text'] ) : '';
+
+          if ( $show_grid ) :
+          ?>
           <section class="py-5" id="machineGrid">
             <div class="container">
               <div class="sec-heading-center text-center mb-5">
+                <?php if ( ! empty( $grid_badge ) ) : ?>
                 <div class="sec-pill-badge-wrap mb-2">
                   <span class="sec-pill-line"></span>
-                  <span class="sec-pill-badge"><i class="bi bi-gear-wide-connected me-1"></i> EQUIPMENT PORTFOLIO</span>
+                  <span class="sec-pill-badge"><i class="bi bi-gear-wide-connected me-1"></i> <?php echo esc_html( $grid_badge ); ?></span>
                   <span class="sec-pill-line"></span>
                 </div>
-                <h2 class="sec-title">Engineered for Flawless Extraction</h2>
-                <div class="sec-subtitle text-muted">Discover our comprehensive collection of traditional, superautomatic, and bionic coffee machinery</div>
+                <?php endif; ?>
+                <h2 class="sec-title"><?php echo esc_html( $grid_title ); ?></h2>
+                <?php if ( ! empty( $grid_desc ) ) : ?>
+                <div class="sec-subtitle text-muted"><?php echo esc_html( $grid_desc ); ?></div>
+                <?php endif; ?>
               </div>
 
               <div class="row g-4" id="machinesContainer">
+                <?php
+                $machine_posts = get_posts( array(
+                    'post_type'      => 'product',
+                    'posts_per_page' => -1,
+                    'post_status'    => 'publish',
+                    'tax_query'      => array(
+                        array(
+                            'taxonomy' => 'product_cat',
+                            'field'    => 'slug',
+                            'terms'    => array(
+                                'commercial-espresso-machines',
+                                'super-automatic-bean-to-cup',
+                                'commercial-coffee-grinders',
+                                'robotic-automated-kiosks',
+                                'specialty-tea-brewing-systems',
+                                'barista-accessories-maintenance',
+                            ),
+                        ),
+                    ),
+                ) );
+
+                if ( ! empty( $machine_posts ) ) :
+                    foreach ( $machine_posts as $mp ) :
+                        $m_title = $mp->post_title;
+                        $m_desc  = wp_trim_words( $mp->post_excerpt ?: $mp->post_content, 18 );
+                        $m_img   = get_the_post_thumbnail_url( $mp->ID, 'medium' ) ?: santino_img( 'imgi_29_maverick-VA_1200x1200_fc8d047e-bc19-4666-8e3a-90081b8cdca7.webp' );
+                        $raw_price = get_post_meta( $mp->ID, '_price', true );
+                        $m_price = $raw_price ? '৳ ' . number_format( (float) $raw_price ) : '';
+                        $cats    = wp_get_post_terms( $mp->ID, 'product_cat', array( 'fields' => 'names' ) );
+                        $m_badge = ! empty( $cats[0] ) ? $cats[0] : 'COMMERCIAL MACHINE';
+                ?>
+                <div class="col-lg-4 col-md-6">
+                  <div class="machine-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm d-flex flex-column justify-content-between p-4">
+                    <div>
+                      <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-dark"><?php echo esc_html( $m_badge ); ?></span>
+                        <?php if ( $m_price ) : ?>
+                        <span class="text-teal small fw-bold" style="color: #00625d;"><?php echo esc_html( $m_price ); ?></span>
+                        <?php endif; ?>
+                      </div>
+                      <div class="machine-img-box text-center my-3">
+                        <img src="<?php echo esc_url( $m_img ); ?>" alt="<?php echo esc_attr( $m_title ); ?>" class="img-fluid" style="max-height: 200px; object-fit: contain;">
+                      </div>
+                      <h4 class="font-heading fw-bold mb-1"><?php echo esc_html( $m_title ); ?></h4>
+                      <p class="text-muted small mb-3"><?php echo esc_html( $m_desc ); ?></p>
+                    </div>
+                    <?php if ( ! empty( $machine_btn_text ) ) : ?>
+                    <div class="border-top pt-3 d-flex gap-2">
+                      <button class="btn-prod-quote flex-fill" data-bs-toggle="modal" data-bs-target="#demoModal">
+                        <?php echo esc_html( $machine_btn_text ); ?>
+                      </button>
+                    </div>
+                    <?php endif; ?>
+                  </div>
+                </div>
+                <?php
+                    endforeach;
+                else :
+                ?>
                 <div class="col-lg-4 col-md-6">
                   <div class="machine-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm d-flex flex-column justify-content-between p-4">
                     <div>
@@ -306,74 +435,19 @@ class Santino_Machines_Solution_Widget extends \Elementor\Widget_Base {
                       </div>
                       <h4 class="font-heading fw-bold mb-1">Black Eagle Maverick</h4>
                       <p class="text-muted small mb-3">T3 Genius multiboiler with PureBrew filter extraction and gravimetric auto-tare scales.</p>
-                      <div class="machine-spec-tags d-flex flex-wrap gap-2 mb-3">
-                        <span class="badge bg-light text-dark border">2/3 Group Heads</span>
-                        <span class="badge bg-light text-dark border">7100W Power</span>
-                        <span class="badge bg-light text-dark border">Gravitech Scale</span>
-                      </div>
                     </div>
+                    <?php if ( ! empty( $machine_btn_text ) ) : ?>
                     <div class="border-top pt-3 d-flex gap-2">
-                      <button class="btn-prod-quote flex-fill" data-bs-toggle="modal" data-bs-target="#demoModal">
-                        Book Demo
-                      </button>
+                      <button class="btn-prod-quote flex-fill" data-bs-toggle="modal" data-bs-target="#demoModal"><?php echo esc_html( $machine_btn_text ); ?></button>
                     </div>
+                    <?php endif; ?>
                   </div>
                 </div>
-
-                <div class="col-lg-4 col-md-6">
-                  <div class="machine-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm d-flex flex-column justify-content-between p-4">
-                    <div>
-                      <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge text-white" style="background-color: var(--santino-teal, #00625d);">ENERGY EFFICIENT</span>
-                        <span class="text-muted small fw-bold">Victoria Arduino</span>
-                      </div>
-                      <div class="machine-img-box text-center my-3">
-                        <img src="<?php echo santino_img('imgi_21_EagleOne_e524e570-7076-4cbc-916e-ad851ca2de5c.jpg'); ?>" alt="Eagle One" class="img-fluid" style="max-height: 200px; object-fit: contain;">
-                      </div>
-                      <h4 class="font-heading fw-bold mb-1">Eagle One Commercial</h4>
-                      <p class="text-muted small mb-3">NEO engine technology that uses instant heating to reduce carbon emissions by up to 35%.</p>
-                      <div class="machine-spec-tags d-flex flex-wrap gap-2 mb-3">
-                        <span class="badge bg-light text-dark border">NEO Instant Boiler</span>
-                        <span class="badge bg-light text-dark border">TERS Heat Recovery</span>
-                        <span class="badge bg-light text-dark border">Mobile App Control</span>
-                      </div>
-                    </div>
-                    <div class="border-top pt-3 d-flex gap-2">
-                      <button class="btn-prod-quote flex-fill" data-bs-toggle="modal" data-bs-target="#demoModal">
-                        Book Demo
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                  <div class="machine-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm d-flex flex-column justify-content-between p-4">
-                    <div>
-                      <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge bg-danger">BIONIC ROBOTICS</span>
-                        <span class="text-muted small fw-bold">CAYE Robotics</span>
-                      </div>
-                      <div class="machine-img-box text-center my-3">
-                        <img src="<?php echo santino_img('imgi_218_blackeagle2.jpg'); ?>" alt="CAYE Barista Bot" class="img-fluid" style="max-height: 200px; object-fit: contain;">
-                      </div>
-                      <h4 class="font-heading fw-bold mb-1">CAYE Bionic Barista Robot</h4>
-                      <p class="text-muted small mb-3">Automated 6-axis dual robotic arm kiosk serving latte art and specialty brews in 45 seconds.</p>
-                      <div class="machine-spec-tags d-flex flex-wrap gap-2 mb-3">
-                        <span class="badge bg-light text-dark border">6-Axis Dual Arm</span>
-                        <span class="badge bg-light text-dark border">Flawless Latte Art</span>
-                        <span class="badge bg-light text-dark border">Cloud POS Sync</span>
-                      </div>
-                    </div>
-                    <div class="border-top pt-3 d-flex gap-2">
-                      <button class="btn-prod-quote flex-fill" data-bs-toggle="modal" data-bs-target="#demoModal">
-                        Book Demo
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <?php endif; ?>
               </div>
             </div>
           </section>
+          <?php endif; ?>
 
           <div class="modal fade" id="demoModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">

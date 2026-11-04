@@ -119,40 +119,65 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
 
 </style>
 
+<?php
+$mb_hero_badge        = get_theme_mod( 'santino_mb_hero_badge', 'SANTINO COFFEE CLUB' );
+$mb_hero_title        = get_theme_mod( 'santino_mb_hero_title', 'Buy 5 Cups,' );
+$mb_hero_title_accent = get_theme_mod( 'santino_mb_hero_title_accent', 'Get 1 Free!' );
+$mb_hero_desc         = get_theme_mod( 'santino_mb_hero_desc', 'Our exclusive digital stamp rewards club for true coffee connoisseurs across Bangladesh.' );
+$mb_hero_btn1_text    = get_theme_mod( 'santino_mb_hero_btn1_text', 'Claim Stamp Card' );
+$mb_hero_btn1_url     = get_theme_mod( 'santino_mb_hero_btn1_url', '#clubPortal' );
+$mb_hero_btn2_text    = get_theme_mod( 'santino_mb_hero_btn2_text', 'Explore Cafe Menu' );
+$mb_hero_btn2_url     = get_theme_mod( 'santino_mb_hero_btn2_url', '/menu/' );
+$mb_hero_bg           = get_theme_mod( 'santino_mb_hero_bg' );
+if ( ! $mb_hero_bg ) {
+    $mb_hero_bg = function_exists('santino_get_page_banner') ? santino_get_page_banner('membership', 'imgi_20_santino_-_250522-07574.jpg') : ( function_exists('santino_img') ? santino_img('imgi_20_santino_-_250522-07574.jpg') : '' );
+}
+?>
+
 <!-- MINIMAL CLEAN MEMBERSHIP HERO -->
-  <section class="pro-banner-hero position-relative overflow-hidden text-center" style="background-image: url('<?php echo function_exists('santino_get_page_banner') ? santino_get_page_banner('membership', 'imgi_20_santino_-_250522-07574.jpg') : santino_img('imgi_20_santino_-_250522-07574.jpg'); ?>')"; background-position: center; background-size: cover; min-height: 56vh; display: flex; align-items: center; justify-content: center; padding: 80px 20px;">
+  <section class="pro-banner-hero position-relative overflow-hidden text-center" style="background-image: url('<?php echo esc_url( $mb_hero_bg ); ?>'); background-position: center; background-size: cover; min-height: 56vh; display: flex; align-items: center; justify-content: center; padding: 80px 20px;">
     <div class="pro-banner-overlay" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0, 38, 35, 0.7) 100%); z-index: 1;"></div>
     
     <div class="container position-relative" style="max-width: 820px; z-index: 2;">
       
       <!-- Home Page Style Pill Badge -->
+      <?php if ( ! empty( $mb_hero_badge ) ) : ?>
       <div class="sec-pill-badge-wrap light mb-3">
         <span class="sec-pill-line"></span>
-        <span class="sec-pill-badge"><i class="bi bi-gem me-1 text-warning"></i> SANTINO VIP COFFEE CLUB</span>
+        <span class="sec-pill-badge"><i class="bi bi-gem me-1 text-warning"></i> <?php echo esc_html( $mb_hero_badge ); ?></span>
         <span class="sec-pill-line"></span>
       </div>
+      <?php endif; ?>
 
       <!-- Concise Balanced Headline -->
       <h1 class="pro-banner-title mb-3" style="font-family: var(--kp-font-title, 'Montserrat', sans-serif); font-size: clamp(2.3rem, 4.5vw, 3.6rem); font-weight: 900; line-height: 1.18; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 14px rgba(0,0,0,0.5);">
-        Exclusive Connoisseur <span style="color: #dfbe8d;">Privileges</span>
+        <?php echo esc_html( $mb_hero_title ); ?> <?php if ( ! empty( $mb_hero_title_accent ) ) : ?><span style="color: #dfbe8d;"><?php echo esc_html( $mb_hero_title_accent ); ?></span><?php endif; ?>
       </h1>
 
       <!-- Subtitle -->
+      <?php if ( ! empty( $mb_hero_desc ) ) : ?>
       <p class="pro-banner-desc mb-4" style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); max-width: 640px; font-size: 1.08rem; line-height: 1.65; color: rgba(255, 255, 255, 0.92); margin: 0 auto; text-shadow: 0 1px 8px rgba(0,0,0,0.4);">
-        Private cupping sessions, seasonal micro-lot allocations, and 15% VIP artisan bean discounts across Bangladesh.
+        <?php echo esc_html( $mb_hero_desc ); ?>
       </p>
+      <?php endif; ?>
 
-      <!-- Action Buttons (Home Page Exact Styling) -->
+      <!-- Action Buttons (Conditional: Blank text hides button) -->
+      <?php if ( ! empty( $mb_hero_btn1_text ) || ! empty( $mb_hero_btn2_text ) ) : ?>
       <div class="pro-banner-actions d-flex justify-content-center align-items-center gap-3 flex-wrap">
-        <a href="#clubPortal" class="btn-hero-lifestyle">
-          <span>Join Coffee Club</span>
+        <?php if ( ! empty( $mb_hero_btn1_text ) ) : ?>
+        <a href="<?php echo esc_url( $mb_hero_btn1_url ); ?>" class="btn-hero-lifestyle">
+          <span><?php echo esc_html( $mb_hero_btn1_text ); ?></span>
           <i class="bi bi-arrow-right"></i>
         </a>
-        <a href="#perks" class="btn-hero-outline">
+        <?php endif; ?>
+        <?php if ( ! empty( $mb_hero_btn2_text ) ) : ?>
+        <a href="<?php echo esc_url( $mb_hero_btn2_url ); ?>" class="btn-hero-outline">
           <i class="bi bi-arrow-down-short text-warning"></i>
-          <span>Explore Perks</span>
+          <span><?php echo esc_html( $mb_hero_btn2_text ); ?></span>
         </a>
+        <?php endif; ?>
       </div>
+      <?php endif; ?>
 
     </div>
   </section>
@@ -319,6 +344,7 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
 .float-item-10 { bottom: 35% !important; left: 2% !important; width: 70px !important; height: 70px !important; }
 
 </style>
+  <?php if ( get_theme_mod( 'santino_mb_show_perks', '1' ) ) : ?>
   <!-- LUXURY MEMBER PERKS SHOWCASE -->
   <section class="py-5 perks-section position-relative overflow-hidden" id="perks">
     <!-- Floating Background Icons & Leaves -->
@@ -361,14 +387,14 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
       <div class="text-center max-w-700 mx-auto mb-5 reveal">
         <div class="sec-pill-badge-wrap mb-2">
         <span class="sec-pill-line"></span>
-        <span class="sec-pill-badge"><i class="bi bi-award-fill  me-1"></i> MEMBER PRIVILEGES</span>
+        <span class="sec-pill-badge"><i class="bi bi-award-fill me-1"></i> <?php echo esc_html( get_theme_mod( 'santino_mb_perks_badge', 'WHY JOIN THE CLUB?' ) ); ?></span>
         <span class="sec-pill-line"></span>
       </div>
         <h2 class="sec-title mb-2">
-          Crafted Exclusively For Coffee Lovers
+          <?php echo esc_html( get_theme_mod( 'santino_mb_perks_title', 'Member Benefits &' ) ); ?> <span class="sec-title-accent"><?php echo esc_html( get_theme_mod( 'santino_mb_perks_title_accent', 'Privileges' ) ); ?></span>
         </h2>
         <p class="text-muted mb-0" style="font-size: 0.98rem; max-width: 580px; line-height: 1.5; margin: 0 auto;">
-          Elevate every cup with exclusive roastery privileges, private sensory workshops, and member-only pricing.
+          <?php echo esc_html( get_theme_mod( 'santino_mb_perks_desc', 'More than just stamps – experience the complete Santino VIP lifestyle' ) ); ?>
         </p>
       </div>
 
@@ -510,6 +536,7 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
 
     </div>
   </section>
+  <?php endif; // santino_mb_show_perks ?>
 
   
 
@@ -805,14 +832,14 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
         </p>
       </div>
 
-      <div class="row g-4 align-items-stretch justify-content-center">
+      <div class="row g-4 align-items-start justify-content-center">
         
         <!-- LEFT COLUMN: Realistic VIP Stamp Card Display -->
         <div class="col-lg-5 reveal" data-delay="100">
-          <div class="d-flex flex-column justify-content-between h-100">
+          <div class="d-flex flex-column gap-3">
             
             <!-- Luxury Gold/Teal Card -->
-            <div class="vip-card-surface mb-4">
+            <div class="vip-card-surface">
               <i class="bi bi-cup-hot vip-card-watermark"></i>
               
               <!-- Card Top Header -->
@@ -926,14 +953,14 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
               <div class="tab-pane fade show active" id="stamps-pane" role="tabpanel">
                 <div class="mb-4">
                   <h4 class="font-heading fw-bold text-dark mb-1">Check Your Live Stamp Progress</h4>
-                  <p class="text-muted small">Enter your Registered Phone Number or Member ID below.</p>
+                  <p class="text-muted small">Enter your Registered Phone Number below.</p>
                 </div>
 
                 <form id="santinoLookupForm" class="mb-4">
                   <div class="portal-lookup-group">
                     <div class="portal-lookup-field">
                       <i class="bi bi-telephone text-teal"></i>
-                      <input type="text" name="query" placeholder="e.g. 01712345678 or SNT-REG-XXXX" required>
+                      <input type="text" name="query" placeholder="e.g. 017XXXXXXXX" required>
                     </div>
                     <button type="submit" class="btn-lookup-action">
                       <span>LOOKUP</span> <i class="bi bi-arrow-right"></i>
@@ -960,7 +987,7 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
                       <input type="text" name="invoice_number" class="form-control" placeholder="e.g. SNT-2026-9042" required>
                     </div>
                     <div class="col-md-3">
-                      <label class="form-label small fw-bold text-dark">No. of Cups *</label>
+                      <label class="form-label small fw-bold text-dark">No. of Items / Cups *</label>
                       <div class="input-group">
                         <button class="btn btn-outline-secondary px-2 santino-cup-minus" type="button" style="font-weight: bold; border-color: #cbd5e1;">−</button>
                         <input type="number" name="cups" class="form-control text-center santino-cups-input" min="1" max="50" value="1" style="font-weight: bold; color: #00625d;" required>
@@ -974,7 +1001,22 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
                   </div>
 
                   <div class="row g-3 mb-3">
-                    <div class="col-md-7">
+                    <div class="col-md-12">
+                      <label class="form-label small fw-bold text-dark"><i class="bi bi-cup-hot-fill me-1 text-teal"></i> Items Ordered / Consumed *</label>
+                      <select name="items_consumed" class="form-select" required>
+                        <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
+                        <?php 
+                        $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
+                        foreach ( $ordered_items as $item_choice ) : ?>
+                          <option value="<?php echo esc_attr( $item_choice ); ?>"><?php echo esc_html( $item_choice ); ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                      <div class="form-text text-muted" style="font-size: 11px;">Select the handcrafted coffee or bakery item on your receipt.</div>
+                    </div>
+                  </div>
+
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-12">
                       <label class="form-label small fw-bold text-dark">Cafe Branch Visited</label>
                       <select name="branch" class="form-select">
                         <?php 
@@ -984,16 +1026,12 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
                         <?php endforeach; ?>
                       </select>
                     </div>
-                    <div class="col-md-5">
-                      <label class="form-label small fw-bold text-dark">Member ID (Optional)</label>
-                      <input type="text" name="member_id" class="form-control" placeholder="e.g. SNT-REG-XXXX">
-                    </div>
                   </div>
 
                   <div class="mb-4">
-                    <label class="form-label small fw-bold text-dark"><i class="bi bi-camera me-1 text-teal"></i> Upload Invoice / Memo Photo (Optional)</label>
-                    <input type="file" name="invoice_image" id="santinoInvoiceImage" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg">
-                    <div class="form-text text-muted small" style="font-size: 0.78rem;">Upload photo of your physical cafe bill/memo for fast verification (JPG, PNG, WebP).</div>
+                    <label class="form-label small fw-bold text-dark"><i class="bi bi-camera-fill me-1 text-teal"></i> Upload Invoice / Memo Photo * (Mandatory)</label>
+                    <input type="file" name="invoice_image" id="santinoInvoiceImage" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg" required>
+                    <div class="form-text text-muted small" style="font-size: 0.78rem;">Upload photo of your physical cafe bill/memo for fast verification (JPG, PNG, WebP) - Required.</div>
                   </div>
 
                   <button type="submit" class="btn btn-portal-submit w-100 font-heading text-uppercase">
@@ -1012,6 +1050,13 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
                 <div id="membershipResponseBox" style="display: none;" class="mb-4"></div>
 
                 <form id="santinoMembershipForm">
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-12">
+                      <label class="form-label small fw-bold text-dark">Full Name *</label>
+                      <input type="text" name="name" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+                  </div>
+
                   <div class="row g-3 mb-3">
                     <div class="col-md-12">
                       <label class="form-label small fw-bold text-dark">Mobile Number / WhatsApp *</label>
@@ -1085,7 +1130,15 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
   </section>
 
 
-      <!-- SIMPLE CLEAN CAFE DISCOVERY CTA -->
+<?php
+$mb_show_cta     = get_theme_mod( 'santino_mb_show_cta', '1' );
+if ( $mb_show_cta ) :
+  $mb_cta_title    = get_theme_mod( 'santino_mb_cta_title', 'Ready For Your Next Handcrafted Brew?' );
+  $mb_cta_desc     = get_theme_mod( 'santino_mb_cta_desc', 'Visit our barista bars across Gulshan, Banani, Dhanmondi & Uttara.' );
+  $mb_cta_btn_text = get_theme_mod( 'santino_mb_cta_btn_text', 'Explore Full Menu →' );
+  $mb_cta_btn_url  = get_theme_mod( 'santino_mb_cta_btn_url', '/menu/' );
+?>
+  <!-- SIMPLE CLEAN CAFE DISCOVERY CTA -->
   <section class="py-5 bg-white text-center border-top">
     <div class="container py-4" style="max-width: 700px;">
       
@@ -1098,24 +1151,27 @@ p, .pro-banner-desc, .perk-desc, .text-muted, label, input, select, textarea {
 
       <!-- Title -->
       <h2 class="sec-title mb-2">
-        Taste The <span class="sec-title-accent">Santino Difference</span>
+        <?php echo esc_html( $mb_cta_title ); ?>
       </h2>
 
       <!-- Description -->
       <p class="text-muted mb-4" style="font-size: 0.98rem; max-width: 540px; margin: 0 auto; line-height: 1.6;">
-        Discover our signature handcrafted beverages, artisanal roasts, and modern cafe ambiance across Dhaka.
+        <?php echo esc_html( $mb_cta_desc ); ?>
       </p>
 
-      <!-- Clean Button -->
+      <!-- Clean Button (Blank to Hide) -->
+      <?php if ( ! empty( $mb_cta_btn_text ) ) : ?>
       <div class="d-flex justify-content-center">
-        <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="btn-hero-lifestyle">
-          <span>Explore Drinks Menu</span>
+        <a href="<?php echo esc_url( $mb_cta_btn_url ); ?>" class="btn-hero-lifestyle">
+          <span><?php echo esc_html( $mb_cta_btn_text ); ?></span>
           <i class="bi bi-arrow-right"></i>
         </a>
       </div>
+      <?php endif; ?>
 
     </div>
   </section>
+<?php endif; ?>
 
   <!-- FOOTER -->
 

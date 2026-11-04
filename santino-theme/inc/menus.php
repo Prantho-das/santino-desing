@@ -76,6 +76,178 @@ class Santino_Footer_Nav_Walker extends Walker_Nav_Menu {
     }
 }
 
+class Santino_Second_Nav_Walker extends Walker_Nav_Menu {
+    private $item_index = 0;
+
+    public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
+        $url   = ! empty( $item->url ) ? esc_url( $item->url ) : '#';
+        $title = apply_filters( 'the_title', $item->title, $item->ID );
+        $upper_title = strtoupper( trim( $title ) );
+        $lower_url   = strtolower( $url );
+
+        if ( $this->item_index > 0 ) {
+            $output .= '<span class="second-menu-sep text-muted">|</span>';
+        }
+        $this->item_index++;
+
+        $bfc_logo        = get_theme_mod( 'santino_bfc_logo' );
+        $swapno_logo     = get_theme_mod( 'santino_swapno_logo' );
+        $membership_logo = get_theme_mod( 'santino_membership_logo' );
+        $menu_logo       = get_theme_mod( 'santino_menu_logo' );
+
+        $media_html = '';
+        $has_image  = false;
+
+        if ( strpos( $upper_title, 'BFC' ) !== false || strpos( $lower_url, '/bfc' ) !== false ) {
+            if ( ! empty( $bfc_logo ) ) {
+                $media_html = '<img src="' . esc_url( $bfc_logo ) . '" alt="' . esc_attr( $title ) . '" class="second-menu-logo">';
+                $has_image  = true;
+            } else {
+                $media_html = '<i class="bi bi-shop"></i>';
+            }
+        } elseif ( strpos( $upper_title, 'SWAPNO' ) !== false || strpos( $upper_title, 'SHWAPNO' ) !== false || strpos( $lower_url, '/swapno' ) !== false ) {
+            if ( ! empty( $swapno_logo ) ) {
+                $media_html = '<img src="' . esc_url( $swapno_logo ) . '" alt="' . esc_attr( $title ) . '" class="second-menu-logo">';
+                $has_image  = true;
+            } else {
+                $media_html = '<i class="bi bi-cart3"></i>';
+            }
+        } elseif ( strpos( $upper_title, 'MEMBER' ) !== false || strpos( $upper_title, 'CLUB' ) !== false || strpos( $lower_url, '/membership' ) !== false ) {
+            if ( ! empty( $membership_logo ) ) {
+                $media_html = '<img src="' . esc_url( $membership_logo ) . '" alt="' . esc_attr( $title ) . '" class="second-menu-logo">';
+                $has_image  = true;
+            } else {
+                $media_html = '<i class="bi bi-award-fill"></i>';
+            }
+        } elseif ( strpos( $upper_title, 'MENU' ) !== false || strpos( $lower_url, '/menu' ) !== false ) {
+            if ( ! empty( $menu_logo ) ) {
+                $media_html = '<img src="' . esc_url( $menu_logo ) . '" alt="' . esc_attr( $title ) . '" class="second-menu-logo">';
+                $has_image  = true;
+            } else {
+                $media_html = '<i class="bi bi-journal-text"></i>';
+            }
+        } else {
+            $custom_icon = '';
+            if ( ! empty( $item->classes ) ) {
+                foreach ( (array) $item->classes as $c ) {
+                    if ( strpos( $c, 'bi-' ) === 0 ) {
+                        $custom_icon = '<i class="bi ' . esc_attr( $c ) . '"></i>';
+                        break;
+                    }
+                }
+            }
+            $media_html = $custom_icon ? $custom_icon : '<i class="bi bi-link-45deg"></i>';
+        }
+
+        $active = ( in_array( 'current-menu-item', (array) $item->classes ) || in_array( 'current-page-ancestor', (array) $item->classes ) ) ? 'active' : '';
+
+        $output .= '<a href="' . $url . '" class="second-menu-item ' . $active . '">';
+        if ( $has_image ) {
+            $output .= $media_html;
+        } else {
+            $output .= $media_html . ' <span>' . esc_html( $title ) . '</span>';
+        }
+        $output .= '</a>';
+    }
+}
+
+function santino_render_second_menu_bar() {
+    $enable = get_theme_mod( 'santino_second_bar_enable', '1' );
+    if ( $enable === '0' || $enable === false || $enable === 0 ) {
+        return;
+    }
+    ?>
+    <div class="top-category-bar second-menu-bar">
+      <div class="container-fluid px-2 px-lg-5">
+        <div class="second-menu-wrapper d-flex justify-content-center align-items-center gap-2 gap-sm-4 gap-md-5">
+          <?php
+          if ( has_nav_menu( 'second_bar' ) ) {
+              wp_nav_menu( array(
+                  'theme_location' => 'second_bar',
+                  'container'      => false,
+                  'items_wrap'     => '%3$s',
+                  'walker'         => new Santino_Second_Nav_Walker(),
+                  'fallback_cb'    => 'santino_second_bar_fallback',
+                  'depth'          => 1,
+              ) );
+          } else {
+              santino_second_bar_fallback();
+          }
+          ?>
+        </div>
+      </div>
+    </div>
+    <?php
+}
+
+function santino_second_bar_fallback() {
+    $bfc_logo        = get_theme_mod( 'santino_bfc_logo' );
+    $swapno_logo     = get_theme_mod( 'santino_swapno_logo' );
+    $membership_logo = get_theme_mod( 'santino_membership_logo' );
+    $menu_logo       = get_theme_mod( 'santino_menu_logo' );
+
+    $m_title = get_theme_mod( 'santino_membership_title' ) ?: 'MEMBERSHIP';
+    $m_url   = get_theme_mod( 'santino_membership_url' ) ?: home_url( '/membership/' );
+
+    $b_title = get_theme_mod( 'santino_bfc_title' ) ?: 'BFC';
+    $b_url   = get_theme_mod( 'santino_bfc_url' ) ?: home_url( '/bfc/' );
+
+    $s_title = get_theme_mod( 'santino_swapno_title' ) ?: 'SWAPNO';
+    $s_url   = get_theme_mod( 'santino_swapno_url' ) ?: home_url( '/swapno/' );
+
+    $u_title = get_theme_mod( 'santino_menu_title' ) ?: 'MENU';
+    $u_url   = get_theme_mod( 'santino_menu_url' ) ?: home_url( '/menu/' );
+
+    $items = array(
+        array(
+            'title' => $m_title,
+            'url'   => $m_url,
+            'icon'  => 'bi-award-fill',
+            'logo'  => $membership_logo,
+            'alt'   => 'Membership',
+        ),
+        array(
+            'title' => $b_title,
+            'url'   => $b_url,
+            'icon'  => 'bi-shop',
+            'logo'  => $bfc_logo,
+            'alt'   => 'BFC',
+        ),
+        array(
+            'title' => $s_title,
+            'url'   => $s_url,
+            'icon'  => 'bi-cart3',
+            'logo'  => $swapno_logo,
+            'alt'   => 'SWAPNO',
+        ),
+        array(
+            'title' => $u_title,
+            'url'   => $u_url,
+            'icon'  => 'bi-journal-text',
+            'logo'  => $menu_logo,
+            'alt'   => 'MENU',
+        ),
+    );
+
+    foreach ( $items as $i => $item ) {
+        if ( $i > 0 ) {
+            echo '<span class="second-menu-sep text-muted">|</span>';
+        }
+        $has_logo = ! empty( $item['logo'] );
+        $media = $has_logo
+            ? '<img src="' . esc_url( $item['logo'] ) . '" alt="' . esc_attr( $item['alt'] ) . '" class="second-menu-logo">'
+            : '<i class="bi ' . esc_attr( $item['icon'] ) . '"></i>';
+
+        echo '<a href="' . esc_url( $item['url'] ) . '" class="second-menu-item">';
+        if ( $has_logo ) {
+            echo $media;
+        } else {
+            echo $media . ' <span>' . esc_html( $item['title'] ) . '</span>';
+        }
+        echo '</a>';
+    }
+}
+
 /**
  * Primary Nav Fallback matching html-designs/index.html 100%
  */
@@ -539,6 +711,39 @@ function santino_setup_official_nav_menus( $force = false ) {
         }
     }
 
+    // 4. Secondary Sub Header Bar
+    $second_name = 'Santino Sub Header Menu';
+    $second_obj  = wp_get_nav_menu_object( $second_name );
+    if ( ! $second_obj ) {
+        $second_id = wp_create_nav_menu( $second_name );
+    } else {
+        $second_id = $second_obj->term_id;
+        if ( $force ) {
+            $existing_s = wp_get_nav_menu_items( $second_id );
+            if ( ! empty( $existing_s ) ) {
+                foreach ( $existing_s as $es ) {
+                    wp_delete_post( $es->ID, true );
+                }
+            }
+        }
+    }
+
+    if ( ! is_wp_error( $second_id ) && ( ! $second_obj || $force ) ) {
+        $sub_items = array(
+            array( 'title' => 'MEMBERSHIP', 'url' => home_url( '/membership/' ) ),
+            array( 'title' => 'BFC', 'url' => home_url( '/bfc/' ) ),
+            array( 'title' => 'SWAPNO', 'url' => home_url( '/swapno/' ) ),
+            array( 'title' => 'MENU', 'url' => home_url( '/menu/' ) ),
+        );
+        foreach ( $sub_items as $s ) {
+            wp_update_nav_menu_item( $second_id, 0, array(
+                'menu-item-title'  => $s['title'],
+                'menu-item-url'    => $s['url'],
+                'menu-item-status' => 'publish',
+            ) );
+        }
+    }
+
     // Force map to theme locations
     $locations = get_theme_mod( 'nav_menu_locations', array() );
     if ( ! is_array( $locations ) ) {
@@ -553,6 +758,9 @@ function santino_setup_official_nav_menus( $force = false ) {
     if ( ! is_wp_error( $care_id ) ) {
         $locations['footer_care'] = $care_id;
     }
+    if ( ! is_wp_error( $second_id ) ) {
+        $locations['second_bar'] = $second_id;
+    }
     set_theme_mod( 'nav_menu_locations', $locations );
 
     return true;
@@ -566,8 +774,8 @@ add_action( 'after_switch_theme', function() {
 } );
 
 add_action( 'admin_init', function() {
-    if ( ! get_option( 'santino_menus_v4_frontend_exact' ) ) {
+    if ( ! get_option( 'santino_menus_v5_second_bar' ) ) {
         santino_setup_official_nav_menus( true );
-        update_option( 'santino_menus_v4_frontend_exact', 1 );
+        update_option( 'santino_menus_v5_second_bar', 1 );
     }
 } );

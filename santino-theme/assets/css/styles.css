@@ -834,6 +834,18 @@ h1, h2, h3, h4, h5, h6,
   color: var(--santino-teal);
   transition: transform 0.2s ease;
 }
+.second-menu-logo {
+  height: 24px;
+  max-height: 24px;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.second-menu-item:hover .second-menu-logo {
+  transform: scale(1.12);
+}
 .second-menu-item:hover {
   color: var(--santino-teal) !important;
   background: rgba(0, 98, 93, 0.08);
@@ -13090,5 +13102,56 @@ html, body {
   width: 100% !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
+}
+
+/* ----------------------------------------------------
+ * High-Priority Modal & Mobile Navigation Dock Fixes
+ * ---------------------------------------------------- */
+.modal {
+  z-index: 100050 !important;
+}
+.modal-backdrop {
+  z-index: 100040 !important;
+}
+
+/* Hide mobile app dock and floating buttons when any modal is opened so footer buttons are never blocked */
+body.modal-open .mobile-app-dock,
+body.modal-open .santino-app-dock,
+body.modal-open .dock-action-circle,
+body.modal-open .dock-highlight-item,
+body.modal-open .side-floating-bar,
+body.modal-open .side-btn-whatsapp,
+body.modal-open .side-btn-call,
+.modal.show ~ .mobile-app-dock {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(100%) !important;
+}
+
+#liveStampCardContainer {
+  margin-top: 15px;
+}
+
+@media (max-width: 576px) {
+  #santinoRedeemModal .modal-dialog {
+    margin: 8px auto !important;
+    max-width: calc(100% - 16px) !important;
+  }
+  #santinoRedeemModal .modal-content {
+    max-height: calc(100dvh - 20px) !important;
+  }
+  #santinoRedeemModal .modal-body {
+    max-height: calc(100dvh - 180px) !important;
+    padding: 16px !important;
+  }
+  #santinoRedeemModal .modal-footer {
+    padding: 12px 16px !important;
+  }
+  #santinoRedeemModal .modal-footer .btn {
+    min-height: 48px !important;
+    font-size: 15px !important;
+  }
 }
 

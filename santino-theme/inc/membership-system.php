@@ -303,6 +303,10 @@ class Santino_Membership_System {
 
         <table class="form-table">
             <tr>
+                <th><label><?php _e( 'Full Name', 'santino' ); ?></label></th>
+                <td><input type="text" name="santino_member_name" value="<?php echo esc_attr( get_the_title( $post->ID ) ); ?>" class="regular-text" placeholder="Member Full Name"></td>
+            </tr>
+            <tr>
                 <th><label><?php _e( 'Membership ID', 'santino' ); ?></label></th>
                 <td><input type="text" name="santino_member_id" value="<?php echo esc_attr( $member_id ); ?>" readonly style="font-weight:bold; color:#00625d; font-family:monospace; background:#f1f5f9;"></td>
             </tr>
@@ -330,7 +334,7 @@ class Santino_Membership_System {
                 <td>
                     <label>
                         <input type="checkbox" name="santino_allow_reregister" value="yes" <?php checked( $allow_reregister, 'yes' ); ?>>
-                        <strong>Allow Re-registration from Portal</strong> (অনুমতি দিলে এই নম্বর দিয়ে ওয়েবসাইটের পোর্টাল থেকে পুনরায় মেম্বারশিপ ফর্ম সাবমিট করা যাবে)
+                        <strong>Allow Re-registration from Portal</strong> (Allows this mobile number to submit the portal enrollment form again)
                     </label>
                 </td>
             </tr>
@@ -422,8 +426,15 @@ class Santino_Membership_System {
                 </td>
             </tr>
             <tr>
+                <th><label><?php _e( 'Items Ordered / Consumed', 'santino' ); ?></label></th>
+                <td>
+                    <textarea name="santino_invoice_items_consumed" rows="2" class="large-text" placeholder="e.g. 2x Cappuccino, 1x Spanish Latte"><?php echo esc_textarea( get_post_meta( $post->ID, '_santino_invoice_items_consumed', true ) ); ?></textarea>
+                    <p class="description"><?php _e( 'Details of handcrafted beverage or food items ordered', 'santino' ); ?></p>
+                </td>
+            </tr>
+            <tr>
                 <th><label><?php _e( 'Number of Cups', 'santino' ); ?></label></th>
-                <td><input type="number" name="santino_invoice_cups" min="1" max="50" value="<?php echo esc_attr( $cups ); ?>" style="width: 80px; font-weight:bold; font-size:14px;"> ☕ (কয় কাপ কফি নেওয়া হয়েছে)</td>
+                <td><input type="number" name="santino_invoice_cups" min="1" max="50" value="<?php echo esc_attr( $cups ); ?>" style="width: 80px; font-weight:bold; font-size:14px;"> ☕ (Total approved cups)</td>
             </tr>
             <tr>
                 <th><label><?php _e( 'Customer Phone Number', 'santino' ); ?></label></th>
@@ -518,7 +529,7 @@ class Santino_Membership_System {
                 <th><label><?php _e( 'Served Free Item / Beverage', 'santino' ); ?></label></th>
                 <td>
                     <input type="text" id="santino_redeem_item_input" name="santino_redeem_item" value="<?php echo esc_attr( $item ?: 'Cappuccino' ); ?>" class="regular-text" style="font-weight:bold; color:#00625d; font-size:14px;">
-                    <p class="description" style="margin-top:6px; color:#475569;">কাস্টমার কোন ফ্রি কফি/আইটেমটি খাচ্ছে তা লিখে দিন বা নিচের বাটনে ক্লিক করুন:</p>
+                    <p class="description" style="margin-top:6px; color:#475569;">Specify the served beverage or click one of the quick items below:</p>
                     <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
                         <?php 
                         $popular_coffees = array( 'Cappuccino', 'Cafe Latte', 'Americano', 'Spanish Latte', 'Caramel Macchiato', 'Cafe Mocha', 'Flat White', 'Iced Latte', 'Cold Brew', 'Hot Chocolate' );
@@ -533,7 +544,7 @@ class Santino_Membership_System {
             <tr>
                 <th><label><?php _e( 'Barista / Counter Notes', 'santino' ); ?></label></th>
                 <td>
-                    <input type="text" name="santino_redeem_note" value="<?php echo esc_attr( get_post_meta( $post->ID, '_santino_redeem_note', true ) ); ?>" class="regular-text" placeholder="যেমন: Barista: Karim / Almond milk / Extra hot">
+                    <input type="text" name="santino_redeem_note" value="<?php echo esc_attr( get_post_meta( $post->ID, '_santino_redeem_note', true ) ); ?>" class="regular-text" placeholder="e.g. Barista: Karim / Almond milk / Extra hot">
                 </td>
             </tr>
             <tr>
@@ -565,6 +576,16 @@ class Santino_Membership_System {
 
         // Save Member Meta
         if ( isset( $_POST['santino_member_nonce'] ) && wp_verify_nonce( $_POST['santino_member_nonce'], 'santino_save_member_meta' ) ) {
+            if ( isset( $_POST['santino_member_name'] ) && ! empty( trim( $_POST['santino_member_name'] ) ) ) {
+                $name = sanitize_text_field( $_POST['santino_member_name'] );
+                update_post_meta( $post_id, '_santino_member_name', $name );
+                remove_action( 'save_post', array( __CLASS__, 'save_custom_meta_data' ) );
+                wp_update_post( array(
+                    'ID'         => $post_id,
+                    'post_title' => $name,
+                ) );
+                add_action( 'save_post', array( __CLASS__, 'save_custom_meta_data' ) );
+            }
             if ( isset( $_POST['santino_member_phone'] ) ) {
                 update_post_meta( $post_id, '_santino_member_phone', sanitize_text_field( $_POST['santino_member_phone'] ) );
             }
@@ -595,6 +616,9 @@ class Santino_Membership_System {
             }
             if ( isset( $_POST['santino_invoice_cups'] ) ) {
                 update_post_meta( $post_id, '_santino_invoice_cups', max( 1, intval( $_POST['santino_invoice_cups'] ) ) );
+            }
+            if ( isset( $_POST['santino_invoice_items_consumed'] ) ) {
+                update_post_meta( $post_id, '_santino_invoice_items_consumed', sanitize_textarea_field( $_POST['santino_invoice_items_consumed'] ) );
             }
             if ( isset( $_POST['santino_invoice_phone'] ) ) {
                 update_post_meta( $post_id, '_santino_invoice_phone', sanitize_text_field( $_POST['santino_invoice_phone'] ) );
@@ -710,6 +734,7 @@ class Santino_Membership_System {
             'invoice_no'    => __( 'Invoice #', 'santino' ),
             'receipt_photo' => __( 'Receipt Photo', 'santino' ),
             'cups'          => __( 'Cups', 'santino' ),
+            'items_consumed'=> __( 'Items Consumed', 'santino' ),
             'phone'         => __( 'Customer Phone', 'santino' ),
             'branch'        => __( 'Cafe Branch', 'santino' ),
             'status'        => __( 'Verification Status', 'santino' ),
@@ -738,6 +763,14 @@ class Santino_Membership_System {
             case 'cups':
                 $cups = intval( get_post_meta( $post_id, '_santino_invoice_cups', true ) ?: 1 );
                 echo '<strong style="color:#00625d; font-size:13px;">' . esc_html( $cups ) . ' ☕</strong>';
+                break;
+            case 'items_consumed':
+                $items = get_post_meta( $post_id, '_santino_invoice_items_consumed', true );
+                if ( $items ) {
+                    echo '<span style="font-size:12px; color:#1e293b; background:#f1f5f9; padding:2px 8px; border-radius:6px; display:inline-block; max-width:180px; line-height:1.35;" title="' . esc_attr( $items ) . '">' . esc_html( wp_trim_words( $items, 6, '...' ) ) . '</span>';
+                } else {
+                    echo '<span style="color:#94a3b8; font-size:11px;">—</span>';
+                }
                 break;
             case 'phone':
                 $inv_raw_phone = get_post_meta( $post_id, '_santino_invoice_phone', true );
@@ -1182,7 +1215,7 @@ class Santino_Membership_System {
         </head>
         <body>
             <div class="no-print-bar">
-                <button class="btn-print" onclick="window.print();">🖨️ প্রিন্ট করুন (Print Slip)</button>
+                <button class="btn-print" onclick="window.print();">🖨️ Print Slip</button>
             </div>
 
             <div class="text-center">
@@ -1362,6 +1395,7 @@ class Santino_Membership_System {
     public static function handle_ajax_membership_apply() {
         check_ajax_referer( 'santino_frontend_nonce', 'security' );
 
+        $name        = sanitize_text_field( $_POST['name'] ?? $_POST['full_name'] ?? '' );
         $phone       = self::normalize_phone( sanitize_text_field( $_POST['phone'] ?? '' ) );
         $email       = sanitize_email( $_POST['email'] ?? '' );
         $birth_month = sanitize_text_field( $_POST['birth_month'] ?? '' );
@@ -1369,12 +1403,12 @@ class Santino_Membership_System {
         $tier        = 'regular';
 
         if ( empty( $phone ) || empty( $email ) || empty( $birth_month ) || empty( $birth_day ) ) {
-            wp_send_json_error( array( 'message' => __( 'Please fill in Mobile Number, Birthday (Month & Day), and Email Address.', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Please fill in Full Name, Mobile Number, Birthday (Month & Day), and Email Address.', 'santino' ) ) );
         }
 
         // Phone validation (BD format)
         if ( ! self::is_valid_bd_phone( $phone ) ) {
-            wp_send_json_error( array( 'message' => __( 'দয়া করে সঠিক ১১ ডিজিটের বাংলাদেশি মোবাইল নম্বর প্রদান করুন (যেমন: 017XXXXXXXX)।', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Please enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX).', 'santino' ) ) );
         }
 
         // Check if phone already registered
@@ -1387,6 +1421,13 @@ class Santino_Membership_System {
             // If auto-enrolled from invoice (birthday/email missing) or admin allowed re-registration:
             if ( $allow_reregister === 'yes' || empty( $existing_birthday ) || empty( $existing_email ) ) {
                 update_post_meta( $existing->ID, '_santino_allow_reregister', 'no' );
+                if ( ! empty( $name ) ) {
+                    update_post_meta( $existing->ID, '_santino_member_name', $name );
+                    wp_update_post( array(
+                        'ID'         => $existing->ID,
+                        'post_title' => $name,
+                    ) );
+                }
                 update_post_meta( $existing->ID, '_santino_member_email', $email );
                 update_post_meta( $existing->ID, '_santino_member_birth_month', $birth_month );
                 update_post_meta( $existing->ID, '_santino_member_birth_day', $birth_day );
@@ -1394,22 +1435,24 @@ class Santino_Membership_System {
                 update_post_meta( $existing->ID, '_santino_member_status', 'active' );
                 $exist_id = get_post_meta( $existing->ID, '_santino_member_id', true );
                 wp_send_json_success( array(
-                    'message'   => __( 'আপনার মেম্বারশিপ প্রোফাইল সফলভাবে আপডেট করা হয়েছে!', 'santino' ),
+                    'message'   => __( 'Your membership profile has been successfully updated!', 'santino' ),
                     'member_id' => $exist_id,
-                    'name'      => $existing->post_title,
+                    'name'      => ! empty( $name ) ? $name : $existing->post_title,
                     'tier'      => 'REGULAR MEMBER',
                 ) );
             } else {
                 wp_send_json_error( array(
-                    'message' => __( 'এই মোবাইল নম্বরটি দিয়ে ইতিমধ্যে মেম্বারশিপ রেজিস্ট্রেশন করা হয়েছে। পোর্টাল/অ্যাডমিন এর অনুমতি ছাড়া একই নম্বর দিয়ে ২য় বার রেজিস্ট্রেশন করা যাবে না।', 'santino' ),
+                    'message' => __( 'This mobile number is already registered. Please check your stamp card status using the Lookup tab.', 'santino' ),
                 ) );
             }
         }
 
         $member_id = 'SNT-REG-' . strtoupper( wp_generate_password( 6, false ) );
 
+        $member_title = ! empty( $name ) ? $name : sprintf( 'Regular Member (%s)', $phone );
+
         $post_id = wp_insert_post( array(
-            'post_title'   => sprintf( 'Regular Member (%s)', $phone ),
+            'post_title'   => $member_title,
             'post_type'    => 'santino_member',
             'post_status'  => 'publish',
         ) );
@@ -1419,6 +1462,9 @@ class Santino_Membership_System {
         }
 
         update_post_meta( $post_id, '_santino_member_id', $member_id );
+        if ( ! empty( $name ) ) {
+            update_post_meta( $post_id, '_santino_member_name', $name );
+        }
         update_post_meta( $post_id, '_santino_member_status', 'active' );
         update_post_meta( $post_id, '_santino_member_tier', $tier );
         update_post_meta( $post_id, '_santino_member_phone', $phone );
@@ -1432,9 +1478,9 @@ class Santino_Membership_System {
         update_post_meta( $post_id, '_santino_total_free_coffees', 0 );
 
         wp_send_json_success( array(
-            'message'   => __( 'অভিনন্দন! আপনার Santino Coffee Club Regular Membership সক্রিয় হয়েছে।', 'santino' ),
+            'message'   => __( 'Congratulations! Your Santino Coffee Club Regular Membership is now active.', 'santino' ),
             'member_id' => $member_id,
-            'name'      => sprintf( 'Member (%s)', substr( $phone, -4 ) ),
+            'name'      => ! empty( $name ) ? $name : sprintf( 'Member (%s)', substr( $phone, -4 ) ),
             'tier'      => 'REGULAR MEMBER',
         ) );
     }
@@ -1443,18 +1489,32 @@ class Santino_Membership_System {
     public static function handle_ajax_invoice_submit() {
         check_ajax_referer( 'santino_frontend_nonce', 'security' );
 
-        $invoice_no = sanitize_text_field( $_POST['invoice_number'] ?? '' );
-        $phone      = self::normalize_phone( sanitize_text_field( $_POST['phone'] ?? '' ) );
-        $member_id  = sanitize_text_field( $_POST['member_id'] ?? '' );
-        $branch     = sanitize_text_field( $_POST['branch'] ?? 'Gulshan-2 Flagship Experience Center' );
-        $cups       = max( 1, intval( $_POST['cups'] ?? 1 ) );
+        $invoice_no     = sanitize_text_field( $_POST['invoice_number'] ?? '' );
+        $phone          = self::normalize_phone( sanitize_text_field( $_POST['phone'] ?? '' ) );
+        $member_id      = sanitize_text_field( $_POST['member_id'] ?? '' );
+        $branch         = sanitize_text_field( $_POST['branch'] ?? 'Gulshan-2 Flagship Experience Center' );
+        $cups           = max( 1, intval( $_POST['cups'] ?? 1 ) );
+        if ( isset( $_POST['items_consumed'] ) && is_array( $_POST['items_consumed'] ) ) {
+            $items_consumed = implode( ', ', array_map( 'sanitize_text_field', $_POST['items_consumed'] ) );
+        } else {
+            $items_consumed = sanitize_text_field( $_POST['items_consumed'] ?? '' );
+        }
 
         if ( empty( $invoice_no ) ) {
-            wp_send_json_error( array( 'message' => __( 'দয়া করে ইনভয়েস/মেমো নম্বর প্রদান করুন।', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Please provide the invoice or receipt number.', 'santino' ) ) );
         }
 
         if ( empty( $phone ) || ! self::is_valid_bd_phone( $phone ) ) {
-            wp_send_json_error( array( 'message' => __( 'দয়া করে সঠিক ১১ ডিজিটের বাংলাদেশি মোবাইল নম্বর প্রদান করুন (যেমন: 017XXXXXXXX)।', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Please enter a valid 11-digit mobile number (e.g. 017XXXXXXXX).', 'santino' ) ) );
+        }
+
+        if ( empty( $items_consumed ) ) {
+            wp_send_json_error( array( 'message' => __( 'Please select the coffee or beverage item ordered.', 'santino' ) ) );
+        }
+
+        // Invoice image upload is mandatory
+        if ( empty( $_FILES['invoice_image']['name'] ) ) {
+            wp_send_json_error( array( 'message' => __( 'Receipt image upload is mandatory. Please attach a clear photo of your memo.', 'santino' ) ) );
         }
 
         // Check if invoice already submitted
@@ -1498,8 +1558,9 @@ class Santino_Membership_System {
         }
 
         // Insert invoice
+        $inv_title = sprintf( 'Invoice #%s - %s (%d Items: %s)', $invoice_no, $phone, $cups, wp_trim_words( $items_consumed, 4, '' ) );
         $inv_post_id = wp_insert_post( array(
-            'post_title'   => sprintf( 'Invoice #%s - %s (%d Cups)', $invoice_no, $phone, $cups ),
+            'post_title'   => $inv_title,
             'post_type'    => 'santino_invoice',
             'post_status'  => 'publish',
         ) );
@@ -1507,6 +1568,8 @@ class Santino_Membership_System {
         if ( is_wp_error( $inv_post_id ) ) {
             wp_send_json_error( array( 'message' => __( 'Could not submit invoice. Please try again.', 'santino' ) ) );
         }
+
+        update_post_meta( $inv_post_id, '_santino_invoice_items_consumed', $items_consumed );
 
         // Handle Invoice Image Upload
         if ( ! empty( $_FILES['invoice_image']['name'] ) ) {
@@ -1555,16 +1618,16 @@ class Santino_Membership_System {
         $redeem_code = sanitize_text_field( $_POST['redeem_code'] ?? '' );
 
         if ( empty( $phone ) || empty( $free_item ) ) {
-            wp_send_json_error( array( 'message' => __( 'দয়া করে আপনার মোবাইল নম্বর এবং ফ্রি কফি আইটেম সিলেক্ট করুন।', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Please select your mobile number and preferred free beverage.', 'santino' ) ) );
         }
 
         if ( ! self::is_valid_bd_phone( $phone ) ) {
-            wp_send_json_error( array( 'message' => __( 'দয়া করে সঠিক ১১ ডিজিটের বাংলাদেশি মোবাইল নম্বর প্রদান করুন (যেমন: 017XXXXXXXX)।', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Please enter a valid 11-digit mobile number (e.g. 017XXXXXXXX).', 'santino' ) ) );
         }
 
         $member = self::find_member_by_phone_or_id( $phone );
         if ( ! $member ) {
-            wp_send_json_error( array( 'message' => __( 'এই মোবাইল নম্বর দিয়ে কোনো রেজিস্টার্ড মেম্বারশিপ পাওয়া যায়নি।', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'No registered membership found for this mobile number.', 'santino' ) ) );
         }
 
         // Find an unused free coffee voucher for this member
@@ -1580,7 +1643,7 @@ class Santino_Membership_System {
         $total_free = intval( get_post_meta( $member->ID, '_santino_total_free_coffees', true ) ?: 0 );
 
         if ( empty( $vouchers ) && $total_free <= 0 ) {
-            wp_send_json_error( array( 'message' => __( 'আপনার কোনো ফ্রি কফি ভাউচার অবশিষ্ট নেই। ৫টি কাপ স্ট্যাম্প সম্পন্ন হলে ফ্রি কফি রিডিম করতে পারবেন।', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'No active complimentary vouchers available. Complete 5 cup stamps to unlock your reward.', 'santino' ) ) );
         }
 
         $voucher_post = ! empty( $vouchers ) ? $vouchers[0] : null;
@@ -1598,7 +1661,7 @@ class Santino_Membership_System {
         ) );
 
         if ( is_wp_error( $redeem_post_id ) ) {
-            wp_send_json_error( array( 'message' => __( 'রিডিম রিকোয়েস্ট জমা দেওয়া সম্ভব হয়নি। আবার চেষ্টা করুন।', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Could not submit redemption request. Please try again.', 'santino' ) ) );
         }
 
         update_post_meta( $redeem_post_id, '_santino_redeem_code', $redeem_code );
@@ -1620,7 +1683,7 @@ class Santino_Membership_System {
         ), home_url( '/' ) );
 
         wp_send_json_success( array(
-            'message'     => sprintf( __( 'ফ্রি কাপ রিডিম রিকোয়েস্ট সফলভাবে জমা হয়েছে! (Redeem ID: %s)। পোর্টাল/অ্যাডমিন অ্যাপ্রুভ করলে বারিস্তা আপনাকে ফ্রি %s প্রদান করবে।', 'santino' ), $redeem_code, $free_item ),
+            'message'     => sprintf( __( 'Complimentary coffee redemption request confirmed! (Redeem ID: %s). Present this code to your barista at %s to receive your %s.', 'santino' ), $redeem_code, $branch, $free_item ),
             'redeem_id'   => $redeem_post_id,
             'redeem_code' => $redeem_code,
             'free_item'   => $free_item,
@@ -1636,12 +1699,12 @@ class Santino_Membership_System {
 
         $query_str = sanitize_text_field( $_POST['query'] ?? '' );
         if ( empty( $query_str ) ) {
-            wp_send_json_error( array( 'message' => __( 'Please enter your Phone Number or VIP Member ID.', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Please enter your Mobile Number.', 'santino' ) ) );
         }
 
         $member = self::find_member_by_phone_or_id( $query_str, $query_str );
         if ( ! $member ) {
-            wp_send_json_error( array( 'message' => __( 'No member found with this Phone Number or VIP ID. Please register first!', 'santino' ) ) );
+            wp_send_json_error( array( 'message' => __( 'No active member found with this Mobile Number. Please register below first!', 'santino' ) ) );
         }
 
         $member_id    = get_post_meta( $member->ID, '_santino_member_id', true );
@@ -1651,6 +1714,15 @@ class Santino_Membership_System {
         $total_free   = intval( get_post_meta( $member->ID, '_santino_total_free_coffees', true ) ?: 0 );
         $tier         = strtoupper( get_post_meta( $member->ID, '_santino_member_tier', true ) ?: 'REGULAR' );
         $birthday     = get_post_meta( $member->ID, '_santino_member_birthday', true );
+
+        $m_name = get_post_meta( $member->ID, '_santino_member_name', true );
+        if ( ! empty( $m_name ) ) {
+            $clean_name = $m_name;
+        } elseif ( ! empty( $member->post_title ) && stripos( $member->post_title, 'Regular Member' ) === false ) {
+            $clean_name = $member->post_title;
+        } else {
+            $clean_name = 'Santino Regular Member';
+        }
 
         // Fetch Recent Invoices
         $invoices = get_posts( array(
@@ -1713,7 +1785,7 @@ class Santino_Membership_System {
         }
 
         wp_send_json_success( array(
-            'name'         => $member->post_title,
+            'name'         => $clean_name,
             'member_id'    => $member_id,
             'phone'        => $phone,
             'tier'         => $tier . ' MEMBER',
@@ -1777,27 +1849,204 @@ class Santino_Membership_System {
         );
     }
 
-    public static function get_cafe_branches() {
-        $branches = get_option( 'santino_cafe_branches', array() );
-        if ( empty( $branches ) || ! is_array( $branches ) ) {
-            $branches = array(
-                'Gulshan-2 Flagship Experience Center',
-                'Banani Borak Mehnur',
-                'Tejgaon Roastery & Lab',
-                'Dhanmondi Ahmed & Kazi Tower',
-                'Uttara Liberty Tower',
-                'Baridhara Diplomatic Enclave',
-            );
+    public static function get_branches_detailed() {
+        $branches = get_option( 'santino_branches_detailed', null );
+        if ( is_array( $branches ) && ! empty( $branches ) ) {
+            return $branches;
         }
-        return array_values( array_filter( array_map( 'trim', $branches ) ) );
+
+        // Check if legacy simple string array exists
+        $legacy = get_option( 'santino_cafe_branches', array() );
+        if ( ! empty( $legacy ) && is_array( $legacy ) ) {
+            $converted = array();
+            foreach ( $legacy as $b_name ) {
+                if ( is_array( $b_name ) ) {
+                    $converted[] = $b_name;
+                } else {
+                    $converted[] = array(
+                        'id'           => 'br_' . substr( md5( $b_name ), 0, 8 ),
+                        'name'         => trim( $b_name ),
+                        'division'     => 'Dhaka',
+                        'district'     => 'Dhaka',
+                        'lat'          => '23.7925',
+                        'long'         => '90.4078',
+                        'map_location' => 'https://maps.google.com/?q=' . urlencode( $b_name . ' Dhaka' ),
+                        'address'      => trim( $b_name ) . ', Dhaka',
+                        'phone'        => '+880 1613-334514',
+                    );
+                }
+            }
+            update_option( 'santino_branches_detailed', $converted );
+            return $converted;
+        }
+
+        $defaults = array(
+            array(
+                'id'           => 'br_gulshan2',
+                'name'         => 'Gulshan-2 Flagship Experience Center',
+                'division'     => 'Dhaka',
+                'district'     => 'Dhaka',
+                'lat'          => '23.7925',
+                'long'         => '90.4078',
+                'map_location' => 'https://maps.google.com/?q=Santino+Coffee+Gulshan+2+Dhaka',
+                'address'      => 'Plot 11, Road 48, CWN Block, Gulshan-2, Dhaka 1212',
+                'phone'        => '+880 1613-334514',
+            ),
+            array(
+                'id'           => 'br_banani',
+                'name'         => 'Banani Borak Mehnur',
+                'division'     => 'Dhaka',
+                'district'     => 'Dhaka',
+                'lat'          => '23.7936',
+                'long'         => '90.4042',
+                'map_location' => 'https://maps.google.com/?q=Borak+Mehnur+Banani+Dhaka',
+                'address'      => 'Plot 51/B, Kamal Ataturk Avenue, Banani Commercial Area, Dhaka',
+                'phone'        => '+880 1613-334514',
+            ),
+            array(
+                'id'           => 'br_tejgaon',
+                'name'         => 'Tejgaon Roastery & Lab',
+                'division'     => 'Dhaka',
+                'district'     => 'Dhaka',
+                'lat'          => '23.7598',
+                'long'         => '90.3992',
+                'map_location' => 'https://maps.google.com/?q=Tejgaon+Industrial+Area+Dhaka',
+                'address'      => 'Tejgaon Industrial Area, Dhaka',
+                'phone'        => '+880 1613-334514',
+            ),
+            array(
+                'id'           => 'br_dhanmondi',
+                'name'         => 'Dhanmondi Ahmed & Kazi Tower',
+                'division'     => 'Dhaka',
+                'district'     => 'Dhaka',
+                'lat'          => '23.7461',
+                'long'         => '90.3742',
+                'map_location' => 'https://maps.google.com/?q=Dhanmondi+27+Dhaka',
+                'address'      => 'House 14, Road 27 (Old), Dhanmondi, Dhaka 1209',
+                'phone'        => '+880 1613-334514',
+            ),
+            array(
+                'id'           => 'br_uttara',
+                'name'         => 'Uttara Liberty Tower',
+                'division'     => 'Dhaka',
+                'district'     => 'Dhaka',
+                'lat'          => '23.8759',
+                'long'         => '90.3795',
+                'map_location' => 'https://maps.google.com/?q=Uttara+Sector+3+Dhaka',
+                'address'      => 'Sector 3, Uttara Commercial Zone, Dhaka',
+                'phone'        => '+880 1613-334514',
+            ),
+            array(
+                'id'           => 'br_baridhara',
+                'name'         => 'Baridhara Diplomatic Enclave',
+                'division'     => 'Dhaka',
+                'district'     => 'Dhaka',
+                'lat'          => '23.7998',
+                'long'         => '90.4228',
+                'map_location' => 'https://maps.google.com/?q=Baridhara+Diplomatic+Zone+Dhaka',
+                'address'      => 'Park Road, Baridhara Diplomatic Zone, Dhaka',
+                'phone'        => '+880 1613-334514',
+            ),
+            array(
+                'id'           => 'br_agrabad',
+                'name'         => 'Agrabad Commercial Lounge',
+                'division'     => 'Chattogram',
+                'district'     => 'Chattogram',
+                'lat'          => '22.3275',
+                'long'         => '91.8122',
+                'map_location' => 'https://maps.google.com/?q=Agrabad+Chattogram',
+                'address'      => 'Agrabad C/A, Chattogram',
+                'phone'        => '+880 1613-334514',
+            ),
+            array(
+                'id'           => 'br_zindabazar',
+                'name'         => 'Zindabazar Premium Counter',
+                'division'     => 'Sylhet',
+                'district'     => 'Sylhet',
+                'lat'          => '24.8949',
+                'long'         => '91.8687',
+                'map_location' => 'https://maps.google.com/?q=Zindabazar+Sylhet',
+                'address'      => 'Zindabazar Point, Sylhet',
+                'phone'        => '+880 1613-334514',
+            ),
+            array(
+                'id'           => 'br_kolatoli',
+                'name'         => 'Coxs Bazar Kolatoli Beach Bar',
+                'division'     => 'Chattogram',
+                'district'     => "Cox's Bazar",
+                'lat'          => '21.4272',
+                'long'         => '91.9840',
+                'map_location' => 'https://maps.google.com/?q=Kolatoli+Coxs+Bazar',
+                'address'      => 'Hotel Motel Zone, Kolatoli, Coxs Bazar',
+                'phone'        => '+880 1613-334514',
+            ),
+        );
+
+        update_option( 'santino_branches_detailed', $defaults );
+        return $defaults;
     }
 
-    public static function save_cafe_branches( $branches ) {
+    public static function get_order_item_choices() {
+        $choices = array();
+        if ( class_exists( 'Santino_Handcrafted_Items_System' ) ) {
+            $items = Santino_Handcrafted_Items_System::get_all_menu_items();
+            if ( ! empty( $items ) && is_array( $items ) ) {
+                foreach ( $items as $it ) {
+                    if ( ! empty( $it['name'] ) ) {
+                        $choices[] = $it['name'];
+                    }
+                }
+            }
+        }
+        if ( empty( $choices ) ) {
+            $choices = array(
+                'Hot Cappuccino',
+                'Iced Latte',
+                'Hot Mocha',
+                'Iced Mocha',
+                'Mocha Frappe',
+                'Hazelnut Frappe',
+                'Classic Americano',
+                'Spanish Latte',
+                'Vanilla Caramel Macchiato',
+                'Santino Raw Coconut Latte',
+                'Single-Origin Pour-over (V60)',
+                'Flat White',
+                'Cold Brew Reserve',
+                'Artisan Butter Croissant',
+                'Signature Roastery Blend Item',
+            );
+        }
+        return array_values( array_unique( $choices ) );
+    }
+
+    public static function get_cafe_branches() {
+        $detailed = self::get_branches_detailed();
+        $names = array();
+        foreach ( $detailed as $b ) {
+            if ( is_array( $b ) && ! empty( $b['name'] ) ) {
+                $names[] = $b['name'];
+            } elseif ( is_string( $b ) ) {
+                $names[] = $b;
+            }
+        }
+        return array_values( array_unique( array_filter( array_map( 'trim', $names ) ) ) );
+    }
+
+    public static function save_branches_detailed( $branches ) {
         if ( ! is_array( $branches ) ) {
             return false;
         }
-        $clean = array_values( array_filter( array_map( 'sanitize_text_field', array_map( 'trim', $branches ) ) ) );
-        return update_option( 'santino_cafe_branches', $clean );
+        update_option( 'santino_branches_detailed', $branches );
+        $names = array_values( array_unique( array_filter( array_map( function( $b ) {
+            return is_array( $b ) ? ( $b['name'] ?? '' ) : $b;
+        }, $branches ) ) ) );
+        update_option( 'santino_cafe_branches', $names );
+        return true;
+    }
+
+    public static function save_cafe_branches( $branches ) {
+        return self::save_branches_detailed( $branches );
     }
 
     public static function render_cafe_branches_page() {
@@ -1805,139 +2054,411 @@ class Santino_Membership_System {
             wp_die( 'Access denied' );
         }
 
+        // 1. Handle Sample CSV Download
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'sample_csv' && check_admin_referer( 'santino_sample_csv' ) ) {
+            header( 'Content-Type: text/csv; charset=utf-8' );
+            header( 'Content-Disposition: attachment; filename=santino-branches-sample.csv' );
+            $out = fopen( 'php://output', 'w' );
+            fputcsv( $out, array( 'branch_name', 'division', 'district', 'lat', 'long', 'map_location', 'address', 'phone' ) );
+            fputcsv( $out, array( 'Gulshan-2 Flagship Experience Center', 'Dhaka', 'Dhaka', '23.7925', '90.4078', 'https://maps.google.com/?q=Santino+Gulshan+2', 'Plot 11, Road 48, CWN Block, Gulshan-2, Dhaka', '+880 1613-334514' ) );
+            fputcsv( $out, array( 'Agrabad Commercial Lounge', 'Chattogram', 'Chattogram', '22.3275', '91.8122', 'https://maps.google.com/?q=Agrabad+Chattogram', 'Agrabad C/A, Chattogram', '+880 1613-334514' ) );
+            fputcsv( $out, array( 'Zindabazar Premium Counter', 'Sylhet', 'Sylhet', '24.8949', '91.8687', 'https://maps.google.com/?q=Zindabazar+Sylhet', 'Zindabazar Point, Sylhet', '+880 1613-334514' ) );
+            fclose( $out );
+            exit;
+        }
+
+        // 2. Handle Export Branches to CSV
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'export_csv' && check_admin_referer( 'santino_export_csv' ) ) {
+            $all = self::get_branches_detailed();
+            header( 'Content-Type: text/csv; charset=utf-8' );
+            header( 'Content-Disposition: attachment; filename=santino-branches-' . date( 'Y-m-d' ) . '.csv' );
+            $out = fopen( 'php://output', 'w' );
+            fputcsv( $out, array( 'branch_name', 'division', 'district', 'lat', 'long', 'map_location', 'address', 'phone' ) );
+            foreach ( $all as $b ) {
+                fputcsv( $out, array(
+                    $b['name'] ?? '',
+                    $b['division'] ?? 'Dhaka',
+                    $b['district'] ?? 'Dhaka',
+                    $b['lat'] ?? '',
+                    $b['long'] ?? '',
+                    $b['map_location'] ?? '',
+                    $b['address'] ?? '',
+                    $b['phone'] ?? '',
+                ) );
+            }
+            fclose( $out );
+            exit;
+        }
+
         $notice = '';
 
         if ( isset( $_POST['santino_branch_action'] ) && check_admin_referer( 'santino_branches_nonce' ) ) {
             $action = sanitize_text_field( $_POST['santino_branch_action'] );
-            $current = self::get_cafe_branches();
+            $current = self::get_branches_detailed();
 
+            // Action: Add Single Branch
             if ( 'add' === $action ) {
-                $new_branch = sanitize_text_field( wp_unslash( $_POST['new_branch_name'] ?? '' ) );
-                if ( ! empty( $new_branch ) && ! in_array( $new_branch, $current, true ) ) {
-                    $current[] = $new_branch;
-                    self::save_cafe_branches( $current );
-                    $notice = '<div class="notice notice-success is-dismissible"><p><strong>Branch added successfully:</strong> ' . esc_html( $new_branch ) . '</p></div>';
+                $name = sanitize_text_field( wp_unslash( $_POST['branch_name'] ?? '' ) );
+                if ( ! empty( $name ) ) {
+                    $div  = sanitize_text_field( wp_unslash( $_POST['division'] ?? 'Dhaka' ) );
+                    $dist = sanitize_text_field( wp_unslash( $_POST['district'] ?? 'Dhaka' ) );
+                    $lat  = sanitize_text_field( wp_unslash( $_POST['lat'] ?? '' ) );
+                    $long = sanitize_text_field( wp_unslash( $_POST['long'] ?? '' ) );
+                    $map  = esc_url_raw( wp_unslash( $_POST['map_location'] ?? '' ) );
+                    $addr = sanitize_text_field( wp_unslash( $_POST['address'] ?? '' ) );
+                    $ph   = sanitize_text_field( wp_unslash( $_POST['phone'] ?? '' ) );
+
+                    if ( empty( $map ) && ! empty( $lat ) && ! empty( $long ) ) {
+                        $map = 'https://maps.google.com/?q=' . $lat . ',' . $long;
+                    }
+
+                    $current[] = array(
+                        'id'           => 'br_' . substr( md5( $name . microtime() ), 0, 8 ),
+                        'name'         => $name,
+                        'division'     => $div,
+                        'district'     => $dist,
+                        'lat'          => $lat,
+                        'long'         => $long,
+                        'map_location' => $map,
+                        'address'      => $addr,
+                        'phone'        => $ph,
+                    );
+                    self::save_branches_detailed( $current );
+                    $notice = '<div class="notice notice-success is-dismissible"><p><strong>Branch added successfully:</strong> ' . esc_html( $name ) . ' (' . esc_html( $dist . ', ' . $div ) . ')</p></div>';
                 }
-            } elseif ( 'delete' === $action ) {
-                $del_branch = sanitize_text_field( wp_unslash( $_POST['del_branch_name'] ?? '' ) );
-                $current = array_values( array_diff( $current, array( $del_branch ) ) );
-                self::save_cafe_branches( $current );
-                $notice = '<div class="notice notice-warning is-dismissible"><p><strong>Branch removed:</strong> ' . esc_html( $del_branch ) . '</p></div>';
-            } elseif ( 'bulk_save' === $action ) {
-                $raw_lines = sanitize_textarea_field( wp_unslash( $_POST['bulk_branches'] ?? '' ) );
-                $lines = array_filter( array_map( 'trim', explode( "\n", $raw_lines ) ) );
-                if ( ! empty( $lines ) ) {
-                    self::save_cafe_branches( $lines );
-                    $notice = '<div class="notice notice-success is-dismissible"><p><strong>Branches updated successfully!</strong></p></div>';
+            }
+            // Action: Edit Existing Branch
+            elseif ( 'edit' === $action ) {
+                $b_id = sanitize_text_field( $_POST['branch_id'] ?? '' );
+                $name = sanitize_text_field( wp_unslash( $_POST['branch_name'] ?? '' ) );
+                if ( ! empty( $b_id ) && ! empty( $name ) ) {
+                    foreach ( $current as &$item ) {
+                        if ( ( $item['id'] ?? '' ) === $b_id || ( $item['name'] ?? '' ) === $b_id ) {
+                            $item['name']         = $name;
+                            $item['division']     = sanitize_text_field( wp_unslash( $_POST['division'] ?? 'Dhaka' ) );
+                            $item['district']     = sanitize_text_field( wp_unslash( $_POST['district'] ?? 'Dhaka' ) );
+                            $item['lat']          = sanitize_text_field( wp_unslash( $_POST['lat'] ?? '' ) );
+                            $item['long']         = sanitize_text_field( wp_unslash( $_POST['long'] ?? '' ) );
+                            $map                  = esc_url_raw( wp_unslash( $_POST['map_location'] ?? '' ) );
+                            if ( empty( $map ) && ! empty( $item['lat'] ) && ! empty( $item['long'] ) ) {
+                                $map = 'https://maps.google.com/?q=' . $item['lat'] . ',' . $item['long'];
+                            }
+                            $item['map_location'] = $map;
+                            $item['address']      = sanitize_text_field( wp_unslash( $_POST['address'] ?? '' ) );
+                            $item['phone']        = sanitize_text_field( wp_unslash( $_POST['phone'] ?? '' ) );
+                            break;
+                        }
+                    }
+                    self::save_branches_detailed( $current );
+                    $notice = '<div class="notice notice-success is-dismissible"><p><strong>Branch updated successfully:</strong> ' . esc_html( $name ) . '</p></div>';
                 }
-            } elseif ( 'reset' === $action ) {
+            }
+            // Action: Delete Branch
+            elseif ( 'delete' === $action ) {
+                $del_id = sanitize_text_field( wp_unslash( $_POST['del_branch_id'] ?? $_POST['del_branch_name'] ?? '' ) );
+                $current = array_values( array_filter( $current, function( $item ) use ( $del_id ) {
+                    return ( $item['id'] ?? '' ) !== $del_id && ( $item['name'] ?? '' ) !== $del_id;
+                } ) );
+                self::save_branches_detailed( $current );
+                $notice = '<div class="notice notice-warning is-dismissible"><p><strong>Branch removed.</strong></p></div>';
+            }
+            // Action: CSV File Upload & Import
+            elseif ( 'upload_csv' === $action ) {
+                if ( ! empty( $_FILES['branches_csv']['tmp_name'] ) && is_uploaded_file( $_FILES['branches_csv']['tmp_name'] ) ) {
+                    $mode = sanitize_text_field( $_POST['csv_mode'] ?? 'append' );
+                    $handle = fopen( $_FILES['branches_csv']['tmp_name'], 'r' );
+                    if ( $handle !== false ) {
+                        $header = fgetcsv( $handle );
+                        $h_map = array();
+                        foreach ( (array) $header as $idx => $col ) {
+                            $c = strtolower( trim( preg_replace( '/[^a-zA-Z0-9_]/', '', str_replace( ' ', '_', $col ) ) ) );
+                            $h_map[ $c ] = $idx;
+                        }
+
+                        $imported = array();
+                        while ( ( $row = fgetcsv( $handle ) ) !== false ) {
+                            $name_idx = $h_map['branch_name'] ?? $h_map['name'] ?? $h_map['branch'] ?? 0;
+                            $b_name   = trim( $row[ $name_idx ] ?? '' );
+                            if ( empty( $b_name ) ) continue;
+
+                            $div  = trim( $row[ $h_map['division'] ?? 1 ] ?? 'Dhaka' );
+                            $dist = trim( $row[ $h_map['district'] ?? $h_map['strict'] ?? 2 ] ?? 'Dhaka' );
+                            $lat  = trim( $row[ $h_map['lat'] ?? $h_map['latitude'] ?? 3 ] ?? '' );
+                            $lng  = trim( $row[ $h_map['long'] ?? $h_map['longitude'] ?? $h_map['lng'] ?? 4 ] ?? '' );
+                            $map  = trim( $row[ $h_map['map_location'] ?? $h_map['map'] ?? $h_map['google_map'] ?? 5 ] ?? '' );
+                            $addr = trim( $row[ $h_map['address'] ?? 6 ] ?? '' );
+                            $ph   = trim( $row[ $h_map['phone'] ?? $h_map['hotline'] ?? 7 ] ?? '' );
+
+                            if ( empty( $map ) && ! empty( $lat ) && ! empty( $lng ) ) {
+                                $map = 'https://maps.google.com/?q=' . $lat . ',' . $lng;
+                            }
+
+                            $imported[] = array(
+                                'id'           => 'br_' . substr( md5( $b_name . microtime() ), 0, 8 ),
+                                'name'         => sanitize_text_field( $b_name ),
+                                'division'     => sanitize_text_field( $div ?: 'Dhaka' ),
+                                'district'     => sanitize_text_field( $dist ?: 'Dhaka' ),
+                                'lat'          => sanitize_text_field( $lat ),
+                                'long'         => sanitize_text_field( $lng ),
+                                'map_location' => esc_url_raw( $map ),
+                                'address'      => sanitize_text_field( $addr ),
+                                'phone'        => sanitize_text_field( $ph ),
+                            );
+                        }
+                        fclose( $handle );
+
+                        if ( ! empty( $imported ) ) {
+                            if ( 'replace' === $mode ) {
+                                $current = $imported;
+                            } else {
+                                $current = array_merge( $current, $imported );
+                            }
+                            self::save_branches_detailed( $current );
+                            $notice = '<div class="notice notice-success is-dismissible"><p><strong>CSV Upload Successful!</strong> Imported ' . count( $imported ) . ' branches into the system.</p></div>';
+                        } else {
+                            $notice = '<div class="notice notice-error is-dismissible"><p>No valid branch rows found in the CSV file.</p></div>';
+                        }
+                    }
+                } else {
+                    $notice = '<div class="notice notice-error is-dismissible"><p>Please select a valid CSV file to upload.</p></div>';
+                }
+            }
+            // Action: Reset Defaults
+            elseif ( 'reset' === $action ) {
+                delete_option( 'santino_branches_detailed' );
                 delete_option( 'santino_cafe_branches' );
+                $current = self::get_branches_detailed();
                 $notice = '<div class="notice notice-info is-dismissible"><p><strong>Branches reset to default list.</strong></p></div>';
             }
         }
 
-        $branches = self::get_cafe_branches();
+        $branches = self::get_branches_detailed();
+        $divisions_list = array( 'Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh' );
+        $edit_branch = null;
+        if ( isset( $_GET['edit'] ) ) {
+            $target_id = sanitize_text_field( $_GET['edit'] );
+            foreach ( $branches as $b ) {
+                if ( ( $b['id'] ?? '' ) === $target_id || ( $b['name'] ?? '' ) === $target_id ) {
+                    $edit_branch = $b;
+                    break;
+                }
+            }
+        }
+
+        $sample_url = wp_nonce_url( admin_url( 'edit.php?post_type=santino_member&page=santino-cafe-branches&action=sample_csv' ), 'santino_sample_csv' );
+        $export_url = wp_nonce_url( admin_url( 'edit.php?post_type=santino_member&page=santino-cafe-branches&action=export_csv' ), 'santino_export_csv' );
         ?>
-        <div class="wrap" style="max-width: 1000px;">
-            <h1 style="display:flex; align-items:center; gap:10px; margin-bottom: 20px;">
-                <span class="dashicons dashicons-store" style="font-size:30px; width:30px; height:30px; color:#00625d;"></span>
-                <?php _e( 'Santino Cafe Branches Management', 'santino' ); ?>
-            </h1>
+        <div class="wrap nosubsub">
+            <h1 class="wp-heading-inline"><?php _e( 'Santino Cafe Branches', 'santino' ); ?></h1>
+            <a href="<?php echo esc_url( $sample_url ); ?>" class="page-title-action"><?php _e( 'Download Sample CSV', 'santino' ); ?></a>
+            <a href="<?php echo esc_url( $export_url ); ?>" class="page-title-action"><?php _e( 'Export CSV', 'santino' ); ?></a>
+            <hr class="wp-header-end">
 
             <?php echo $notice; ?>
 
-            <p class="description" style="font-size:14px; margin-bottom: 24px;">
-                <?php _e( 'Manage the active Santino cafe locations displayed in the frontend Stamp Card, Invoice Submission, Free Coffee Redeem, and Machines Consultation forms.', 'santino' ); ?>
-            </p>
+            <div id="col-container" class="wp-clearfix" style="margin-top: 15px;">
+                <div id="col-left">
+                    <div class="col-wrap">
+                        <div class="form-wrap">
+                            <h2><?php echo $edit_branch ? __( 'Edit Cafe Branch', 'santino' ) : __( 'Add New Branch', 'santino' ); ?></h2>
+                            <form method="post">
+                                <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
+                                <input type="hidden" name="santino_branch_action" value="<?php echo $edit_branch ? 'edit' : 'add'; ?>">
+                                <?php if ( $edit_branch ) : ?>
+                                    <input type="hidden" name="branch_id" value="<?php echo esc_attr( $edit_branch['id'] ?? $edit_branch['name'] ); ?>">
+                                <?php endif; ?>
 
-            <div style="display:grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start;">
-                <div class="card" style="padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin:0;">
-                    <h2 style="margin-top:0; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; font-size:16px;">
-                        <?php _e( 'Active Branches List', 'santino' ); ?> (<?php echo count( $branches ); ?>)
-                    </h2>
+                                <div class="form-field form-required">
+                                    <label for="branch_name"><?php _e( 'Branch Name', 'santino' ); ?> *</label>
+                                    <input name="branch_name" id="branch_name" type="text" value="<?php echo esc_attr( $edit_branch['name'] ?? '' ); ?>" size="40" aria-required="true" required>
+                                    <p class="description"><?php _e( 'The full name of the outlet or cafe roastery.', 'santino' ); ?></p>
+                                </div>
 
-                    <table class="wp-list-table widefat fixed striped" style="margin-top: 15px; border-radius: 6px; overflow: hidden;">
-                        <thead>
-                            <tr>
-                                <th style="width: 50px;">#</th>
-                                <th><?php _e( 'Branch Name & Location', 'santino' ); ?></th>
-                                <th style="width: 100px; text-align: center;"><?php _e( 'Action', 'santino' ); ?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ( $branches as $idx => $b ) : ?>
-                                <tr>
-                                    <td style="font-weight: bold; color: #64748b;"><?php echo $idx + 1; ?></td>
-                                    <td>
-                                        <strong style="color: #0f172a; font-size: 14px;"><?php echo esc_html( $b ); ?></strong>
-                                    </td>
-                                    <td style="text-align: center;">
-                                        <form method="post" style="display:inline;" onsubmit="return confirm('Remove branch: <?php echo esc_js( $b ); ?>?');">
-                                            <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
-                                            <input type="hidden" name="santino_branch_action" value="delete">
-                                            <input type="hidden" name="del_branch_name" value="<?php echo esc_attr( $b ); ?>">
-                                            <button type="submit" class="button button-link-delete" style="color: #dc2626; font-size: 12px;">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                                <div class="form-field form-required">
+                                    <label for="branch_division"><?php _e( 'Division', 'santino' ); ?> *</label>
+                                    <select name="division" id="branch_division" required style="max-width: 100%;">
+                                        <?php 
+                                        $cur_div = $edit_branch['division'] ?? 'Dhaka';
+                                        foreach ( $divisions_list as $div ) : ?>
+                                            <option value="<?php echo esc_attr( $div ); ?>" <?php selected( $cur_div, $div ); ?>><?php echo esc_html( $div ); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
 
-                    <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-                        <h3 style="font-size: 14px; margin-bottom: 8px;"><?php _e( 'Bulk Edit All Branches (One per line):', 'santino' ); ?></h3>
-                        <form method="post">
-                            <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
-                            <input type="hidden" name="santino_branch_action" value="bulk_save">
-                            <textarea name="bulk_branches" rows="7" class="large-text code" style="padding: 10px; font-size: 13px;"><?php echo esc_textarea( implode( "\n", $branches ) ); ?></textarea>
-                            <p class="submit" style="margin-top: 10px; padding:0;">
-                                <button type="submit" class="button button-primary" style="background:#00625d; border-color:#004d49; font-weight:bold;">
-                                    <?php _e( 'Save Bulk Changes', 'santino' ); ?>
-                                </button>
+                                <div class="form-field form-required">
+                                    <label for="branch_district"><?php _e( 'District', 'santino' ); ?> *</label>
+                                    <input name="district" id="branch_district" type="text" value="<?php echo esc_attr( $edit_branch['district'] ?? 'Dhaka' ); ?>" size="40" required>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="branch_lat"><?php _e( 'Latitude (lat)', 'santino' ); ?></label>
+                                    <input name="lat" id="branch_lat" type="text" value="<?php echo esc_attr( $edit_branch['lat'] ?? '' ); ?>" size="40" placeholder="e.g. 23.7925">
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="branch_long"><?php _e( 'Longitude (long)', 'santino' ); ?></label>
+                                    <input name="long" id="branch_long" type="text" value="<?php echo esc_attr( $edit_branch['long'] ?? '' ); ?>" size="40" placeholder="e.g. 90.4078">
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="branch_map"><?php _e( 'Map Location (Google Maps URL)', 'santino' ); ?></label>
+                                    <input name="map_location" id="branch_map" type="url" value="<?php echo esc_attr( $edit_branch['map_location'] ?? '' ); ?>" size="40" placeholder="https://maps.google.com/?q=...">
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="branch_address"><?php _e( 'Address / Street Area', 'santino' ); ?></label>
+                                    <textarea name="address" id="branch_address" rows="3" cols="40"><?php echo esc_textarea( $edit_branch['address'] ?? '' ); ?></textarea>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="branch_phone"><?php _e( 'Hotline / Phone Number', 'santino' ); ?></label>
+                                    <input name="phone" id="branch_phone" type="text" value="<?php echo esc_attr( $edit_branch['phone'] ?? '+880 1613-334514' ); ?>" size="40">
+                                </div>
+
+                                <p class="submit">
+                                    <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo $edit_branch ? __( 'Save Changes', 'santino' ) : __( 'Add New Branch', 'santino' ); ?>">
+                                    <?php if ( $edit_branch ) : ?>
+                                        <a href="<?php echo admin_url( 'edit.php?post_type=santino_member&page=santino-cafe-branches' ); ?>" class="button button-secondary" style="margin-left: 6px;"><?php _e( 'Cancel', 'santino' ); ?></a>
+                                    <?php endif; ?>
+                                </p>
+                            </form>
+                        </div>
+
+                        <div class="form-wrap" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #c3c4c7;">
+                            <h2><?php _e( 'Bulk CSV File Import', 'santino' ); ?></h2>
+                            <p class="description" style="margin-bottom: 10px;">
+                                <?php _e( 'Upload .csv with columns: branch_name, division, district, lat, long, map_location, address, phone', 'santino' ); ?>
                             </p>
-                        </form>
+                            <form method="post" enctype="multipart/form-data">
+                                <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
+                                <input type="hidden" name="santino_branch_action" value="upload_csv">
+                                <div class="form-field">
+                                    <input type="file" name="branches_csv" accept=".csv" required>
+                                </div>
+                                <p style="margin: 10px 0;">
+                                    <label><input type="radio" name="csv_mode" value="append" checked> <?php _e( 'Append to existing', 'santino' ); ?></label>
+                                    &nbsp;&nbsp;
+                                    <label><input type="radio" name="csv_mode" value="replace"> <?php _e( 'Replace all', 'santino' ); ?></label>
+                                </p>
+                                <p class="submit" style="padding-top: 0;">
+                                    <input type="submit" class="button button-secondary" value="<?php _e( 'Upload & Import CSV', 'santino' ); ?>">
+                                </p>
+                            </form>
+                        </div>
+
+                        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #c3c4c7;">
+                            <form method="post" onsubmit="return confirm('Reset all branches to default list?');">
+                                <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
+                                <input type="hidden" name="santino_branch_action" value="reset">
+                                <input type="submit" class="button button-link-delete" value="<?php _e( '↺ Reset to Default Branches', 'santino' ); ?>" style="color: #b32d2e;">
+                            </form>
+                        </div>
                     </div>
                 </div>
 
-                <div>
-                    <div class="card" style="padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin:0 0 20px 0;">
-                        <h2 style="margin-top:0; font-size:16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
-                            <?php _e( '+ Add New Branch', 'santino' ); ?>
-                        </h2>
-                        <form method="post" style="margin-top: 15px;">
-                            <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
-                            <input type="hidden" name="santino_branch_action" value="add">
-                            <p>
-                                <label for="new_branch_name" style="font-weight:600; display:block; margin-bottom:6px;">
-                                    <?php _e( 'Branch / Outlet Title:', 'santino' ); ?>
-                                </label>
-                                <input type="text" id="new_branch_name" name="new_branch_name" class="regular-text" style="width:100%; padding:8px 10px;" placeholder="e.g. Uttara Sector 3 Roastery" required>
-                            </p>
-                            <button type="submit" class="button button-primary w-100" style="background:#059669; border-color:#047857; width:100%; font-weight:bold; height:36px;">
-                                + <?php _e( 'Add Branch', 'santino' ); ?>
-                            </button>
-                        </form>
-                    </div>
+                <div id="col-right">
+                    <div class="col-wrap">
+                        <div class="tablenav top">
+                            <div class="alignleft actions">
+                                <strong><?php echo count( $branches ); ?> <?php _e( 'Branches', 'santino' ); ?></strong>
+                            </div>
+                            <div class="alignright">
+                                <input type="search" id="santinoBranchSearchInput" placeholder="<?php esc_attr_e( 'Search branches...', 'santino' ); ?>" style="height: 30px; font-size: 13px;">
+                            </div>
+                        </div>
 
-                    <div class="card" style="padding: 16px; border-radius: 8px; background: #fffdf5; border-color: #fde68a; margin:0;">
-                        <h3 style="margin-top:0; font-size:14px; color: #92400e;">
-                            <span class="dashicons dashicons-info" style="color: #d97706;"></span>
-                            <?php _e( 'Default Branches', 'santino' ); ?>
-                        </h3>
-                        <p class="description" style="font-size:12px; line-height: 1.5; color: #78350f;">
-                            <?php _e( 'Want to revert back to default flagship branches? Click reset below.', 'santino' ); ?>
-                        </p>
-                        <form method="post" onsubmit="return confirm('Reset all branches to default list?');">
-                            <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
-                            <input type="hidden" name="santino_branch_action" value="reset">
-                            <button type="submit" class="button button-secondary" style="font-size:12px;">
-                                <?php _e( 'Reset to Defaults', 'santino' ); ?>
-                            </button>
-                        </form>
+                        <table class="wp-list-table widefat fixed striped table-view-list" id="santinoBranchesTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 35px;">#</th>
+                                    <th scope="col" class="manage-column column-primary"><?php _e( 'Branch Name', 'santino' ); ?></th>
+                                    <th scope="col" style="width: 100px;"><?php _e( 'Division', 'santino' ); ?></th>
+                                    <th scope="col" style="width: 100px;"><?php _e( 'District', 'santino' ); ?></th>
+                                    <th scope="col" style="width: 140px;"><?php _e( 'Lat / Long', 'santino' ); ?></th>
+                                    <th scope="col" style="width: 80px; text-align: center;"><?php _e( 'Map', 'santino' ); ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if ( empty( $branches ) ) : ?>
+                                    <tr><td colspan="6"><?php _e( 'No branches found.', 'santino' ); ?></td></tr>
+                                <?php else : ?>
+                                    <?php foreach ( $branches as $idx => $b ) : 
+                                        $b_id  = $b['id'] ?? $b['name'];
+                                        $map_u = ! empty( $b['map_location'] ) ? $b['map_location'] : ( ( ! empty( $b['lat'] ) && ! empty( $b['long'] ) ) ? 'https://maps.google.com/?q=' . $b['lat'] . ',' . $b['long'] : '' );
+                                    ?>
+                                        <tr class="santino-branch-row" data-search="<?php echo esc_attr( strtolower( ( $b['name'] ?? '' ) . ' ' . ( $b['division'] ?? '' ) . ' ' . ( $b['district'] ?? '' ) . ' ' . ( $b['address'] ?? '' ) ) ); ?>">
+                                            <td><?php echo $idx + 1; ?></td>
+                                            <td class="column-primary">
+                                                <strong>
+                                                    <a href="<?php echo admin_url( 'edit.php?post_type=santino_member&page=santino-cafe-branches&edit=' . urlencode( $b_id ) ); ?>" class="row-title">
+                                                        <?php echo esc_html( $b['name'] ?? '' ); ?>
+                                                    </a>
+                                                </strong>
+                                                <?php if ( ! empty( $b['address'] ) ) : ?>
+                                                    <div style="color: #64748b; font-size: 12px; margin-top: 2px;"><?php echo esc_html( $b['address'] ); ?></div>
+                                                <?php endif; ?>
+                                                <?php if ( ! empty( $b['phone'] ) ) : ?>
+                                                    <div style="color: #50575e; font-size: 11px; margin-top: 2px;">📞 <?php echo esc_html( $b['phone'] ); ?></div>
+                                                <?php endif; ?>
+                                                <div class="row-actions">
+                                                    <span class="edit">
+                                                        <a href="<?php echo admin_url( 'edit.php?post_type=santino_member&page=santino-cafe-branches&edit=' . urlencode( $b_id ) ); ?>"><?php _e( 'Edit', 'santino' ); ?></a> | 
+                                                    </span>
+                                                    <span class="trash">
+                                                        <form method="post" style="display:inline;" onsubmit="return confirm('Remove branch: <?php echo esc_js( $b['name'] ?? '' ); ?>?');">
+                                                            <?php wp_nonce_field( 'santino_branches_nonce' ); ?>
+                                                            <input type="hidden" name="santino_branch_action" value="delete">
+                                                            <input type="hidden" name="del_branch_id" value="<?php echo esc_attr( $b_id ); ?>">
+                                                            <button type="submit" class="button-link submitdelete" style="font-size: 11px;"><?php _e( 'Delete', 'santino' ); ?></button>
+                                                        </form>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td><?php echo esc_html( $b['division'] ?? 'Dhaka' ); ?></td>
+                                            <td><?php echo esc_html( $b['district'] ?? 'Dhaka' ); ?></td>
+                                            <td style="font-family: monospace; font-size: 11px;">
+                                                <?php if ( ! empty( $b['lat'] ) && ! empty( $b['long'] ) ) : ?>
+                                                    <?php echo esc_html( $b['lat'] ); ?>, <?php echo esc_html( $b['long'] ); ?>
+                                                <?php else : ?>
+                                                    —
+                                                <?php endif; ?>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <?php if ( $map_u ) : ?>
+                                                    <a href="<?php echo esc_url( $map_u ); ?>" target="_blank" class="button button-small"><?php _e( 'View', 'santino' ); ?></a>
+                                                <?php else : ?>
+                                                    —
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var searchInput = document.getElementById('santinoBranchSearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    var q = this.value.toLowerCase().trim();
+                    var rows = document.querySelectorAll('.santino-branch-row');
+                    rows.forEach(function(row) {
+                        var text = row.getAttribute('data-search') || '';
+                        if (!q || text.indexOf(q) !== -1) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+        </script>
         <?php
     }
 

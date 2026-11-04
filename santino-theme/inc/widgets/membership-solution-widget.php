@@ -10,7 +10,7 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__( 'Santino VIP Coffee Club Solution', 'santino' );
+        return esc_html__( 'Santino: /membership/ All Sections & Stamps', 'santino' );
     }
 
     public function get_icon() {
@@ -121,10 +121,11 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
 
         $this->end_controls_section();
 
+        // 2. METRICS ROW CONTROLS
         $this->start_controls_section(
-            'section_display_options',
+            'section_metrics',
             array(
-                'label' => esc_html__( 'Sections Visibility & Metrics', 'santino' ),
+                'label' => esc_html__( 'Key Metrics Row', 'santino' ),
                 'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
             )
         );
@@ -140,6 +141,85 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
         );
 
         $this->add_control(
+            'metric1_num',
+            array(
+                'label'   => esc_html__( 'Metric 1 Value', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => '100% Free',
+            )
+        );
+        $this->add_control(
+            'metric1_label',
+            array(
+                'label'   => esc_html__( 'Metric 1 Label', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Club Enrollment',
+            )
+        );
+
+        $this->add_control(
+            'metric2_num',
+            array(
+                'label'   => esc_html__( 'Metric 2 Value', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => '15% Off',
+            )
+        );
+        $this->add_control(
+            'metric2_label',
+            array(
+                'label'   => esc_html__( 'Metric 2 Label', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Retail Bean Privilege',
+            )
+        );
+
+        $this->add_control(
+            'metric3_num',
+            array(
+                'label'   => esc_html__( 'Metric 3 Value', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Priority',
+            )
+        );
+        $this->add_control(
+            'metric3_label',
+            array(
+                'label'   => esc_html__( 'Metric 3 Label', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Private Cupping Access',
+            )
+        );
+
+        $this->add_control(
+            'metric4_num',
+            array(
+                'label'   => esc_html__( 'Metric 4 Value', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Monthly',
+            )
+        );
+        $this->add_control(
+            'metric4_label',
+            array(
+                'label'   => esc_html__( 'Metric 4 Label', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Exclusive Micro-Lots',
+            )
+        );
+
+        $this->end_controls_section();
+
+        // 3. PERKS & PRIVILEGES SECTION
+        $this->start_controls_section(
+            'section_perks',
+            array(
+                'label' => esc_html__( 'Perks & Privileges Section', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control(
             'show_perks',
             array(
                 'label'        => esc_html__( 'Show Perks Cards', 'santino' ),
@@ -150,12 +230,243 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
         );
 
         $this->add_control(
+            'perks_badge',
+            array(
+                'label'   => esc_html__( 'Perks Badge', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'MEMBER PRIVILEGES',
+            )
+        );
+
+        $this->add_control(
+            'perks_title',
+            array(
+                'label'   => esc_html__( 'Perks Title', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Crafted Exclusively For Coffee Lovers',
+            )
+        );
+
+        $this->add_control(
+            'perks_desc',
+            array(
+                'label'   => esc_html__( 'Perks Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXTAREA,
+                'default' => 'Elevate every cup with exclusive roastery privileges, private sensory workshops, and member-only pricing.',
+            )
+        );
+
+        // 6 Perks Controls
+        $perk_defaults = array(
+            1 => array( 'tag' => 'VIP ALLOCATION', 'title' => 'Priority Micro-Lot Reserves', 'desc' => 'Exclusive 48-hour advance access to rare competition harvests, Geisha lots, and anaerobic micro-batches before public store launch.', 'foot1' => 'Limited Batches', 'foot2' => 'First Access' ),
+            2 => array( 'tag' => 'SCA • WBC LAB', 'title' => 'Private Cupping Masterclasses', 'desc' => 'Invitations to sensory cupping workshops and origin taste profiling led by certified SCA and WBC barista trainers at our Tejgaon roastery lab.', 'foot1' => 'Tejgaon Roastery', 'foot2' => 'Free Passes' ),
+            3 => array( 'tag' => '15% OFF BEANS', 'title' => 'Artisan Roasted Beans Discount', 'desc' => 'Enjoy a permanent 15% VIP member privilege on all 250g and 1kg bags of freshly roasted single-origin coffees and signature espresso blends.', 'foot1' => '250g & 1kg Bags', 'foot2' => 'Year-Round' ),
+            4 => array( 'tag' => 'ANNUAL GIFT', 'title' => 'Birthday Month Signature Treat', 'desc' => 'Celebrate your special month with a complimentary handcrafted artisanal drink or single-origin pour-over at any Santino flagship cafe.', 'foot1' => 'Any Branch', 'foot2' => '100% On Us' ),
+            5 => array( 'tag' => 'TECH CARE', 'title' => 'Barista Dial-In & Gear Support', 'desc' => 'Direct access to our technicians for home espresso grinder calibration, brew ratio optimization, and equipment maintenance consultations.', 'foot1' => 'Expert Baristas', 'foot2' => 'Consultations' ),
+            6 => array( 'tag' => 'ZERO WAIT', 'title' => 'Express WhatsApp Order-Ahead', 'desc' => 'Skip peak morning lines at Gulshan, Banani, and Tejgaon branches with priority WhatsApp beverage pre-ordering and table reserve.', 'foot1' => 'Priority Line', 'foot2' => 'Express Queue' ),
+        );
+
+        for ( $p = 1; $p <= 6; $p++ ) {
+            $this->add_control(
+                'perk' . $p . '_tag',
+                array(
+                    'label'   => esc_html__( "Perk $p Tag", 'santino' ),
+                    'type'    => \Elementor\Controls_Manager::TEXT,
+                    'default' => $perk_defaults[ $p ]['tag'],
+                )
+            );
+            $this->add_control(
+                'perk' . $p . '_title',
+                array(
+                    'label'   => esc_html__( "Perk $p Title", 'santino' ),
+                    'type'    => \Elementor\Controls_Manager::TEXT,
+                    'default' => $perk_defaults[ $p ]['title'],
+                )
+            );
+            $this->add_control(
+                'perk' . $p . '_desc',
+                array(
+                    'label'   => esc_html__( "Perk $p Description", 'santino' ),
+                    'type'    => \Elementor\Controls_Manager::TEXTAREA,
+                    'default' => $perk_defaults[ $p ]['desc'],
+                )
+            );
+        }
+
+        $this->end_controls_section();
+
+        // 4. PORTAL SECTION CONTROLS
+        $this->start_controls_section(
+            'section_portal',
+            array(
+                'label' => esc_html__( 'VIP Club Portal Section', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control(
             'show_portal',
             array(
                 'label'        => esc_html__( 'Show VIP Club Portal Section', 'santino' ),
                 'type'         => \Elementor\Controls_Manager::SWITCHER,
                 'default'      => 'yes',
                 'return_value' => 'yes',
+            )
+        );
+
+        $this->add_control(
+            'portal_badge',
+            array(
+                'label'   => esc_html__( 'Portal Badge', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'VIP LOYALTY REWARDS',
+            )
+        );
+
+        $this->add_control(
+            'portal_title',
+            array(
+                'label'   => esc_html__( 'Portal Title', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Digital Coffee Stamp Card & Club Portal',
+            )
+        );
+
+        $this->add_control(
+            'portal_desc',
+            array(
+                'label'   => esc_html__( 'Portal Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXTAREA,
+                'default' => 'Enjoy specialty brews across Santino partner cafes. Collect 5 Cup Stamps and claim your 6th Handcrafted Drink 100% Free!',
+            )
+        );
+
+        $this->add_control(
+            'tab1_title',
+            array(
+                'label'   => esc_html__( 'Tab 1 Heading', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Check Your Live Stamp Progress',
+            )
+        );
+        $this->add_control(
+            'tab1_desc',
+            array(
+                'label'   => esc_html__( 'Tab 1 Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Enter your Registered Phone Number or Regular Member ID below.',
+            )
+        );
+
+        $this->add_control(
+            'tab2_title',
+            array(
+                'label'   => esc_html__( 'Tab 2 Heading', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Log Cafe Invoice / Memo Number',
+            )
+        );
+        $this->add_control(
+            'tab2_desc',
+            array(
+                'label'   => esc_html__( 'Tab 2 Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Submit your receipt details. Cups will be credited to your stamp card upon portal verification.',
+            )
+        );
+
+        $this->add_control(
+            'tab3_title',
+            array(
+                'label'   => esc_html__( 'Tab 3 Heading', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Santino Regular Member Enrollment',
+            )
+        );
+        $this->add_control(
+            'tab3_desc',
+            array(
+                'label'   => esc_html__( 'Tab 3 Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Complete 5 cups of handcrafted coffee across Dhaka branches to enjoy your 6th cup free.',
+            )
+        );
+
+        $this->end_controls_section();
+
+        // 5. BOTTOM CTA SECTION
+        $this->start_controls_section(
+            'section_bottom_cta',
+            array(
+                'label' => esc_html__( 'Bottom CTA (Visit Cafes)', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control(
+            'show_bottom_cta',
+            array(
+                'label'        => esc_html__( 'Show Bottom CTA Section', 'santino' ),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'default'      => 'yes',
+                'return_value' => 'yes',
+            )
+        );
+
+        $this->add_control(
+            'cta_badge',
+            array(
+                'label'   => esc_html__( 'Badge Text', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'VISIT OUR CAFES',
+            )
+        );
+
+        $this->add_control(
+            'cta_title',
+            array(
+                'label'   => esc_html__( 'Title', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Taste The',
+            )
+        );
+
+        $this->add_control(
+            'cta_title_accent',
+            array(
+                'label'   => esc_html__( 'Title Accent', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Santino Difference',
+            )
+        );
+
+        $this->add_control(
+            'cta_desc',
+            array(
+                'label'   => esc_html__( 'Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXTAREA,
+                'default' => 'Discover our signature handcrafted beverages, artisanal roasts, and modern cafe ambiance across Dhaka.',
+            )
+        );
+
+        $this->add_control(
+            'cta_btn_text',
+            array(
+                'label'       => esc_html__( 'Button Text (Blank to Hide)', 'santino' ),
+                'type'        => \Elementor\Controls_Manager::TEXT,
+                'default'     => 'Explore Drinks Menu',
+                'description' => esc_html__( 'Leave blank if you want to hide this button completely.', 'santino' ),
+            )
+        );
+
+        $this->add_control(
+            'cta_btn_url',
+            array(
+                'label'   => esc_html__( 'Button URL', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::URL,
+                'default' => array(
+                    'url' => '/menu/',
+                ),
             )
         );
 
@@ -511,9 +822,9 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
         $hero_badge  = ! empty( $settings['hero_badge'] ) ? $settings['hero_badge'] : 'SANTINO VIP COFFEE CLUB';
         $hero_title  = ! empty( $settings['hero_title'] ) ? $settings['hero_title'] : 'Exclusive Connoisseur <span style="color: #dfbe8d;">Privileges</span>';
         $hero_desc   = ! empty( $settings['hero_desc'] ) ? $settings['hero_desc'] : 'Private cupping sessions, seasonal micro-lot allocations, and 15% VIP artisan bean discounts across Bangladesh.';
-        $btn1_text   = ! empty( $settings['hero_btn1_text'] ) ? $settings['hero_btn1_text'] : 'Join Coffee Club';
+        $btn1_text   = isset( $settings['hero_btn1_text'] ) ? trim( (string) $settings['hero_btn1_text'] ) : '';
         $btn1_url    = ! empty( $settings['hero_btn1_url']['url'] ) ? $settings['hero_btn1_url']['url'] : '#clubPortal';
-        $btn2_text   = ! empty( $settings['hero_btn2_text'] ) ? $settings['hero_btn2_text'] : 'Explore Perks';
+        $btn2_text   = isset( $settings['hero_btn2_text'] ) ? trim( (string) $settings['hero_btn2_text'] ) : '';
         $btn2_url    = ! empty( $settings['hero_btn2_url']['url'] ) ? $settings['hero_btn2_url']['url'] : '#perks';
         $show_hero   = ( $settings['show_hero'] ?? 'yes' ) === 'yes';
         $show_metrics = ( $settings['show_metrics'] ?? 'yes' ) === 'yes';
@@ -539,16 +850,22 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                 <?php echo wp_kses_post( $hero_desc ); ?>
               </p>
 
+              <?php if ( ! empty( $btn1_text ) || ! empty( $btn2_text ) ) : ?>
               <div class="pro-banner-actions d-flex justify-content-center align-items-center gap-3 flex-wrap">
+                <?php if ( ! empty( $btn1_text ) ) : ?>
                 <a href="<?php echo esc_url( $btn1_url ); ?>" class="btn-hero-lifestyle">
                   <span><?php echo esc_html( $btn1_text ); ?></span>
                   <i class="bi bi-arrow-right"></i>
                 </a>
+                <?php endif; ?>
+                <?php if ( ! empty( $btn2_text ) ) : ?>
                 <a href="<?php echo esc_url( $btn2_url ); ?>" class="btn-hero-outline">
                   <i class="bi bi-arrow-down-short text-warning"></i>
                   <span><?php echo esc_html( $btn2_text ); ?></span>
                 </a>
+                <?php endif; ?>
               </div>
+              <?php endif; ?>
             </div>
           </section>
           <?php endif; ?>
@@ -560,29 +877,29 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                 <div class="col-lg-3 col-6">
                   <div class="metric-card-pro">
                     <div class="metric-card-icon"><i class="bi bi-stars"></i></div>
-                    <div class="metric-num">100% Free</div>
-                    <div class="metric-label">Club Enrollment</div>
+                    <div class="metric-num"><?php echo esc_html( $settings['metric1_num'] ?? '100% Free' ); ?></div>
+                    <div class="metric-label"><?php echo esc_html( $settings['metric1_label'] ?? 'Club Enrollment' ); ?></div>
                   </div>
                 </div>
                 <div class="col-lg-3 col-6">
                   <div class="metric-card-pro">
                     <div class="metric-card-icon"><i class="bi bi-percent"></i></div>
-                    <div class="metric-num">15% Off</div>
-                    <div class="metric-label">Retail Bean Privilege</div>
+                    <div class="metric-num"><?php echo esc_html( $settings['metric2_num'] ?? '15% Off' ); ?></div>
+                    <div class="metric-label"><?php echo esc_html( $settings['metric2_label'] ?? 'Retail Bean Privilege' ); ?></div>
                   </div>
                 </div>
                 <div class="col-lg-3 col-6">
                   <div class="metric-card-pro">
                     <div class="metric-card-icon"><i class="bi bi-cup-hot-fill"></i></div>
-                    <div class="metric-num">Priority</div>
-                    <div class="metric-label">Private Cupping Access</div>
+                    <div class="metric-num"><?php echo esc_html( $settings['metric3_num'] ?? 'Priority' ); ?></div>
+                    <div class="metric-label"><?php echo esc_html( $settings['metric3_label'] ?? 'Private Cupping Access' ); ?></div>
                   </div>
                 </div>
                 <div class="col-lg-3 col-6">
                   <div class="metric-card-pro">
                     <div class="metric-card-icon"><i class="bi bi-calendar-heart-fill"></i></div>
-                    <div class="metric-num">Monthly</div>
-                    <div class="metric-label">Exclusive Micro-Lots</div>
+                    <div class="metric-num"><?php echo esc_html( $settings['metric4_num'] ?? 'Monthly' ); ?></div>
+                    <div class="metric-label"><?php echo esc_html( $settings['metric4_label'] ?? 'Exclusive Micro-Lots' ); ?></div>
                   </div>
                 </div>
               </div>
@@ -590,144 +907,107 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
           </div>
           <?php endif; ?>
 
+          <?php 
+          $show_perks = ( $settings['show_perks'] ?? 'yes' ) === 'yes';
+          if ( $show_perks ) : 
+            $perks_badge = ! empty( $settings['perks_badge'] ) ? $settings['perks_badge'] : 'MEMBER PRIVILEGES';
+            $perks_title = ! empty( $settings['perks_title'] ) ? $settings['perks_title'] : 'Crafted Exclusively For Coffee Lovers';
+            $perks_desc  = ! empty( $settings['perks_desc'] ) ? $settings['perks_desc'] : 'Elevate every cup with exclusive roastery privileges, private sensory workshops, and member-only pricing.';
+
+            $perk_icons = array(
+              1 => 'bi bi-stars',
+              2 => 'bi bi-mortarboard-fill',
+              3 => 'bi bi-tag-fill',
+              4 => 'bi bi-gift-fill',
+              5 => 'bi bi-sliders',
+              6 => 'bi bi-whatsapp',
+            );
+            $perk_footers = array(
+              1 => array( 'left' => 'Limited Batches', 'right' => 'First Access' ),
+              2 => array( 'left' => 'Tejgaon Roastery', 'right' => 'Free Passes' ),
+              3 => array( 'left' => '250g & 1kg Bags', 'right' => 'Year-Round' ),
+              4 => array( 'left' => 'Any Branch', 'right' => '100% On Us' ),
+              5 => array( 'left' => 'Expert Baristas', 'right' => 'Consultations' ),
+              6 => array( 'left' => 'Priority Line', 'right' => 'Express Queue' ),
+            );
+          ?>
           <section class="py-5 perks-section position-relative overflow-hidden" id="perks">
             <div class="container py-lg-4">
               <div class="text-center max-w-700 mx-auto mb-5">
                 <div class="sec-pill-badge-wrap mb-2">
                   <span class="sec-pill-line"></span>
-                  <span class="sec-pill-badge"><i class="bi bi-award-fill me-1"></i> MEMBER PRIVILEGES</span>
+                  <span class="sec-pill-badge"><i class="bi bi-award-fill me-1"></i> <?php echo esc_html( $perks_badge ); ?></span>
                   <span class="sec-pill-line"></span>
                 </div>
-                <h2 class="sec-title mb-2">Crafted Exclusively For Coffee Lovers</h2>
+                <h2 class="sec-title mb-2"><?php echo esc_html( $perks_title ); ?></h2>
                 <p class="text-muted mb-0" style="font-size: 0.98rem; max-width: 580px; line-height: 1.5; margin: 0 auto;">
-                  Elevate every cup with exclusive roastery privileges, private sensory workshops, and member-only pricing.
+                  <?php echo esc_html( $perks_desc ); ?>
                 </p>
               </div>
 
               <div class="row g-4 justify-content-center">
+                <?php for ( $p = 1; $p <= 6; $p++ ) : 
+                  $p_tag   = $settings[ 'perk' . $p . '_tag' ] ?? '';
+                  $p_title = $settings[ 'perk' . $p . '_title' ] ?? '';
+                  $p_desc  = $settings[ 'perk' . $p . '_desc' ] ?? '';
+                  if ( empty( $p_title ) ) continue;
+                ?>
                 <div class="col-lg-4 col-md-6">
                   <div class="perk-card-luxury">
                     <div>
                       <div class="d-flex justify-content-between align-items-start">
-                        <div class="perk-icon-wrap"><i class="bi bi-stars"></i></div>
-                        <span class="perk-pill-tag">VIP ALLOCATION</span>
+                        <div class="perk-icon-wrap"><i class="<?php echo esc_attr( $perk_icons[ $p ] ); ?>"></i></div>
+                        <?php if ( ! empty( $p_tag ) ) : ?>
+                          <span class="perk-pill-tag"><?php echo esc_html( $p_tag ); ?></span>
+                        <?php endif; ?>
                       </div>
-                      <h4 class="font-heading perk-title">Priority Micro-Lot Reserves</h4>
-                      <p class="perk-desc">Exclusive 48-hour advance access to rare competition harvests, Geisha lots, and anaerobic micro-batches before public store launch.</p>
+                      <h4 class="font-heading perk-title"><?php echo esc_html( $p_title ); ?></h4>
+                      <p class="perk-desc"><?php echo esc_html( $p_desc ); ?></p>
                     </div>
                     <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between text-muted" style="font-size: 12px;">
-                      <span><i class="bi bi-check2-circle text-teal me-1"></i> Limited Batches</span>
-                      <span class="fw-bold text-teal">First Access</span>
+                      <span><i class="bi bi-check2-circle text-teal me-1"></i> <?php echo esc_html( $perk_footers[ $p ]['left'] ); ?></span>
+                      <span class="fw-bold text-teal"><?php echo esc_html( $perk_footers[ $p ]['right'] ); ?></span>
                     </div>
                   </div>
                 </div>
-
-                <div class="col-lg-4 col-md-6">
-                  <div class="perk-card-luxury">
-                    <div>
-                      <div class="d-flex justify-content-between align-items-start">
-                        <div class="perk-icon-wrap"><i class="bi bi-mortarboard-fill"></i></div>
-                        <span class="perk-pill-tag">SCA • WBC LAB</span>
-                      </div>
-                      <h4 class="font-heading perk-title">Private Cupping Masterclasses</h4>
-                      <p class="perk-desc">Invitations to sensory cupping workshops and origin taste profiling led by certified SCA and WBC barista trainers at our Tejgaon roastery lab.</p>
-                    </div>
-                    <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between text-muted" style="font-size: 12px;">
-                      <span><i class="bi bi-geo-alt text-teal me-1"></i> Tejgaon Roastery</span>
-                      <span class="fw-bold text-teal">Free Passes</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                  <div class="perk-card-luxury">
-                    <div>
-                      <div class="d-flex justify-content-between align-items-start">
-                        <div class="perk-icon-wrap"><i class="bi bi-tag-fill"></i></div>
-                        <span class="perk-pill-tag" style="background: rgba(195, 153, 108, 0.15); color: #93683a;">15% OFF BEANS</span>
-                      </div>
-                      <h4 class="font-heading perk-title">Artisan Roasted Beans Discount</h4>
-                      <p class="perk-desc">Enjoy a permanent 15% VIP member privilege on all 250g and 1kg bags of freshly roasted single-origin coffees and signature espresso blends.</p>
-                    </div>
-                    <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between text-muted" style="font-size: 12px;">
-                      <span><i class="bi bi-bag-check text-teal me-1"></i> 250g &amp; 1kg Bags</span>
-                      <span class="fw-bold text-teal">Year-Round</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                  <div class="perk-card-luxury">
-                    <div>
-                      <div class="d-flex justify-content-between align-items-start">
-                        <div class="perk-icon-wrap"><i class="bi bi-gift-fill"></i></div>
-                        <span class="perk-pill-tag">ANNUAL GIFT</span>
-                      </div>
-                      <h4 class="font-heading perk-title">Birthday Month Signature Treat</h4>
-                      <p class="perk-desc">Celebrate your special month with a complimentary handcrafted artisanal drink or single-origin pour-over at any Santino flagship cafe.</p>
-                    </div>
-                    <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between text-muted" style="font-size: 12px;">
-                      <span><i class="bi bi-cup-hot text-teal me-1"></i> Any Branch</span>
-                      <span class="fw-bold text-teal">100% On Us</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                  <div class="perk-card-luxury">
-                    <div>
-                      <div class="d-flex justify-content-between align-items-start">
-                        <div class="perk-icon-wrap"><i class="bi bi-sliders"></i></div>
-                        <span class="perk-pill-tag">TECH CARE</span>
-                      </div>
-                      <h4 class="font-heading perk-title">Barista Dial-In &amp; Gear Support</h4>
-                      <p class="perk-desc">Direct access to our technicians for home espresso grinder calibration, brew ratio optimization, and equipment maintenance consultations.</p>
-                    </div>
-                    <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between text-muted" style="font-size: 12px;">
-                      <span><i class="bi bi-wrench-adjustable text-teal me-1"></i> Expert Baristas</span>
-                      <span class="fw-bold text-teal">Consultations</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                  <div class="perk-card-luxury">
-                    <div>
-                      <div class="d-flex justify-content-between align-items-start">
-                        <div class="perk-icon-wrap"><i class="bi bi-whatsapp"></i></div>
-                        <span class="perk-pill-tag">ZERO WAIT</span>
-                      </div>
-                      <h4 class="font-heading perk-title">Express WhatsApp Order-Ahead</h4>
-                      <p class="perk-desc">Skip peak morning lines at Gulshan, Banani, and Tejgaon branches with priority WhatsApp beverage pre-ordering and table reserve.</p>
-                    </div>
-                    <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between text-muted" style="font-size: 12px;">
-                      <span><i class="bi bi-lightning-charge text-teal me-1"></i> Priority Line</span>
-                      <span class="fw-bold text-teal">Express Queue</span>
-                    </div>
-                  </div>
-                </div>
+                <?php endfor; ?>
               </div>
             </div>
           </section>
+          <?php endif; ?>
 
+          <?php 
+          $show_portal = ( $settings['show_portal'] ?? 'yes' ) === 'yes';
+          if ( $show_portal ) :
+            $portal_badge = ! empty( $settings['portal_badge'] ) ? $settings['portal_badge'] : 'VIP LOYALTY REWARDS';
+            $portal_title = ! empty( $settings['portal_title'] ) ? $settings['portal_title'] : 'Digital Coffee Stamp Card & Club Portal';
+            $portal_desc  = ! empty( $settings['portal_desc'] ) ? $settings['portal_desc'] : 'Enjoy specialty brews across Santino partner cafes. Collect 5 Cup Stamps and claim your 6th Handcrafted Drink 100% Free!';
+            $tab1_title   = ! empty( $settings['tab1_title'] ) ? $settings['tab1_title'] : 'Check Your Live Stamp Progress';
+            $tab1_desc    = ! empty( $settings['tab1_desc'] ) ? $settings['tab1_desc'] : 'Enter your Registered Phone Number or Regular Member ID below.';
+            $tab2_title   = ! empty( $settings['tab2_title'] ) ? $settings['tab2_title'] : 'Log Cafe Invoice / Memo Number';
+            $tab2_desc    = ! empty( $settings['tab2_desc'] ) ? $settings['tab2_desc'] : 'Submit your receipt details. Cups will be credited to your stamp card upon portal verification.';
+            $tab3_title   = ! empty( $settings['tab3_title'] ) ? $settings['tab3_title'] : 'Santino Regular Member Enrollment';
+            $tab3_desc    = ! empty( $settings['tab3_desc'] ) ? $settings['tab3_desc'] : 'Complete 5 cups of handcrafted coffee across Dhaka branches to enjoy your 6th cup free.';
+          ?>
+          <div id="stamps"></div>
           <section class="py-5 club-portal-section position-relative overflow-hidden" id="clubPortal">
             <div class="container py-lg-4">
               <div class="text-center max-w-700 mx-auto mb-5">
                 <div class="sec-pill-badge-wrap mb-2">
                   <span class="sec-pill-line"></span>
-                  <span class="sec-pill-badge"><i class="bi bi-cup-hot-fill me-1"></i> VIP LOYALTY REWARDS</span>
+                  <span class="sec-pill-badge"><i class="bi bi-cup-hot-fill me-1"></i> <?php echo esc_html( $portal_badge ); ?></span>
                   <span class="sec-pill-line"></span>
                 </div>
-                <h2 class="sec-title mb-2">Digital Coffee Stamp Card &amp; Club Portal</h2>
+                <h2 class="sec-title mb-2"><?php echo esc_html( $portal_title ); ?></h2>
                 <p class="text-muted mb-0" style="font-size: 0.98rem; max-width: 580px; line-height: 1.5; margin: 0 auto;">
-                  Enjoy specialty brews across Santino partner cafes. Collect <strong>5 Cup Stamps</strong> and claim your <strong>6th Handcrafted Drink 100% Free!</strong>
+                  <?php echo esc_html( $portal_desc ); ?>
                 </p>
               </div>
 
-              <div class="row g-4 align-items-stretch justify-content-center">
+              <div class="row g-4 align-items-start justify-content-center">
                 <div class="col-lg-5">
-                  <div class="d-flex flex-column justify-content-between h-100">
-                    <div class="vip-card-surface mb-4">
+                  <div class="d-flex flex-column gap-3">
+                    <div class="vip-card-surface">
                       <div class="d-flex justify-content-between align-items-start mb-3 position-relative" style="z-index: 2;">
                         <div>
                           <div class="small fw-bold text-uppercase" style="color: #dfbe8d; letter-spacing: 1.5px; font-size: 11px;">
@@ -827,8 +1107,8 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                     <div class="tab-content flex-grow-1" id="loyaltyTabsContent">
                       <div class="tab-pane fade show active" id="stamps-pane" role="tabpanel">
                         <div class="mb-4">
-                          <h4 class="font-heading fw-bold text-dark mb-1">Check Your Live Stamp Progress</h4>
-                          <p class="text-muted small">Enter your Registered Phone Number or Regular Member ID below.</p>
+                          <h4 class="font-heading fw-bold text-dark mb-1"><?php echo esc_html( $tab1_title ); ?></h4>
+                          <p class="text-muted small"><?php echo esc_html( $tab1_desc ); ?></p>
                         </div>
 
                         <form id="santinoLookupForm" class="mb-4">
@@ -847,8 +1127,8 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
 
                       <div class="tab-pane fade" id="invoice-pane" role="tabpanel">
                         <div class="mb-4">
-                          <h4 class="font-heading fw-bold text-dark mb-1">Log Cafe Invoice / Memo Number</h4>
-                          <p class="text-muted small">Submit your receipt details. Cups will be credited to your stamp card upon portal verification.</p>
+                          <h4 class="font-heading fw-bold text-dark mb-1"><?php echo esc_html( $tab2_title ); ?></h4>
+                          <p class="text-muted small"><?php echo esc_html( $tab2_desc ); ?></p>
                         </div>
                         <div id="invoiceResponseBox" style="display: none;" class="mb-4"></div>
                         <form id="santinoInvoiceForm" enctype="multipart/form-data">
@@ -858,7 +1138,7 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                               <input type="text" name="invoice_number" class="form-control" placeholder="e.g. SNT-2026-9042" required>
                             </div>
                             <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">No. of Cups Ordered *</label>
+                              <label class="form-label small fw-bold text-dark">No. of Items / Cups *</label>
                               <div class="input-group">
                                 <button class="btn btn-outline-secondary px-2 santino-cup-minus" type="button" style="font-weight: bold; border-color: #cbd5e1;">−</button>
                                 <input type="number" name="cups" class="form-control text-center santino-cups-input" min="1" max="50" value="1" style="font-weight: bold; color: #00625d;" required>
@@ -867,13 +1147,23 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                             </div>
                           </div>
                           <div class="row g-3 mb-3">
-                            <div class="col-md-6">
+                            <div class="col-12">
                               <label class="form-label small fw-bold text-dark">Phone Number / WhatsApp *</label>
                               <input type="tel" name="phone" class="form-control santino-phone-validate" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)1[3-9]\d{8}$" maxlength="15" title="Please enter a valid 11-digit Bangladeshi phone number" required>
                             </div>
-                            <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">Member ID (Optional)</label>
-                              <input type="text" name="member_id" class="form-control" placeholder="e.g. SNT-REG-XXXX">
+                          </div>
+                          <div class="row g-3 mb-3">
+                            <div class="col-12">
+                              <label class="form-label small fw-bold text-dark"><i class="bi bi-cup-hot-fill me-1 text-teal"></i> Items Ordered / Consumed *</label>
+                              <select name="items_consumed" class="form-select" required>
+                                <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
+                                <?php 
+                                $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
+                                foreach ( $ordered_items as $item_choice ) : ?>
+                                  <option value="<?php echo esc_attr( $item_choice ); ?>"><?php echo esc_html( $item_choice ); ?></option>
+                                <?php endforeach; ?>
+                              </select>
+                              <div class="form-text text-muted" style="font-size: 11px;">Select the handcrafted coffee or bakery item on your receipt.</div>
                             </div>
                           </div>
                           <div class="row g-3 mb-3">
@@ -889,9 +1179,9 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                             </div>
                           </div>
                           <div class="mb-4">
-                            <label class="form-label small fw-bold text-dark"><i class="bi bi-camera me-1 text-teal"></i> Upload Invoice / Memo Photo (Optional)</label>
-                            <input type="file" name="invoice_image" id="santinoInvoiceImage" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg">
-                            <div class="form-text text-muted small" style="font-size: 0.78rem;">Upload photo of your physical cafe bill/memo for fast verification (JPG, PNG, WebP).</div>
+                            <label class="form-label small fw-bold text-dark"><i class="bi bi-camera-fill me-1 text-teal"></i> Upload Invoice / Memo Photo * (Mandatory)</label>
+                            <input type="file" name="invoice_image" id="santinoInvoiceImage" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg" required>
+                            <div class="form-text text-muted small" style="font-size: 0.78rem;">Upload photo of your physical cafe bill/memo for fast verification (JPG, PNG, WebP) - Required.</div>
                           </div>
                           <button type="submit" class="btn btn-portal-submit w-100 font-heading text-uppercase">
                             Submit Invoice For Stamp Verification →
@@ -901,11 +1191,17 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
 
                       <div class="tab-pane fade" id="register-pane" role="tabpanel">
                         <div class="mb-4">
-                          <h4 class="font-heading fw-bold text-dark mb-1">Register For Santino Coffee Club</h4>
-                          <p class="text-muted small">Just your Mobile Number, Birthday &amp; Email to activate your digital stamp card.</p>
+                          <h4 class="font-heading fw-bold text-dark mb-1"><?php echo esc_html( $tab3_title ); ?></h4>
+                          <p class="text-muted small"><?php echo esc_html( $tab3_desc ); ?></p>
                         </div>
                         <div id="membershipResponseBox" style="display: none;" class="mb-4"></div>
                         <form id="santinoMembershipForm">
+                          <div class="row g-3 mb-3">
+                            <div class="col-12">
+                              <label class="form-label small fw-bold text-dark">Full Name *</label>
+                              <input type="text" name="name" class="form-control" placeholder="Enter your full name" required>
+                            </div>
+                          </div>
                           <div class="row g-3 mb-3">
                             <div class="col-12">
                               <label class="form-label small fw-bold text-dark">Mobile Number: *</label>
@@ -965,28 +1261,49 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
               </div>
             </div>
           </section>
+          <?php endif; ?>
 
+          <?php 
+          $show_bottom_cta = ( $settings['show_bottom_cta'] ?? 'yes' ) === 'yes';
+          if ( $show_bottom_cta ) :
+            $cta_badge  = ! empty( $settings['cta_badge'] ) ? $settings['cta_badge'] : '';
+            $cta_title  = ! empty( $settings['cta_title'] ) ? $settings['cta_title'] : 'Taste The';
+            $cta_accent = ! empty( $settings['cta_title_accent'] ) ? $settings['cta_title_accent'] : 'Santino Difference';
+            $cta_desc   = ! empty( $settings['cta_desc'] ) ? $settings['cta_desc'] : '';
+            $cta_btn    = isset( $settings['cta_btn_text'] ) ? trim( (string) $settings['cta_btn_text'] ) : '';
+            $cta_url    = ! empty( $settings['cta_btn_url']['url'] ) ? $settings['cta_btn_url']['url'] : home_url( '/menu/' );
+          ?>
           <section class="py-5 bg-white text-center border-top">
             <div class="container py-4" style="max-width: 700px;">
+              <?php if ( ! empty( $cta_badge ) ) : ?>
               <div class="sec-pill-badge-wrap mb-2">
                 <span class="sec-pill-line"></span>
-                <span class="sec-pill-badge"><i class="bi bi-cup-hot-fill me-1"></i> VISIT OUR CAFES</span>
+                <span class="sec-pill-badge"><i class="bi bi-cup-hot-fill me-1"></i> <?php echo esc_html( $cta_badge ); ?></span>
                 <span class="sec-pill-line"></span>
               </div>
+              <?php endif; ?>
               <h2 class="sec-title mb-2">
-                Taste The <span class="sec-title-accent">Santino Difference</span>
+                <?php echo esc_html( $cta_title ); ?> 
+                <?php if ( ! empty( $cta_accent ) ) : ?>
+                  <span class="sec-title-accent"><?php echo esc_html( $cta_accent ); ?></span>
+                <?php endif; ?>
               </h2>
+              <?php if ( ! empty( $cta_desc ) ) : ?>
               <p class="text-muted mb-4" style="font-size: 0.98rem; max-width: 540px; margin: 0 auto; line-height: 1.6;">
-                Discover our signature handcrafted beverages, artisanal roasts, and modern cafe ambiance across Dhaka.
+                <?php echo esc_html( $cta_desc ); ?>
               </p>
+              <?php endif; ?>
+              <?php if ( ! empty( $cta_btn ) ) : ?>
               <div class="d-flex justify-content-center">
-                <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="btn-hero-lifestyle">
-                  <span>Explore Drinks Menu</span>
+                <a href="<?php echo esc_url( $cta_url ); ?>" class="btn-hero-lifestyle">
+                  <span><?php echo esc_html( $cta_btn ); ?></span>
                   <i class="bi bi-arrow-right"></i>
                 </a>
               </div>
+              <?php endif; ?>
             </div>
           </section>
+          <?php endif; ?>
         </div>
         <?php
     }

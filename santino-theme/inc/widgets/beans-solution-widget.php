@@ -10,7 +10,7 @@ class Santino_Beans_Solution_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__( 'Santino Specialty Beans Solution', 'santino' );
+        return esc_html__( 'Santino: /beans/ All Sections & Products', 'santino' );
     }
 
     public function get_icon() {
@@ -54,6 +54,63 @@ class Santino_Beans_Solution_Widget extends \Elementor\Widget_Base {
                 'label'   => esc_html__( 'Hero Description', 'santino' ),
                 'type'    => \Elementor\Controls_Manager::TEXTAREA,
                 'default' => 'Fresh micro-batch roasts sourced directly from premier origins worldwide.',
+            )
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_catalog',
+            array(
+                'label' => esc_html__( 'Roastery Beans Catalog', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control(
+            'show_catalog',
+            array(
+                'label'        => esc_html__( 'Show Catalog Section', 'santino' ),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'default'      => 'yes',
+                'return_value' => 'yes',
+            )
+        );
+
+        $this->add_control(
+            'catalog_badge',
+            array(
+                'label'   => esc_html__( 'Badge Text', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'SPECIALTY ROAST COLLECTION',
+            )
+        );
+
+        $this->add_control(
+            'catalog_title',
+            array(
+                'label'   => esc_html__( 'Title', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Roasted to Peak Flavor Expression',
+            )
+        );
+
+        $this->add_control(
+            'catalog_desc',
+            array(
+                'label'   => esc_html__( 'Description', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXTAREA,
+                'default' => 'Explore our Single Origin Espressos (SOE), heritage espresso blends, and OEM private label options',
+            )
+        );
+
+        $this->add_control(
+            'bean_btn_text',
+            array(
+                'label'       => esc_html__( 'Card Button Text (Blank to Hide)', 'santino' ),
+                'type'        => \Elementor\Controls_Manager::TEXT,
+                'default'     => '',
+                'description' => esc_html__( 'Leave blank if you want to hide the button completely.', 'santino' ),
             )
         );
 
@@ -247,19 +304,88 @@ class Santino_Beans_Solution_Widget extends \Elementor\Widget_Base {
             </div>
           </div>
 
+          <?php
+          $show_catalog  = ( $settings['show_catalog'] ?? 'yes' ) === 'yes';
+          $catalog_badge = ! empty( $settings['catalog_badge'] ) ? $settings['catalog_badge'] : '';
+          $catalog_title = ! empty( $settings['catalog_title'] ) ? $settings['catalog_title'] : 'Roasted to Peak Flavor Expression';
+          $catalog_desc  = ! empty( $settings['catalog_desc'] ) ? $settings['catalog_desc'] : '';
+          $bean_btn_text = isset( $settings['bean_btn_text'] ) ? trim( (string) $settings['bean_btn_text'] ) : '';
+
+          if ( $show_catalog ) :
+          ?>
           <section class="py-5" id="roastCatalog">
             <div class="container">
               <div class="sec-heading-center text-center mb-5">
+                <?php if ( ! empty( $catalog_badge ) ) : ?>
                 <div class="sec-pill-badge-wrap mb-2">
                   <span class="sec-pill-line"></span>
-                  <span class="sec-pill-badge"><i class="bi bi-award-fill me-1"></i> SPECIALTY ROAST COLLECTION</span>
+                  <span class="sec-pill-badge"><i class="bi bi-award-fill me-1"></i> <?php echo esc_html( $catalog_badge ); ?></span>
                   <span class="sec-pill-line"></span>
                 </div>
-                <h2 class="sec-title">Roasted to Peak Flavor Expression</h2>
-                <div class="sec-subtitle text-muted">Explore our Single Origin Espressos (SOE), heritage espresso blends, and OEM private label options</div>
+                <?php endif; ?>
+                <h2 class="sec-title"><?php echo esc_html( $catalog_title ); ?></h2>
+                <?php if ( ! empty( $catalog_desc ) ) : ?>
+                <div class="sec-subtitle text-muted"><?php echo esc_html( $catalog_desc ); ?></div>
+                <?php endif; ?>
               </div>
 
               <div class="row g-4" id="beansContainer">
+                <?php
+                $bean_posts = get_posts( array(
+                    'post_type'      => 'product',
+                    'posts_per_page' => -1,
+                    'post_status'    => 'publish',
+                    'tax_query'      => array(
+                        array(
+                            'taxonomy' => 'product_cat',
+                            'field'    => 'slug',
+                            'terms'    => array( 'specialty-roastery-beans', 'beans', 'coffee-beans' ),
+                        ),
+                    ),
+                ) );
+
+                if ( ! empty( $bean_posts ) ) :
+                    foreach ( $bean_posts as $bp ) :
+                        $b_title = $bp->post_title;
+                        $b_desc  = wp_trim_words( $bp->post_excerpt ?: $bp->post_content, 16 );
+                        $b_img   = get_the_post_thumbnail_url( $bp->ID, 'medium' ) ?: santino_img( 'beans-ethiopia-yirgacheffe.jpg' );
+                        $raw_price = get_post_meta( $bp->ID, '_price', true );
+                        $b_price = $raw_price ? '৳ ' . number_format( (float) $raw_price ) : '';
+                        $cats    = wp_get_post_terms( $bp->ID, 'product_cat', array( 'fields' => 'names' ) );
+                        $b_badge = ! empty( $cats[0] ) ? $cats[0] : 'SPECIALTY ROAST';
+                ?>
+                <div class="col-lg-4 col-md-6">
+                  <div class="bean-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm p-4 d-flex flex-column justify-content-between">
+                    <div>
+                      <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge text-dark fw-bold" style="background-color: var(--santino-gold, #dfbe8d);"><?php echo esc_html( $b_badge ); ?></span>
+                        <span class="text-muted small fw-bold">Fresh Roast</span>
+                      </div>
+                      <div class="text-center my-3">
+                        <img src="<?php echo esc_url( $b_img ); ?>" alt="<?php echo esc_attr( $b_title ); ?>" class="img-fluid" style="max-height: 190px; object-fit: cover; border-radius: 12px;">
+                      </div>
+                      <h4 class="font-heading fw-bold mb-1"><?php echo esc_html( $b_title ); ?></h4>
+                      <p class="text-muted small mb-3"><?php echo esc_html( $b_desc ); ?></p>
+                    </div>
+                    <div class="border-top pt-3 d-flex justify-content-between align-items-center">
+                      <div>
+                        <?php if ( $b_price ) : ?>
+                        <span class="fw-bold fs-5 text-dark"><?php echo esc_html( $b_price ); ?></span>
+                        <span class="text-muted small"> / pack</span>
+                        <?php endif; ?>
+                      </div>
+                      <?php if ( ! empty( $bean_btn_text ) ) : ?>
+                      <button class="btn btn-dark btn-sm fw-bold px-3 py-2" style="background-color: var(--santino-teal, #00625d); border: none;" data-bs-toggle="modal" data-bs-target="#sampleModal">
+                        <?php echo esc_html( $bean_btn_text ); ?>
+                      </button>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                </div>
+                <?php
+                    endforeach;
+                else :
+                ?>
                 <div class="col-lg-4 col-md-6">
                   <div class="bean-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm p-4 d-flex flex-column justify-content-between">
                     <div>
@@ -272,86 +398,20 @@ class Santino_Beans_Solution_Widget extends \Elementor\Widget_Base {
                       </div>
                       <h4 class="font-heading fw-bold mb-1">Ethiopia Yirgacheffe G1</h4>
                       <p class="text-muted small mb-3">Washed process from 1,900m altitude. Bursting with jasmine florals, bergamot citrus, and sweet honey.</p>
-                      <div class="bean-flavor-chips d-flex flex-wrap gap-2 mb-3">
-                        <span class="badge bg-light text-dark border">Jasmine</span>
-                        <span class="badge bg-light text-dark border">Bergamot</span>
-                        <span class="badge bg-light text-dark border">Light-Medium Roast</span>
-                      </div>
                     </div>
                     <div class="border-top pt-3 d-flex justify-content-between align-items-center">
-                      <div>
-                        <span class="fw-bold fs-5 text-dark">৳ 1,450</span>
-                        <span class="text-muted small"> / 250g</span>
-                      </div>
-                      <button class="btn btn-dark btn-sm fw-bold px-3 py-2" style="background-color: var(--santino-teal, #00625d); border: none;" data-bs-toggle="modal" data-bs-target="#sampleModal">
-                        Order Beans
-                      </button>
+                      <div><span class="fw-bold fs-5 text-dark">৳ 1,450</span><span class="text-muted small"> / 250g</span></div>
+                      <?php if ( ! empty( $bean_btn_text ) ) : ?>
+                      <button class="btn btn-dark btn-sm fw-bold px-3 py-2" style="background-color: var(--santino-teal, #00625d); border: none;" data-bs-toggle="modal" data-bs-target="#sampleModal"><?php echo esc_html( $bean_btn_text ); ?></button>
+                      <?php endif; ?>
                     </div>
                   </div>
                 </div>
-
-                <div class="col-lg-4 col-md-6">
-                  <div class="bean-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm p-4 d-flex flex-column justify-content-between">
-                    <div>
-                      <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge text-white fw-bold" style="background-color: var(--santino-teal, #00625d);">SIGNATURE BLEND</span>
-                        <span class="text-muted small fw-bold">House Specialty</span>
-                      </div>
-                      <div class="text-center my-3">
-                        <img src="<?php echo santino_img('traditional-coffee-9kg_1.jpg'); ?>" alt="Santino Espresso Gold" class="img-fluid" style="max-height: 190px; object-fit: cover; border-radius: 12px;">
-                      </div>
-                      <h4 class="font-heading fw-bold mb-1">Santino Espresso Gold Blend</h4>
-                      <p class="text-muted small mb-3">Signature Italian blend designed for dense crema, caramel sweetness, and rich cocoa finish.</p>
-                      <div class="bean-flavor-chips d-flex flex-wrap gap-2 mb-3">
-                        <span class="badge bg-light text-dark border">Dark Chocolate</span>
-                        <span class="badge bg-light text-dark border">Roasted Hazelnut</span>
-                        <span class="badge bg-light text-dark border">Medium-Dark Roast</span>
-                      </div>
-                    </div>
-                    <div class="border-top pt-3 d-flex justify-content-between align-items-center">
-                      <div>
-                        <span class="fw-bold fs-5 text-dark">৳ 950</span>
-                        <span class="text-muted small"> / 250g</span>
-                      </div>
-                      <button class="btn btn-dark btn-sm fw-bold px-3 py-2" style="background-color: var(--santino-teal, #00625d); border: none;" data-bs-toggle="modal" data-bs-target="#sampleModal">
-                        Order Beans
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                  <div class="bean-product-card h-100 bg-white border rounded-4 overflow-hidden shadow-sm p-4 d-flex flex-column justify-content-between">
-                    <div>
-                      <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge bg-danger text-white fw-bold">MICRO-LOT</span>
-                        <span class="text-muted small fw-bold">Colombia</span>
-                      </div>
-                      <div class="text-center my-3">
-                        <img src="<?php echo santino_img('beans-colombia-huila.jpg'); ?>" alt="Colombia Huila Geisha" class="img-fluid" style="max-height: 190px; object-fit: cover; border-radius: 12px;">
-                      </div>
-                      <h4 class="font-heading fw-bold mb-1">Colombia Huila Geisha</h4>
-                      <p class="text-muted small mb-3">Anaerobic slow fermentation. Complex tropical fruitiness, lemongrass, and silky tea-like elegance.</p>
-                      <div class="bean-flavor-chips d-flex flex-wrap gap-2 mb-3">
-                        <span class="badge bg-light text-dark border">Tropical Mango</span>
-                        <span class="badge bg-light text-dark border">Lemongrass</span>
-                        <span class="badge bg-light text-dark border">Light Roast</span>
-                      </div>
-                    </div>
-                    <div class="border-top pt-3 d-flex justify-content-between align-items-center">
-                      <div>
-                        <span class="fw-bold fs-5 text-dark">৳ 1,950</span>
-                        <span class="text-muted small"> / 250g</span>
-                      </div>
-                      <button class="btn btn-dark btn-sm fw-bold px-3 py-2" style="background-color: var(--santino-teal, #00625d); border: none;" data-bs-toggle="modal" data-bs-target="#sampleModal">
-                        Order Beans
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <?php endif; ?>
               </div>
             </div>
           </section>
+          <?php endif; ?>
 
           <div class="modal fade" id="sampleModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">

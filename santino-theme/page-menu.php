@@ -444,6 +444,20 @@ h1, h2, h3, h4, h5, h6,
 
 <div class="menu-page-wrap">
 
+  <?php
+  $menu_hero_badge  = get_theme_mod( 'santino_menu_hero_badge', 'SANTINO SIGNATURE CAFE MENU' );
+  $menu_hero_title  = get_theme_mod( 'santino_menu_hero_title', 'Artisan Coffee &' );
+  $menu_hero_accent = get_theme_mod( 'santino_menu_hero_title_accent', 'Beverage Menu' );
+  $menu_hero_desc   = get_theme_mod( 'santino_menu_hero_desc', 'Crafted with master roasted beans, plant-based dairy, and precision Italian extraction.' );
+  $menu_search_ph   = get_theme_mod( 'santino_menu_search_ph', 'Search cappuccino, mocha, frappe, latte, croissant...' );
+
+  $banner_1_img = get_theme_mod( 'santino_menu_banner_1_img' ) ?: santino_img( 'banner-signature-lattes.jpg' );
+  $banner_2_img = get_theme_mod( 'santino_menu_banner_2_img' ) ?: santino_img( 'banner-barista-coffee.jpg' );
+  $banner_3_img = get_theme_mod( 'santino_menu_banner_3_img' ) ?: santino_img( 'banner-fruity-americano.jpg' );
+  $banner_4_img = get_theme_mod( 'santino_menu_banner_4_img' ) ?: santino_img( 'banner-soe-espresso.jpg' );
+  $banner_5_img = get_theme_mod( 'santino_menu_banner_5_img' ) ?: santino_img( 'banner-matcha-tea.jpg' );
+  ?>
+
   <!-- 1. HERO HEADER & LIVE SEARCH -->
   <section class="py-4 bg-white position-relative">
     <div class="floating-bg-icons">
@@ -455,17 +469,21 @@ h1, h2, h3, h4, h5, h6,
       
       <div class="row align-items-center mb-4 g-3 reveal">
         <div class="col-lg-6">
+          <?php if ( ! empty( $menu_hero_badge ) ) : ?>
           <div class="sec-pill-badge-wrap mb-2">
-            <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> SANTINO SIGNATURE CAFE MENU</span>
+            <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> <?php echo esc_html( $menu_hero_badge ); ?></span>
           </div>
-          <h1 class="sec-title mb-2">Artisan Coffee &amp; <span class="sec-title-accent">Beverage Menu</span></h1>
-          <p class="sec-description mb-0">Crafted with master roasted beans, plant-based dairy, and precision Italian extraction.</p>
+          <?php endif; ?>
+          <h1 class="sec-title mb-2"><?php echo esc_html( $menu_hero_title ); ?> <?php if ( ! empty( $menu_hero_accent ) ) : ?><span class="sec-title-accent"><?php echo esc_html( $menu_hero_accent ); ?></span><?php endif; ?></h1>
+          <?php if ( ! empty( $menu_hero_desc ) ) : ?>
+          <p class="sec-description mb-0"><?php echo esc_html( $menu_hero_desc ); ?></p>
+          <?php endif; ?>
         </div>
         <div class="col-lg-6">
           <div class="portal-lookup-group shadow-sm">
             <div class="portal-lookup-field">
               <i class="bi bi-search"></i>
-              <input type="text" id="menuSearchInput" placeholder="Search cappuccino, mocha, frappe, latte, croissant...">
+              <input type="text" id="menuSearchInput" placeholder="<?php echo esc_attr( $menu_search_ph ); ?>">
             </div>
             <button class="btn btn-outline-secondary border-0 d-none" id="clearSearchBtn" style="width: 32px; height: 32px; padding: 0; margin-right: 4px;" aria-label="Clear"><i class="bi bi-x-circle-fill"></i></button>
             <button type="button" class="btn-lookup-action" id="menuSearchActionBtn" aria-label="Search">
@@ -475,27 +493,27 @@ h1, h2, h3, h4, h5, h6,
         </div>
       </div>
 
-      <!-- 5 Category Visual Banners (Preserved) -->
+      <!-- 5 Category Visual Banners -->
       <div class="luckin-category-banners-container reveal">
         
         <a href="javascript:void(0)" onclick="filterByCategory('signature-lattes')" class="luckin-banner-card hover-lift">
-          <img src="<?php echo santino_img('banner-signature-lattes.jpg'); ?>" alt="Signature Lattes">
+          <img src="<?php echo esc_url( $banner_1_img ); ?>" alt="Signature Lattes">
         </a>
 
         <a href="javascript:void(0)" onclick="filterByCategory('barista-coffee')" class="luckin-banner-card hover-lift">
-          <img src="<?php echo santino_img('banner-barista-coffee.jpg'); ?>" alt="BARISTA COFFEE">
+          <img src="<?php echo esc_url( $banner_2_img ); ?>" alt="BARISTA COFFEE">
         </a>
 
         <a href="javascript:void(0)" onclick="filterByCategory('fruity-americano')" class="luckin-banner-card hover-lift">
-          <img src="<?php echo santino_img('banner-fruity-americano.jpg'); ?>" alt="FRUITY AMERICANO">
+          <img src="<?php echo esc_url( $banner_3_img ); ?>" alt="FRUITY AMERICANO">
         </a>
 
         <a href="javascript:void(0)" onclick="filterByCategory('soe-espresso')" class="luckin-banner-card hover-lift">
-          <img src="<?php echo santino_img('banner-soe-espresso.jpg'); ?>" alt="Single Origin Espresso">
+          <img src="<?php echo esc_url( $banner_4_img ); ?>" alt="Single Origin Espresso">
         </a>
 
         <a href="javascript:void(0)" onclick="filterByCategory('matcha-tea')" class="luckin-banner-card hover-lift">
-          <img src="<?php echo santino_img('banner-matcha-tea.jpg'); ?>" alt="Matcha">
+          <img src="<?php echo esc_url( $banner_5_img ); ?>" alt="Matcha">
         </a>
 
       </div>
@@ -570,31 +588,52 @@ h1, h2, h3, h4, h5, h6,
   </section>
 
   <!-- 4. OFFICIAL HERO ITEMS & VIP REWARD POSTER -->
+  <?php
+  $vip_badge        = get_theme_mod( 'santino_menu_vip_badge', 'SANTINO HERO ITEMS' );
+  $vip_title        = get_theme_mod( 'santino_menu_vip_title', 'Premium Beans,' );
+  $vip_title_accent = get_theme_mod( 'santino_menu_vip_title_accent', 'Hot & Cold Hero Brews' );
+  $vip_desc         = get_theme_mod( 'santino_menu_vip_desc', 'Explore our barista favorites including Hot Cappuccino, Iced Latte, Rich Hot Mocha, Iced Mocha, and ice-blended Frappes crafted with 100% premium roasted beans.' );
+  $vip_poster_img   = get_theme_mod( 'santino_menu_vip_poster_img' ) ?: santino_img( 'santino-hero-poster.jpg' );
+  $vip_btn1_text    = get_theme_mod( 'santino_menu_vip_btn1_text', 'Buy 5 Get 6th Free' );
+  $vip_btn1_url     = get_theme_mod( 'santino_menu_vip_btn1_url', '/membership/' );
+  $vip_btn2_text    = get_theme_mod( 'santino_menu_vip_btn2_text', 'Explore Full Menu' );
+  $vip_btn2_url     = get_theme_mod( 'santino_menu_vip_btn2_url', '#menuGridSection' );
+  ?>
   <section class="py-5" style="background: linear-gradient(135deg, #0f2723 0%, #004d49 100%);">
     <div class="container">
       <div class="row align-items-center g-4">
         <div class="col-lg-5 text-center text-lg-start">
+          <?php if ( ! empty( $vip_badge ) ) : ?>
           <div class="sec-pill-badge-wrap mb-3">
             <span class="sec-pill-badge" style="background: rgba(195, 153, 108, 0.2); color: #dfbe8d; border-color: rgba(195, 153, 108, 0.4);">
-              <i class="bi bi-gem me-1" style="color: #dfbe8d;"></i> SANTINO HERO ITEMS
+              <i class="bi bi-gem me-1" style="color: #dfbe8d;"></i> <?php echo esc_html( $vip_badge ); ?>
             </span>
           </div>
-          <h2 class="sec-title text-white mb-3">Premium Beans, <span style="color: #dfbe8d;">Hot &amp; Cold Hero Brews</span></h2>
+          <?php endif; ?>
+          <h2 class="sec-title text-white mb-3"><?php echo esc_html( $vip_title ); ?> <?php if ( ! empty( $vip_title_accent ) ) : ?><span style="color: #dfbe8d;"><?php echo esc_html( $vip_title_accent ); ?></span><?php endif; ?></h2>
+          <?php if ( ! empty( $vip_desc ) ) : ?>
           <p class="text-white-50 mb-4" style="font-size: 1.05rem; line-height: 1.7;">
-            Explore our barista favorites including Hot Cappuccino, Iced Latte, Rich Hot Mocha, Iced Mocha, and ice-blended Frappes crafted with 100% premium roasted beans.
+            <?php echo esc_html( $vip_desc ); ?>
           </p>
+          <?php endif; ?>
+          <?php if ( ! empty( $vip_btn1_text ) || ! empty( $vip_btn2_text ) ) : ?>
           <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
-            <a href="<?php echo esc_url( home_url( '/membership/' ) ); ?>" class="btn-hero-lifestyle" style="background: #dfbe8d !important; border-color: #dfbe8d !important; color: #0d2622 !important;">
-              <i class="bi bi-gift-fill me-1"></i> Buy 5 Get 6th Free
+            <?php if ( ! empty( $vip_btn1_text ) ) : ?>
+            <a href="<?php echo esc_url( $vip_btn1_url ); ?>" class="btn-hero-lifestyle" style="background: #dfbe8d !important; border-color: #dfbe8d !important; color: #0d2622 !important;">
+              <i class="bi bi-gift-fill me-1"></i> <?php echo esc_html( $vip_btn1_text ); ?>
             </a>
-            <a href="#menuGridSection" class="btn-hero-outline">
-              <i class="bi bi-cup-hot-fill me-1"></i> Explore Full Menu
+            <?php endif; ?>
+            <?php if ( ! empty( $vip_btn2_text ) ) : ?>
+            <a href="<?php echo esc_url( $vip_btn2_url ); ?>" class="btn-hero-outline">
+              <i class="bi bi-cup-hot-fill me-1"></i> <?php echo esc_html( $vip_btn2_text ); ?>
             </a>
+            <?php endif; ?>
           </div>
+          <?php endif; ?>
         </div>
         <div class="col-lg-7">
           <div class="rounded-4 overflow-hidden shadow-lg border border-white-10 text-center" style="max-height: 480px; background: #000;">
-            <img src="<?php echo santino_img('santino-hero-poster.jpg'); ?>" alt="Santino Coffee Hero Menu Poster" class="w-100 h-100 object-fit-contain" style="max-height: 480px;">
+            <img src="<?php echo esc_url( $vip_poster_img ); ?>" alt="Santino Coffee Hero Menu Poster" class="w-100 h-100 object-fit-contain" style="max-height: 480px;">
           </div>
         </div>
       </div>
@@ -602,143 +641,145 @@ h1, h2, h3, h4, h5, h6,
   </section>
 
   <!-- 5. APP DOWNLOAD BANNER -->
+  <?php
+  $show_app       = get_theme_mod( 'santino_menu_show_app', '1' );
+  if ( $show_app ) :
+    $app_badge      = get_theme_mod( 'santino_menu_app_badge', 'MOBILE REWARDS & ORDERING' );
+    $app_title      = get_theme_mod( 'santino_menu_app_title', 'Download the Santino Coffee App' );
+    $app_sub        = get_theme_mod( 'santino_menu_app_sub', 'Save time with swift order pickup, earn reward beans on every roast, and access exclusive member privileges.' );
+    $app_play_text  = get_theme_mod( 'santino_menu_app_play_text', 'Google Play' );
+    $app_play_url   = get_theme_mod( 'santino_menu_app_play_url', 'https://play.google.com' );
+    $app_apple_text = get_theme_mod( 'santino_menu_app_apple_text', 'App Store' );
+    $app_apple_url  = get_theme_mod( 'santino_menu_app_apple_url', 'https://apps.apple.com' );
+  ?>
   <section class="app-download-section reveal">
     <div class="container">
       <div class="app-download-card">
         <div class="row align-items-center g-4 text-center text-lg-start">
           <div class="col-lg-7">
-            <span class="app-badge-tag"><i class="bi bi-phone"></i> MOBILE REWARDS &amp; ORDERING</span>
-            <h3 class="app-card-title">Download the Santino Coffee App</h3>
+            <?php if ( ! empty( $app_badge ) ) : ?>
+            <span class="app-badge-tag"><i class="bi bi-phone"></i> <?php echo esc_html( $app_badge ); ?></span>
+            <?php endif; ?>
+            <h3 class="app-card-title"><?php echo esc_html( $app_title ); ?></h3>
             <p class="app-card-sub mb-0">
-              Save time with swift order pickup, earn reward beans on every roast, and access exclusive member privileges.
+              <?php echo esc_html( $app_sub ); ?>
             </p>
           </div>
           <div class="col-lg-5 text-center text-lg-end">
+            <?php if ( ! empty( $app_play_text ) || ! empty( $app_apple_text ) ) : ?>
             <div class="d-inline-flex flex-wrap gap-3 justify-content-center justify-content-lg-end align-items-center">
-              <a href="https://play.google.com" target="_blank" class="app-store-badge-btn">
+              <?php if ( ! empty( $app_play_text ) ) : ?>
+              <a href="<?php echo esc_url( $app_play_url ); ?>" target="_blank" class="app-store-badge-btn">
                 <i class="bi bi-google-play text-white"></i>
                 <div class="text-start">
                   <span class="badge-text-top">GET IT ON</span>
-                  <strong class="badge-text-main">Google Play</strong>
+                  <strong class="badge-text-main"><?php echo esc_html( $app_play_text ); ?></strong>
                 </div>
               </a>
-              <a href="https://apps.apple.com" target="_blank" class="app-store-badge-btn">
+              <?php endif; ?>
+              <?php if ( ! empty( $app_apple_text ) ) : ?>
+              <a href="<?php echo esc_url( $app_apple_url ); ?>" target="_blank" class="app-store-badge-btn">
                 <i class="bi bi-apple text-white"></i>
                 <div class="text-start">
                   <span class="badge-text-top">Download on the</span>
-                  <strong class="badge-text-main">App Store</strong>
+                  <strong class="badge-text-main"><?php echo esc_html( $app_apple_text ); ?></strong>
                 </div>
               </a>
+              <?php endif; ?>
             </div>
+            <?php endif; ?>
           </div>
         </div>
       </div>
     </div>
   </section>
+  <?php endif; ?>
 
   <!-- 6. EXPERIENCE HUBS LOCATOR -->
+  <?php
+  $branches_badge        = get_theme_mod( 'santino_menu_branches_badge', 'EXPERIENCE SANTINO NATIONWIDE' );
+  $branches_title        = get_theme_mod( 'santino_menu_branches_title', 'Our Cafes &' );
+  $branches_title_accent = get_theme_mod( 'santino_menu_branches_title_accent', 'Roastery Hubs' );
+  $branches_sub          = get_theme_mod( 'santino_menu_branches_sub', 'Step into an artisan coffee retreat or visit our partner express bars across prime Dhaka locations' );
+
+  $branches_detailed = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_branches_detailed() : array();
+
+  // Extract unique regions for filter buttons
+  $region_filters = array();
+  foreach ( $branches_detailed as $b ) {
+      $r = ! empty( $b['district'] ) ? trim( $b['district'] ) : ( ! empty( $b['division'] ) ? trim( $b['division'] ) : '' );
+      if ( $r && ! in_array( $r, $region_filters ) ) {
+          $region_filters[] = $r;
+      }
+  }
+  ?>
   <section class="cafe-branches-section py-5" id="branches" style="background-color: #fff9f3;">
     <div class="container">
       
       <div class="sec-heading-center text-center mb-5 reveal">
+        <?php if ( ! empty( $branches_badge ) ) : ?>
         <div class="sec-pill-badge-wrap mb-2">
-          <span class="sec-pill-badge"><i class="bi bi-geo-alt-fill text-danger me-1"></i> EXPERIENCE SANTINO NATIONWIDE</span>
+          <span class="sec-pill-badge"><i class="bi bi-geo-alt-fill text-danger me-1"></i> <?php echo esc_html( $branches_badge ); ?></span>
         </div>
-        <h2 class="sec-title mb-2">Our Cafes &amp; <span class="sec-title-accent">Roastery Hubs</span></h2>
-        <div class="sec-description">Step into an artisan coffee retreat or visit our partner express bars across prime Dhaka locations</div>
+        <?php endif; ?>
+        <h2 class="sec-title mb-2"><?php echo esc_html( $branches_title ); ?> <?php if ( ! empty( $branches_title_accent ) ) : ?><span class="sec-title-accent"><?php echo esc_html( $branches_title_accent ); ?></span><?php endif; ?></h2>
+        <?php if ( ! empty( $branches_sub ) ) : ?>
+        <div class="sec-description"><?php echo esc_html( $branches_sub ); ?></div>
+        <?php endif; ?>
       </div>
 
       <div class="d-flex justify-content-center flex-wrap gap-2 mb-5 reveal">
-        <button class="branch-filter-btn active" data-branch-filter="all">All Locations (6)</button>
-        <button class="branch-filter-btn" data-branch-filter="gulshan">Gulshan &amp; Banani</button>
-        <button class="branch-filter-btn" data-branch-filter="dhanmondi">Dhanmondi</button>
-        <button class="branch-filter-btn" data-branch-filter="uttara">Uttara</button>
-        <button class="branch-filter-btn" data-branch-filter="tejgaon">Tejgaon Roastery</button>
+        <button class="branch-filter-btn active" data-branch-filter="all">All Locations (<?php echo count( $branches_detailed ); ?>)</button>
+        <?php foreach ( $region_filters as $rf ) : ?>
+          <button class="branch-filter-btn" data-branch-filter="<?php echo esc_attr( sanitize_title( $rf ) ); ?>"><?php echo esc_html( $rf ); ?></button>
+        <?php endforeach; ?>
       </div>
 
       <div class="row g-4" id="branchesGrid">
-        
-        <div class="col-lg-4 col-md-6 branch-item-col reveal" data-delay="100" data-region="gulshan">
+        <?php foreach ( $branches_detailed as $idx => $b ) :
+            $b_region = sanitize_title( ! empty( $b['district'] ) ? $b['district'] : ( ! empty( $b['division'] ) ? $b['division'] : 'dhaka' ) );
+            $map_url = ! empty( $b['map_location'] ) ? $b['map_location'] : ( ( ! empty( $b['lat'] ) && ! empty( $b['long'] ) ) ? 'https://www.google.com/maps?q=' . $b['lat'] . ',' . $b['long'] : 'https://maps.google.com/?q=' . urlencode( $b['name'] . ' ' . $b['address'] ) );
+            $phone_clean = preg_replace( '/[^0-9+]/', '', $b['phone'] ?? '' );
+            $card_img = santino_img( 'imgi_26_santino_-_250522-07312.jpg' );
+            if ( $idx === 0 ) {
+                $card_img = function_exists('santino_get_page_banner') ? santino_get_page_banner('menu', 'banner-signature-lattes.jpg') : santino_img('banner-signature-lattes.jpg');
+            } elseif ( $idx % 2 === 0 ) {
+                $card_img = santino_img( 'imgi_27_santino_-_250522-07216.jpg' );
+            }
+        ?>
+        <div class="col-lg-4 col-md-6 branch-item-col reveal" data-delay="<?php echo ( $idx + 1 ) * 100; ?>" data-region="<?php echo esc_attr( $b_region ); ?>">
           <div class="branch-card hover-lift">
-            <div class="branch-card-img" style="background-image: url('<?php echo function_exists('santino_get_page_banner') ? santino_get_page_banner('menu', 'banner-signature-lattes.jpg') : santino_img('banner-signature-lattes.jpg'); ?>')";">
-              <span class="branch-tag-badge">FLAGSHIP EXPERIENCE</span>
+            <div class="branch-card-img" style="background-image: url('<?php echo esc_url( $card_img ); ?>');">
+              <span class="branch-tag-badge"><?php echo esc_html( ! empty( $b['division'] ) ? strtoupper( $b['division'] ) : 'EXPERIENCE HUB' ); ?></span>
             </div>
             <div class="branch-card-body">
-              <h3 class="branch-title">Santino Experience Hub | Gulshan-2</h3>
-              <p class="branch-desc text-muted small mb-3">State-of-the-art Victoria Arduino espresso bar, cupping lounge &amp; VIP meeting rooms.</p>
+              <h3 class="branch-title"><?php echo esc_html( $b['name'] ); ?></h3>
+              <p class="branch-desc text-muted small mb-3"><?php echo esc_html( ! empty( $b['district'] ) ? ( $b['district'] . ', ' . ( $b['division'] ?? 'Bangladesh' ) ) : 'Specialty Espresso bar and fresh bakery treats.' ); ?></p>
               
               <div class="branch-info-list">
-                <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Plot 11, Road 48, CWN Block, Gulshan-2, Dhaka 1212</span></div>
+                <?php if ( ! empty( $b['address'] ) ) : ?>
+                <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span><?php echo esc_html( $b['address'] ); ?></span></div>
+                <?php endif; ?>
+                <?php if ( ! empty( $b['lat'] ) && ! empty( $b['long'] ) ) : ?>
+                <div class="info-line"><i class="bi bi-compass text-teal"></i> <span>GPS: <?php echo esc_html( $b['lat'] ); ?>, <?php echo esc_html( $b['long'] ); ?></span></div>
+                <?php endif; ?>
                 <div class="info-line"><i class="bi bi-clock text-primary"></i> <span>Sat – Thurs: 7:30 AM – 11:00 PM | Fri: 8:00 AM – 11:30 PM</span></div>
-                <div class="info-line"><i class="bi bi-p-circle text-success"></i> <span>Valet &amp; Underground Parking Available • Free High-Speed WiFi</span></div>
               </div>
 
               <div class="d-flex gap-2 mt-4">
-                <a href="https://maps.google.com" target="_blank" class="btn-prod-outline flex-fill">
+                <a href="<?php echo esc_url( $map_url ); ?>" target="_blank" class="btn-prod-outline flex-fill">
                   <i class="bi bi-pin-map-fill me-1 text-danger"></i> Google Maps
                 </a>
-                <a href="tel:+8801613334514" class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;">
-                  <i class="bi bi-cup-hot-fill me-1"></i> Visit Cafe
+                <?php if ( ! empty( $b['phone'] ) ) : ?>
+                <a href="tel:<?php echo esc_attr( $phone_clean ); ?>" class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;">
+                  <i class="bi bi-telephone-fill me-1"></i> <?php echo esc_html( $b['phone'] ); ?>
                 </a>
+                <?php endif; ?>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="col-lg-4 col-md-6 branch-item-col reveal" data-delay="200" data-region="gulshan">
-          <div class="branch-card hover-lift">
-            <div class="branch-card-img" style="background-image: url('<?php echo santino_img('imgi_26_santino_-_250522-07312.jpg'); ?>');">
-              <span class="branch-tag-badge">COMMERCIAL HUB</span>
-            </div>
-            <div class="branch-card-body">
-              <h3 class="branch-title">Borak Mehnur Tower | Banani</h3>
-              <p class="branch-desc text-muted small mb-3">Located on Kamal Ataturk Avenue with vibrant outdoor seating and grab-and-go bar.</p>
-              
-              <div class="branch-info-list">
-                <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>Plot 51/B, Kamal Ataturk Avenue, Banani Commercial Area, Dhaka</span></div>
-                <div class="info-line"><i class="bi bi-clock text-primary"></i> <span>Daily: 7:00 AM – 10:30 PM</span></div>
-                <div class="info-line"><i class="bi bi-p-circle text-success"></i> <span>Building Parking • Outdoor Terrace • Takeaway Window</span></div>
-              </div>
-
-              <div class="d-flex gap-2 mt-4">
-                <a href="https://maps.google.com" target="_blank" class="btn-prod-outline flex-fill">
-                  <i class="bi bi-pin-map-fill me-1 text-danger"></i> Google Maps
-                </a>
-                <a href="tel:+8801613334514" class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;">
-                  <i class="bi bi-cup-hot-fill me-1"></i> Visit Cafe
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 branch-item-col reveal" data-delay="300" data-region="dhanmondi">
-          <div class="branch-card hover-lift">
-            <div class="branch-card-img" style="background-image: url('<?php echo santino_img('imgi_27_santino_-_250522-07216.jpg'); ?>');">
-              <span class="branch-tag-badge">LIFESTYLE CAFE</span>
-            </div>
-            <div class="branch-card-body">
-              <h3 class="branch-title">Santino Cafe | Dhanmondi 27</h3>
-              <p class="branch-desc text-muted small mb-3">Quiet study ambiance, artisan pourover coffee station, and fresh bakery pastries.</p>
-              
-              <div class="branch-info-list">
-                <div class="info-line"><i class="bi bi-geo-alt text-danger"></i> <span>House 14, Road 27 (Old), Dhanmondi, Dhaka 1209</span></div>
-                <div class="info-line"><i class="bi bi-clock text-primary"></i> <span>Daily: 8:00 AM – 11:00 PM</span></div>
-                <div class="info-line"><i class="bi bi-p-circle text-success"></i> <span>Dedicated Power Sockets • Quiet Work Zones</span></div>
-              </div>
-
-              <div class="d-flex gap-2 mt-4">
-                <a href="https://maps.google.com" target="_blank" class="btn-prod-outline flex-fill">
-                  <i class="bi bi-pin-map-fill me-1 text-danger"></i> Google Maps
-                </a>
-                <a href="tel:+8801613334514" class="btn btn-dark btn-sm flex-fill fw-bold py-2 btn-order-branch hover-glow" style="background-color: var(--santino-teal); border: none;">
-                  <i class="bi bi-cup-hot-fill me-1"></i> Visit Cafe
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <?php endforeach; ?>
       </div>
 
     </div>

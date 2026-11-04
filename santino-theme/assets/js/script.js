@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
           e.target.classList.remove('is-invalid');
           e.target.classList.add('is-valid');
         } else {
-          e.target.setCustomValidity('সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন (013-019)');
+          e.target.setCustomValidity('Please enter a valid 11-digit mobile number (013-019)');
           e.target.classList.remove('is-valid');
           e.target.classList.add('is-invalid');
         }
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const bdPhoneRegex = /^(?:\+?880|0)1[3-9]\d{8}$/;
         if (!bdPhoneRegex.test(cleanPhone)) {
           phoneField.focus();
-          phoneField.setCustomValidity('দয়া করে সঠিক ১১ ডিজিটের বাংলাদেশি মোবাইল নম্বর প্রদান করুন (যেমন: 017XXXXXXXX)');
+          phoneField.setCustomValidity('Please enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX).');
           phoneField.reportValidity();
           return;
         } else {
@@ -355,6 +355,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const cupsInput = this.querySelector('input[name="cups"]');
       const cupsVal = cupsInput ? (parseInt(cupsInput.value) || 1) : 1;
+
+      const fileInput = this.querySelector('input[name="invoice_image"]');
+      if (fileInput && (!fileInput.files || !fileInput.files.length)) {
+        fileInput.focus();
+        fileInput.setCustomValidity('Receipt or memo photo upload is mandatory.');
+        fileInput.reportValidity();
+        return;
+      } else if (fileInput) {
+        fileInput.setCustomValidity('');
+      }
 
       const submitBtn = this.querySelector('button[type="submit"]');
       const originalText = submitBtn ? submitBtn.innerHTML : 'Submit Invoice';
@@ -468,14 +478,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const cardBox = document.getElementById('liveStampCardContainer');
         if (data.success && cardBox) {
           const d = data.data;
-          const stamps = d.stamps;
+          const stamps = Math.min(5, Math.max(0, parseInt(d.stamps) || 0));
+          const hasUnusedVoucher = d.vouchers && d.vouchers.some(v => v.status === 'unused');
+          const activeVoucher = d.vouchers ? d.vouchers.find(v => v.status === 'unused') : null;
+          const activeVoucherCode = activeVoucher ? activeVoucher.code : '';
+
           let cupsHtml = '';
           for (let i = 1; i <= 5; i++) {
             const isActive = i <= stamps;
             cupsHtml += `
-              <div class="stamp-cup-item text-center flex-grow-1" style="min-width: 0; max-width: 20%;">
-                <div style="width: 100%; max-width: 46px; min-width: 34px; aspect-ratio: 1 / 1; margin: 0 auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 4.2vw, 20px); border: 2px solid ${isActive ? '#ffffff' : 'rgba(195, 153, 108, 0.35)'}; background: ${isActive ? 'linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%)' : 'rgba(0, 98, 93, 0.25)'}; color: ${isActive ? '#041a18' : 'rgba(255,255,255,0.45)'}; box-shadow: ${isActive ? '0 0 12px rgba(223, 190, 141, 0.45)' : 'none'};">
-                  ${isActive ? '☕' : i}
+              <div class="stamp-cup-item text-center flex-grow-1" style="min-width: 0; max-width: 16.66%;">
+                <div style="width: 100%; max-width: 48px; min-width: 34px; aspect-ratio: 1 / 1; margin: 0 auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 4vw, 18px); font-weight: 800; border: 2px solid ${isActive ? '#ffffff' : 'rgba(195, 153, 108, 0.35)'}; background: ${isActive ? 'linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%)' : 'rgba(0, 98, 93, 0.25)'}; color: ${isActive ? '#041a18' : 'rgba(255,255,255,0.45)'}; box-shadow: ${isActive ? '0 0 14px rgba(223, 190, 141, 0.5)' : 'none'}; transition: all 0.3s ease;">
+                  ${isActive ? '<i class="bi bi-cup-hot-fill" style="color: #041a18;"></i>' : i}
                 </div>
                 <div class="text-truncate mt-1.5" style="font-size: clamp(9px, 2.5vw, 11px); font-weight: 700; color: ${isActive ? '#dfbe8d' : 'rgba(255,255,255,0.45)'};">
                   Cup ${i}${isActive ? ' ✓' : ''}
@@ -484,38 +498,46 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
           }
 
+          // 6th Cup Free Circle
+          const isFreeReady = stamps >= 5 || hasUnusedVoucher;
+          cupsHtml += `
+            <div class="stamp-cup-item text-center flex-grow-1" style="min-width: 0; max-width: 16.66%;">
+              <div style="width: 100%; max-width: 48px; min-width: 34px; aspect-ratio: 1 / 1; margin: 0 auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 4vw, 18px); border: 2px solid ${isFreeReady ? '#dfbe8d' : 'rgba(223, 190, 141, 0.35)'}; background: ${isFreeReady ? 'linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%)' : 'rgba(223, 190, 141, 0.12)'}; color: ${isFreeReady ? '#041a18' : 'rgba(223,190,141,0.5)'}; box-shadow: ${isFreeReady ? '0 0 18px rgba(223, 190, 141, 0.7)' : 'none'};">
+                <i class="bi bi-gift-fill" style="${isFreeReady ? 'color: #041a18;' : 'color: #dfbe8d;'}"></i>
+              </div>
+              <div class="text-truncate mt-1.5" style="font-size: clamp(9px, 2.5vw, 11px); font-weight: 800; color: ${isFreeReady ? '#dfbe8d' : 'rgba(223, 190, 141, 0.6)'};">
+                ${isFreeReady ? 'FREE #6 ★' : 'FREE #6'}
+              </div>
+            </div>
+          `;
+
           let vouchersHtml = '';
           if (d.vouchers && d.vouchers.length > 0) {
             vouchersHtml = `
-              <div class="mt-3 p-3 rounded-4 border" style="background: rgba(195, 153, 108, 0.1); border-color: rgba(195, 153, 108, 0.35) !important;">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h6 class="fw-bold mb-0 text-white" style="font-size: 12px;"><i class="bi bi-gift-fill me-1" style="color: #dfbe8d;"></i> Free Coffee Vouchers:</h6>
-                  <span class="text-white-50" style="font-size: 10px;">${d.vouchers.filter(v => v.status === 'unused').length} Active</span>
+              <div class="mt-3 p-3 rounded-4 border" style="background: rgba(195, 153, 108, 0.08); border-color: rgba(195, 153, 108, 0.3) !important;">
+                <div class="d-flex justify-content-between align-items-center mb-2.5">
+                  <h6 class="fw-bold mb-0 text-white" style="font-size: 13px;"><i class="bi bi-gift-fill me-1.5" style="color: #dfbe8d;"></i> Complimentary Vouchers:</h6>
+                  <span class="badge rounded-pill" style="background: rgba(223, 190, 141, 0.2); color: #dfbe8d; font-size: 10px; font-weight: 700;">${d.vouchers.filter(v => v.status === 'unused').length} Active</span>
                 </div>
                 <div class="d-flex flex-column gap-2">
                   ${d.vouchers.map(v => `
-                    <div class="p-2.5 rounded-3 border" style="background: #091715; border-color: rgba(195,153,108,0.3) !important;">
-                      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
-                        <code class="fs-6 fw-bold px-2 py-0.5 rounded" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; letter-spacing: 0.5px;">${v.code}</code>
-                        <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                           <button type="button" class="btn btn-outline-light btn-sm fw-bold px-2.5 py-0.5 rounded-pill santino-download-voucher-btn" data-code="${v.code}" data-name="${d.name}" data-phone="${d.phone}" data-id="${d.member_id}" data-type="voucher" data-status="${v.status}" style="font-size: 10px; border-color: rgba(223,190,141,0.4); color: #dfbe8d;">
-                            📥 ডাউনলোড / Download
-                          </button>
-                          <span class="badge ${v.status === 'unused' ? 'bg-success' : (v.status === 'pending_redemption' ? 'bg-warning text-dark' : 'bg-secondary')}" style="font-size: 10px;">
-                            ${v.status === 'unused' ? '✓ UNUSED / READY TO CLAIM' : (v.status === 'pending_redemption' ? '⏳ PENDING PORTAL APPROVAL' : '✓ REDEEMED')}
-                          </span>
-                        </div>
+                    <div class="p-3 rounded-3 border d-flex flex-wrap align-items-center justify-content-between gap-2" style="background: rgba(0, 0, 0, 0.35); border-color: rgba(195,153,108,0.25) !important;">
+                      <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <code class="fs-6 fw-bold px-2.5 py-1 rounded" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; letter-spacing: 0.5px;">${v.code}</code>
+                        <span class="badge ${v.status === 'unused' ? 'bg-success' : (v.status === 'pending_redemption' ? 'bg-warning text-dark' : 'bg-secondary')}" style="font-size: 10px;">
+                          ${v.status === 'unused' ? '✓ READY TO CLAIM' : (v.status === 'pending_redemption' ? '⏳ PENDING APPROVAL' : '✓ REDEEMED')}
+                        </span>
                       </div>
-                      ${v.status === 'unused' ? `
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-2 pt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important;">
-                          <span class="text-white-50" style="font-size: 11px;">
-                            <i class="bi bi-gift text-warning me-1"></i> অনলাইন রিডিম রিকোয়েস্ট পাঠান:
-                          </span>
-                          <button type="button" class="btn btn-sm fw-bold px-3 py-1 rounded-pill santino-open-redeem-btn" data-voucher="${v.code}" data-phone="${d.phone}" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 11px; border: none;">
-                            🎁 কফি রিডিম করুন
+                      <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <button type="button" class="btn btn-outline-light btn-sm fw-bold px-3 py-1.5 rounded-pill santino-download-voucher-btn" data-code="${v.code}" data-name="${d.name}" data-phone="${d.phone}" data-id="${d.member_id}" data-type="voucher" data-status="${v.status}" style="font-size: 11px; border-color: rgba(223,190,141,0.4); color: #dfbe8d;">
+                          <i class="bi bi-download me-1"></i> Download Voucher
+                        </button>
+                        ${v.status === 'unused' ? `
+                          <button type="button" class="btn btn-sm fw-bold px-3.5 py-1.5 rounded-pill santino-open-redeem-btn" data-voucher="${v.code}" data-phone="${d.phone}" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 11px; border: none; font-weight: 800;">
+                            <i class="bi bi-cup-hot-fill me-1"></i> Redeem Now &rarr;
                           </button>
-                        </div>
-                      ` : ''}
+                        ` : ''}
+                      </div>
                     </div>
                   `).join('')}
                 </div>
@@ -527,20 +549,20 @@ document.addEventListener('DOMContentLoaded', () => {
           if (d.redeems && d.redeems.length > 0) {
             redeemsHtml = `
               <div class="mt-3 p-3 rounded-4 border" style="background: rgba(0, 98, 93, 0.15); border-color: rgba(0, 98, 93, 0.4) !important;">
-                <h6 class="fw-bold mb-2 text-white" style="font-size: 12px;"><i class="bi bi-clock-history me-1.5" style="color: #dfbe8d;"></i> Recent Redeem Requests:</h6>
+                <h6 class="fw-bold mb-2 text-white" style="font-size: 13px;"><i class="bi bi-clock-history me-1.5" style="color: #dfbe8d;"></i> Recent Redemptions:</h6>
                 <div class="d-flex flex-column gap-2">
                   ${d.redeems.map(r => `
-                    <div class="p-2.5 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2 border" style="background: #071917; border-color: rgba(255,255,255,0.1) !important;">
+                    <div class="p-2.5 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2 border" style="background: rgba(0, 0, 0, 0.35); border-color: rgba(255,255,255,0.1) !important;">
                       <div>
                         <span class="fw-bold text-white small">${r.item}</span>
                         <div class="text-white-50" style="font-size: 11px;">#${r.code} • ${r.branch} • ${r.date}</div>
                       </div>
                       <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                        <button type="button" class="btn btn-outline-light btn-sm fw-bold px-2.5 py-0.5 rounded-pill santino-download-voucher-btn" data-code="${r.code}" data-name="${d.name}" data-phone="${d.phone}" data-id="${d.member_id}" data-item="${r.item}" data-branch="${r.branch}" data-date="${r.date}" data-type="redeem" data-status="${r.status}" style="font-size: 10px; border-color: rgba(223,190,141,0.4); color: #dfbe8d;">
-                          📥 স্লিপ ডাউনলোড
+                        <button type="button" class="btn btn-outline-light btn-sm fw-bold px-2.5 py-1 rounded-pill santino-download-voucher-btn" data-code="${r.code}" data-name="${d.name}" data-phone="${d.phone}" data-id="${d.member_id}" data-item="${r.item}" data-branch="${r.branch}" data-date="${r.date}" data-type="redeem" data-status="${r.status}" style="font-size: 10px; border-color: rgba(223,190,141,0.4); color: #dfbe8d;">
+                          <i class="bi bi-download me-1"></i> Download Slip
                         </button>
                         <span class="badge ${r.status === 'approved' ? 'bg-success' : (r.status === 'rejected' ? 'bg-danger' : 'bg-warning text-dark')}" style="font-size: 10px;">
-                          ${r.status === 'approved' ? '✓ APPROVED (Served)' : (r.status === 'rejected' ? '✗ REJECTED' : '⏳ PENDING PORTAL APPROVAL')}
+                          ${r.status === 'approved' ? '✓ APPROVED (Served)' : (r.status === 'rejected' ? '✗ REJECTED' : '⏳ PENDING APPROVAL')}
                         </span>
                       </div>
                     </div>
@@ -554,7 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (d.invoices && d.invoices.length > 0) {
             invoicesHtml = `
               <div class="mt-3 p-3 rounded-4 border" style="background: rgba(0, 0, 0, 0.25); border-color: rgba(255,255,255,0.08) !important;">
-                <div class="small fw-bold text-white-50 mb-2" style="font-size: 11px;"><i class="bi bi-receipt me-1"></i> Recent Approved Invoices:</div>
+                <div class="small fw-bold text-white-50 mb-2" style="font-size: 12px;"><i class="bi bi-receipt me-1" style="color: #dfbe8d;"></i> Recent Approved Invoices:</div>
                 <div class="d-flex flex-wrap gap-1.5">
                   ${d.invoices.map(inv => `
                     <span class="badge p-2 rounded-2 border text-wrap text-start ${inv.status === 'approved' ? 'border-success text-success' : 'border-warning text-warning'}" style="background: rgba(0,0,0,0.5); font-size: 11px; line-height: 1.4;">
@@ -566,58 +588,70 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
           }
 
-          const hasUnusedVoucher = d.vouchers && d.vouchers.some(v => v.status === 'unused');
-
           cardBox.style.display = 'block';
           cardBox.innerHTML = `
-            <div class="card border rounded-4 shadow-2xl p-3 p-sm-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: radial-gradient(circle at 80% 20%, #005c56 0%, #071d1b 60%, #04100e 100%); border-color: rgba(195, 153, 108, 0.45) !important; color: #fff;">
-              <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+            <div class="card border rounded-4 shadow-2xl p-3 p-sm-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: radial-gradient(ellipse at 80% 20%, #005650 0%, #071f1d 55%, #031311 100%); border: 1.5px solid rgba(223, 190, 141, 0.45) !important; color: #fff; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+              
+              <!-- Card Header Row -->
+              <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
                 <div style="min-width: 0; flex: 1;">
-                  <span class="badge px-2.5 py-1 fw-bold text-uppercase rounded-pill" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 10px;">
-                    <i class="bi bi-patch-check-fill me-1"></i> SANTINO REGULAR MEMBER
+                  <span class="badge px-3 py-1 fw-bold text-uppercase rounded-pill" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 10px; letter-spacing: 1px;">
+                    <i class="bi bi-patch-check-fill me-1"></i> SANTINO COFFEE CLUB
                   </span>
-                  <h3 class="fw-bold text-white mt-1.5 mb-0 font-heading text-truncate" style="font-size: clamp(18px, 5vw, 24px);">${d.name}</h3>
-                  <div class="text-white-50 font-monospace small mt-1" style="font-size: 11px; word-break: break-all;">
-                    ID: <strong style="color: #dfbe8d;">${d.member_id}</strong> • ${d.phone}
+                  <h3 class="fw-bold text-white mt-2 mb-0 font-heading text-truncate" style="font-size: clamp(20px, 4.5vw, 26px);">${d.name || 'Santino Regular Member'}</h3>
+                  <div class="text-white-50 small mt-1 font-monospace" style="font-size: 13px;">
+                    <i class="bi bi-phone me-1" style="color: #dfbe8d;"></i> ${d.phone}
                   </div>
                 </div>
-                <div class="text-end ps-2 flex-shrink-0">
-                  <div class="fw-bold mb-0 font-heading" style="color: #dfbe8d; font-size: clamp(24px, 7vw, 36px); line-height: 1;">${stamps}/5</div>
+                
+                <div class="text-end ps-2 flex-shrink-0 d-flex flex-column align-items-end">
+                  <!-- Gold Metallic Chip Graphic -->
+                  <div style="width: 44px; height: 32px; border-radius: 6px; background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 50%, #e8d0aa 100%); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 2px 6px rgba(0,0,0,0.3); margin-bottom: 8px; position: relative; overflow: hidden;">
+                    <div style="position: absolute; inset: 6px; border: 1px solid rgba(4,26,24,0.3); border-radius: 3px;"></div>
+                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(4,26,24,0.3);"></div>
+                  </div>
+                  <div class="fw-bold mb-0 font-heading" style="color: #dfbe8d; font-size: clamp(22px, 6vw, 30px); line-height: 1;">${stamps}/5</div>
                   <div class="text-white-50" style="font-size: 11px;">Card Stamps</div>
                 </div>
               </div>
 
+              <!-- Unlocked Reward Banner -->
               ${hasUnusedVoucher ? `
-                <div class="p-3 rounded-4 mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2.5 border" style="background: linear-gradient(135deg, rgba(223, 190, 141, 0.25) 0%, rgba(195, 153, 108, 0.12) 100%); border-color: rgba(223, 190, 141, 0.5) !important;">
-                  <div class="d-flex align-items-center gap-2.5" style="min-width: 0; flex: 1;">
-                    <div style="font-size: 26px; line-height: 1;">🎁</div>
+                <div class="p-3.5 rounded-4 mb-3 d-flex flex-wrap align-items-center justify-content-between gap-3 border" style="background: linear-gradient(135deg, rgba(223, 190, 141, 0.25) 0%, rgba(195, 153, 108, 0.12) 100%); border-color: rgba(223, 190, 141, 0.5) !important;">
+                  <div class="d-flex align-items-center gap-3" style="min-width: 0; flex: 1;">
+                    <div style="font-size: 32px; line-height: 1;"><i class="bi bi-gift-fill" style="color: #dfbe8d;"></i></div>
                     <div style="min-width: 0;">
-                      <div class="fw-bold text-white" style="font-size: 13px; color: #dfbe8d !important;">🎉 ফ্রি ১ কাপ কফি রিওয়ার্ড আনলকড!</div>
-                      <div class="text-white-50" style="font-size: 11px;">৫টি কাপ সম্পন্ন হওয়ায় ১টি ফ্রি কফি ভাউচার পেয়েছেন। এখান থেকেই সরাসরি রিডিম রিকোয়েস্ট পাঠান।</div>
+                      <span class="badge rounded-pill px-2.5 py-0.5 fw-bold text-uppercase" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 9px;">REWARD UNLOCKED</span>
+                      <div class="fw-bold text-white mt-1" style="font-size: 14px; color: #dfbe8d !important;">1 Complimentary Coffee Available!</div>
+                      <div class="text-white-50" style="font-size: 11px;">5 stamps completed! Claim your free beverage voucher directly below.</div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-sm fw-bold px-3 py-1.5 rounded-pill santino-open-redeem-btn flex-shrink-0" data-voucher="${(d.vouchers && d.vouchers.find(v => v.status === 'unused')) ? d.vouchers.find(v => v.status === 'unused').code : ''}" data-phone="${d.phone}" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; border: none; font-size: 11px;">
-                    🎁 রিডিম রিকোয়েস্ট পাঠান &rarr;
+                  <button type="button" class="btn btn-sm fw-bold px-3.5 py-2 rounded-pill santino-open-redeem-btn flex-shrink-0" data-voucher="${activeVoucherCode}" data-phone="${d.phone}" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; border: none; font-size: 12px; font-weight: 800; box-shadow: 0 4px 15px rgba(223, 190, 141, 0.35);">
+                    <i class="bi bi-gift-fill me-1"></i> Claim Free Coffee &rarr;
                   </button>
                 </div>
               ` : ''}
 
-              <div class="p-3 p-md-4 rounded-4 mt-2 shadow-lg border" style="background: rgba(6, 20, 18, 0.9); border-color: rgba(195, 153, 108, 0.3) !important;">
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-1.5 mb-2.5">
+              <!-- 5-Cup Stamp Card Tracker Box -->
+              <div class="p-3 p-md-4 rounded-4 mt-2 shadow-lg border" style="background: rgba(0, 0, 0, 0.38); border-color: rgba(195, 153, 108, 0.3) !important;">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                   <h6 class="fw-bold mb-0 text-white font-heading" style="font-size: 13px;">
-                    <i class="bi bi-cup-hot-fill me-1" style="color: #dfbe8d;"></i> Digital Stamp Card
+                    <i class="bi bi-cup-hot-fill me-1.5" style="color: #dfbe8d;"></i> 5-Cup Stamp Card Tracker
                   </h6>
-                  <span class="badge px-2 py-1 rounded-pill" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.3); font-size: 10px; font-weight: 600;">
-                    ${5 - stamps === 0 ? '🎉 Free Coffee Ready!' : (5 - stamps) + ' cups to next free coffee'}
+                  <span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.35); font-size: 10px; font-weight: 700; letter-spacing: 0.5px;">
+                    ${5 - stamps === 0 ? '🎉 FREE COFFEE READY!' : 'BUY 5, GET 1 FREE'}
                   </span>
                 </div>
+                
                 <div class="d-flex justify-content-between align-items-center py-2 px-0" style="gap: 4px; width: 100%;">
                   ${cupsHtml}
                 </div>
-                <div class="d-flex justify-content-between align-items-center mt-2.5 pt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important; font-size: 11px;">
-                  <span class="text-white-50">মোট অনুমোদিত কফি: <strong class="text-white">${d.total_cups || stamps} কাপ</strong></span>
-                  <span class="text-white-50">অর্জিত ফ্রি কফি: <strong style="color: #dfbe8d;">${d.total_free || 0} টি</strong></span>
+                
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-2.5 border-top flex-wrap gap-2" style="border-color: rgba(255,255,255,0.08) !important; font-size: 11px;">
+                  <span class="text-white-50"><i class="bi bi-geo-alt-fill text-warning me-1"></i> Valid across all Dhaka branches</span>
+                  <span style="color: #dfbe8d;"><i class="bi bi-patch-check-fill text-success me-1"></i> Auto-Verified</span>
                 </div>
+                
                 ${vouchersHtml}
                 ${redeemsHtml}
                 ${invoicesHtml}
@@ -626,7 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
           `;
           cardBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
-          alert(data.data ? data.data.message : 'No member found.');
+          alert(data.data ? data.data.message : 'No member found with this number. Please join first!');
         }
       })
       .catch(err => {
@@ -635,7 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
           submitBtn.innerHTML = originalText;
         }
         console.error('Lookup error:', err);
-        alert('Could not check stamp card. Please try again.');
+        alert('Could not verify stamp card. Please try again.');
       });
     });
   }
@@ -657,27 +691,30 @@ document.addEventListener('DOMContentLoaded', () => {
       modalEl.tabIndex = -1;
       modalEl.setAttribute('aria-hidden', 'true');
       modalEl.innerHTML = `
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content rounded-4 border-0 shadow-lg text-white" style="background: #0b1f1d; border: 1px solid rgba(195,153,108,0.4) !important;">
-            <div class="modal-header border-bottom" style="border-color: rgba(255,255,255,0.1) !important;">
-              <h5 class="modal-title fw-bold font-heading text-white" style="font-size: 16px;">
-                <i class="bi bi-gift-fill me-1" style="color: #dfbe8d;"></i> ফ্রি কফি রিডিম রিকোয়েস্ট (Claim Free Coffee)
-              </h5>
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 460px; margin: 10px auto; padding: 0 10px; max-height: calc(100dvh - 20px);">
+          <div class="modal-content rounded-4 border-0 shadow-2xl text-white overflow-hidden" style="background: #071e1b; border: 1.5px solid rgba(223,190,141,0.45) !important; box-shadow: 0 25px 60px rgba(0,0,0,0.85); max-height: calc(100dvh - 20px); display: flex; flex-direction: column;">
+            <div class="modal-header border-bottom p-3 p-sm-4" style="border-color: rgba(255,255,255,0.1) !important; background: #051614; flex-shrink: 0;">
+              <div>
+                <span class="badge rounded-pill px-2.5 py-0.5 fw-bold text-uppercase mb-1" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 9px;">VIP COMPLIMENTARY CUP</span>
+                <h5 class="modal-title fw-bold font-heading text-white mt-1 mb-0" style="font-size: 17px;">
+                  <i class="bi bi-gift-fill me-1.5" style="color: #dfbe8d;"></i> Claim Free Beverage
+                </h5>
+              </div>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="santinoFrontendRedeemForm">
-              <div class="modal-body p-4">
+            <form id="santinoFrontendRedeemForm" style="display: flex; flex-direction: column; overflow: hidden; flex: 1;">
+              <div class="modal-body p-3 p-sm-4" style="overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1 1 auto;">
                 <div class="mb-3">
-                  <label class="form-label small text-white-50">মেম্বার মোবাইল নম্বর</label>
-                  <input type="text" id="santinoRedeemPhone" name="phone" class="form-control" readonly style="background: rgba(255,255,255,0.06); color: #dfbe8d; border-color: rgba(255,255,255,0.15); font-weight: bold; font-family: monospace;">
+                  <label class="form-label small text-white-50 fw-bold">Member Mobile Number</label>
+                  <input type="text" id="santinoRedeemPhone" name="phone" class="form-control" readonly style="background: rgba(255,255,255,0.06); color: #dfbe8d; border-color: rgba(255,255,255,0.15); font-weight: bold; font-family: monospace; height: 44px; border-radius: 12px;">
                 </div>
                 <div class="mb-3">
-                  <label class="form-label small text-white-50">ভাউচার কোড</label>
-                  <input type="text" id="santinoRedeemVoucher" name="voucher_code" class="form-control" readonly style="background: rgba(255,255,255,0.06); color: #dfbe8d; border-color: rgba(255,255,255,0.15); font-weight: bold; font-family: monospace;">
+                  <label class="form-label small text-white-50 fw-bold">Voucher Code</label>
+                  <input type="text" id="santinoRedeemVoucher" name="voucher_code" class="form-control" readonly style="background: rgba(255,255,255,0.06); color: #dfbe8d; border-color: rgba(255,255,255,0.15); font-weight: bold; font-family: monospace; height: 44px; border-radius: 12px;">
                 </div>
                 <div class="mb-3">
-                  <label class="form-label small text-white-50">যে কফি আইটেমটি নিতে চান (Select Free Beverage)</label>
-                  <select id="santinoRedeemItem" name="free_item" class="form-select" required style="background: #112c29; color: #fff; border-color: #00625d;">
+                  <label class="form-label small text-white-50 fw-bold">Select Free Beverage *</label>
+                  <select id="santinoRedeemItem" name="free_item" class="form-select" required style="background: #0d2825; color: #fff; border-color: rgba(223, 190, 141, 0.4); height: 44px; border-radius: 12px; font-weight: 600;">
                     <option value="Handcrafted Cappuccino">Handcrafted Cappuccino</option>
                     <option value="Cafe Latte">Cafe Latte</option>
                     <option value="Classic Americano">Classic Americano</option>
@@ -691,18 +728,18 @@ document.addEventListener('DOMContentLoaded', () => {
                   </select>
                 </div>
                 <div class="mb-3">
-                  <label class="form-label small text-white-50">যে ক্যাফে ব্রাঞ্চ থেকে কফি সংগ্রহ করবেন (Select Cafe Branch)</label>
-                  <select id="santinoRedeemBranch" name="branch" class="form-select" required style="background: #112c29; color: #fff; border-color: #00625d;">
+                  <label class="form-label small text-white-50 fw-bold">Select Pickup Cafe Branch *</label>
+                  <select id="santinoRedeemBranch" name="branch" class="form-select" required style="background: #0d2825; color: #fff; border-color: rgba(223, 190, 141, 0.4); height: 44px; border-radius: 12px; font-weight: 600;">
                   </select>
                 </div>
-                <div class="alert alert-info rounded-3 p-2.5 mb-0" style="background: rgba(0, 98, 93, 0.2); border: 1px solid rgba(0, 98, 93, 0.4); font-size: 11px; color: #dfbe8d;">
-                  <i class="bi bi-info-circle me-1"></i> রিকোয়েস্ট পাঠানোর পর পোর্টালে স্ট্যাটাস আপডেট হবে এবং বারিস্তা আপনার কোড নিশ্চিত করে কফি সার্ভ করবে।
+                <div class="alert alert-info rounded-3 p-3 mb-0" style="background: rgba(0, 98, 93, 0.2); border: 1px solid rgba(0, 98, 93, 0.4); font-size: 11px; color: #dfbe8d; line-height: 1.5;">
+                  <i class="bi bi-info-circle me-1.5"></i> Present this voucher code to your barista at your chosen branch to enjoy your complimentary handcrafted coffee.
                 </div>
               </div>
-              <div class="modal-footer border-top" style="border-color: rgba(255,255,255,0.1) !important;">
-                <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-3" data-bs-dismiss="modal">বাতিল</button>
-                <button type="submit" id="santinoRedeemSubmitBtn" class="btn btn-sm fw-bold rounded-pill px-4" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; border:none;">
-                  ✓ রিকোয়েস্ট নিশ্চিত করুন
+              <div class="modal-footer border-top d-flex flex-row gap-2 w-100 p-2.5 p-sm-3" style="background: #051614; border-color: rgba(255,255,255,0.1) !important; flex-shrink: 0; position: sticky; bottom: 0; z-index: 10;">
+                <button type="button" class="btn btn-outline-light rounded-pill flex-fill py-2.5" data-bs-dismiss="modal" style="min-height: 46px; font-weight: 700; font-size: 13.5px; border-color: rgba(255,255,255,0.3);">Cancel</button>
+                <button type="submit" id="santinoRedeemSubmitBtn" class="btn fw-bold rounded-pill flex-fill py-2.5" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; border: none; font-size: 14px; font-weight: 800; min-height: 46px; box-shadow: 0 4px 15px rgba(223, 190, 141, 0.35); cursor: pointer;">
+                  Confirm Redemption &rarr;
                 </button>
               </div>
             </form>
@@ -717,7 +754,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const submitBtn = document.getElementById('santinoRedeemSubmitBtn');
         const origText = submitBtn.innerHTML;
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> সাবমিট হচ্ছে...';
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Submitting...';
 
         const formData = new FormData(this);
         formData.append('action', 'santino_submit_redeem');
@@ -745,25 +782,25 @@ document.addEventListener('DOMContentLoaded', () => {
               document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
             }
             if (resData.data && resData.data.print_url) {
-              if (confirm((resData.data.message || 'ফ্রি কফি রিডিম সফল হয়েছে!') + '\n\nআপনি কি ৬ষ্ঠ কাপ ফ্রি ভাউচার স্লিপ এখনই প্রিন্ট করতে চান? (Print 6th Cup Free POS Slip?)')) {
+              if (confirm((resData.data.message || 'Coffee redemption request confirmed!') + '\n\nWould you like to print or download your 6th Cup Free POS Slip now?')) {
                 window.open(resData.data.print_url, '_blank');
               }
             } else {
-              alert(resData.data ? resData.data.message : 'ফ্রি কফি রিডিম রিকোয়েস্ট সফলভাবে জমা হয়েছে!');
+              alert(resData.data ? resData.data.message : 'Free coffee redemption request submitted successfully!');
             }
             const lookupForm = document.getElementById('santinoLookupForm');
             if (lookupForm) {
               lookupForm.dispatchEvent(new Event('submit'));
             }
           } else {
-            alert(resData.data ? resData.data.message : 'রিডিম রিকোয়েস্ট জমা দেওয়া সম্ভব হয়নি।');
+            alert(resData.data ? resData.data.message : 'Could not submit redemption request.');
           }
         })
         .catch(err => {
           submitBtn.disabled = false;
           submitBtn.innerHTML = origText;
           console.error('Redeem error:', err);
-          alert('নেটওয়ার্ক সমস্যার কারণে রিকোয়েস্ট পাঠানো যায়নি। আবার চেষ্টা করুন।');
+          alert('Network issue. Could not submit request. Please try again.');
         });
       });
     }
@@ -1106,24 +1143,24 @@ window.generateAndDownloadSantinoVoucher = function(info) {
         <div class="modal-content rounded-4 border-0 shadow-2xl text-white" style="background: #061917; border: 1px solid rgba(195,153,108,0.4) !important;">
           <div class="modal-header border-bottom" style="border-color: rgba(255,255,255,0.1) !important;">
             <h5 class="modal-title fw-bold text-white font-heading" style="font-size: 16px;">
-              🎉 ভাউচার কার্ড প্রস্তুত (Digital Voucher Pass)
+              🎉 Digital Voucher Pass Ready
             </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body p-3 p-md-4 text-center">
-            <p class="small text-white-50 mb-3">আপনার ভাউচার ইমেজটি ডাউনলোড হয়েছে। কাউন্টারে এই ছবি বা কোডটি দেখিয়ে ফ্রি কফি সংগ্রহ করুন।</p>
+            <p class="small text-white-50 mb-3">Your voucher image is ready. Present this digital pass or voucher code at any partner cafe to enjoy your complimentary beverage.</p>
             <div class="rounded-3 overflow-hidden shadow-lg border" style="border-color: rgba(195,153,108,0.4) !important;">
               <img id="santinoVoucherPreviewImg" src="" alt="Santino Voucher" class="img-fluid w-100" style="display: block;">
             </div>
           </div>
           <div class="modal-footer border-top d-flex justify-content-between" style="border-color: rgba(255,255,255,0.1) !important;">
-            <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-3" data-bs-dismiss="modal">বন্ধ করুন</button>
+            <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-3" data-bs-dismiss="modal">Close</button>
             <div class="d-flex gap-2">
               <button type="button" id="santinoVoucherPrintBtn" class="btn btn-outline-warning btn-sm fw-bold rounded-pill px-3">
-                🖨️ প্রিন্ট করুন
+                🖨️ Print Slip
               </button>
               <a id="santinoVoucherDownloadAgainBtn" href="" download="" class="btn btn-sm fw-bold rounded-pill px-3" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; text-decoration: none;">
-                📥 আবার ডাউনলোড
+                📥 Download Again
               </a>
             </div>
           </div>

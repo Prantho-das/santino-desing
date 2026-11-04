@@ -281,6 +281,15 @@ class Santino_Machine_Grid_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        $this->add_control(
+            'card_btn_text',
+            array(
+                'label'   => esc_html__( 'Card Action Button Text (Blank to Hide)', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => '',
+            )
+        );
+
         $this->end_controls_section();
     }
 
@@ -632,11 +641,13 @@ class Santino_Machine_Grid_Widget extends \Elementor\Widget_Base {
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                                <div>
-                                    <button class="btn-add-cart" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                                        <i class="bi bi-cart2"></i> Add to Cart <i class="bi bi-arrow-right ms-1"></i>
-                                    </button>
-                                </div>
+                                 <?php if ( ! empty( $settings['card_btn_text'] ) ) : ?>
+                                 <div>
+                                     <button class="btn-add-cart" data-bs-toggle="modal" data-bs-target="#enquiryModal">
+                                         <?php echo esc_html( $settings['card_btn_text'] ); ?> <i class="bi bi-arrow-right ms-1"></i>
+                                     </button>
+                                 </div>
+                                 <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>

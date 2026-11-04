@@ -197,24 +197,8 @@
   </div>
 
   <!-- 2ND MENU BAR (Visible on Desktop and Mobile Screen) -->
-  <div class="top-category-bar second-menu-bar">
-    <div class="container-fluid px-2 px-lg-5">
-      <div class="second-menu-wrapper d-flex justify-content-center align-items-center gap-2 gap-sm-4 gap-md-5">
-        <a href="<?php echo esc_url( home_url( '/membership/' ) ); ?>" class="second-menu-item">
-          <i class="bi bi-award-fill"></i> MEMBERSHIP
-        </a>
-        <span class="second-menu-sep text-muted">|</span>
-        <a href="<?php echo esc_url( home_url( '/bfc/' ) ); ?>" class="second-menu-item">
-          <i class="bi bi-shop"></i> BFC
-        </a>
-        <span class="second-menu-sep text-muted">|</span>
-        <a href="<?php echo esc_url( home_url( '/swapno/' ) ); ?>" class="second-menu-item">
-          <i class="bi bi-cart3"></i> SWAPNO
-        </a>
-        <span class="second-menu-sep text-muted">|</span>
-        <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="second-menu-item">
-          <i class="bi bi-journal-text"></i> MENU
-        </a>
-      </div>
-    </div>
-  </div>
+  <?php
+  if ( function_exists( 'santino_render_second_menu_bar' ) ) {
+      santino_render_second_menu_bar();
+  }
+  ?>

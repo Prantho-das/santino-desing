@@ -28,9 +28,20 @@ if ( $is_elementor ) :
     endwhile;
 else :
     // Fallback: render complete luxury Hero + Member Portal
-    $hero_bg_url = function_exists( 'santino_get_page_banner' ) 
-        ? santino_get_page_banner( 'santino-member', 'imgi_20_santino_-_250522-07574.jpg' ) 
-        : ( function_exists( 'santino_img' ) ? santino_img( 'imgi_20_santino_-_250522-07574.jpg' ) : '' );
+    $mb_hero_badge        = get_theme_mod( 'santino_mb_hero_badge', 'SANTINO VIP MEMBER PORTAL' );
+    $mb_hero_title        = get_theme_mod( 'santino_mb_hero_title', 'Santino Member Club' );
+    $mb_hero_title_accent = get_theme_mod( 'santino_mb_hero_title_accent', '& Rewards' );
+    $mb_hero_desc         = get_theme_mod( 'santino_mb_hero_desc', 'Track your 5-cup coffee stamps, upload cafe invoices, and claim your free 6th handcrafted cup across Santino partner cafes.' );
+    $mb_hero_btn1_text    = get_theme_mod( 'santino_mb_hero_btn1_text', 'Check Stamp Card' );
+    $mb_hero_btn1_url     = get_theme_mod( 'santino_mb_hero_btn1_url', '#clubPortal' );
+    $mb_hero_btn2_text    = get_theme_mod( 'santino_mb_hero_btn2_text', 'Log Invoice Memo' );
+    $mb_hero_btn2_url     = get_theme_mod( 'santino_mb_hero_btn2_url', '#invoice-tab' );
+    $hero_bg_url          = get_theme_mod( 'santino_mb_hero_bg' );
+    if ( ! $hero_bg_url ) {
+        $hero_bg_url = function_exists( 'santino_get_page_banner' ) 
+            ? santino_get_page_banner( 'santino-member', 'imgi_20_santino_-_250522-07574.jpg' ) 
+            : ( function_exists( 'santino_img' ) ? santino_img( 'imgi_20_santino_-_250522-07574.jpg' ) : '' );
+    }
 ?>
 
 <style>
@@ -349,30 +360,40 @@ else :
     <div class="pro-banner-overlay" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0, 38, 35, 0.72) 100%); z-index: 1;"></div>
     
     <div class="container position-relative" style="max-width: 840px; z-index: 2;">
+      <?php if ( ! empty( $mb_hero_badge ) ) : ?>
       <div class="sec-pill-badge-wrap light mb-3">
         <span class="sec-pill-line"></span>
-        <span class="sec-pill-badge" style="background: rgba(223, 190, 141, 0.2); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.35);"><i class="bi bi-gem me-1 text-warning"></i> SANTINO VIP MEMBER PORTAL</span>
+        <span class="sec-pill-badge" style="background: rgba(223, 190, 141, 0.2); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.35);"><i class="bi bi-gem me-1 text-warning"></i> <?php echo esc_html( $mb_hero_badge ); ?></span>
         <span class="sec-pill-line"></span>
       </div>
+      <?php endif; ?>
 
       <h1 class="pro-banner-title mb-3" style="font-family: var(--kp-font-title, 'Montserrat', sans-serif); font-size: clamp(2.3rem, 4.5vw, 3.6rem); font-weight: 900; line-height: 1.18; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 14px rgba(0,0,0,0.5);">
-        Santino Member Club &amp; Rewards
+        <?php echo esc_html( $mb_hero_title ); ?> <?php if ( ! empty( $mb_hero_title_accent ) ) : ?><span style="color: #dfbe8d;"><?php echo esc_html( $mb_hero_title_accent ); ?></span><?php endif; ?>
       </h1>
 
+      <?php if ( ! empty( $mb_hero_desc ) ) : ?>
       <p class="pro-banner-desc mb-4" style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); max-width: 640px; font-size: 1.08rem; line-height: 1.65; color: rgba(255, 255, 255, 0.92); margin: 0 auto; text-shadow: 0 1px 8px rgba(0,0,0,0.4);">
-        Track your 5-cup coffee stamps, upload cafe invoices, and claim your free 6th handcrafted cup across Santino partner cafes.
+        <?php echo esc_html( $mb_hero_desc ); ?>
       </p>
+      <?php endif; ?>
 
+      <?php if ( ! empty( $mb_hero_btn1_text ) || ! empty( $mb_hero_btn2_text ) ) : ?>
       <div class="pro-banner-actions d-flex justify-content-center align-items-center gap-3 flex-wrap">
-        <a href="#clubPortal" class="btn-hero-lifestyle">
-          <span>Check Stamp Card</span>
+        <?php if ( ! empty( $mb_hero_btn1_text ) ) : ?>
+        <a href="<?php echo esc_url( $mb_hero_btn1_url ); ?>" class="btn-hero-lifestyle">
+          <span><?php echo esc_html( $mb_hero_btn1_text ); ?></span>
           <i class="bi bi-arrow-right"></i>
         </a>
-        <a href="#invoice-tab" class="btn-hero-outline">
+        <?php endif; ?>
+        <?php if ( ! empty( $mb_hero_btn2_text ) ) : ?>
+        <a href="<?php echo esc_url( $mb_hero_btn2_url ); ?>" class="btn-hero-outline">
           <i class="bi bi-receipt-cutoff text-warning"></i>
-          <span>Log Invoice Memo</span>
+          <span><?php echo esc_html( $mb_hero_btn2_text ); ?></span>
         </a>
+        <?php endif; ?>
       </div>
+      <?php endif; ?>
     </div>
   </section>
 
@@ -402,12 +423,12 @@ else :
         </p>
       </div>
 
-      <div class="row g-4 align-items-stretch justify-content-center">
+      <div class="row g-4 align-items-start justify-content-center">
         <!-- LEFT COLUMN: Stamp Card Display -->
         <div class="col-lg-5">
-          <div class="d-flex flex-column justify-content-between h-100">
+          <div class="d-flex flex-column gap-3">
             <!-- Luxury Gold/Teal Card -->
-            <div class="vip-card-surface mb-4">
+            <div class="vip-card-surface">
               <i class="bi bi-cup-hot vip-card-watermark"></i>
               
               <!-- Card Top Header -->
@@ -552,7 +573,7 @@ else :
                       <input type="text" name="invoice_number" class="form-control" placeholder="e.g. SNT-2026-9042" required>
                     </div>
                     <div class="col-md-3">
-                      <label class="form-label small fw-bold text-dark">No. of Cups *</label>
+                      <label class="form-label small fw-bold text-dark">No. of Items / Cups *</label>
                       <div class="input-group">
                         <button class="btn btn-outline-secondary px-2 santino-cup-minus" type="button" style="font-weight: bold; border-color: #cbd5e1;">−</button>
                         <input type="number" name="cups" class="form-control text-center santino-cups-input" min="1" max="50" value="1" style="font-weight: bold; color: #00625d;" required>
@@ -566,7 +587,22 @@ else :
                   </div>
 
                   <div class="row g-3 mb-3">
-                    <div class="col-md-7">
+                    <div class="col-md-12">
+                      <label class="form-label small fw-bold text-dark"><i class="bi bi-cup-hot-fill me-1" style="color: #00625d;"></i> Items Ordered / Consumed *</label>
+                      <select name="items_consumed" class="form-select" required>
+                        <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
+                        <?php 
+                        $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
+                        foreach ( $ordered_items as $item_choice ) : ?>
+                          <option value="<?php echo esc_attr( $item_choice ); ?>"><?php echo esc_html( $item_choice ); ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                      <div class="form-text text-muted" style="font-size: 11px;">Select the handcrafted coffee or bakery item on your receipt.</div>
+                    </div>
+                  </div>
+
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-12">
                       <label class="form-label small fw-bold text-dark">Cafe Branch Visited</label>
                       <select name="branch" class="form-select">
                         <?php 
@@ -576,16 +612,12 @@ else :
                         <?php endforeach; ?>
                       </select>
                     </div>
-                    <div class="col-md-5">
-                      <label class="form-label small fw-bold text-dark">Member ID (Optional)</label>
-                      <input type="text" name="member_id" class="form-control" placeholder="e.g. SNT-REG-XXXX">
-                    </div>
                   </div>
 
                   <div class="mb-4">
-                    <label class="form-label small fw-bold text-dark"><i class="bi bi-camera me-1" style="color: #00625d;"></i> Upload Invoice / Memo Photo (Optional)</label>
-                    <input type="file" name="invoice_image" id="santinoInvoiceImage" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg">
-                    <div class="form-text text-muted small" style="font-size: 0.78rem;">Upload photo of your physical cafe bill/memo for fast verification (JPG, PNG, WebP).</div>
+                    <label class="form-label small fw-bold text-dark"><i class="bi bi-camera-fill me-1" style="color: #00625d;"></i> Upload Invoice / Memo Photo * (Mandatory)</label>
+                    <input type="file" name="invoice_image" id="santinoInvoiceImage" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg" required>
+                    <div class="form-text text-muted small" style="font-size: 0.78rem;">Upload photo of your physical cafe bill/memo for fast verification (JPG, PNG, WebP) - Required.</div>
                   </div>
 
                   <button type="submit" class="btn btn-portal-submit w-100 font-heading text-uppercase">
@@ -604,6 +636,13 @@ else :
                 <div id="membershipResponseBox" style="display: none;" class="mb-4"></div>
 
                 <form id="santinoMembershipForm">
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-12">
+                      <label class="form-label small fw-bold text-dark">Full Name *</label>
+                      <input type="text" name="name" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+                  </div>
+
                   <div class="row g-3 mb-3">
                     <div class="col-md-12">
                       <label class="form-label small fw-bold text-dark">Mobile Number: *</label>

@@ -374,9 +374,7 @@ function renderMenuGrid(items) {
               <span class="menu-item-price">৳ ${item.price}</span>
               <span class="menu-item-cal text-muted small ms-1">${item.calories}</span>
             </div>
-            <button class="btn-customize-pill" onclick="event.stopPropagation(); openItemCustomModal('${item.id}')">
-              Order <i class="bi bi-arrow-right"></i>
-            </button>
+            ${(window.santino_order_btn_text && window.santino_order_btn_text.trim()) ? `<button class="btn-customize-pill" onclick="event.stopPropagation(); openItemCustomModal('${item.id}')">${window.santino_order_btn_text} <i class="bi bi-arrow-right"></i></button>` : ''}
           </div>
         </div>
 

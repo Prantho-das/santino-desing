@@ -1392,7 +1392,7 @@ else :
             </div>
             <div>
               <button class="btn-add-cart" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                <i class="bi bi-cart2"></i> Add to Cart <i class="bi bi-arrow-right ms-1"></i>
+                <i class="bi bi-chat-right-text"></i> Inquire Machine <i class="bi bi-arrow-right ms-1"></i>
               </button>
             </div>
           </div>
@@ -1419,7 +1419,7 @@ else :
             </div>
             <div>
               <button class="btn-add-cart" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                <i class="bi bi-cart2"></i> Add to Cart <i class="bi bi-arrow-right ms-1"></i>
+                <i class="bi bi-chat-right-text"></i> Inquire Machine <i class="bi bi-arrow-right ms-1"></i>
               </button>
             </div>
           </div>
@@ -1446,7 +1446,7 @@ else :
             </div>
             <div>
               <button class="btn-add-cart" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                <i class="bi bi-cart2"></i> Add to Cart <i class="bi bi-arrow-right ms-1"></i>
+                <i class="bi bi-chat-right-text"></i> Inquire Machine <i class="bi bi-arrow-right ms-1"></i>
               </button>
             </div>
           </div>
@@ -1473,7 +1473,7 @@ else :
             </div>
             <div>
               <button class="btn-add-cart" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                <i class="bi bi-cart2"></i> Add to Cart <i class="bi bi-arrow-right ms-1"></i>
+                <i class="bi bi-chat-right-text"></i> Inquire Machine <i class="bi bi-arrow-right ms-1"></i>
               </button>
             </div>
           </div>
