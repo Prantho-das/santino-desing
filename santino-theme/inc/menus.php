@@ -98,45 +98,66 @@ class Santino_Second_Nav_Walker extends Walker_Nav_Menu {
         $media_html = '';
         $has_image  = false;
 
-        if ( strpos( $upper_title, 'BFC' ) !== false || strpos( $lower_url, '/bfc' ) !== false ) {
-            if ( ! empty( $bfc_logo ) ) {
-                $media_html = '<img src="' . esc_url( $bfc_logo ) . '" alt="' . esc_attr( $title ) . '" class="second-menu-logo">';
-                $has_image  = true;
-            } else {
-                $media_html = '<i class="bi bi-shop"></i>';
+        $item_img = get_post_meta( $item->ID, '_menu_item_image', true );
+        if ( empty( $item_img ) && has_post_thumbnail( $item->ID ) ) {
+            $item_img = get_the_post_thumbnail_url( $item->ID, 'full' );
+        }
+        if ( ! empty( $item_img ) ) {
+            if ( is_numeric( $item_img ) ) {
+                $item_img = wp_get_attachment_image_url( $item_img, 'full' );
             }
-        } elseif ( strpos( $upper_title, 'SWAPNO' ) !== false || strpos( $upper_title, 'SHWAPNO' ) !== false || strpos( $lower_url, '/swapno' ) !== false ) {
-            if ( ! empty( $swapno_logo ) ) {
-                $media_html = '<img src="' . esc_url( $swapno_logo ) . '" alt="' . esc_attr( $title ) . '" class="second-menu-logo">';
+            if ( ! empty( $item_img ) ) {
+                $media_html = '<img src="' . esc_url( $item_img ) . '" alt="' . esc_attr( strip_tags( $title ) ) . '" class="second-menu-logo">';
                 $has_image  = true;
-            } else {
-                $media_html = '<i class="bi bi-cart3"></i>';
             }
-        } elseif ( strpos( $upper_title, 'MEMBER' ) !== false || strpos( $upper_title, 'CLUB' ) !== false || strpos( $lower_url, '/membership' ) !== false ) {
-            if ( ! empty( $membership_logo ) ) {
-                $media_html = '<img src="' . esc_url( $membership_logo ) . '" alt="' . esc_attr( $title ) . '" class="second-menu-logo">';
-                $has_image  = true;
+        }
+
+        if ( ! $has_image && preg_match( '/<img[^>]+src=["\']([^"\']+)["\'][^>]*>/i', (string) $item->title, $m ) ) {
+            $media_html = '<img src="' . esc_url( $m[1] ) . '" alt="' . esc_attr( strip_tags( $title ) ) . '" class="second-menu-logo">';
+            $has_image  = true;
+        }
+
+        if ( ! $has_image ) {
+            if ( strpos( $upper_title, 'BFC' ) !== false || strpos( $lower_url, '/bfc' ) !== false ) {
+                if ( ! empty( $bfc_logo ) ) {
+                    $media_html = '<img src="' . esc_url( $bfc_logo ) . '" alt="' . esc_attr( strip_tags( $title ) ) . '" class="second-menu-logo">';
+                    $has_image  = true;
+                } else {
+                    $media_html = '<i class="bi bi-shop"></i>';
+                }
+            } elseif ( strpos( $upper_title, 'SWAPNO' ) !== false || strpos( $upper_title, 'SHWAPNO' ) !== false || strpos( $lower_url, '/swapno' ) !== false ) {
+                if ( ! empty( $swapno_logo ) ) {
+                    $media_html = '<img src="' . esc_url( $swapno_logo ) . '" alt="' . esc_attr( strip_tags( $title ) ) . '" class="second-menu-logo">';
+                    $has_image  = true;
+                } else {
+                    $media_html = '<i class="bi bi-cart3"></i>';
+                }
+            } elseif ( strpos( $upper_title, 'MEMBER' ) !== false || strpos( $upper_title, 'CLUB' ) !== false || strpos( $lower_url, '/membership' ) !== false ) {
+                if ( ! empty( $membership_logo ) ) {
+                    $media_html = '<img src="' . esc_url( $membership_logo ) . '" alt="' . esc_attr( strip_tags( $title ) ) . '" class="second-menu-logo">';
+                    $has_image  = true;
+                } else {
+                    $media_html = '<i class="bi bi-award-fill"></i>';
+                }
+            } elseif ( strpos( $upper_title, 'MENU' ) !== false || strpos( $lower_url, '/menu' ) !== false ) {
+                if ( ! empty( $menu_logo ) ) {
+                    $media_html = '<img src="' . esc_url( $menu_logo ) . '" alt="' . esc_attr( strip_tags( $title ) ) . '" class="second-menu-logo">';
+                    $has_image  = true;
+                } else {
+                    $media_html = '<i class="bi bi-journal-text"></i>';
+                }
             } else {
-                $media_html = '<i class="bi bi-award-fill"></i>';
-            }
-        } elseif ( strpos( $upper_title, 'MENU' ) !== false || strpos( $lower_url, '/menu' ) !== false ) {
-            if ( ! empty( $menu_logo ) ) {
-                $media_html = '<img src="' . esc_url( $menu_logo ) . '" alt="' . esc_attr( $title ) . '" class="second-menu-logo">';
-                $has_image  = true;
-            } else {
-                $media_html = '<i class="bi bi-journal-text"></i>';
-            }
-        } else {
-            $custom_icon = '';
-            if ( ! empty( $item->classes ) ) {
-                foreach ( (array) $item->classes as $c ) {
-                    if ( strpos( $c, 'bi-' ) === 0 ) {
-                        $custom_icon = '<i class="bi ' . esc_attr( $c ) . '"></i>';
-                        break;
+                $custom_icon = '';
+                if ( ! empty( $item->classes ) ) {
+                    foreach ( (array) $item->classes as $c ) {
+                        if ( strpos( $c, 'bi-' ) === 0 ) {
+                            $custom_icon = '<i class="bi ' . esc_attr( $c ) . '"></i>';
+                            break;
+                        }
                     }
                 }
+                $media_html = $custom_icon ? $custom_icon : '<i class="bi bi-link-45deg"></i>';
             }
-            $media_html = $custom_icon ? $custom_icon : '<i class="bi bi-link-45deg"></i>';
         }
 
         $active = ( in_array( 'current-menu-item', (array) $item->classes ) || in_array( 'current-page-ancestor', (array) $item->classes ) ) ? 'active' : '';
@@ -145,7 +166,8 @@ class Santino_Second_Nav_Walker extends Walker_Nav_Menu {
         if ( $has_image ) {
             $output .= $media_html;
         } else {
-            $output .= $media_html . ' <span>' . esc_html( $title ) . '</span>';
+            $clean_title = trim( strip_tags( $title ) );
+            $output .= $media_html . ' <span>' . esc_html( $clean_title ) . '</span>';
         }
         $output .= '</a>';
     }
@@ -777,5 +799,75 @@ add_action( 'admin_init', function() {
     if ( ! get_option( 'santino_menus_v5_second_bar' ) ) {
         santino_setup_official_nav_menus( true );
         update_option( 'santino_menus_v5_second_bar', 1 );
+    }
+} );
+add_action( 'wp_nav_menu_item_custom_fields', 'santino_nav_menu_item_logo_field', 10, 2 );
+function santino_nav_menu_item_logo_field( $item_id, $item ) {
+    $menu_image = get_post_meta( $item_id, '_menu_item_image', true );
+    ?>
+    <p class="description description-wide santino-menu-logo-upload-wrap">
+        <label for="edit-menu-item-image-<?php echo esc_attr( $item_id ); ?>">
+            <?php esc_html_e( 'Item Logo / Image (Replaces text)', 'santino' ); ?><br />
+            <input type="text" id="edit-menu-item-image-<?php echo esc_attr( $item_id ); ?>" class="widefat edit-menu-item-image" name="menu-item-image[<?php echo esc_attr( $item_id ); ?>]" value="<?php echo esc_attr( $menu_image ); ?>" />
+        </label>
+        <button type="button" class="button button-secondary santino-upload-menu-img-btn" style="margin-top:5px;"><?php esc_html_e( 'Upload / Select Image', 'santino' ); ?></button>
+        <?php if ( ! empty( $menu_image ) ) : ?>
+            <button type="button" class="button button-link-delete santino-remove-menu-img-btn" style="margin-top:5px; margin-left:8px;"><?php esc_html_e( 'Remove Image', 'santino' ); ?></button>
+            <div class="santino-menu-img-preview" style="margin-top:5px;"><img src="<?php echo esc_url( $menu_image ); ?>" style="max-height:30px; vertical-align:middle; border:1px solid #ddd; padding:2px; background:#fff;"></div>
+        <?php else: ?>
+            <div class="santino-menu-img-preview" style="margin-top:5px; display:none;"><img src="" style="max-height:30px; vertical-align:middle; border:1px solid #ddd; padding:2px; background:#fff;"></div>
+        <?php endif; ?>
+    </p>
+    <?php
+}
+
+add_action( 'wp_update_nav_menu_item', 'santino_save_nav_menu_item_logo_field', 10, 2 );
+function santino_save_nav_menu_item_logo_field( $menu_id, $menu_item_db_id ) {
+    if ( isset( $_POST['menu-item-image'][ $menu_item_db_id ] ) ) {
+        $img_val = sanitize_text_field( $_POST['menu-item-image'][ $menu_item_db_id ] );
+        if ( ! empty( $img_val ) ) {
+            update_post_meta( $menu_item_db_id, '_menu_item_image', $img_val );
+        } else {
+            delete_post_meta( $menu_item_db_id, '_menu_item_image' );
+        }
+    }
+}
+
+add_action( 'admin_enqueue_scripts', function( $hook ) {
+    if ( $hook === 'nav-menus.php' ) {
+        wp_enqueue_media();
+        add_action( 'admin_footer', function() {
+            ?>
+            <script>
+            jQuery(document).ready(function($) {
+                $(document).on('click', '.santino-upload-menu-img-btn', function(e) {
+                    e.preventDefault();
+                    var $btn = $(this);
+                    var $wrap = $btn.closest('.santino-menu-logo-upload-wrap');
+                    var $input = $wrap.find('.edit-menu-item-image');
+                    var $preview = $wrap.find('.santino-menu-img-preview');
+                    var frame = wp.media({
+                        title: 'Select Item Logo / Image',
+                        button: { text: 'Use this image' },
+                        multiple: false
+                    });
+                    frame.on('select', function() {
+                        var attachment = frame.state().get('selection').first().toJSON();
+                        $input.val(attachment.url).trigger('change');
+                        $preview.show().find('img').attr('src', attachment.url);
+                    });
+                    frame.open();
+                });
+                $(document).on('click', '.santino-remove-menu-img-btn', function(e) {
+                    e.preventDefault();
+                    var $wrap = $(this).closest('.santino-menu-logo-upload-wrap');
+                    $wrap.find('.edit-menu-item-image').val('').trigger('change');
+                    $wrap.find('.santino-menu-img-preview').hide().find('img').attr('src', '');
+                    $(this).hide();
+                });
+            });
+            </script>
+            <?php
+        });
     }
 } );
