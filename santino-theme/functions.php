@@ -113,6 +113,9 @@ function santino_enqueue_scripts() {
     if ( file_exists( SANTINO_DIR . '/assets/css/styles.css' ) ) {
         wp_enqueue_style( 'santino-main-style', SANTINO_URI . '/assets/css/styles.css', array( 'santino-theme-style' ), SANTINO_VERSION );
     }
+    if ( file_exists( SANTINO_DIR . '/assets/css/menu-page.css' ) ) {
+        wp_enqueue_style( 'santino-menu-style', SANTINO_URI . '/assets/css/menu-page.css', array( 'santino-theme-style' ), SANTINO_VERSION );
+    }
 
     // Bootstrap JS
     wp_enqueue_script( 'bootstrap-bundle', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', true );
@@ -195,7 +198,16 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     require_once SANTINO_DIR . '/inc/widgets/our-story-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/membership-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/member-portal-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/membership-hero-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/membership-perks-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/membership-portal-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/membership-cta-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/menu-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/menu-hero-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/menu-grid-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/menu-vip-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/menu-app-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/menu-branches-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/brands-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/machines-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/beans-solution-widget.php';
@@ -233,7 +245,16 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     $widgets_manager->register( new \Santino_Our_Story_Solution_Widget() );
     $widgets_manager->register( new \Santino_Membership_Solution_Widget() );
     $widgets_manager->register( new \Santino_Member_Portal_Widget() );
+    $widgets_manager->register( new \Santino_Membership_Hero_Widget() );
+    $widgets_manager->register( new \Santino_Membership_Perks_Widget() );
+    $widgets_manager->register( new \Santino_Membership_Portal_Widget() );
+    $widgets_manager->register( new \Santino_Membership_CTA_Widget() );
     $widgets_manager->register( new \Santino_Menu_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Menu_Hero_Widget() );
+    $widgets_manager->register( new \Santino_Menu_Grid_Widget() );
+    $widgets_manager->register( new \Santino_Menu_VIP_Widget() );
+    $widgets_manager->register( new \Santino_Menu_App_Widget() );
+    $widgets_manager->register( new \Santino_Menu_Branches_Widget() );
     $widgets_manager->register( new \Santino_Brands_Solution_Widget() );
     $widgets_manager->register( new \Santino_Machines_Solution_Widget() );
     $widgets_manager->register( new \Santino_Beans_Solution_Widget() );
@@ -355,6 +376,7 @@ require_once SANTINO_DIR . '/inc/leads-system.php';
 require_once SANTINO_DIR . '/inc/demo-importer.php';
 require_once SANTINO_DIR . '/inc/customizer.php';
 require_once SANTINO_DIR . '/inc/elementor-pages-sync.php';
+require_once SANTINO_DIR . '/inc/rest-api.php';
 
 
 

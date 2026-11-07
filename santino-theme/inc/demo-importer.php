@@ -254,6 +254,94 @@ class Santino_Demo_Importer {
 
             </div>
 
+            <!-- Section 3: Elementor Specific Page Syncer Box inside Santino Setup -->
+            <div style="background: #fff; border-radius: 10px; border: 1px solid #ccd0d4; border-left: 5px solid #00625d; padding: 24px 28px; margin-top: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 18px;">
+                    <div>
+                        <span style="font-size: 11px; font-weight: 800; color: #00625d; letter-spacing: 1px; text-transform: uppercase;">
+                            ELEMENTOR PAGE SYNCER &amp; REPAIR
+                        </span>
+                        <h2 style="margin: 4px 0 0 0; font-size: 19px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                            <span class="dashicons dashicons-update" style="color: #00625d; font-size: 24px;"></span>
+                            Specific Page Syncer (Member &amp; Custom Pages)
+                        </h2>
+                    </div>
+                    <div>
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=santino-elementor-syncer' ) ); ?>" class="button button-primary" style="background: #00625d; border-color: #004d49; font-weight: 700; padding: 6px 18px;">
+                            ⚙️ Open Full Page Syncer Tool &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <p style="color: #475569; font-size: 13.5px; line-height: 1.6; margin: 0 0 18px 0;">
+                    Need to push clean, modular Elementor widgets into a specific page or fix single-block layouts? Use the 1-click syncers below to inject 3 clean, independently editable Elementor sections (Hero Banner, VIP Stamp Card Portal, Cafe CTA):
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                    <?php
+                    $m_page = get_page_by_path( 'santino-member' );
+                    $m_id   = $m_page ? $m_page->ID : 36426;
+                    $sync_m_url = wp_nonce_url( admin_url( 'admin-post.php?action=santino_sync_specific_page&target_page_id=' . $m_id . '&layout_type=three_sections' ), 'santino_sync_nonce_' . $m_id );
+
+                    $vip_p  = get_page_by_path( 'membership' );
+                    $vip_id = $vip_p ? $vip_p->ID : 22;
+                    $sync_vip_url = wp_nonce_url( admin_url( 'admin-post.php?action=santino_sync_specific_page&target_page_id=' . $vip_id . '&layout_type=membership_solution' ), 'santino_sync_nonce_' . $vip_id );
+
+                    $c_p    = get_page_by_path( 'coffee-club' );
+                    $c_id   = $c_p ? $c_p->ID : 0;
+                    $sync_c_url = $c_id ? wp_nonce_url( admin_url( 'admin-post.php?action=santino_sync_specific_page&target_page_id=' . $c_id . '&layout_type=three_sections' ), 'santino_sync_nonce_' . $c_id ) : '#';
+
+                    $menu_p  = get_page_by_path( 'menu' );
+                    $menu_id = $menu_p ? $menu_p->ID : 0;
+                    if ( ! $menu_id ) {
+                        $all_menu_pages = get_posts( array(
+                            'post_type'      => 'page',
+                            'title'          => 'Menu',
+                            'posts_per_page' => 1,
+                        ) );
+                        if ( ! empty( $all_menu_pages ) ) {
+                            $menu_id = $all_menu_pages[0]->ID;
+                        }
+                    }
+                    $sync_menu_url = $menu_id ? wp_nonce_url( admin_url( 'admin-post.php?action=santino_sync_specific_page&target_page_id=' . $menu_id . '&layout_type=menu_native' ), 'santino_sync_nonce_' . $menu_id ) : wp_nonce_url( admin_url( 'admin-post.php?action=santino_sync_specific_page&create_slug=menu&layout_type=menu_native' ), 'santino_sync_specific_page_nonce' );
+                    ?>
+                    <div style="background: #f0fdfa; border: 1.5px solid #00625d; border-radius: 8px; padding: 16px; box-shadow: 0 2px 6px rgba(0,98,93,0.06);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <strong style="color: #0f172a; font-size: 14px;">/menu/ (Beverage Menu)</strong>
+                            <span style="background: #e6f4ea; color: #137333; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">5 SECTIONS NATIVE</span>
+                        </div>
+                        <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 12px;">Hero &amp; Search + Items Grid + VIP Poster + App + Hubs</span>
+                        <a href="<?php echo esc_url( $sync_menu_url ); ?>" class="button button-primary" style="background:#00625d; border-color:#004d49; font-weight:700; width:100%; text-align:center;" onclick="return confirm('Sync /menu/ page with 5 native dynamic sections?');">
+                            ⚡ Sync /menu/ (5 Dynamic Sections)
+                        </a>
+                    </div>
+
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+                        <strong style="color: #0f172a; font-size: 14px; display: block; margin-bottom: 4px;">/santino-member/ (Portal)</strong>
+                        <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 12px;">3 Sections: Hero + VIP Stamp Card + CTA</span>
+                        <a href="<?php echo esc_url( $sync_m_url ); ?>" class="button button-primary" style="background:#00625d; border-color:#004d49; font-weight:600; width:100%; text-align:center;" onclick="return confirm('Sync /santino-member/ to 3 clean Elementor sections?');">
+                            ⚡ Sync /santino-member/ (3 Sections)
+                        </a>
+                    </div>
+
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+                        <strong style="color: #0f172a; font-size: 14px; display: block; margin-bottom: 4px;">/membership/ (VIP Club)</strong>
+                        <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 12px;">VIP Connoisseur Privileges &amp; Rewards</span>
+                        <a href="<?php echo esc_url( $sync_vip_url ); ?>" class="button button-secondary" style="font-weight:600; width:100%; text-align:center; color:#b45309; border-color:#d97706;" onclick="return confirm('Sync /membership/ to VIP Elementor layout?');">
+                            ⚡ Sync /membership/ (VIP Layout)
+                        </a>
+                    </div>
+
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+                        <strong style="color: #0f172a; font-size: 14px; display: block; margin-bottom: 4px;">/coffee-club/ (Club Portal)</strong>
+                        <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 12px;">3 Clean Sections (Hero + Portal + CTA)</span>
+                        <a href="<?php echo esc_url( $sync_c_url ); ?>" class="button button-secondary" style="font-weight:600; width:100%; text-align:center;" onclick="return confirm('Sync /coffee-club/ to 3 clean Elementor sections?');" <?php if ( ! $c_id ) echo 'disabled'; ?>>
+                            ⚡ Sync /coffee-club/
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <script>
@@ -473,7 +561,7 @@ class Santino_Demo_Importer {
             if ( isset( $created_page_ids[ $slug ] ) ) {
                 $pid = $created_page_ids[ $slug ];
                 $json = wp_json_encode( $sections, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
-                update_post_meta( $pid, '_elementor_data', $json );
+                update_post_meta( $pid, '_elementor_data', wp_slash( $json ) );
                 update_post_meta( $pid, '_elementor_edit_mode', 'builder' );
                 update_post_meta( $pid, '_elementor_version', '3.25.0' );
             }
@@ -540,15 +628,104 @@ class Santino_Demo_Importer {
             ),
 
             'membership' => array(
-                self::build_sec( array( array( 'type' => 'santino_membership_solution', 'settings' => array() ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_membership_hero', 'settings' => array(
+                    'badge_text'     => 'SANTINO VIP COFFEE CLUB',
+                    'title'          => 'Exclusive Connoisseur Privileges',
+                    'desc'           => 'Private cupping sessions, seasonal micro-lot allocations, and 15% VIP artisan bean discounts across Bangladesh.',
+                    'btn1_text'      => 'Join Coffee Club',
+                    'btn1_url'       => array( 'url' => '#clubPortal' ),
+                    'btn2_text'      => 'Explore Perks',
+                    'btn2_url'       => array( 'url' => '#perks' ),
+                    'show_metrics'   => 'yes',
+                ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_membership_perks', 'settings' => array(
+                    'badge_text'     => 'EXCLUSIVE PRIVILEGES',
+                    'title'          => 'Crafted Exclusively for Connoisseurs',
+                    'desc'           => 'Elevate every cup with exclusive roastery privileges, private sensory workshops, and member-only pricing.',
+                ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_membership_portal', 'settings' => array(
+                    'badge_text'     => 'VIP LOYALTY REWARDS',
+                    'title'          => 'Digital Coffee Stamp Card &amp; Club Portal',
+                    'desc'           => 'Enjoy specialty brews across Santino partner cafes. Collect 5 Cup Stamps and claim your 6th Handcrafted Drink 100% Free!',
+                    'card_sub'       => 'SANTINO VIP COFFEE CLUB',
+                    'card_title'     => 'VIP Connoisseur Member',
+                    'tab1_title'     => 'Check Stamp Status',
+                    'tab2_title'     => 'Log Invoice',
+                    'tab3_title'     => 'Join Coffee Club',
+                ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_membership_cta', 'settings' => array(
+                    'badge_text'     => 'VISIT OUR CAFES',
+                    'title'          => 'Ready For Your Next Handcrafted Brew?',
+                    'desc'           => 'Visit our barista bars across Gulshan, Banani, Dhanmondi & Uttara.',
+                    'btn_text'       => 'Explore Full Menu →',
+                    'btn_url'        => array( 'url' => '/menu/' ),
+                ) ) ) ),
             ),
 
             'santino-member' => array(
-                self::build_sec( array( array( 'type' => 'santino_member_portal', 'settings' => array() ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_membership_hero', 'settings' => array(
+                    'badge_text'     => 'SANTINO VIP MEMBER PORTAL',
+                    'title'          => 'Santino Member Club &amp; Rewards',
+                    'desc'           => 'Track your 5-cup coffee stamps, upload cafe invoices, and claim your free 6th handcrafted cup across Santino partner cafes.',
+                    'btn1_text'      => 'Check Stamp Card',
+                    'btn1_url'       => array( 'url' => '#clubPortal' ),
+                    'btn2_text'      => 'Log Invoice Memo',
+                    'btn2_url'       => array( 'url' => '#invoice-tab' ),
+                    'show_metrics'   => 'yes',
+                ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_membership_portal', 'settings' => array(
+                    'badge_text'  => 'VIP LOYALTY REWARDS',
+                    'title'       => 'Digital Coffee Stamp Card &amp; Club Portal',
+                    'desc'        => 'Enjoy specialty brews across Santino partner cafes. Collect 5 Cup Stamps and claim your 6th Handcrafted Drink 100% Free!',
+                    'card_sub'    => 'SANTINO COFFEE CLUB',
+                    'card_title'  => 'Regular Member',
+                    'tab1_title'  => 'Check Stamp Status',
+                    'tab2_title'  => 'Log Invoice',
+                    'tab3_title'  => 'Join Coffee Club',
+                ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_membership_cta', 'settings' => array(
+                    'badge_text' => 'VISIT OUR CAFES',
+                    'title'      => 'Ready For Your Next Handcrafted Brew?',
+                    'desc'       => 'Visit our barista bars across Gulshan, Banani, Dhanmondi & Uttara.',
+                    'btn_text'   => 'Explore Full Menu →',
+                    'btn_url'    => array( 'url' => '/menu/' ),
+                ) ) ) ),
             ),
 
             'menu' => array(
-                self::build_sec( array( array( 'type' => 'santino_menu_solution', 'settings' => array() ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_menu_hero', 'settings' => array(
+                    'badge_text'         => 'SANTINO SIGNATURE CAFE MENU',
+                    'title_main'         => 'Artisan Coffee &',
+                    'title_accent'       => 'Beverage Menu',
+                    'desc_text'          => 'Crafted with master roasted beans, plant-based dairy, and precision Italian extraction.',
+                    'search_placeholder'=> 'Search espresso, cold brew, matcha...',
+                ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_menu_grid', 'settings' => array(
+                    'badge_text' => 'HANDCRAFTED BEVERAGES',
+                    'title'      => 'Explore Our Barista Menu',
+                    'desc'       => 'Every beverage is calibrated to golden extraction standards using single-origin beans and premium dairy.',
+                ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_menu_vip', 'settings' => array(
+                    'badge_text' => 'EXCLUSIVE CLUB PRIVILEGE',
+                    'title'      => 'Santino VIP Coffee Club',
+                    'desc'       => 'Join hundreds of connoisseurs across Dhaka. Enjoy 15% VIP discounts on artisan beans, private cupping invitations, and your 6th handcrafted drink completely free on us.',
+                    'btn1_text'  => 'Join VIP Coffee Club →',
+                    'btn1_url'   => array( 'url' => '/membership/' ),
+                    'btn2_text'  => 'Digital Stamp Card',
+                    'btn2_url'   => array( 'url' => '/santino-member/' ),
+                ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_menu_app', 'settings' => array(
+                    'badge_text' => 'ORDER ON THE GO',
+                    'title'      => 'Download Santino Cafe App',
+                    'desc'       => 'Skip the queue, customize your roast profile, schedule pick-up, and earn loyalty beans with every espresso sip.',
+                    'apple_url'  => array( 'url' => '#' ),
+                    'google_url' => array( 'url' => '#' ),
+                ) ) ) ),
+                self::build_sec( array( array( 'type' => 'santino_menu_branches', 'settings' => array(
+                    'badge_text' => 'FIND A ROASTERY BAR',
+                    'title'      => 'Experience Santino Live',
+                    'desc'       => 'Visit our certified barista bars and sensory experience lounges across Dhaka.',
+                ) ) ) ),
             ),
 
             'brands' => array(

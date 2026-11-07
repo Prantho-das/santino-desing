@@ -120,6 +120,14 @@ function santino_customize_register( $wp_customize ) {
     );
 
     // Custom Titles
+    $wp_customize->add_setting( 'santino_second_bar_hide_labels', array( 'default' => '0', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'santino_second_bar_hide_labels', array(
+        'label'       => __( 'Hide Text Labels (Logo Only Mode)', 'santino' ),
+        'section'     => 'santino_second_bar_settings',
+        'type'        => 'checkbox',
+        'description' => __( 'When checked, items with logos will hide their text labels.', 'santino' ),
+    ) );
+
     $wp_customize->add_setting( 'santino_membership_title', array( 'default' => 'MEMBERSHIP', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'santino_membership_title', array(
         'label'   => __( 'Membership Label', 'santino' ),

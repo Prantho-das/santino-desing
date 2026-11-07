@@ -8,20 +8,9 @@
 
 get_header();
 
-$is_elementor_page = false;
-if ( class_exists( '\Elementor\Plugin' ) ) {
-    $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
-    if ( $document && $document->is_built_with_elementor() ) {
-        $is_elementor_page = true;
-    }
+if ( have_posts() ) {
+    the_post();
 }
-
-if ( $is_elementor_page ) :
-    while ( have_posts() ) :
-        the_post();
-        the_content();
-    endwhile;
-else :
 ?>
 
 <style>
@@ -440,9 +429,116 @@ h1, h2, h3, h4, h5, h6,
   background: var(--santino-teal, #00625d);
   color: #ffffff;
 }
+
+@media (max-width: 991.98px) {
+  .menu-category-sticky-bar {
+    top: 56px !important;
+    padding: 8px 0 !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .luckin-category-banners-container {
+    gap: 12px !important;
+    margin-bottom: 25px !important;
+  }
+  .luckin-banner-card {
+    border-radius: 12px !important;
+  }
+  .category-tabs-wrapper {
+    gap: 6px !important;
+    padding: 2px 4px !important;
+  }
+  .btn-cat-tab {
+    padding: 6px 14px !important;
+    font-size: 12px !important;
+  }
+  .app-download-card {
+    padding: 24px 18px !important;
+    border-radius: 16px !important;
+  }
+  .branch-card-img {
+    height: 160px !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .sec-title {
+    font-size: 1.85rem !important;
+  }
+  #menuItemsGrid {
+    --bs-gutter-x: 0.65rem;
+    --bs-gutter-y: 0.65rem;
+  }
+  #menuItemsGrid > [class*="col-"] {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
+  .menu-product-card {
+    border-radius: 14px !important;
+  }
+  .menu-card-image-wrap {
+    height: 145px !important;
+  }
+  .menu-badge-pill {
+    font-size: 8px !important;
+    padding: 2px 6px !important;
+    top: 6px !important;
+    left: 6px !important;
+  }
+  .menu-card-body {
+    padding: 10px !important;
+  }
+  .menu-taste-notes {
+    font-size: 10px !important;
+  }
+  .menu-item-name {
+    font-size: 0.88rem !important;
+    margin-bottom: 4px !important;
+    line-height: 1.25 !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .menu-item-price {
+    font-size: 0.98rem !important;
+  }
+  .btn-hero-lifestyle,
+  .btn-hero-outline {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .modal-dialog {
+    margin: 8px !important;
+    max-width: calc(100% - 16px) !important;
+  }
+  #cartOffcanvas {
+    width: 100% !important;
+  }
+}
 </style>
 
 <div class="menu-page-wrap">
+
+  <?php
+  $is_elementor = false;
+  if ( function_exists( 'santino_is_elementor_page' ) && santino_is_elementor_page() ) {
+      $is_elementor = true;
+  } elseif ( class_exists( '\Elementor\Plugin' ) ) {
+      if ( \Elementor\Plugin::$instance->editor->is_edit_mode() 
+        || \Elementor\Plugin::$instance->preview->is_preview_mode() 
+        || isset( $_GET['elementor-preview'] ) 
+        || ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) ) {
+          $is_elementor = true;
+      }
+  }
+
+  if ( $is_elementor ) :
+      the_content();
+  else :
+  ?>
 
   <?php
   $menu_hero_badge  = get_theme_mod( 'santino_menu_hero_badge', 'SANTINO SIGNATURE CAFE MENU' );
@@ -553,14 +649,23 @@ h1, h2, h3, h4, h5, h6,
   <!-- 3. ALL HANDCRAFTED ITEMS GRID -->
   <section class="menu-items-section py-5" id="menuGridSection">
     <div class="container">
-      
+      <?php
+      $grid_badge  = get_theme_mod( 'santino_menu_grid_badge', 'FRESHLY BREWED' );
+      $grid_title  = get_theme_mod( 'santino_menu_grid_title', 'All Handcrafted' );
+      $grid_accent = get_theme_mod( 'santino_menu_grid_title_accent', 'Items' );
+      $grid_desc   = get_theme_mod( 'santino_menu_grid_desc', 'Showing specialty beverages and gourmet items' );
+      ?>
       <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 reveal">
         <div>
+          <?php if ( ! empty( $grid_badge ) ) : ?>
           <div class="sec-pill-badge-wrap mb-1">
-            <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> FRESHLY BREWED</span>
+            <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> <?php echo esc_html( $grid_badge ); ?></span>
           </div>
-          <h2 class="sec-title mb-1" id="currentCategoryHeading">All Handcrafted <span class="sec-title-accent">Items</span></h2>
-          <div class="sec-description text-muted small" id="itemsCountText">Showing specialty beverages and gourmet items</div>
+          <?php endif; ?>
+          <h2 class="sec-title mb-1" id="currentCategoryHeading"><?php echo esc_html( $grid_title ); ?> <?php if ( ! empty( $grid_accent ) ) : ?><span class="sec-title-accent"><?php echo esc_html( $grid_accent ); ?></span><?php endif; ?></h2>
+          <?php if ( ! empty( $grid_desc ) ) : ?>
+          <div class="sec-description text-muted small" id="itemsCountText"><?php echo esc_html( $grid_desc ); ?></div>
+          <?php endif; ?>
         </div>
         
         <div class="d-flex gap-2 align-items-center">
@@ -823,6 +928,8 @@ h1, h2, h3, h4, h5, h6,
     </div>
   </section>
 
+  <?php endif; ?>
+
   <!-- 7. ITEM CUSTOMIZATION MODAL -->
   <div class="modal fade" id="itemCustomModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -954,5 +1061,4 @@ h1, h2, h3, h4, h5, h6,
 </div>
 
 <?php
-endif;
 get_footer();

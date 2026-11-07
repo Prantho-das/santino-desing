@@ -3,7 +3,11 @@
  * Template Name: Santino Member Portal
  * Template Post Type: page
  *
- * Dedicated layout for /santino-member/ with Hero Section and VIP Coffee Club Portal.
+ * Dedicated layout for /santino-member/ with 3 sections:
+ * 1. Member Hero Banner & Floating Metrics
+ * 2. VIP Loyalty Rewards & Digital Stamp Portal
+ * 3. Cafe Discovery CTA Section
+ *
  * Fully editable via Elementor.
  *
  * @package Santino
@@ -27,38 +31,28 @@ if ( $is_elementor ) :
         the_content();
     endwhile;
 else :
-    // Fallback: render complete luxury Hero + Member Portal
-    $mb_hero_badge        = get_theme_mod( 'santino_mb_hero_badge', 'SANTINO VIP MEMBER PORTAL' );
-    $mb_hero_title        = get_theme_mod( 'santino_mb_hero_title', 'Santino Member Club' );
-    $mb_hero_title_accent = get_theme_mod( 'santino_mb_hero_title_accent', '& Rewards' );
-    $mb_hero_desc         = get_theme_mod( 'santino_mb_hero_desc', 'Track your 5-cup coffee stamps, upload cafe invoices, and claim your free 6th handcrafted cup across Santino partner cafes.' );
-    $mb_hero_btn1_text    = get_theme_mod( 'santino_mb_hero_btn1_text', 'Check Stamp Card' );
-    $mb_hero_btn1_url     = get_theme_mod( 'santino_mb_hero_btn1_url', '#clubPortal' );
-    $mb_hero_btn2_text    = get_theme_mod( 'santino_mb_hero_btn2_text', 'Log Invoice Memo' );
-    $mb_hero_btn2_url     = get_theme_mod( 'santino_mb_hero_btn2_url', '#invoice-tab' );
-    $hero_bg_url          = get_theme_mod( 'santino_mb_hero_bg' );
-    if ( ! $hero_bg_url ) {
-        $hero_bg_url = function_exists( 'santino_get_page_banner' ) 
-            ? santino_get_page_banner( 'santino-member', 'imgi_20_santino_-_250522-07574.jpg' ) 
-            : ( function_exists( 'santino_img' ) ? santino_img( 'imgi_20_santino_-_250522-07574.jpg' ) : '' );
-    }
 ?>
 
 <style>
-.standalone-portal-page,
-.standalone-portal-section {
+.santino-member-wrap,
+.pro-banner-hero,
+.club-portal-section,
+#clubPortal {
   font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif);
 }
 
+.pro-banner-title,
 .sec-title,
 .font-heading,
+h1, h2, h3, h4, h5, h6,
 .sec-pill-badge,
 .portal-tabs .nav-link,
+.btn,
 .btn-portal-submit,
-.vip-card-surface h4,
-.vip-card-surface .badge,
 .btn-hero-lifestyle,
-.btn-hero-outline {
+.btn-hero-outline,
+.vip-card-surface h4,
+.vip-card-surface .badge {
   font-family: var(--kp-font-title, 'Montserrat', sans-serif) !important;
   letter-spacing: -0.3px;
 }
@@ -70,11 +64,32 @@ else :
   letter-spacing: -0.5px !important;
 }
 
+.sec-title-accent {
+  color: var(--santino-teal, #00625d) !important;
+}
+
 .sec-pill-badge-wrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
+}
+.sec-pill-badge-wrap.light .sec-pill-line {
+  width: 32px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.4);
+}
+.sec-pill-badge-wrap.light .sec-pill-badge {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
 }
 .sec-pill-line {
   display: inline-block;
@@ -142,188 +157,176 @@ else :
   transform: translateY(-2px) !important;
 }
 
-.standalone-portal-section {
-  background: #fdfbf7;
-  padding: 60px 0 90px;
+.story-metrics-floating-wrap {
   position: relative;
-  overflow: hidden;
+  z-index: 15;
+  margin-top: -55px;
+  padding-bottom: 30px;
+}
+.metric-card-pro {
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 98, 93, 0.12);
+  border-radius: 22px;
+  padding: 26px 20px 22px;
+  text-align: center;
+  box-shadow: 0 14px 34px rgba(0, 77, 73, 0.07);
+  transition: transform 0.3s ease;
+}
+.metric-card-pro:hover {
+  transform: translateY(-4px);
+}
+.metric-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 98, 93, 0.06);
+  color: var(--santino-teal, #00625d);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+}
+.metric-card-pro .metric-num {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--santino-teal, #00625d);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.metric-card-pro .metric-label {
+  color: #4a5c57;
+  font-size: 0.86rem;
+  font-weight: 700;
 }
 
+.club-portal-section {
+  background: linear-gradient(180deg, #f8faf9 0%, #edf3f1 100%);
+  position: relative;
+}
 .vip-card-surface {
-  background: radial-gradient(circle at 80% 20%, #005c56 0%, #071d1b 60%, #04100e 100%);
-  border-radius: 24px;
-  padding: 32px 28px;
+  background: linear-gradient(135deg, #004d49 0%, #002d2b 60%, #011d1c 100%);
+  border: 1px solid rgba(195, 153, 108, 0.4);
+  border-radius: 20px;
   color: #ffffff;
+  padding: 28px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 20px 45px rgba(0, 38, 35, 0.22);
-  border: 1px solid rgba(195, 153, 108, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 77, 73, 0.22);
 }
-
 .vip-card-watermark {
   position: absolute;
-  right: -20px;
-  bottom: -30px;
+  right: -25px;
+  bottom: -35px;
   font-size: 160px;
-  color: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.04);
   pointer-events: none;
   z-index: 1;
 }
-
 .gold-chip {
-  width: 44px;
+  width: 42px;
   height: 32px;
   border-radius: 6px;
-  background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0,0,0,0.3);
+  background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 50%, #b88a59 100%);
+  border: 1px solid rgba(255,255,255,0.4);
+  display: inline-block;
 }
-
 .stamp-slot {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
-  font-weight: 700;
-  margin: 0 auto;
-  transition: all 0.3s ease;
+  font-size: 18px;
 }
-
 .stamp-slot.active {
-  background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%);
-  color: #041a18;
-  box-shadow: 0 0 14px rgba(223, 190, 141, 0.45);
-  border: 2px solid #ffffff;
-}
-
-.stamp-slot.empty {
-  background: rgba(0, 98, 93, 0.25);
-  border: 2px dashed rgba(195, 153, 108, 0.35);
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.stamp-slot.reward {
   background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%);
   color: #002d2b;
   border: 2px solid #ffffff;
-  animation: pulse-reward 2s infinite ease-in-out;
 }
-
-@keyframes pulse-reward {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(223, 190, 141, 0.7); }
-  50% { transform: scale(1.08); box-shadow: 0 0 16px 4px rgba(223, 190, 141, 0.85); }
+.stamp-slot.empty {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px dashed rgba(195, 153, 108, 0.4);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+  font-weight: 700;
 }
-
+.stamp-slot.reward {
+  background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%);
+  border: 2px solid #ffffff;
+}
+.portal-tabs .nav-link {
+  color: #4b6360;
+  background: #ffffff;
+  border: 1px solid #dbe5e2;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 13.5px;
+}
+.portal-tabs .nav-link.active {
+  background: #00625d !important;
+  color: #ffffff !important;
+  border-color: #00625d !important;
+}
 .portal-card {
   background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid #dbe5e2;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 77, 73, 0.06);
 }
-
-.portal-tabs .nav-link {
-  border-radius: 50px !important;
-  padding: 10px 20px !important;
-  font-size: 13.5px !important;
-  font-weight: 700 !important;
-  color: #4a5568 !important;
-  background: #f1f5f9 !important;
-  border: 1px solid transparent !important;
-  transition: all 0.25s ease !important;
-}
-
-.portal-tabs .nav-link:hover {
-  background: #e2e8f0 !important;
-  color: #1a202c !important;
-}
-
-.portal-tabs .nav-link.active {
-  background: var(--santino-teal, #00625d) !important;
-  color: #ffffff !important;
-  box-shadow: 0 6px 18px rgba(0, 98, 93, 0.28) !important;
-}
-
-.portal-lookup-group {
-  display: flex !important;
-  align-items: center !important;
-  background: #ffffff !important;
-  border: 2px solid #00625d !important;
-  border-radius: 60px !important;
-  padding: 6px 8px 6px 18px !important;
-  box-shadow: 0 8px 24px rgba(0, 98, 93, 0.08) !important;
-  gap: 10px !important;
-  width: 100% !important;
-}
-
-.portal-lookup-field {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  flex: 1 1 auto !important;
-}
-
-.portal-lookup-field input {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  width: 100% !important;
-  color: #1a2b28 !important;
-  padding: 8px 0 !important;
-}
-
-.btn-lookup-action {
-  background: var(--santino-teal, #00625d) !important;
-  color: #ffffff !important;
-  border: none !important;
-  font-family: var(--kp-font-title, 'Montserrat', sans-serif) !important;
-  font-weight: 700 !important;
-  font-size: 13px !important;
-  letter-spacing: 0.6px !important;
-  text-transform: uppercase !important;
-  padding: 10px 24px !important;
-  border-radius: 50px !important;
-  min-height: 40px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  cursor: pointer !important;
-  box-shadow: 0 4px 14px rgba(0, 98, 93, 0.25) !important;
-  transition: all 0.25s ease !important;
-  white-space: nowrap !important;
-  flex-shrink: 0 !important;
-}
-
-.btn-lookup-action:hover {
-  background: #004d49 !important;
-  color: #ffffff !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 8px 20px rgba(0, 98, 93, 0.35) !important;
-}
-
 .btn-portal-submit {
-  background: linear-gradient(135deg, #00625d 0%, #00423e 100%);
-  color: #ffffff !important;
+  background: var(--santino-teal, #00625d);
+  color: #ffffff;
   border: none;
-  border-radius: 12px;
-  padding: 14px 24px;
-  font-weight: 800;
+  border-radius: 10px;
+  font-weight: 700;
   letter-spacing: 0.5px;
-  font-size: 14px;
-  box-shadow: 0 8px 20px rgba(0, 98, 93, 0.25);
-  transition: all 0.3s ease;
+  padding: 14px 24px;
+  transition: background 0.3s ease;
 }
-
 .btn-portal-submit:hover {
-  background: #003330;
-  color: #ffffff !important;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0, 98, 93, 0.35);
+  background: #004d49;
+  color: #ffffff;
+}
+.portal-lookup-group {
+  background: #ffffff;
+  border-radius: 50px;
+  padding: 6px 8px 6px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1.5px solid #d8e5e1;
+}
+.portal-lookup-field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.portal-lookup-field input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.95rem;
+  color: #333;
+  background: transparent;
+}
+.btn-lookup-action {
+  background: var(--santino-teal, #00625d);
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
 }
 
 .floating-bg-icons {
@@ -336,7 +339,6 @@ else :
   overflow: hidden !important;
   z-index: 1 !important;
 }
-
 .float-item {
   position: absolute !important;
   color: var(--santino-teal, #00625d) !important;
@@ -346,47 +348,74 @@ else :
   align-items: center !important;
   justify-content: center !important;
 }
-.float-item-1 { top: 5% !important; left: 2% !important; width: 68px !important; height: 68px !important; }
-.float-item-2 { top: 12% !important; right: 4% !important; width: 76px !important; height: 76px !important; }
-.float-item-3 { top: 42% !important; left: 4% !important; width: 56px !important; height: 56px !important; }
-.float-item-4 { top: 68% !important; right: 3% !important; width: 80px !important; height: 80px !important; }
-.float-item-5 { bottom: 8% !important; left: 14% !important; width: 72px !important; height: 72px !important; }
-.float-item-6 { top: 6% !important; left: 42% !important; width: 54px !important; height: 54px !important; }
+.float-item svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 65px !important;
+  max-height: 65px !important;
+}
+.float-item-1 { top: 5%; left: 2%; width: 68px; height: 68px; }
+.float-item-2 { top: 12%; right: 4%; width: 76px; height: 76px; }
+.float-item-3 { top: 42%; left: 4%; width: 56px; height: 56px; }
+.float-item-4 { top: 68%; right: 3%; width: 80px; height: 80px; }
+.float-item-5 { bottom: 8%; left: 14%; width: 72px; height: 72px; }
+.float-item-6 { top: 6%; left: 42%; width: 54px; height: 54px; }
 </style>
 
-<div class="standalone-portal-page">
-  <!-- HERO BANNER SECTION -->
-  <section class="pro-banner-hero position-relative overflow-hidden text-center" style="background-image: url('<?php echo esc_url( $hero_bg_url ); ?>'); background-position: center; background-size: cover; min-height: 56vh; display: flex; align-items: center; justify-content: center; padding: 85px 20px;">
+<?php
+$mb_hero_badge_raw = get_theme_mod( 'santino_member_hero_badge', get_theme_mod( 'santino_mb_hero_badge' ) );
+$mb_hero_badge     = ( $mb_hero_badge_raw !== false ) ? trim( (string) $mb_hero_badge_raw ) : 'SANTINO VIP MEMBER PORTAL';
+$mb_hero_title_raw = get_theme_mod( 'santino_member_hero_title', get_theme_mod( 'santino_mb_hero_title' ) );
+$mb_hero_title     = ( $mb_hero_title_raw !== false ) ? trim( (string) $mb_hero_title_raw ) : 'Santino Member Club';
+$mb_hero_accent_raw = get_theme_mod( 'santino_member_hero_accent', get_theme_mod( 'santino_mb_hero_title_accent' ) );
+$mb_hero_title_accent = ( $mb_hero_accent_raw !== false ) ? trim( (string) $mb_hero_accent_raw ) : '& Rewards';
+$mb_hero_desc_raw  = get_theme_mod( 'santino_member_hero_desc', get_theme_mod( 'santino_mb_hero_desc' ) );
+$mb_hero_desc      = ( $mb_hero_desc_raw !== false ) ? trim( (string) $mb_hero_desc_raw ) : 'Track your 5-cup coffee stamps, upload cafe invoices, and claim your free 6th handcrafted cup across Santino partner cafes.';
+$mb_hero_btn1_text = trim( (string) get_theme_mod( 'santino_member_btn1_text', 'Check Stamp Card' ) );
+$mb_hero_btn1_url  = get_theme_mod( 'santino_member_btn1_url', '#clubPortal' );
+$mb_hero_btn2_text = trim( (string) get_theme_mod( 'santino_member_btn2_text', 'Log Invoice Memo' ) );
+$mb_hero_btn2_url  = get_theme_mod( 'santino_member_btn2_url', '#invoice-tab' );
+$mb_hero_bg        = get_theme_mod( 'santino_member_bg', get_theme_mod( 'santino_mb_hero_bg' ) );
+if ( ! $mb_hero_bg ) {
+    $mb_hero_bg = function_exists('santino_get_page_banner') ? santino_get_page_banner('santino-member', 'imgi_20_santino_-_250522-07574.jpg') : ( function_exists('santino_img') ? santino_img('imgi_20_santino_-_250522-07574.jpg') : '' );
+}
+?>
+
+<div class="santino-member-wrap">
+  <!-- SECTION 1: HERO BANNER & FLOATING METRICS -->
+  <section class="pro-banner-hero position-relative overflow-hidden text-center" style="background-image: url('<?php echo esc_url( $mb_hero_bg ); ?>'); background-position: center; background-size: cover; min-height: 56vh; display: flex; align-items: center; justify-content: center; padding: 85px 20px;">
     <div class="pro-banner-overlay" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0, 38, 35, 0.72) 100%); z-index: 1;"></div>
     
     <div class="container position-relative" style="max-width: 840px; z-index: 2;">
-      <?php if ( ! empty( $mb_hero_badge ) ) : ?>
+      <?php if ( $mb_hero_badge !== '' ) : ?>
       <div class="sec-pill-badge-wrap light mb-3">
         <span class="sec-pill-line"></span>
-        <span class="sec-pill-badge" style="background: rgba(223, 190, 141, 0.2); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.35);"><i class="bi bi-gem me-1 text-warning"></i> <?php echo esc_html( $mb_hero_badge ); ?></span>
+        <span class="sec-pill-badge"><i class="bi bi-gem me-1 text-warning"></i> <?php echo esc_html( $mb_hero_badge ); ?></span>
         <span class="sec-pill-line"></span>
       </div>
       <?php endif; ?>
 
-      <h1 class="pro-banner-title mb-3" style="font-family: var(--kp-font-title, 'Montserrat', sans-serif); font-size: clamp(2.3rem, 4.5vw, 3.6rem); font-weight: 900; line-height: 1.18; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 14px rgba(0,0,0,0.5);">
-        <?php echo esc_html( $mb_hero_title ); ?> <?php if ( ! empty( $mb_hero_title_accent ) ) : ?><span style="color: #dfbe8d;"><?php echo esc_html( $mb_hero_title_accent ); ?></span><?php endif; ?>
+      <?php if ( $mb_hero_title !== '' ) : ?>
+      <h1 class="pro-banner-title mb-3" style="font-size: clamp(2.3rem, 4.5vw, 3.6rem); font-weight: 900; line-height: 1.18; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 14px rgba(0,0,0,0.5);">
+        <?php echo esc_html( $mb_hero_title ); ?> <?php if ( $mb_hero_title_accent !== '' ) : ?><span style="color: #dfbe8d;"><?php echo esc_html( $mb_hero_title_accent ); ?></span><?php endif; ?>
       </h1>
+      <?php endif; ?>
 
-      <?php if ( ! empty( $mb_hero_desc ) ) : ?>
-      <p class="pro-banner-desc mb-4" style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); max-width: 640px; font-size: 1.08rem; line-height: 1.65; color: rgba(255, 255, 255, 0.92); margin: 0 auto; text-shadow: 0 1px 8px rgba(0,0,0,0.4);">
+      <?php if ( $mb_hero_desc !== '' ) : ?>
+      <p class="pro-banner-desc mb-4" style="max-width: 640px; font-size: 1.08rem; line-height: 1.65; color: rgba(255, 255, 255, 0.92); margin: 0 auto; text-shadow: 0 1px 8px rgba(0,0,0,0.4);">
         <?php echo esc_html( $mb_hero_desc ); ?>
       </p>
       <?php endif; ?>
 
-      <?php if ( ! empty( $mb_hero_btn1_text ) || ! empty( $mb_hero_btn2_text ) ) : ?>
+      <?php if ( $mb_hero_btn1_text !== '' || $mb_hero_btn2_text !== '' ) : ?>
       <div class="pro-banner-actions d-flex justify-content-center align-items-center gap-3 flex-wrap">
-        <?php if ( ! empty( $mb_hero_btn1_text ) ) : ?>
+        <?php if ( $mb_hero_btn1_text !== '' ) : ?>
         <a href="<?php echo esc_url( $mb_hero_btn1_url ); ?>" class="btn-hero-lifestyle">
           <span><?php echo esc_html( $mb_hero_btn1_text ); ?></span>
           <i class="bi bi-arrow-right"></i>
         </a>
         <?php endif; ?>
-        <?php if ( ! empty( $mb_hero_btn2_text ) ) : ?>
+        <?php if ( $mb_hero_btn2_text !== '' ) : ?>
         <a href="<?php echo esc_url( $mb_hero_btn2_url ); ?>" class="btn-hero-outline">
           <i class="bi bi-receipt-cutoff text-warning"></i>
           <span><?php echo esc_html( $mb_hero_btn2_text ); ?></span>
@@ -397,8 +426,44 @@ else :
     </div>
   </section>
 
-  <!-- 2-COLUMN VIP LOYALTY PORTAL SECTION -->
-  <section class="standalone-portal-section position-relative overflow-hidden" id="clubPortal">
+  <!-- Luxury Overlap Floating Metrics Bar -->
+  <div class="story-metrics-floating-wrap">
+    <div class="container">
+      <div class="row g-3 g-md-4 text-center justify-content-center">
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-stars"></i></div>
+            <div class="metric-num">100% Free</div>
+            <div class="metric-label">Club Enrollment</div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-percent"></i></div>
+            <div class="metric-num">15% Off</div>
+            <div class="metric-label">Retail Bean Privilege</div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-cup-hot-fill"></i></div>
+            <div class="metric-num">Priority</div>
+            <div class="metric-label">Private Cupping Access</div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="metric-card-pro">
+            <div class="metric-card-icon"><i class="bi bi-calendar-heart-fill"></i></div>
+            <div class="metric-num">Monthly</div>
+            <div class="metric-label">Exclusive Micro-Lots</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: VIP MEMBER LOYALTY PORTAL -->
+  <section class="py-5 club-portal-section position-relative overflow-hidden" id="clubPortal">
     <!-- Floating Background Icons -->
     <div class="floating-bg-icons" aria-hidden="true">
       <div class="float-item float-item-1"><i class="bi bi-cup-hot-fill fs-2"></i></div>
@@ -424,14 +489,12 @@ else :
       </div>
 
       <div class="row g-4 align-items-start justify-content-center">
-        <!-- LEFT COLUMN: Stamp Card Display -->
+        <!-- LEFT COLUMN: VIP Stamp Card Display -->
         <div class="col-lg-5">
           <div class="d-flex flex-column gap-3">
-            <!-- Luxury Gold/Teal Card -->
             <div class="vip-card-surface">
               <i class="bi bi-cup-hot vip-card-watermark"></i>
               
-              <!-- Card Top Header -->
               <div class="d-flex justify-content-between align-items-start mb-3 position-relative" style="z-index: 2;">
                 <div>
                   <div class="small fw-bold text-uppercase" style="color: #dfbe8d; letter-spacing: 1.5px; font-size: 11px;">
@@ -442,12 +505,10 @@ else :
                 <div class="gold-chip"></div>
               </div>
 
-              <!-- Card ID -->
               <div class="mb-4 position-relative" style="z-index: 2;">
                 <div class="font-monospace text-white-50 small" style="letter-spacing: 2px;">SNT-REG-•••• ••••</div>
               </div>
 
-              <!-- 5-Cup Physical Stamp Grid -->
               <div class="p-3 rounded-4 mb-3 position-relative" style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(195, 153, 108, 0.25); z-index: 2;">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <span class="small fw-bold" style="color: #dfbe8d; font-size: 11.5px;">5-Cup Stamp Card Tracker</span>
@@ -476,34 +537,32 @@ else :
                     <div class="text-white-50" style="font-size: 9.5px;">Cup 5</div>
                   </div>
                   <div class="text-center">
-                    <div class="stamp-slot reward mb-1"><i class="bi bi-gift-fill" style="color: #002d2b; font-size: 17px;"></i></div>
+                    <div class="stamp-slot reward mb-1"><i class="bi bi-gift-fill" style="color: #002d2b; font-size: 16px;"></i></div>
                     <div style="font-size: 9.5px; color: #dfbe8d; font-weight: 700;">FREE #6</div>
                   </div>
                 </div>
               </div>
 
-              <!-- Card Bottom Info -->
               <div class="d-flex justify-content-between align-items-center text-white-50 small position-relative" style="z-index: 2; font-size: 11px;">
                 <span>Valid across all Dhaka branches</span>
                 <span style="color: #dfbe8d;"><i class="bi bi-patch-check-fill me-1"></i> Auto-Verified</span>
               </div>
             </div>
 
-            <!-- 3 Simple How It Works Steps -->
             <div class="p-3 bg-white rounded-4 border shadow-sm">
               <div class="row g-2 text-center">
                 <div class="col-4">
-                  <div class="fs-4 text-teal mb-1" style="color: #00625d;"><i class="bi bi-cup-hot"></i></div>
+                  <div class="fs-4 text-teal mb-1"><i class="bi bi-cup-hot"></i></div>
                   <div class="fw-bold small text-dark">1. Sip Coffee</div>
                   <div class="text-muted" style="font-size: 10px;">At partner cafes</div>
                 </div>
                 <div class="col-4 border-start border-end">
-                  <div class="fs-4 text-teal mb-1" style="color: #00625d;"><i class="bi bi-receipt"></i></div>
+                  <div class="fs-4 text-teal mb-1"><i class="bi bi-receipt"></i></div>
                   <div class="fw-bold small text-dark">2. Log Memo</div>
                   <div class="text-muted" style="font-size: 10px;">Submit invoice &amp; cups</div>
                 </div>
                 <div class="col-4">
-                  <div class="fs-4 mb-1" style="color: #c3996c !important;"><i class="bi bi-gift"></i></div>
+                  <div class="fs-4 text-teal mb-1" style="color: #c3996c !important;"><i class="bi bi-gift"></i></div>
                   <div class="fw-bold small text-dark">3. Get Free Cup</div>
                   <div class="text-muted" style="font-size: 10px;">Buy 5, Get 1 Free</div>
                 </div>
@@ -515,7 +574,6 @@ else :
         <!-- RIGHT COLUMN: Interactive Portal Form Tabs -->
         <div class="col-lg-7">
           <div class="portal-card p-4 p-md-5 h-100 d-flex flex-column justify-content-between">
-            <!-- Navigation Pills -->
             <ul class="nav nav-pills portal-tabs gap-2 mb-4 justify-content-start" id="loyaltyTabs" role="tablist">
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="stamps-tab" data-bs-toggle="pill" data-bs-target="#stamps-pane" type="button" role="tab">
@@ -539,14 +597,14 @@ else :
               <div class="tab-pane fade show active" id="stamps-pane" role="tabpanel">
                 <div class="mb-4">
                   <h4 class="font-heading fw-bold text-dark mb-1">Check Your Live Stamp Progress</h4>
-                  <p class="text-muted small">Enter your Registered Phone Number or Member ID below.</p>
+                  <p class="text-muted small">Enter your Registered Phone Number below.</p>
                 </div>
 
                 <form id="santinoLookupForm" class="mb-4">
                   <div class="portal-lookup-group">
                     <div class="portal-lookup-field">
-                      <i class="bi bi-telephone" style="color: #00625d;"></i>
-                      <input type="text" name="query" placeholder="e.g. 01712345678 or SNT-REG-XXXX" required>
+                      <i class="bi bi-telephone text-teal"></i>
+                      <input type="text" name="query" placeholder="e.g. 017XXXXXXXX" required>
                     </div>
                     <button type="submit" class="btn-lookup-action">
                       <span>LOOKUP</span> <i class="bi bi-arrow-right"></i>
@@ -568,37 +626,61 @@ else :
 
                 <form id="santinoInvoiceForm" enctype="multipart/form-data">
                   <div class="row g-3 mb-3">
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                       <label class="form-label small fw-bold text-dark">Invoice / Memo Number *</label>
                       <input type="text" name="invoice_number" class="form-control" placeholder="e.g. SNT-2026-9042" required>
                     </div>
-                    <div class="col-md-3">
-                      <label class="form-label small fw-bold text-dark">No. of Items / Cups *</label>
-                      <div class="input-group">
-                        <button class="btn btn-outline-secondary px-2 santino-cup-minus" type="button" style="font-weight: bold; border-color: #cbd5e1;">−</button>
-                        <input type="number" name="cups" class="form-control text-center santino-cups-input" min="1" max="50" value="1" style="font-weight: bold; color: #00625d;" required>
-                        <button class="btn btn-outline-secondary px-2 santino-cup-plus" type="button" style="font-weight: bold; border-color: #cbd5e1;">+</button>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                       <label class="form-label small fw-bold text-dark">Phone Number / WhatsApp *</label>
                       <input type="tel" name="phone" class="form-control santino-phone-validate" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)1[3-9]\d{8}$" maxlength="15" title="Please enter a valid 11-digit Bangladeshi phone number" required>
                     </div>
                   </div>
 
-                  <div class="row g-3 mb-3">
-                    <div class="col-md-12">
-                      <label class="form-label small fw-bold text-dark"><i class="bi bi-cup-hot-fill me-1" style="color: #00625d;"></i> Items Ordered / Consumed *</label>
-                      <select name="items_consumed" class="form-select" required>
-                        <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
-                        <?php 
-                        $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
-                        foreach ( $ordered_items as $item_choice ) : ?>
-                          <option value="<?php echo esc_attr( $item_choice ); ?>"><?php echo esc_html( $item_choice ); ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                      <div class="form-text text-muted" style="font-size: 11px;">Select the handcrafted coffee or bakery item on your receipt.</div>
+                  <!-- Dynamic Multi-Item Order Section (Compact & Mobile-First) -->
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <label class="form-label small fw-bold text-dark mb-0">
+                        <i class="bi bi-cup-hot-fill me-1" style="color: #00625d;"></i> Items Ordered / Consumed *
+                      </label>
+                      <span class="santino-total-cups-badge">
+                        Total: <span class="santino-total-cups-count">1</span> Cup(s)/Item(s)
+                      </span>
                     </div>
+
+                    <div class="santino-order-items-container mb-2">
+                      <div class="santino-order-item-row">
+                        <div class="santino-row-main">
+                          <select name="order_items[]" class="santino-item-select" required>
+                            <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
+                            <?php 
+                            $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
+                            foreach ( $ordered_items as $item_choice ) : ?>
+                              <option value="<?php echo esc_attr( $item_choice ); ?>"><?php echo esc_html( $item_choice ); ?></option>
+                            <?php endforeach; ?>
+                          </select>
+                        </div>
+                        <div class="santino-row-actions">
+                          <div class="santino-stepper-capsule">
+                            <button type="button" class="santino-stepper-btn santino-row-minus" aria-label="Decrease">−</button>
+                            <input type="text" name="order_qtys[]" class="santino-stepper-val santino-row-qty" value="1" readonly>
+                            <button type="button" class="santino-stepper-btn santino-row-plus" aria-label="Increase">+</button>
+                          </div>
+                          <button type="button" class="santino-remove-item-row d-none" title="Remove item">
+                            <i class="bi bi-trash3"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-2">
+                      <button type="button" class="btn santino-add-order-item-btn">
+                        <i class="bi bi-plus-circle-fill"></i> Add Another Item
+                      </button>
+                      <div class="text-muted" style="font-size: 11px;">Specify each item &amp; quantity</div>
+                    </div>
+
+                    <input type="hidden" name="cups" class="santino-cups-input" value="1">
+                    <input type="hidden" name="items_consumed" class="santino-items-consumed-summary" value="">
                   </div>
 
                   <div class="row g-3 mb-3">
@@ -615,7 +697,7 @@ else :
                   </div>
 
                   <div class="mb-4">
-                    <label class="form-label small fw-bold text-dark"><i class="bi bi-camera-fill me-1" style="color: #00625d;"></i> Upload Invoice / Memo Photo * (Mandatory)</label>
+                    <label class="form-label small fw-bold text-dark"><i class="bi bi-camera-fill me-1 text-teal"></i> Upload Invoice / Memo Photo * (Mandatory)</label>
                     <input type="file" name="invoice_image" id="santinoInvoiceImage" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg" required>
                     <div class="form-text text-muted small" style="font-size: 0.78rem;">Upload photo of your physical cafe bill/memo for fast verification (JPG, PNG, WebP) - Required.</div>
                   </div>
@@ -645,9 +727,8 @@ else :
 
                   <div class="row g-3 mb-3">
                     <div class="col-md-12">
-                      <label class="form-label small fw-bold text-dark">Mobile Number: *</label>
-                      <input type="tel" name="phone" id="santinoMemberPhone" class="form-control" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" title="Please enter a valid Bangladeshi phone number" required>
-                      <div class="form-text text-muted" style="font-size: 11px;">Same mobile number cannot be re-registered without portal permission.</div>
+                      <label class="form-label small fw-bold text-dark">Mobile Number / WhatsApp *</label>
+                      <input type="tel" name="phone" id="santinoMemberPhone" class="form-control" placeholder="017XXXXXXXX or +88017XXXXXXXX" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" title="Please enter a valid Bangladeshi phone number" required>
                     </div>
                   </div>
 
@@ -691,7 +772,7 @@ else :
                   <div class="form-check mb-4">
                     <input class="form-check-input" type="checkbox" id="termsCheck" checked required>
                     <label class="form-check-label small text-muted" for="termsCheck">
-                      I agree to join Santino Coffee Club Regular Membership to receive reward stamps and free cups.
+                      I agree to join Santino Coffee Club Regular Membership to receive reward stamps.
                     </label>
                   </div>
 
@@ -706,6 +787,43 @@ else :
       </div>
     </div>
   </section>
+
+  <?php
+  $mb_show_cta     = get_theme_mod( 'santino_mb_show_cta', '1' );
+  if ( $mb_show_cta ) :
+    $mb_cta_title    = get_theme_mod( 'santino_mb_cta_title', 'Ready For Your Next Handcrafted Brew?' );
+    $mb_cta_desc     = get_theme_mod( 'santino_mb_cta_desc', 'Visit our barista bars across Gulshan, Banani, Dhanmondi & Uttara.' );
+    $mb_cta_btn_text = get_theme_mod( 'santino_mb_cta_btn_text', 'Explore Full Menu →' );
+    $mb_cta_btn_url  = get_theme_mod( 'santino_mb_cta_btn_url', '/menu/' );
+  ?>
+  <!-- SECTION 3: CAFE DISCOVERY CTA -->
+  <section class="py-5 bg-white text-center border-top">
+    <div class="container py-4" style="max-width: 700px;">
+      <div class="sec-pill-badge-wrap mb-2">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge"><i class="bi bi-cup-hot-fill me-1"></i> VISIT OUR CAFES</span>
+        <span class="sec-pill-line"></span>
+      </div>
+
+      <h2 class="sec-title mb-2">
+        <?php echo esc_html( $mb_cta_title ); ?>
+      </h2>
+
+      <p class="text-muted mb-4" style="font-size: 0.98rem; max-width: 540px; margin: 0 auto; line-height: 1.6;">
+        <?php echo esc_html( $mb_cta_desc ); ?>
+      </p>
+
+      <?php if ( ! empty( $mb_cta_btn_text ) ) : ?>
+      <div class="d-flex justify-content-center">
+        <a href="<?php echo esc_url( $mb_cta_btn_url ); ?>" class="btn-hero-lifestyle">
+          <span><?php echo esc_html( $mb_cta_btn_text ); ?></span>
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+      <?php endif; ?>
+    </div>
+  </section>
+  <?php endif; ?>
 </div>
 
 <?php

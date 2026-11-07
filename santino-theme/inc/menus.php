@@ -91,7 +91,21 @@ class Santino_Second_Nav_Walker extends Walker_Nav_Menu {
         $this->item_index++;
 
         $bfc_logo        = get_theme_mod( 'santino_bfc_logo' );
+        if ( empty( $bfc_logo ) ) {
+            if ( file_exists( SANTINO_DIR . '/assets/images/bfc-logo.png' ) ) {
+                $bfc_logo = SANTINO_URI . '/assets/images/bfc-logo.png';
+            } elseif ( file_exists( SANTINO_DIR . '/assets/images/bfc-logo.svg' ) ) {
+                $bfc_logo = SANTINO_URI . '/assets/images/bfc-logo.svg';
+            }
+        }
         $swapno_logo     = get_theme_mod( 'santino_swapno_logo' );
+        if ( empty( $swapno_logo ) ) {
+            if ( file_exists( SANTINO_DIR . '/assets/images/shwapno-logo.png' ) ) {
+                $swapno_logo = SANTINO_URI . '/assets/images/shwapno-logo.png';
+            } elseif ( file_exists( SANTINO_DIR . '/assets/images/shwapno-logo.svg' ) ) {
+                $swapno_logo = SANTINO_URI . '/assets/images/shwapno-logo.svg';
+            }
+        }
         $membership_logo = get_theme_mod( 'santino_membership_logo' );
         $menu_logo       = get_theme_mod( 'santino_menu_logo' );
 
@@ -162,12 +176,21 @@ class Santino_Second_Nav_Walker extends Walker_Nav_Menu {
 
         $active = ( in_array( 'current-menu-item', (array) $item->classes ) || in_array( 'current-page-ancestor', (array) $item->classes ) ) ? 'active' : '';
 
-        $output .= '<a href="' . $url . '" class="second-menu-item ' . $active . '">';
+        $clean_title = trim( html_entity_decode( strip_tags( (string) $title ), ENT_QUOTES, 'UTF-8' ) );
+        $clean_title = trim( str_replace( array( '&nbsp;', "\xc2\xa0", '#', '(no label)' ), '', $clean_title ) );
+
+        $hide_label_opt  = get_theme_mod( 'santino_second_bar_hide_labels', '0' );
+        $item_hide_label = get_post_meta( $item->ID, '_menu_item_hide_label', true );
+        $has_hide_class  = in_array( 'hide-label', (array) $item->classes ) || in_array( 'no-label', (array) $item->classes ) || in_array( 'logo-only', (array) $item->classes );
+
         if ( $has_image ) {
-            $output .= $media_html;
-        } else {
-            $clean_title = trim( strip_tags( $title ) );
-            $output .= $media_html . ' <span>' . esc_html( $clean_title ) . '</span>';
+            $clean_title = '';
+        }
+
+        $output .= '<a href="' . $url . '" class="second-menu-item ' . $active . '">';
+        $output .= $media_html;
+        if ( ! empty( $clean_title ) ) {
+            $output .= ' <span>' . esc_html( $clean_title ) . '</span>';
         }
         $output .= '</a>';
     }
@@ -204,20 +227,40 @@ function santino_render_second_menu_bar() {
 
 function santino_second_bar_fallback() {
     $bfc_logo        = get_theme_mod( 'santino_bfc_logo' );
+    if ( empty( $bfc_logo ) ) {
+        if ( file_exists( SANTINO_DIR . '/assets/images/bfc-logo.svg' ) ) {
+            $bfc_logo = SANTINO_URI . '/assets/images/bfc-logo.svg';
+        } elseif ( file_exists( SANTINO_DIR . '/assets/images/bfc-logo.png' ) ) {
+            $bfc_logo = SANTINO_URI . '/assets/images/bfc-logo.png';
+        }
+    }
     $swapno_logo     = get_theme_mod( 'santino_swapno_logo' );
+    if ( empty( $swapno_logo ) ) {
+        if ( file_exists( SANTINO_DIR . '/assets/images/shwapno-logo.png' ) ) {
+            $swapno_logo = SANTINO_URI . '/assets/images/shwapno-logo.png';
+        } elseif ( file_exists( SANTINO_DIR . '/assets/images/shwapno-logo.svg' ) ) {
+            $swapno_logo = SANTINO_URI . '/assets/images/shwapno-logo.svg';
+        }
+    }
     $membership_logo = get_theme_mod( 'santino_membership_logo' );
     $menu_logo       = get_theme_mod( 'santino_menu_logo' );
 
-    $m_title = get_theme_mod( 'santino_membership_title' ) ?: 'MEMBERSHIP';
+    $hide_all_labels = get_theme_mod( 'santino_second_bar_hide_labels', '0' );
+
+    $m_title = get_theme_mod( 'santino_membership_title' );
+    if ( $m_title === false || $m_title === null ) { $m_title = 'MEMBERSHIP'; }
     $m_url   = get_theme_mod( 'santino_membership_url' ) ?: home_url( '/membership/' );
 
-    $b_title = get_theme_mod( 'santino_bfc_title' ) ?: 'BFC';
+    $b_title = get_theme_mod( 'santino_bfc_title' );
+    if ( $b_title === false || $b_title === null ) { $b_title = 'BFC'; }
     $b_url   = get_theme_mod( 'santino_bfc_url' ) ?: home_url( '/bfc/' );
 
-    $s_title = get_theme_mod( 'santino_swapno_title' ) ?: 'SWAPNO';
+    $s_title = get_theme_mod( 'santino_swapno_title' );
+    if ( $s_title === false || $s_title === null ) { $s_title = 'SWAPNO'; }
     $s_url   = get_theme_mod( 'santino_swapno_url' ) ?: home_url( '/swapno/' );
 
-    $u_title = get_theme_mod( 'santino_menu_title' ) ?: 'MENU';
+    $u_title = get_theme_mod( 'santino_menu_title' );
+    if ( $u_title === false || $u_title === null ) { $u_title = 'MENU'; }
     $u_url   = get_theme_mod( 'santino_menu_url' ) ?: home_url( '/menu/' );
 
     $items = array(
@@ -261,10 +304,13 @@ function santino_second_bar_fallback() {
             : '<i class="bi ' . esc_attr( $item['icon'] ) . '"></i>';
 
         echo '<a href="' . esc_url( $item['url'] ) . '" class="second-menu-item">';
+        echo $media;
+        $lbl = trim( strip_tags( (string) $item['title'] ) );
         if ( $has_logo ) {
-            echo $media;
-        } else {
-            echo $media . ' <span>' . esc_html( $item['title'] ) . '</span>';
+            $lbl = '';
+        }
+        if ( $lbl !== '' && $lbl !== '&nbsp;' && $lbl !== '(no label)' && $lbl !== '#' ) {
+            echo ' <span>' . esc_html( $lbl ) . '</span>';
         }
         echo '</a>';
     }
@@ -804,10 +850,11 @@ add_action( 'admin_init', function() {
 add_action( 'wp_nav_menu_item_custom_fields', 'santino_nav_menu_item_logo_field', 10, 2 );
 function santino_nav_menu_item_logo_field( $item_id, $item ) {
     $menu_image = get_post_meta( $item_id, '_menu_item_image', true );
+    $hide_label = get_post_meta( $item_id, '_menu_item_hide_label', true );
     ?>
     <p class="description description-wide santino-menu-logo-upload-wrap">
         <label for="edit-menu-item-image-<?php echo esc_attr( $item_id ); ?>">
-            <?php esc_html_e( 'Item Logo / Image (Replaces text)', 'santino' ); ?><br />
+            <?php esc_html_e( 'Item Logo / Image', 'santino' ); ?><br />
             <input type="text" id="edit-menu-item-image-<?php echo esc_attr( $item_id ); ?>" class="widefat edit-menu-item-image" name="menu-item-image[<?php echo esc_attr( $item_id ); ?>]" value="<?php echo esc_attr( $menu_image ); ?>" />
         </label>
         <button type="button" class="button button-secondary santino-upload-menu-img-btn" style="margin-top:5px;"><?php esc_html_e( 'Upload / Select Image', 'santino' ); ?></button>
@@ -817,6 +864,11 @@ function santino_nav_menu_item_logo_field( $item_id, $item ) {
         <?php else: ?>
             <div class="santino-menu-img-preview" style="margin-top:5px; display:none;"><img src="" style="max-height:30px; vertical-align:middle; border:1px solid #ddd; padding:2px; background:#fff;"></div>
         <?php endif; ?>
+        <br />
+        <label style="margin-top:8px; display:inline-block; font-weight:600; cursor:pointer;">
+            <input type="checkbox" name="menu-item-hide-label[<?php echo esc_attr( $item_id ); ?>]" value="1" <?php checked( $hide_label, '1' ); ?> />
+            <?php esc_html_e( 'Hide Navigation Label (Show Logo Only)', 'santino' ); ?>
+        </label>
     </p>
     <?php
 }
@@ -830,6 +882,11 @@ function santino_save_nav_menu_item_logo_field( $menu_id, $menu_item_db_id ) {
         } else {
             delete_post_meta( $menu_item_db_id, '_menu_item_image' );
         }
+    }
+    if ( isset( $_POST['menu-item-hide-label'][ $menu_item_db_id ] ) ) {
+        update_post_meta( $menu_item_db_id, '_menu_item_hide_label', '1' );
+    } else {
+        delete_post_meta( $menu_item_db_id, '_menu_item_hide_label' );
     }
 }
 

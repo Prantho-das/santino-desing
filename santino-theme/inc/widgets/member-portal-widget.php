@@ -10,7 +10,7 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__( 'Santino: /santino-member/ All Sections & Portal', 'santino' );
+        return esc_html__( 'Santino: [Legacy Single Widget] All Sections & Portal', 'santino' );
     }
 
     public function get_icon() {
@@ -863,37 +863,61 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
 
                         <form id="santinoInvoiceForm" enctype="multipart/form-data">
                           <div class="row g-3 mb-3">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                               <label class="form-label small fw-bold text-dark">Invoice / Memo Number *</label>
                               <input type="text" name="invoice_number" class="form-control" placeholder="e.g. SNT-2026-9042" required>
                             </div>
-                            <div class="col-md-3">
-                              <label class="form-label small fw-bold text-dark">No. of Items / Cups *</label>
-                              <div class="input-group">
-                                <button class="btn btn-outline-secondary px-2 santino-cup-minus" type="button" style="font-weight: bold; border-color: #cbd5e1;">−</button>
-                                <input type="number" name="cups" class="form-control text-center santino-cups-input" min="1" max="50" value="1" style="font-weight: bold; color: #00625d;" required>
-                                <button class="btn btn-outline-secondary px-2 santino-cup-plus" type="button" style="font-weight: bold; border-color: #cbd5e1;">+</button>
-                              </div>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                               <label class="form-label small fw-bold text-dark">Phone Number / WhatsApp *</label>
                               <input type="tel" name="phone" class="form-control santino-phone-validate" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)1[3-9]\d{8}$" maxlength="15" title="Please enter a valid 11-digit Bangladeshi phone number" required>
                             </div>
                           </div>
 
-                          <div class="row g-3 mb-3">
-                            <div class="col-md-12">
-                              <label class="form-label small fw-bold text-dark"><i class="bi bi-cup-hot-fill me-1" style="color: #00625d;"></i> Items Ordered / Consumed *</label>
-                              <select name="items_consumed" class="form-select" required>
-                                <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
-                                <?php 
-                                $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
-                                foreach ( $ordered_items as $item_choice ) : ?>
-                                  <option value="<?php echo esc_attr( $item_choice ); ?>"><?php echo esc_html( $item_choice ); ?></option>
-                                <?php endforeach; ?>
-                              </select>
-                              <div class="form-text text-muted" style="font-size: 11px;">Select the handcrafted coffee or bakery item on your receipt.</div>
+                          <!-- Dynamic Multi-Item Order Section (Compact & Mobile-First) -->
+                          <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                              <label class="form-label small fw-bold text-dark mb-0">
+                                <i class="bi bi-cup-hot-fill me-1" style="color: #00625d;"></i> Items Ordered / Consumed *
+                              </label>
+                              <span class="santino-total-cups-badge">
+                                Total: <span class="santino-total-cups-count">1</span> Cup(s)/Item(s)
+                              </span>
                             </div>
+
+                            <div class="santino-order-items-container mb-2">
+                              <div class="santino-order-item-row">
+                                <div class="santino-row-main">
+                                  <select name="order_items[]" class="santino-item-select" required>
+                                    <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
+                                    <?php 
+                                    $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
+                                    foreach ( $ordered_items as $item_choice ) : ?>
+                                      <option value="<?php echo esc_attr( $item_choice ); ?>"><?php echo esc_html( $item_choice ); ?></option>
+                                    <?php endforeach; ?>
+                                  </select>
+                                </div>
+                                <div class="santino-row-actions">
+                                  <div class="santino-stepper-capsule">
+                                    <button type="button" class="santino-stepper-btn santino-row-minus" aria-label="Decrease">−</button>
+                                    <input type="text" name="order_qtys[]" class="santino-stepper-val santino-row-qty" value="1" readonly>
+                                    <button type="button" class="santino-stepper-btn santino-row-plus" aria-label="Increase">+</button>
+                                  </div>
+                                  <button type="button" class="santino-remove-item-row d-none" title="Remove item">
+                                    <i class="bi bi-trash3"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center pt-2">
+                              <button type="button" class="btn santino-add-order-item-btn">
+                                <i class="bi bi-plus-circle-fill"></i> Add Another Item
+                              </button>
+                              <div class="text-muted" style="font-size: 11px;">Specify each item &amp; quantity</div>
+                            </div>
+
+                            <input type="hidden" name="cups" class="santino-cups-input" value="1">
+                            <input type="hidden" name="items_consumed" class="santino-items-consumed-summary" value="">
                           </div>
 
                           <div class="row g-3 mb-3">

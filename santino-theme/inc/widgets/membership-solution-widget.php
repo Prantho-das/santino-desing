@@ -819,9 +819,9 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
             $hero_bg_url = set_url_scheme( $hero_bg_url );
         }
 
-        $hero_badge  = ! empty( $settings['hero_badge'] ) ? $settings['hero_badge'] : 'SANTINO VIP COFFEE CLUB';
-        $hero_title  = ! empty( $settings['hero_title'] ) ? $settings['hero_title'] : 'Exclusive Connoisseur <span style="color: #dfbe8d;">Privileges</span>';
-        $hero_desc   = ! empty( $settings['hero_desc'] ) ? $settings['hero_desc'] : 'Private cupping sessions, seasonal micro-lot allocations, and 15% VIP artisan bean discounts across Bangladesh.';
+        $hero_badge  = isset( $settings['hero_badge'] ) ? trim( (string) $settings['hero_badge'] ) : '';
+        $hero_title  = isset( $settings['hero_title'] ) ? trim( (string) $settings['hero_title'] ) : '';
+        $hero_desc   = isset( $settings['hero_desc'] ) ? trim( (string) $settings['hero_desc'] ) : '';
         $btn1_text   = isset( $settings['hero_btn1_text'] ) ? trim( (string) $settings['hero_btn1_text'] ) : '';
         $btn1_url    = ! empty( $settings['hero_btn1_url']['url'] ) ? $settings['hero_btn1_url']['url'] : '#clubPortal';
         $btn2_text   = isset( $settings['hero_btn2_text'] ) ? trim( (string) $settings['hero_btn2_text'] ) : '';
@@ -831,24 +831,30 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
         ?>
 
         <div class="membership-page-wrap">
-          <?php if ( $show_hero ) : ?>
+          <?php if ( $show_hero && ( $hero_badge !== '' || $hero_title !== '' || $hero_desc !== '' || $btn1_text !== '' || $btn2_text !== '' || $hero_bg_url !== '' ) ) : ?>
           <section class="pro-banner-hero position-relative overflow-hidden text-center" style="background-image: url('<?php echo esc_url( $hero_bg_url ); ?>'); background-position: center; background-size: cover; min-height: 56vh; display: flex; align-items: center; justify-content: center; padding: 80px 20px;">
             <div class="pro-banner-overlay" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0, 38, 35, 0.7) 100%); z-index: 1;"></div>
             
             <div class="container position-relative" style="max-width: 820px; z-index: 2;">
+              <?php if ( $hero_badge !== '' ) : ?>
               <div class="sec-pill-badge-wrap light mb-3">
                 <span class="sec-pill-line"></span>
                 <span class="sec-pill-badge"><i class="bi bi-gem me-1 text-warning"></i> <?php echo wp_kses_post( $hero_badge ); ?></span>
                 <span class="sec-pill-line"></span>
               </div>
+              <?php endif; ?>
 
+              <?php if ( $hero_title !== '' ) : ?>
               <h1 class="pro-banner-title mb-3" style="font-family: var(--kp-font-title, 'Montserrat', sans-serif); font-size: clamp(2.3rem, 4.5vw, 3.6rem); font-weight: 900; line-height: 1.18; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 14px rgba(0,0,0,0.5);">
                 <?php echo wp_kses_post( $hero_title ); ?>
               </h1>
+              <?php endif; ?>
 
+              <?php if ( $hero_desc !== '' ) : ?>
               <p class="pro-banner-desc mb-4" style="font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif); max-width: 640px; font-size: 1.08rem; line-height: 1.65; color: rgba(255, 255, 255, 0.92); margin: 0 auto; text-shadow: 0 1px 8px rgba(0,0,0,0.4);">
                 <?php echo wp_kses_post( $hero_desc ); ?>
               </p>
+              <?php endif; ?>
 
               <?php if ( ! empty( $btn1_text ) || ! empty( $btn2_text ) ) : ?>
               <div class="pro-banner-actions d-flex justify-content-center align-items-center gap-3 flex-wrap">
@@ -1138,33 +1144,56 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                               <input type="text" name="invoice_number" class="form-control" placeholder="e.g. SNT-2026-9042" required>
                             </div>
                             <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">No. of Items / Cups *</label>
-                              <div class="input-group">
-                                <button class="btn btn-outline-secondary px-2 santino-cup-minus" type="button" style="font-weight: bold; border-color: #cbd5e1;">−</button>
-                                <input type="number" name="cups" class="form-control text-center santino-cups-input" min="1" max="50" value="1" style="font-weight: bold; color: #00625d;" required>
-                                <button class="btn btn-outline-secondary px-2 santino-cup-plus" type="button" style="font-weight: bold; border-color: #cbd5e1;">+</button>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row g-3 mb-3">
-                            <div class="col-12">
                               <label class="form-label small fw-bold text-dark">Phone Number / WhatsApp *</label>
                               <input type="tel" name="phone" class="form-control santino-phone-validate" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)1[3-9]\d{8}$" maxlength="15" title="Please enter a valid 11-digit Bangladeshi phone number" required>
                             </div>
                           </div>
-                          <div class="row g-3 mb-3">
-                            <div class="col-12">
-                              <label class="form-label small fw-bold text-dark"><i class="bi bi-cup-hot-fill me-1 text-teal"></i> Items Ordered / Consumed *</label>
-                              <select name="items_consumed" class="form-select" required>
-                                <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
-                                <?php 
-                                $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
-                                foreach ( $ordered_items as $item_choice ) : ?>
-                                  <option value="<?php echo esc_attr( $item_choice ); ?>"><?php echo esc_html( $item_choice ); ?></option>
-                                <?php endforeach; ?>
-                              </select>
-                              <div class="form-text text-muted" style="font-size: 11px;">Select the handcrafted coffee or bakery item on your receipt.</div>
+
+                          <!-- Dynamic Multi-Item Order Section (Compact & Mobile-First) -->
+                          <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                              <label class="form-label small fw-bold text-dark mb-0">
+                                <i class="bi bi-cup-hot-fill me-1" style="color: #00625d;"></i> Items Ordered / Consumed *
+                              </label>
+                              <span class="santino-total-cups-badge">
+                                Total: <span class="santino-total-cups-count">1</span> Cup(s)/Item(s)
+                              </span>
                             </div>
+
+                            <div class="santino-order-items-container mb-2">
+                              <div class="santino-order-item-row">
+                                <div class="santino-row-main">
+                                  <select name="order_items[]" class="santino-item-select" required>
+                                    <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
+                                    <?php 
+                                    $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
+                                    foreach ( $ordered_items as $item_choice ) : ?>
+                                      <option value="<?php echo esc_attr( $item_choice ); ?>"><?php echo esc_html( $item_choice ); ?></option>
+                                    <?php endforeach; ?>
+                                  </select>
+                                </div>
+                                <div class="santino-row-actions">
+                                  <div class="santino-stepper-capsule">
+                                    <button type="button" class="santino-stepper-btn santino-row-minus" aria-label="Decrease">−</button>
+                                    <input type="text" name="order_qtys[]" class="santino-stepper-val santino-row-qty" value="1" readonly>
+                                    <button type="button" class="santino-stepper-btn santino-row-plus" aria-label="Increase">+</button>
+                                  </div>
+                                  <button type="button" class="santino-remove-item-row d-none" title="Remove item">
+                                    <i class="bi bi-trash3"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center pt-2">
+                              <button type="button" class="btn santino-add-order-item-btn">
+                                <i class="bi bi-plus-circle-fill"></i> Add Another Item
+                              </button>
+                              <div class="text-muted" style="font-size: 11px;">Specify each item &amp; quantity</div>
+                            </div>
+
+                            <input type="hidden" name="cups" class="santino-cups-input" value="1">
+                            <input type="hidden" name="items_consumed" class="santino-items-consumed-summary" value="">
                           </div>
                           <div class="row g-3 mb-3">
                             <div class="col-12">

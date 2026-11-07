@@ -289,8 +289,119 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Stepper handlers for Cups count
+  // Sync multi-item order rows, quantities and total cups
+  function santinoUpdateOrderItemsTotals(form) {
+    if (!form) return;
+    const rows = form.querySelectorAll('.santino-order-item-row');
+    let totalCups = 0;
+    const summaries = [];
+
+    rows.forEach(function(row) {
+      const select = row.querySelector('.santino-item-select');
+      const qtyInput = row.querySelector('.santino-row-qty');
+      const qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
+      totalCups += qty;
+
+      const val = select && select.value ? select.value.trim() : '';
+      if (val) {
+        summaries.push(qty + 'x ' + val);
+      }
+    });
+
+    if (totalCups < 1) totalCups = 1;
+
+    // Update total badge count
+    const badgeCount = form.querySelector('.santino-total-cups-count');
+    if (badgeCount) badgeCount.textContent = totalCups;
+
+    // Update hidden inputs
+    const cupsInput = form.querySelector('input[name="cups"]');
+    if (cupsInput) cupsInput.value = totalCups;
+
+    const summaryInput = form.querySelector('.santino-items-consumed-summary');
+    if (summaryInput) summaryInput.value = summaries.join(', ');
+
+    // Show/hide remove button based on row count
+    rows.forEach(function(row) {
+      const rmBtn = row.querySelector('.santino-remove-item-row');
+      if (rmBtn) {
+        if (rows.length > 1) {
+          rmBtn.classList.remove('d-none');
+        } else {
+          rmBtn.classList.add('d-none');
+        }
+      }
+    });
+  }
+
+  // Stepper handlers for Cups count & Multi-Item Orders
   document.addEventListener('click', function(e) {
+    // Row level plus
+    const rowPlus = e.target.closest('.santino-row-plus');
+    if (rowPlus) {
+      e.preventDefault();
+      const row = rowPlus.closest('.santino-order-item-row');
+      const input = row ? row.querySelector('.santino-row-qty') : null;
+      if (input) {
+        let val = parseInt(input.value) || 1;
+        if (val < 50) input.value = val + 1;
+        santinoUpdateOrderItemsTotals(rowPlus.closest('form'));
+      }
+      return;
+    }
+
+    // Row level minus
+    const rowMinus = e.target.closest('.santino-row-minus');
+    if (rowMinus) {
+      e.preventDefault();
+      const row = rowMinus.closest('.santino-order-item-row');
+      const input = row ? row.querySelector('.santino-row-qty') : null;
+      if (input) {
+        let val = parseInt(input.value) || 1;
+        if (val > 1) input.value = val - 1;
+        santinoUpdateOrderItemsTotals(rowMinus.closest('form'));
+      }
+      return;
+    }
+
+    // Add another item row
+    const addBtn = e.target.closest('.santino-add-order-item-btn');
+    if (addBtn) {
+      e.preventDefault();
+      const form = addBtn.closest('form');
+      const container = form ? form.querySelector('.santino-order-items-container') : null;
+      if (container) {
+        const firstRow = container.querySelector('.santino-order-item-row');
+        if (firstRow) {
+          const newRow = firstRow.cloneNode(true);
+          const sel = newRow.querySelector('.santino-item-select');
+          if (sel) sel.selectedIndex = 0;
+          const qty = newRow.querySelector('.santino-row-qty');
+          if (qty) qty.value = 1;
+          container.appendChild(newRow);
+          santinoUpdateOrderItemsTotals(form);
+        }
+      }
+      return;
+    }
+
+    // Remove an item row
+    const rmBtn = e.target.closest('.santino-remove-item-row');
+    if (rmBtn) {
+      e.preventDefault();
+      const form = rmBtn.closest('form');
+      const row = rmBtn.closest('.santino-order-item-row');
+      if (row && form) {
+        const rows = form.querySelectorAll('.santino-order-item-row');
+        if (rows.length > 1) {
+          row.remove();
+          santinoUpdateOrderItemsTotals(form);
+        }
+      }
+      return;
+    }
+
+    // Legacy standalone cup steppers
     const plusBtn = e.target.closest('.santino-cup-plus');
     const minusBtn = e.target.closest('.santino-cup-minus');
     if (plusBtn) {
@@ -308,6 +419,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let val = parseInt(input.value) || 1;
         if (val > 1) input.value = val - 1;
       }
+    }
+  });
+
+  // Multi-item select change listener
+  document.addEventListener('change', function(e) {
+    if (e.target && e.target.classList.contains('santino-item-select')) {
+      santinoUpdateOrderItemsTotals(e.target.closest('form'));
     }
   });
 
@@ -339,6 +457,9 @@ document.addEventListener('DOMContentLoaded', () => {
     invoiceForm.addEventListener('submit', function(e) {
       e.preventDefault();
 
+      // Ensure multi-item totals and items_consumed are up to date
+      santinoUpdateOrderItemsTotals(this);
+
       const phoneField = this.querySelector('input[name="phone"]');
       if (phoneField) {
         const cleanPhone = phoneField.value.trim().replace(/[\s\-\(\)\.]/g, '');
@@ -350,6 +471,23 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         } else {
           phoneField.setCustomValidity('');
+        }
+      }
+
+      // Check items selected
+      const selects = this.querySelectorAll('.santino-item-select');
+      if (selects.length > 0) {
+        let hasItem = false;
+        selects.forEach(function(s) {
+          if (s.value && s.value.trim() !== '') hasItem = true;
+        });
+        if (!hasItem) {
+          selects[0].focus();
+          selects[0].setCustomValidity('Please select at least one ordered coffee or menu item.');
+          selects[0].reportValidity();
+          return;
+        } else {
+          selects[0].setCustomValidity('');
         }
       }
 
@@ -375,6 +513,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const formData = new FormData(this);
       formData.set('cups', cupsVal);
+      const summaryInput = this.querySelector('.santino-items-consumed-summary');
+      if (summaryInput && summaryInput.value) {
+        formData.set('items_consumed', summaryInput.value);
+      }
       formData.append('action', 'santino_submit_invoice');
       if (typeof santino_ajax !== 'undefined') {
         formData.append('security', santino_ajax.nonce);

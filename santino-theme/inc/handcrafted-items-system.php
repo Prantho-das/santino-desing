@@ -14,6 +14,9 @@ class Santino_Handcrafted_Items_System {
         add_action( 'manage_santino_item_posts_custom_column', array( __CLASS__, 'render_columns' ), 10, 2 );
 
         add_action( 'admin_init', array( __CLASS__, 'maybe_seed_items' ) );
+        add_action( 'admin_init', array( __CLASS__, 'handle_csv_downloads' ) );
+        add_action( 'admin_init', array( __CLASS__, 'handle_csv_upload' ) );
+        add_action( 'admin_notices', array( __CLASS__, 'render_admin_csv_ui' ) );
     }
 
     public static function register_post_type() {
@@ -231,7 +234,12 @@ class Santino_Handcrafted_Items_System {
                 if ( has_post_thumbnail( $post_id ) ) {
                     echo get_the_post_thumbnail( $post_id, array( 50, 50 ), array( 'style' => 'border-radius:6px; object-fit:cover;' ) );
                 } else {
-                    echo '<span style="display:inline-block; width:45px; height:45px; background:#f1f5f9; border-radius:6px; line-height:45px; text-align:center; font-size:20px;">☕</span>';
+                    $custom_img = get_post_meta( $post_id, '_santino_item_custom_img', true );
+                    if ( ! empty( $custom_img ) ) {
+                        echo '<img src="' . esc_url( $custom_img ) . '" alt="" style="width:50px; height:50px; border-radius:6px; object-fit:cover; display:block;" />';
+                    } else {
+                        echo '<span style="display:inline-block; width:45px; height:45px; background:#f1f5f9; border-radius:6px; line-height:45px; text-align:center; font-size:20px;">☕</span>';
+                    }
                 }
                 break;
 
@@ -381,6 +389,348 @@ class Santino_Handcrafted_Items_System {
             'Cold Brew Reserve',
             'Hot Chocolate',
         );
+    }
+
+    public static function normalize_category_slug( $raw_cat ) {
+        $raw = strtolower( trim( $raw_cat ) );
+        if ( strpos( $raw, 'latte' ) !== false || strpos( $raw, 'signature' ) !== false ) {
+            return 'signature-lattes';
+        }
+        if ( strpos( $raw, 'espresso' ) !== false || strpos( $raw, 'specialty' ) !== false || strpos( $raw, 'pour' ) !== false || strpos( $raw, 'v60' ) !== false ) {
+            return 'specialty-espresso';
+        }
+        if ( strpos( $raw, 'matcha' ) !== false || strpos( $raw, 'tea' ) !== false || strpos( $raw, 'frappe' ) !== false ) {
+            return 'matcha-tea';
+        }
+        if ( strpos( $raw, 'pastry' ) !== false || strpos( $raw, 'bakery' ) !== false || strpos( $raw, 'croissant' ) !== false || strpos( $raw, 'cake' ) !== false || strpos( $raw, 'treat' ) !== false ) {
+            return 'pastry-bakery';
+        }
+        return 'barista-coffee';
+    }
+
+    public static function normalize_type( $raw_type ) {
+        $raw = strtolower( trim( $raw_type ) );
+        if ( in_array( $raw, array( 'hot', 'iced', 'both', 'blended' ), true ) ) {
+            return $raw;
+        }
+        if ( strpos( $raw, 'blend' ) !== false || strpos( $raw, 'frappe' ) !== false ) {
+            return 'blended';
+        }
+        if ( strpos( $raw, 'both' ) !== false ) {
+            return 'both';
+        }
+        if ( strpos( $raw, 'ice' ) !== false || strpos( $raw, 'cold' ) !== false ) {
+            return 'iced';
+        }
+        return 'hot';
+    }
+
+    public static function handle_csv_downloads() {
+        if ( ! is_admin() || ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+        if ( ! isset( $_GET['post_type'] ) || $_GET['post_type'] !== 'santino_item' ) {
+            return;
+        }
+
+        $action = sanitize_text_field( $_GET['santino_item_action'] ?? '' );
+        if ( empty( $action ) ) {
+            return;
+        }
+
+        if ( 'sample_csv' === $action ) {
+            check_admin_referer( 'santino_item_sample_csv' );
+            while ( ob_get_level() ) {
+                ob_end_clean();
+            }
+            header( 'Content-Type: text/csv; charset=utf-8' );
+            header( 'Content-Disposition: attachment; filename="santino-handcrafted-items-sample.csv"' );
+            header( 'Pragma: no-cache' );
+            header( 'Expires: 0' );
+            $out = fopen( 'php://output', 'w' );
+            fprintf( $out, chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) );
+            fputcsv( $out, array( 'item_name', 'category', 'price', 'type', 'portion_sizes', 'tag', 'calories', 'bestseller', 'redeemable', 'plantbased', 'image_url', 'description' ) );
+            fputcsv( $out, array( 'Vanilla Bean Spanish Latte', 'signature-lattes', '240', 'both', 'Reg Tk. 240 | Large Tk. 290', 'SIGNATURE', '190 kcal', 'yes', 'yes', 'no', '', 'Double shot espresso layered with sweet condensed milk, Madagascar vanilla, and whole farm milk.' ) );
+            fputcsv( $out, array( 'Single-Origin Pour-over (V60)', 'specialty-espresso', '340', 'hot', 'Ethiopia Yirgacheffe / Colombia Geisha', 'ARTISAN', '5 kcal', 'no', 'yes', 'yes', '', 'Precision hand-brewed single origin Arabica with bright floral jasmine notes and silky tea-like finish.' ) );
+            fputcsv( $out, array( 'Japanese Ceremonial Matcha Frappe', 'matcha-tea', '280', 'blended', 'Large 16oz • Ice Blended', 'POPULAR', '220 kcal', 'yes', 'yes', 'yes', '', 'Stone-ground Uji matcha blended with fresh farm milk, vanilla bean syrup, and cloud cream.' ) );
+            fputcsv( $out, array( 'Artisan Butter Croissant', 'pastry-bakery', '180', 'hot', 'Served Warm with French Butter', 'BAKERY', '260 kcal', 'yes', 'no', 'no', '', 'Authentic French butter croissant baked fresh daily with 48 golden laminated flaky layers.' ) );
+            fclose( $out );
+            exit;
+        }
+
+        if ( 'export_csv' === $action ) {
+            check_admin_referer( 'santino_item_export_csv' );
+            while ( ob_get_level() ) {
+                ob_end_clean();
+            }
+            header( 'Content-Type: text/csv; charset=utf-8' );
+            header( 'Content-Disposition: attachment; filename="santino-items-export-' . date( 'Y-m-d' ) . '.csv"' );
+            header( 'Pragma: no-cache' );
+            header( 'Expires: 0' );
+            $out = fopen( 'php://output', 'w' );
+            fprintf( $out, chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) );
+            fputcsv( $out, array( 'item_name', 'category', 'price', 'type', 'portion_sizes', 'tag', 'calories', 'bestseller', 'redeemable', 'plantbased', 'image_url', 'description' ) );
+
+            $posts = get_posts( array(
+                'post_type'      => 'santino_item',
+                'posts_per_page' => -1,
+                'post_status'    => 'any',
+                'orderby'        => 'ID',
+                'order'          => 'DESC',
+            ) );
+
+            foreach ( $posts as $p ) {
+                $img = get_the_post_thumbnail_url( $p->ID, 'full' ) ?: get_post_meta( $p->ID, '_santino_item_custom_img', true );
+                fputcsv( $out, array(
+                    $p->post_title,
+                    get_post_meta( $p->ID, '_santino_item_category', true ) ?: 'barista-coffee',
+                    get_post_meta( $p->ID, '_santino_item_price', true ) ?: '0',
+                    get_post_meta( $p->ID, '_santino_item_type', true ) ?: 'hot',
+                    get_post_meta( $p->ID, '_santino_item_roast', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_item_tag', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_item_calories', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_item_bestseller', true ) ?: 'no',
+                    get_post_meta( $p->ID, '_santino_item_redeemable', true ) ?: 'yes',
+                    get_post_meta( $p->ID, '_santino_item_plantbased', true ) ?: 'no',
+                    $img ?: '',
+                    $p->post_content,
+                ) );
+            }
+
+            fclose( $out );
+            exit;
+        }
+    }
+
+    public static function handle_csv_upload() {
+        if ( ! is_admin() || ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+        if ( ! isset( $_POST['santino_item_csv_action'] ) || $_POST['santino_item_csv_action'] !== 'import' ) {
+            return;
+        }
+        check_admin_referer( 'santino_item_import_nonce' );
+
+        if ( empty( $_FILES['item_csv']['tmp_name'] ) || ! is_uploaded_file( $_FILES['item_csv']['tmp_name'] ) ) {
+            wp_safe_redirect( add_query_arg( array( 'post_type' => 'santino_item', 'item_error' => 'no_file' ), admin_url( 'edit.php' ) ) );
+            exit;
+        }
+
+        $file_path = $_FILES['item_csv']['tmp_name'];
+        $handle    = fopen( $file_path, 'r' );
+        if ( false === $handle ) {
+            wp_safe_redirect( add_query_arg( array( 'post_type' => 'santino_item', 'item_error' => 'read_error' ), admin_url( 'edit.php' ) ) );
+            exit;
+        }
+
+        $mode   = sanitize_text_field( $_POST['import_mode'] ?? 'append' );
+        $header = fgetcsv( $handle );
+        if ( ! $header ) {
+            fclose( $handle );
+            wp_safe_redirect( add_query_arg( array( 'post_type' => 'santino_item', 'item_error' => 'empty_csv' ), admin_url( 'edit.php' ) ) );
+            exit;
+        }
+
+        if ( isset( $header[0] ) ) {
+            $header[0] = preg_replace( '/\x{EF}\x{BB}\x{BF}/', '', $header[0] );
+        }
+
+        $h_map = array();
+        foreach ( (array) $header as $idx => $col ) {
+            $clean_col = strtolower( trim( preg_replace( '/[^a-zA-Z0-9_]/', '', str_replace( ' ', '_', $col ) ) ) );
+            $h_map[ $clean_col ] = $idx;
+        }
+
+        $imported = 0;
+        $updated  = 0;
+        $skipped  = 0;
+
+        while ( ( $row = fgetcsv( $handle ) ) !== false ) {
+            if ( empty( array_filter( $row ) ) ) {
+                continue;
+            }
+
+            $name = trim( $row[ $h_map['item_name'] ?? $h_map['name'] ?? $h_map['title'] ?? 0 ] ?? '' );
+            if ( empty( $name ) ) {
+                $skipped++;
+                continue;
+            }
+
+            $cat_raw  = trim( $row[ $h_map['category'] ?? $h_map['cat'] ?? 1 ] ?? 'barista-coffee' );
+            $cat      = self::normalize_category_slug( $cat_raw );
+            $price    = intval( preg_replace( '/[^0-9]/', '', $row[ $h_map['price'] ?? 2 ] ?? '0' ) );
+            $type_raw = trim( $row[ $h_map['type'] ?? $h_map['serving_type'] ?? 3 ] ?? 'hot' );
+            $type     = self::normalize_type( $type_raw );
+            $roast    = trim( $row[ $h_map['portion_sizes'] ?? $h_map['sizes'] ?? $h_map['roast'] ?? 4 ] ?? '' );
+            $tag      = trim( $row[ $h_map['tag'] ?? $h_map['badge'] ?? 5 ] ?? '' );
+            $calories = trim( $row[ $h_map['calories'] ?? $h_map['calorie'] ?? 6 ] ?? '' );
+            $best     = strtolower( trim( $row[ $h_map['bestseller'] ?? $h_map['popular'] ?? 7 ] ?? 'no' ) );
+            $redeem   = strtolower( trim( $row[ $h_map['redeemable'] ?? $h_map['free_redeem'] ?? 8 ] ?? 'yes' ) );
+            $plant    = strtolower( trim( $row[ $h_map['plantbased'] ?? $h_map['vegan'] ?? 9 ] ?? 'no' ) );
+            $img_url  = trim( $row[ $h_map['image_url'] ?? $h_map['image'] ?? $h_map['photo'] ?? 10 ] ?? '' );
+            $desc     = trim( $row[ $h_map['description'] ?? $h_map['desc'] ?? $h_map['content'] ?? 11 ] ?? '' );
+
+            $best   = in_array( $best, array( 'yes', '1', 'true' ), true ) ? 'yes' : 'no';
+            $redeem = in_array( $redeem, array( 'no', '0', 'false' ), true ) ? 'no' : 'yes';
+            $plant  = in_array( $plant, array( 'yes', '1', 'true' ), true ) ? 'yes' : 'no';
+
+            $existing = get_page_by_title( $name, OBJECT, 'santino_item' );
+            $post_id  = null;
+
+            if ( $existing ) {
+                if ( 'append' === $mode ) {
+                    $skipped++;
+                    continue;
+                }
+                $post_id = $existing->ID;
+                wp_update_post( array(
+                    'ID'           => $post_id,
+                    'post_content' => $desc,
+                ) );
+                $updated++;
+            } else {
+                $post_id = wp_insert_post( array(
+                    'post_title'   => sanitize_text_field( $name ),
+                    'post_content' => $desc,
+                    'post_type'    => 'santino_item',
+                    'post_status'  => 'publish',
+                ) );
+                if ( is_wp_error( $post_id ) || ! $post_id ) {
+                    $skipped++;
+                    continue;
+                }
+                $imported++;
+            }
+
+            update_post_meta( $post_id, '_santino_item_category', sanitize_text_field( $cat ) );
+            update_post_meta( $post_id, '_santino_item_price', $price );
+            update_post_meta( $post_id, '_santino_item_type', sanitize_text_field( $type ) );
+            update_post_meta( $post_id, '_santino_item_roast', sanitize_text_field( $roast ?: ( 'Tk. ' . $price ) ) );
+            update_post_meta( $post_id, '_santino_item_tag', sanitize_text_field( $tag ) );
+            update_post_meta( $post_id, '_santino_item_calories', sanitize_text_field( $calories ) );
+            update_post_meta( $post_id, '_santino_item_bestseller', $best );
+            update_post_meta( $post_id, '_santino_item_redeemable', $redeem );
+            update_post_meta( $post_id, '_santino_item_plantbased', $plant );
+
+            if ( ! empty( $img_url ) ) {
+                update_post_meta( $post_id, '_santino_item_custom_img', esc_url_raw( $img_url ) );
+            }
+        }
+
+        fclose( $handle );
+
+        $redirect = add_query_arg( array(
+            'post_type'      => 'santino_item',
+            'imported_items' => $imported,
+            'updated_items'  => $updated,
+            'skipped_items'  => $skipped,
+        ), admin_url( 'edit.php' ) );
+
+        wp_safe_redirect( $redirect );
+        exit;
+    }
+
+    public static function render_admin_csv_ui() {
+        $screen = get_current_screen();
+        if ( ! $screen || $screen->id !== 'edit-santino_item' || $screen->post_type !== 'santino_item' ) {
+            return;
+        }
+
+        if ( isset( $_GET['imported_items'] ) ) {
+            $imp  = intval( $_GET['imported_items'] );
+            $upd  = intval( $_GET['updated_items'] ?? 0 );
+            $skip = intval( $_GET['skipped_items'] ?? 0 );
+            ?>
+            <div class="notice notice-success is-dismissible" style="border-left-color: #00625d;">
+                <p><strong><?php _e( 'Handcrafted Items CSV Import Completed:', 'santino' ); ?></strong> <?php echo sprintf( __( '%d added, %d updated, %d skipped.', 'santino' ), $imp, $upd, $skip ); ?></p>
+            </div>
+            <?php
+        }
+
+        if ( isset( $_GET['item_error'] ) ) {
+            $err = sanitize_text_field( $_GET['item_error'] );
+            $msg = __( 'An error occurred during CSV upload.', 'santino' );
+            if ( 'no_file' === $err ) $msg = __( 'No CSV file was selected.', 'santino' );
+            if ( 'read_error' === $err ) $msg = __( 'Could not open or read the CSV file.', 'santino' );
+            if ( 'empty_csv' === $err ) $msg = __( 'The uploaded CSV file is empty.', 'santino' );
+            ?>
+            <div class="notice notice-error is-dismissible">
+                <p><strong><?php _e( 'Error:', 'santino' ); ?></strong> <?php echo esc_html( $msg ); ?></p>
+            </div>
+            <?php
+        }
+        ?>
+        <div id="santino-item-csv-panel" class="postbox" style="display: none; margin: 15px 0; padding: 15px 20px;">
+            <h3 style="margin-top: 0;"><?php _e( 'Bulk CSV File Import', 'santino' ); ?></h3>
+            <p class="description">
+                <?php _e( 'Upload .csv with columns: item_name, category, price, type, portion_sizes, tag, calories, bestseller, redeemable, plantbased, image_url, description', 'santino' ); ?>
+            </p>
+            <form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'edit.php?post_type=santino_item' ) ); ?>">
+                <?php wp_nonce_field( 'santino_item_import_nonce' ); ?>
+                <input type="hidden" name="santino_item_csv_action" value="import">
+                <p>
+                    <input type="file" name="item_csv" accept=".csv" required>
+                </p>
+                <p>
+                    <label><input type="radio" name="import_mode" value="append" checked> <?php _e( 'Append to existing', 'santino' ); ?></label>
+                    &nbsp;&nbsp;
+                    <label><input type="radio" name="import_mode" value="update"> <?php _e( 'Replace / Update existing', 'santino' ); ?></label>
+                </p>
+                <p>
+                    <input type="submit" class="button button-primary" value="<?php _e( 'Upload & Import CSV', 'santino' ); ?>">
+                    <button type="button" class="button button-secondary" onclick="document.getElementById('santino-item-csv-panel').style.display='none';"><?php _e( 'Cancel', 'santino' ); ?></button>
+                </p>
+            </form>
+        </div>
+
+        <style>
+        .wrap .page-title-action,
+        .wrap .santino-item-csv-btn,
+        .wrap a.page-title-action {
+            display: inline-block;
+            border: 1.5px solid #2271b1 !important;
+            background: #f6f7f7 !important;
+            color: #2271b1 !important;
+            border-radius: 3px !important;
+            padding: 4px 10px !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            line-height: normal !important;
+            text-decoration: none !important;
+            margin-left: 6px !important;
+            vertical-align: middle !important;
+            box-shadow: none !important;
+            transition: all 0.15s ease-in-out !important;
+            cursor: pointer !important;
+        }
+        .wrap .page-title-action:hover,
+        .wrap .santino-item-csv-btn:hover,
+        .wrap a.page-title-action:hover {
+            background: #2271b1 !important;
+            color: #ffffff !important;
+            border-color: #2271b1 !important;
+        }
+        </style>
+
+        <script>
+        jQuery(document).ready(function($) {
+            if (!$('.santino-item-csv-btn').length) {
+                var $target = $('.wrap .page-title-action').last();
+                if (!$target.length) {
+                    $target = $('.wrap .wp-heading-inline');
+                }
+                var sampleUrl = '<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=santino_item&santino_item_action=sample_csv' ), 'santino_item_sample_csv' ) ); ?>';
+                var exportUrl = '<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=santino_item&santino_item_action=export_csv' ), 'santino_item_export_csv' ) ); ?>';
+                
+                var buttons = '<a href="' + sampleUrl + '" class="page-title-action santino-item-csv-btn"><?php _e( 'Download Sample CSV', 'santino' ); ?></a>' +
+                              '<a href="' + exportUrl + '" class="page-title-action santino-item-csv-btn"><?php _e( 'Export CSV', 'santino' ); ?></a>' +
+                              '<a href="#import-csv" class="page-title-action santino-item-csv-btn" onclick="var b=document.getElementById(\'santino-item-csv-panel\'); b.style.display=(b.style.display===\'none\'||!b.style.display)?\'block\':\'none\'; return false;"><?php _e( 'Import CSV', 'santino' ); ?></a>';
+                
+                $target.after(buttons);
+            }
+        });
+        </script>
+        <?php
     }
 
     public static function maybe_seed_items() {

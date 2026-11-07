@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 44" width="140" height="44">
+  <defs>
+    <linearGradient id="bfcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E51922"/>
+      <stop offset="100%" stop-color="#B80D15"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="136" height="40" rx="8" ry="8" fill="url(#bfcGrad)" stroke="#FFD100" stroke-width="2"/>
+  <circle cx="22" cy="22" r="13" fill="#FFFFFF" fill-opacity="0.15"/>
+  <path d="M16 26 C16 18, 22 14, 27 16 C25 18, 26 21, 28 22 C26 23, 23 25, 20 27 Z" fill="#FFD100"/>
+  <text x="76" y="26" font-family="'Montserrat', 'Arial Black', sans-serif" font-size="20" font-weight="900" fill="#FFFFFF" letter-spacing="1.5" text-anchor="middle">BFC</text>
+  <text x="76" y="37" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="6.5" font-weight="800" fill="#FFD100" letter-spacing="1.2" text-anchor="middle">BEST FRIED CHICKEN</text>
+</svg>

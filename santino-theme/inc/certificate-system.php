@@ -17,6 +17,9 @@ class Santino_Certificate_System {
         add_action( 'wp_ajax_nopriv_santino_verify_certificate', array( __CLASS__, 'handle_ajax_verify' ) );
 
         add_action( 'admin_init', array( __CLASS__, 'maybe_seed_certificates' ) );
+        add_action( 'admin_init', array( __CLASS__, 'handle_csv_downloads' ) );
+        add_action( 'admin_init', array( __CLASS__, 'handle_csv_upload' ) );
+        add_action( 'admin_notices', array( __CLASS__, 'render_admin_csv_ui' ) );
     }
 
     public static function register_post_type() {
@@ -393,6 +396,305 @@ class Santino_Certificate_System {
         );
 
         wp_send_json_success( $data );
+    }
+
+    public static function handle_csv_downloads() {
+        if ( ! is_admin() || ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+        if ( ! isset( $_GET['post_type'] ) || $_GET['post_type'] !== 'santino_certificate' ) {
+            return;
+        }
+
+        $action = sanitize_text_field( $_GET['santino_cert_action'] ?? '' );
+        if ( empty( $action ) ) {
+            return;
+        }
+
+        if ( 'sample_csv' === $action ) {
+            check_admin_referer( 'santino_cert_sample_csv' );
+            while ( ob_get_level() ) {
+                ob_end_clean();
+            }
+            header( 'Content-Type: text/csv; charset=utf-8' );
+            header( 'Content-Disposition: attachment; filename="santino-certificates-sample.csv"' );
+            header( 'Pragma: no-cache' );
+            header( 'Expires: 0' );
+            $out = fopen( 'php://output', 'w' );
+            fprintf( $out, chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) );
+            fputcsv( $out, array( 'certificate_id', 'candidate_name', 'course_name', 'duration', 'issue_date', 'grade', 'institute', 'trainer', 'standard', 'status', 'candidate_contact', 'notes' ) );
+            fputcsv( $out, array( 'SNT-2025-001', 'Mohammed Tanvir Hossain', 'Barista Advance Professional & Sensory Lab', '18 Days (54 Contact Hours)', '12 October 2025', 'Distinction (Grade A+)', 'Santino Barista Academy • ISO 9001:2015', 'Master Barista Trainer, Santino Academy', 'WBC & SCA Protocols / ISO 9001:2015', 'verified', '01711223344', 'Official Gold Seal Graduate' ) );
+            fputcsv( $out, array( 'BBTA-2025-042', 'Sadia Afrin Chowdhury', 'Professional Barista Intermediate & Latte Art', '7 Days (21 Contact Hours)', '24 September 2025', 'Passed with Honors (94%)', 'Bangladesh Barista Training Academy (BBTA)', 'Senior Barista Specialist, BBTA', 'BBTA Standard Calibration / ISO 9001:2015', 'verified', '01811334455', 'Latte Art Pattern Champion' ) );
+            fputcsv( $out, array( 'SNT-ADV-108', 'Kamrul Islam', 'Espresso Science, Grinder Dial-In & Roastery Management', '12 Days (36 Contact Hours)', '05 August 2025', 'Distinction (Grade A)', 'Santino Barista Academy & Technical Lab', 'Authorized VA Technical Instructor', 'Victoria Arduino Commercial Standards', 'verified', '01911445566', 'Commercial Roastery Calibration' ) );
+            fclose( $out );
+            exit;
+        }
+
+        if ( 'export_csv' === $action ) {
+            check_admin_referer( 'santino_cert_export_csv' );
+            while ( ob_get_level() ) {
+                ob_end_clean();
+            }
+            header( 'Content-Type: text/csv; charset=utf-8' );
+            header( 'Content-Disposition: attachment; filename="santino-certificates-export-' . date( 'Y-m-d' ) . '.csv"' );
+            header( 'Pragma: no-cache' );
+            header( 'Expires: 0' );
+            $out = fopen( 'php://output', 'w' );
+            fprintf( $out, chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) );
+            fputcsv( $out, array( 'certificate_id', 'candidate_name', 'course_name', 'duration', 'issue_date', 'grade', 'institute', 'trainer', 'standard', 'status', 'candidate_contact', 'notes' ) );
+
+            $posts = get_posts( array(
+                'post_type'      => 'santino_certificate',
+                'posts_per_page' => -1,
+                'post_status'    => 'any',
+                'orderby'        => 'ID',
+                'order'          => 'DESC',
+            ) );
+
+            foreach ( $posts as $p ) {
+                $c_id = get_post_meta( $p->ID, '_santino_cert_id', true ) ?: $p->post_title;
+                fputcsv( $out, array(
+                    $c_id,
+                    get_post_meta( $p->ID, '_santino_candidate_name', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_course_name', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_duration', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_issue_date', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_grade', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_institute', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_trainer', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_standard', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_cert_status', true ) ?: 'verified',
+                    get_post_meta( $p->ID, '_santino_candidate_contact', true ) ?: '',
+                    get_post_meta( $p->ID, '_santino_cert_notes', true ) ?: '',
+                ) );
+            }
+
+            fclose( $out );
+            exit;
+        }
+    }
+
+    public static function handle_csv_upload() {
+        if ( ! is_admin() || ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+        if ( ! isset( $_POST['santino_cert_csv_action'] ) || $_POST['santino_cert_csv_action'] !== 'import' ) {
+            return;
+        }
+        check_admin_referer( 'santino_cert_import_nonce' );
+
+        if ( empty( $_FILES['cert_csv']['tmp_name'] ) || ! is_uploaded_file( $_FILES['cert_csv']['tmp_name'] ) ) {
+            wp_safe_redirect( add_query_arg( array( 'post_type' => 'santino_certificate', 'cert_error' => 'no_file' ), admin_url( 'edit.php' ) ) );
+            exit;
+        }
+
+        $file_path = $_FILES['cert_csv']['tmp_name'];
+        $handle    = fopen( $file_path, 'r' );
+        if ( false === $handle ) {
+            wp_safe_redirect( add_query_arg( array( 'post_type' => 'santino_certificate', 'cert_error' => 'read_error' ), admin_url( 'edit.php' ) ) );
+            exit;
+        }
+
+        $mode   = sanitize_text_field( $_POST['import_mode'] ?? 'append' );
+        $header = fgetcsv( $handle );
+        if ( ! $header ) {
+            fclose( $handle );
+            wp_safe_redirect( add_query_arg( array( 'post_type' => 'santino_certificate', 'cert_error' => 'empty_csv' ), admin_url( 'edit.php' ) ) );
+            exit;
+        }
+
+        if ( isset( $header[0] ) ) {
+            $header[0] = preg_replace( '/\x{EF}\x{BB}\x{BF}/', '', $header[0] );
+        }
+
+        $h_map = array();
+        foreach ( (array) $header as $idx => $col ) {
+            $clean_col = strtolower( trim( preg_replace( '/[^a-zA-Z0-9_]/', '', str_replace( ' ', '_', $col ) ) ) );
+            $h_map[ $clean_col ] = $idx;
+        }
+
+        $imported = 0;
+        $updated  = 0;
+        $skipped  = 0;
+
+        while ( ( $row = fgetcsv( $handle ) ) !== false ) {
+            if ( empty( array_filter( $row ) ) ) {
+                continue;
+            }
+
+            $c_id_raw = trim( $row[ $h_map['certificate_id'] ?? $h_map['cert_id'] ?? $h_map['id'] ?? 0 ] ?? '' );
+            $name     = trim( $row[ $h_map['candidate_name'] ?? $h_map['name'] ?? $h_map['candidate'] ?? 1 ] ?? '' );
+
+            if ( empty( $c_id_raw ) && empty( $name ) ) {
+                $skipped++;
+                continue;
+            }
+
+            $c_id = strtoupper( $c_id_raw );
+            if ( empty( $c_id ) ) {
+                $c_id = 'SNT-' . date( 'Y' ) . '-' . sprintf( '%04d', wp_rand( 100, 9999 ) );
+            }
+
+            $course    = trim( $row[ $h_map['course_name'] ?? $h_map['course'] ?? 2 ] ?? '' );
+            $duration  = trim( $row[ $h_map['duration'] ?? 3 ] ?? '' );
+            $issue_dt  = trim( $row[ $h_map['issue_date'] ?? $h_map['date'] ?? 4 ] ?? '' );
+            $grade     = trim( $row[ $h_map['grade'] ?? $h_map['result'] ?? 5 ] ?? 'Distinction (Grade A+)' );
+            $institute = trim( $row[ $h_map['institute'] ?? $h_map['academy'] ?? 6 ] ?? 'Santino Barista Academy • ISO 9001:2015' );
+            $trainer   = trim( $row[ $h_map['trainer'] ?? $h_map['instructor'] ?? 7 ] ?? 'Master Barista Trainer, Santino Academy' );
+            $standard  = trim( $row[ $h_map['standard'] ?? 8 ] ?? 'WBC & SCA Protocols / ISO 9001:2015' );
+            $status    = strtolower( trim( $row[ $h_map['status'] ?? 9 ] ?? 'verified' ) );
+            if ( ! in_array( $status, array( 'verified', 'pending', 'revoked' ), true ) ) {
+                $status = 'verified';
+            }
+            $contact   = trim( $row[ $h_map['candidate_contact'] ?? $h_map['contact'] ?? $h_map['phone'] ?? 10 ] ?? '' );
+            $notes     = trim( $row[ $h_map['notes'] ?? $h_map['remarks'] ?? 11 ] ?? '' );
+
+            $existing = get_posts( array(
+                'post_type'      => 'santino_certificate',
+                'posts_per_page' => 1,
+                'post_status'    => 'any',
+                'meta_query'     => array(
+                    array(
+                        'key'     => '_santino_cert_id',
+                        'value'   => $c_id,
+                        'compare' => '=',
+                    ),
+                ),
+            ) );
+
+            $post_id = null;
+            if ( ! empty( $existing ) ) {
+                if ( 'append' === $mode ) {
+                    $skipped++;
+                    continue;
+                }
+                $post_id = $existing[0]->ID;
+                $updated++;
+            } else {
+                $by_title = get_page_by_title( $c_id, OBJECT, 'santino_certificate' );
+                if ( $by_title ) {
+                    if ( 'append' === $mode ) {
+                        $skipped++;
+                        continue;
+                    }
+                    $post_id = $by_title->ID;
+                    $updated++;
+                } else {
+                    $post_id = wp_insert_post( array(
+                        'post_title'  => $c_id,
+                        'post_type'   => 'santino_certificate',
+                        'post_status' => 'publish',
+                    ) );
+                    if ( is_wp_error( $post_id ) || ! $post_id ) {
+                        $skipped++;
+                        continue;
+                    }
+                    $imported++;
+                }
+            }
+
+            $hash = strtoupper( substr( md5( $c_id . 'SANTINO' ), 0, 4 ) . '-' . substr( md5( $c_id . 'REG' ), 4, 4 ) . '-' . substr( md5( $c_id . 'CERT' ), 8, 4 ) );
+
+            update_post_meta( $post_id, '_santino_cert_id', $c_id );
+            update_post_meta( $post_id, '_santino_candidate_name', sanitize_text_field( $name ) );
+            update_post_meta( $post_id, '_santino_course_name', sanitize_text_field( $course ) );
+            update_post_meta( $post_id, '_santino_duration', sanitize_text_field( $duration ) );
+            update_post_meta( $post_id, '_santino_issue_date', sanitize_text_field( $issue_dt ) );
+            update_post_meta( $post_id, '_santino_grade', sanitize_text_field( $grade ) );
+            update_post_meta( $post_id, '_santino_institute', sanitize_text_field( $institute ) );
+            update_post_meta( $post_id, '_santino_trainer', sanitize_text_field( $trainer ) );
+            update_post_meta( $post_id, '_santino_standard', sanitize_text_field( $standard ) );
+            update_post_meta( $post_id, '_santino_cert_status', sanitize_text_field( $status ) );
+            update_post_meta( $post_id, '_santino_candidate_contact', sanitize_text_field( $contact ) );
+            update_post_meta( $post_id, '_santino_cert_notes', sanitize_textarea_field( $notes ) );
+            update_post_meta( $post_id, '_santino_cert_hash', $hash );
+        }
+
+        fclose( $handle );
+
+        $redirect = add_query_arg( array(
+            'post_type'      => 'santino_certificate',
+            'imported_certs' => $imported,
+            'updated_certs'  => $updated,
+            'skipped_certs'  => $skipped,
+        ), admin_url( 'edit.php' ) );
+
+        wp_safe_redirect( $redirect );
+        exit;
+    }
+
+    public static function render_admin_csv_ui() {
+        $screen = get_current_screen();
+        if ( ! $screen || $screen->id !== 'edit-santino_certificate' || $screen->post_type !== 'santino_certificate' ) {
+            return;
+        }
+
+        if ( isset( $_GET['imported_certs'] ) ) {
+            $imp  = intval( $_GET['imported_certs'] );
+            $upd  = intval( $_GET['updated_certs'] ?? 0 );
+            $skip = intval( $_GET['skipped_certs'] ?? 0 );
+            ?>
+            <div class="notice notice-success is-dismissible" style="border-left-color: #00625d;">
+                <p><strong><?php _e( 'Certificates CSV Import Completed:', 'santino' ); ?></strong> <?php echo sprintf( __( '%d added, %d updated, %d skipped.', 'santino' ), $imp, $upd, $skip ); ?></p>
+            </div>
+            <?php
+        }
+
+        if ( isset( $_GET['cert_error'] ) ) {
+            $err = sanitize_text_field( $_GET['cert_error'] );
+            $msg = __( 'An error occurred during CSV upload.', 'santino' );
+            if ( 'no_file' === $err ) $msg = __( 'No CSV file was selected.', 'santino' );
+            if ( 'read_error' === $err ) $msg = __( 'Could not open or read the CSV file.', 'santino' );
+            if ( 'empty_csv' === $err ) $msg = __( 'The uploaded CSV file is empty.', 'santino' );
+            ?>
+            <div class="notice notice-error is-dismissible">
+                <p><strong><?php _e( 'Error:', 'santino' ); ?></strong> <?php echo esc_html( $msg ); ?></p>
+            </div>
+            <?php
+        }
+        ?>
+        <div id="santino-cert-csv-panel" class="postbox" style="display: none; margin: 15px 0; padding: 15px 20px;">
+            <h3 style="margin-top: 0;"><?php _e( 'Bulk CSV File Import', 'santino' ); ?></h3>
+            <p class="description">
+                <?php _e( 'Upload .csv with columns: certificate_id, candidate_name, course_name, duration, issue_date, grade, institute, trainer, standard, status, candidate_contact, notes', 'santino' ); ?>
+            </p>
+            <form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'edit.php?post_type=santino_certificate' ) ); ?>">
+                <?php wp_nonce_field( 'santino_cert_import_nonce' ); ?>
+                <input type="hidden" name="santino_cert_csv_action" value="import">
+                <p>
+                    <input type="file" name="cert_csv" accept=".csv" required>
+                </p>
+                <p>
+                    <label><input type="radio" name="import_mode" value="append" checked> <?php _e( 'Append to existing', 'santino' ); ?></label>
+                    &nbsp;&nbsp;
+                    <label><input type="radio" name="import_mode" value="update"> <?php _e( 'Replace / Update existing', 'santino' ); ?></label>
+                </p>
+                <p>
+                    <input type="submit" class="button button-primary" value="<?php _e( 'Upload & Import CSV', 'santino' ); ?>">
+                    <button type="button" class="button button-secondary" onclick="document.getElementById('santino-cert-csv-panel').style.display='none';"><?php _e( 'Cancel', 'santino' ); ?></button>
+                </p>
+            </form>
+        </div>
+
+        <script>
+        jQuery(document).ready(function($) {
+            if (!$('.santino-cert-csv-btn').length) {
+                var $target = $('.wrap .page-title-action').last();
+                if (!$target.length) {
+                    $target = $('.wrap .wp-heading-inline');
+                }
+                var sampleUrl = '<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=santino_certificate&santino_cert_action=sample_csv' ), 'santino_cert_sample_csv' ) ); ?>';
+                var exportUrl = '<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=santino_certificate&santino_cert_action=export_csv' ), 'santino_cert_export_csv' ) ); ?>';
+                
+                var buttons = '<a href="' + sampleUrl + '" class="page-title-action santino-cert-csv-btn"><?php _e( 'Download Sample CSV', 'santino' ); ?></a>' +
+                              '<a href="' + exportUrl + '" class="page-title-action santino-cert-csv-btn"><?php _e( 'Export CSV', 'santino' ); ?></a>' +
+                              '<a href="#import-csv" class="page-title-action santino-cert-csv-btn" onclick="var b=document.getElementById(\'santino-cert-csv-panel\'); b.style.display=(b.style.display===\'none\'||!b.style.display)?\'block\':\'none\'; return false;"><?php _e( 'Import CSV', 'santino' ); ?></a>';
+                
+                $target.after(buttons);
+            }
+        });
+        </script>
+        <?php
     }
 
     public static function maybe_seed_certificates() {
