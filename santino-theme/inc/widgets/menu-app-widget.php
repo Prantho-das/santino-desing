@@ -99,9 +99,9 @@ class Santino_Menu_App_Widget extends \Elementor\Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-        $badge      = isset( $settings['app_badge'] ) && $settings['app_badge'] !== '' ? $settings['app_badge'] : 'MOBILE REWARDS & ORDERING';
-        $title      = isset( $settings['app_title'] ) && $settings['app_title'] !== '' ? $settings['app_title'] : 'Download the Santino Coffee App';
-        $sub        = isset( $settings['app_sub'] ) && $settings['app_sub'] !== '' ? $settings['app_sub'] : 'Save time with swift order pickup, earn reward beans on every roast, and access exclusive member privileges.';
+        $badge      = ! empty( $settings['app_badge'] ) ? $settings['app_badge'] : ( ! empty( $settings['badge_text'] ) ? $settings['badge_text'] : 'MOBILE REWARDS & ORDERING' );
+        $title      = ! empty( $settings['app_title'] ) ? $settings['app_title'] : ( ! empty( $settings['title'] ) ? $settings['title'] : 'Download the Santino Coffee App' );
+        $sub        = ! empty( $settings['app_sub'] ) ? $settings['app_sub'] : ( ! empty( $settings['desc'] ) ? $settings['desc'] : 'Save time with swift order pickup, earn reward beans on every roast, and access exclusive member privileges.' );
         $play_text  = isset( $settings['play_text'] ) && $settings['play_text'] !== '' ? $settings['play_text'] : 'Google Play';
         $play_url   = ! empty( $settings['play_url'] ) ? ( is_array( $settings['play_url'] ) ? ( $settings['play_url']['url'] ?? '' ) : $settings['play_url'] ) : 'https://play.google.com';
         $apple_text = isset( $settings['apple_text'] ) && $settings['apple_text'] !== '' ? $settings['apple_text'] : 'App Store';

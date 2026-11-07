@@ -72,26 +72,26 @@ class Santino_Menu_Grid_Widget extends \Elementor\Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-        $grid_badge  = isset( $settings['grid_badge'] ) && $settings['grid_badge'] !== '' ? $settings['grid_badge'] : 'FRESHLY BREWED';
-        $grid_title  = isset( $settings['grid_title'] ) && $settings['grid_title'] !== '' ? $settings['grid_title'] : 'All Handcrafted';
+        $grid_badge  = ! empty( $settings['grid_badge'] ) ? $settings['grid_badge'] : ( ! empty( $settings['badge_text'] ) ? $settings['badge_text'] : 'FRESHLY BREWED' );
+        $grid_title  = ! empty( $settings['grid_title'] ) ? $settings['grid_title'] : ( ! empty( $settings['title'] ) ? $settings['title'] : 'All Handcrafted' );
         $grid_accent = isset( $settings['grid_title_accent'] ) && $settings['grid_title_accent'] !== '' ? $settings['grid_title_accent'] : 'Items';
-        $grid_desc   = isset( $settings['grid_desc'] ) && $settings['grid_desc'] !== '' ? $settings['grid_desc'] : 'Showing specialty beverages and gourmet items';
+        $grid_desc   = ! empty( $settings['grid_desc'] ) ? $settings['grid_desc'] : ( ! empty( $settings['desc'] ) ? $settings['desc'] : 'Showing specialty beverages and gourmet items' );
         ?>
         <!-- 2. STICKY CATEGORY NAV -->
-        <nav class="sticky-category-nav py-3 bg-white" id="categoryNav">
+        <nav class="menu-category-sticky-bar" id="categoryStickyBar">
           <div class="container">
-            <div class="category-tabs-scroll-wrap d-flex align-items-center gap-2">
+            <div class="category-tabs-wrapper d-flex align-items-center gap-2">
               <button class="btn-cat-tab active" data-filter="all">
                 <i class="bi bi-grid-fill"></i> All Items
               </button>
               <button class="btn-cat-tab" data-filter="signature-lattes">
-                <i class="bi bi-stars"></i> Signature Lattes
+                <i class="bi bi-cup-hot-fill"></i> Signature Lattes
               </button>
               <button class="btn-cat-tab" data-filter="barista-coffee">
-                <i class="bi bi-cup-hot-fill"></i> Barista Coffee
+                <i class="bi bi-cup-straw"></i> Barista Classics
               </button>
               <button class="btn-cat-tab" data-filter="fruity-americano">
-                <i class="bi bi-brightness-high-fill"></i> Fruity Americano
+                <i class="bi bi-lightning-charge-fill"></i> Fruity Americano
               </button>
               <button class="btn-cat-tab" data-filter="soe-espresso">
                 <i class="bi bi-award-fill"></i> Single Origin (SOE)

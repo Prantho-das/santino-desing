@@ -72,10 +72,10 @@ class Santino_Menu_Branches_Widget extends \Elementor\Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-        $badge        = isset( $settings['branches_badge'] ) && $settings['branches_badge'] !== '' ? $settings['branches_badge'] : 'EXPERIENCE SANTINO NATIONWIDE';
-        $title        = isset( $settings['branches_title'] ) && $settings['branches_title'] !== '' ? $settings['branches_title'] : 'Our Cafes &';
+        $badge        = ! empty( $settings['branches_badge'] ) ? $settings['branches_badge'] : ( ! empty( $settings['badge_text'] ) ? $settings['badge_text'] : 'EXPERIENCE SANTINO NATIONWIDE' );
+        $title        = ! empty( $settings['branches_title'] ) ? $settings['branches_title'] : ( ! empty( $settings['title'] ) ? $settings['title'] : 'Our Cafes &' );
         $title_accent = isset( $settings['branches_title_accent'] ) && $settings['branches_title_accent'] !== '' ? $settings['branches_title_accent'] : 'Roastery Hubs';
-        $sub          = isset( $settings['branches_sub'] ) && $settings['branches_sub'] !== '' ? $settings['branches_sub'] : 'Step into an artisan coffee retreat or visit our partner express bars across prime Dhaka locations';
+        $sub          = ! empty( $settings['branches_sub'] ) ? $settings['branches_sub'] : ( ! empty( $settings['desc'] ) ? $settings['desc'] : 'Step into an artisan coffee retreat or visit our partner express bars across prime Dhaka locations' );
 
         $branches_detailed = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_branches_detailed() : array();
 

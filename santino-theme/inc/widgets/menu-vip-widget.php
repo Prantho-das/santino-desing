@@ -116,10 +116,10 @@ class Santino_Menu_VIP_Widget extends \Elementor\Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-        $badge        = isset( $settings['vip_badge'] ) && $settings['vip_badge'] !== '' ? $settings['vip_badge'] : 'EXCLUSIVE VIP PRIVILEGE';
-        $title        = isset( $settings['vip_title'] ) && $settings['vip_title'] !== '' ? $settings['vip_title'] : 'Premium Beans,';
+        $badge        = ! empty( $settings['vip_badge'] ) ? $settings['vip_badge'] : ( ! empty( $settings['badge_text'] ) ? $settings['badge_text'] : 'EXCLUSIVE VIP PRIVILEGE' );
+        $title        = ! empty( $settings['vip_title'] ) ? $settings['vip_title'] : ( ! empty( $settings['title'] ) ? $settings['title'] : 'Premium Beans,' );
         $title_accent = isset( $settings['vip_title_accent'] ) && $settings['vip_title_accent'] !== '' ? $settings['vip_title_accent'] : 'Hot & Cold Hero Brews';
-        $desc         = isset( $settings['vip_desc'] ) && $settings['vip_desc'] !== '' ? $settings['vip_desc'] : 'Explore our barista favorites including Hot Cappuccino, Iced Latte, Rich Hot Mocha, Iced Mocha, and ice-blended Frappes crafted with 100% premium roasted beans.';
+        $desc         = ! empty( $settings['vip_desc'] ) ? $settings['vip_desc'] : ( ! empty( $settings['desc'] ) ? $settings['desc'] : 'Explore our barista favorites including Hot Cappuccino, Iced Latte, Rich Hot Mocha, Iced Mocha, and ice-blended Frappes crafted with 100% premium roasted beans.' );
         $img          = ! empty( $settings['poster_img']['url'] ) ? $settings['poster_img']['url'] : santino_img( 'santino-hero-poster.jpg' );
         $btn1_text    = isset( $settings['btn1_text'] ) && $settings['btn1_text'] !== '' ? $settings['btn1_text'] : 'Buy 5 Get 6th Free';
         $btn1_url     = ! empty( $settings['btn1_url'] ) ? ( is_array( $settings['btn1_url'] ) ? ( $settings['btn1_url']['url'] ?? '' ) : $settings['btn1_url'] ) : '/membership/';
