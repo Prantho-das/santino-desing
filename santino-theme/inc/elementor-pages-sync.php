@@ -52,20 +52,28 @@ class Santino_Elementor_Pages_Sync {
     }
 
     public static function render_meta_box( $post ) {
+        $sync_url_menu = wp_nonce_url( admin_url( 'admin-post.php?action=santino_sync_specific_page&target_page_id=' . $post->ID . '&layout_type=menu_sections' ), 'santino_sync_nonce_' . $post->ID );
         $sync_url_3sec = wp_nonce_url( admin_url( 'admin-post.php?action=santino_sync_specific_page&target_page_id=' . $post->ID . '&layout_type=three_sections' ), 'santino_sync_nonce_' . $post->ID );
         $sync_url_vip  = wp_nonce_url( admin_url( 'admin-post.php?action=santino_sync_specific_page&target_page_id=' . $post->ID . '&layout_type=membership_solution' ), 'santino_sync_nonce_' . $post->ID );
+        $is_menu       = ( 23 === (int) $post->ID || 'menu' === $post->post_name );
         ?>
         <div style="font-size: 13px; line-height: 1.5;">
             <p style="margin-top: 0; color: #475569;">
                 <?php _e( 'Instantly push clean Elementor section structures to this page.', 'santino' ); ?>
             </p>
             <p>
+                <?php if ( $is_menu ) : ?>
+                <a href="<?php echo esc_url( $sync_url_menu ); ?>" class="button button-primary" style="width: 100%; text-align: center; margin-bottom: 6px; background: #00625d; border-color: #004d49;" onclick="return confirm('Sync this page to 5 modular Menu Elementor widgets?');">
+                    <?php _e( '⚡ Sync 5 Menu Sections (Hero + Grid + VIP + App + Branches)', 'santino' ); ?>
+                </a>
+                <?php else : ?>
                 <a href="<?php echo esc_url( $sync_url_3sec ); ?>" class="button button-primary" style="width: 100%; text-align: center; margin-bottom: 6px;" onclick="return confirm('Sync this page to 3 clean Elementor sections?');">
                     <?php _e( '⚡ Sync 3 Sections (Hero + Portal + CTA)', 'santino' ); ?>
                 </a>
                 <a href="<?php echo esc_url( $sync_url_vip ); ?>" class="button button-secondary" style="width: 100%; text-align: center;" onclick="return confirm('Sync this page to VIP Membership layout?');">
                     <?php _e( 'Sync VIP Membership Layout', 'santino' ); ?>
                 </a>
+                <?php endif; ?>
             </p>
             <p class="description" style="font-size: 11px;">
                 <?php _e( 'Overwrites elementor data with individual editable widgets and clears cache.', 'santino' ); ?>
@@ -144,20 +152,21 @@ class Santino_Elementor_Pages_Sync {
             wp_die( 'Page not found with ID: ' . esc_html( $page_id ) );
         }
 
-        $is_menu_page      = ( ( isset( $_REQUEST['layout_type'] ) && 'menu_native' === $_REQUEST['layout_type'] ) || 'menu' === $post->post_name );
+        $is_menu_page      = ( ( isset( $_REQUEST['layout_type'] ) && in_array( $_REQUEST['layout_type'], array( 'menu_native', 'menu_sections' ), true ) ) || 'menu' === $post->post_name || 23 === (int) $page_id );
         $is_vip_membership = ( 22 === (int) $page_id || 'membership' === $post->post_name );
         $is_member_portal  = ( 36426 === (int) $page_id || in_array( $post->post_name, array( 'santino-member', 'coffee-club' ), true ) || false !== stripos( $post->post_title, 'Santino Member' ) );
 
         if ( $is_menu_page ) {
             update_post_meta( $page_id, '_wp_page_template', 'templates/template-menu.php' );
-            delete_post_meta( $page_id, '_elementor_edit_mode' );
+            update_post_meta( $page_id, '_elementor_edit_mode', 'builder' );
+            update_post_meta( $page_id, '_elementor_version', '3.25.0' );
             if ( class_exists( 'Santino_Handcrafted_Items_System' ) && method_exists( 'Santino_Handcrafted_Items_System', 'maybe_seed_items' ) ) {
                 Santino_Handcrafted_Items_System::maybe_seed_items();
             }
             if ( class_exists( 'Santino_Membership_System' ) && method_exists( 'Santino_Membership_System', 'get_branches_detailed' ) ) {
                 Santino_Membership_System::get_branches_detailed();
             }
-            $structure = array();
+            $structure = self::get_menu_five_sections_structure();
         } else {
             update_post_meta( $page_id, '_elementor_edit_mode', 'builder' );
             update_post_meta( $page_id, '_elementor_version', '3.25.0' );
@@ -293,12 +302,12 @@ class Santino_Elementor_Pages_Sync {
     }
 
     public static function auto_split_legacy_member_page() {
-        $target_ids = array( 36426, 22 );
+        $target_ids = array( 36426, 22, 23 );
         if ( isset( $_GET['post'] ) ) {
             $target_ids[] = intval( $_GET['post'] );
         }
 
-        $slugs = array( 'santino-member', 'membership', 'coffee-club' );
+        $slugs = array( 'santino-member', 'membership', 'coffee-club', 'menu' );
         foreach ( $slugs as $slug ) {
             $p = get_page_by_path( $slug );
             if ( $p ) {
@@ -340,8 +349,31 @@ class Santino_Elementor_Pages_Sync {
             $el_data           = get_post_meta( $pid, '_elementor_data', true );
             $is_vip_membership = ( 22 === (int) $pid || 'membership' === $post->post_name );
             $is_member_portal  = ( 36426 === (int) $pid || in_array( $post->post_name, array( 'santino-member', 'coffee-club' ), true ) || false !== stripos( $post->post_title, 'Santino Member' ) );
+            $is_menu_page      = ( 23 === (int) $pid || 'menu' === $post->post_name );
 
-            if ( $is_vip_membership ) {
+            if ( $is_menu_page ) {
+                if ( empty( $el_data ) || false !== strpos( $el_data, 'santino_menu_solution' ) || false === strpos( $el_data, 'santino_menu_grid' ) || get_post_meta( $pid, '_elementor_edit_mode', true ) !== 'builder' ) {
+                    $structure = self::get_menu_five_sections_structure();
+                    $json      = wp_json_encode( $structure, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+                    update_post_meta( $pid, '_elementor_data', wp_slash( $json ) );
+                    update_post_meta( $pid, '_elementor_edit_mode', 'builder' );
+                    update_post_meta( $pid, '_elementor_version', '3.25.0' );
+                    update_post_meta( $pid, '_wp_page_template', 'templates/template-menu.php' );
+                    delete_post_meta( $pid, '_elementor_css' );
+
+                    if ( ! empty( $post->post_content ) ) {
+                        wp_update_post( array( 'ID' => $pid, 'post_content' => '' ) );
+                    }
+
+                    $revisions = wp_get_post_revisions( $pid );
+                    if ( ! empty( $revisions ) ) {
+                        foreach ( $revisions as $rev ) {
+                            wp_delete_post_revision( $rev->ID );
+                        }
+                    }
+                    $cache_cleared = true;
+                }
+            } elseif ( $is_vip_membership ) {
                 if ( empty( $el_data ) || false !== strpos( $el_data, 'santino_membership_solution' ) || false === strpos( $el_data, 'santino_membership_perks' ) ) {
                     $structure = self::get_membership_four_sections_structure();
                     $json      = wp_json_encode( $structure, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );

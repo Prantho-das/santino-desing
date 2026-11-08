@@ -60,7 +60,10 @@ function santino_is_elementor_page( $post_id = null ) {
     if ( ! class_exists( '\Elementor\Plugin' ) ) {
         return false;
     }
-    if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+    if ( \Elementor\Plugin::$instance->editor->is_edit_mode() 
+      || \Elementor\Plugin::$instance->preview->is_preview_mode() 
+      || isset( $_GET['elementor-preview'] ) 
+      || ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) ) {
         return true;
     }
     if ( ! $post_id ) {

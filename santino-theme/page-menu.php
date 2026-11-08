@@ -8,9 +8,38 @@
 
 get_header();
 
-if ( have_posts() ) {
-    the_post();
+$is_elementor_page = false;
+if ( function_exists( 'santino_is_elementor_page' ) && santino_is_elementor_page() ) {
+    $is_elementor_page = true;
+} elseif ( class_exists( '\Elementor\Plugin' ) ) {
+    if ( \Elementor\Plugin::$instance->editor->is_edit_mode() 
+      || \Elementor\Plugin::$instance->preview->is_preview_mode() 
+      || isset( $_GET['elementor-preview'] ) 
+      || ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) ) {
+        $is_elementor_page = true;
+    } else {
+        $document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
+        if ( $document && $document->is_built_with_elementor() ) {
+            $is_elementor_page = true;
+        }
+    }
 }
+
+if ( $is_elementor_page ) :
+?>
+<div class="menu-page-wrap">
+  <?php
+  while ( have_posts() ) :
+      the_post();
+      the_content();
+  endwhile;
+  ?>
+</div>
+<?php
+else :
+  if ( have_posts() ) {
+      the_post();
+  }
 ?>
 
 <style>
@@ -523,24 +552,6 @@ h1, h2, h3, h4, h5, h6,
 <div class="menu-page-wrap">
 
   <?php
-  $is_elementor = false;
-  if ( function_exists( 'santino_is_elementor_page' ) && santino_is_elementor_page() ) {
-      $is_elementor = true;
-  } elseif ( class_exists( '\Elementor\Plugin' ) ) {
-      if ( \Elementor\Plugin::$instance->editor->is_edit_mode() 
-        || \Elementor\Plugin::$instance->preview->is_preview_mode() 
-        || isset( $_GET['elementor-preview'] ) 
-        || ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) ) {
-          $is_elementor = true;
-      }
-  }
-
-  if ( $is_elementor ) :
-      the_content();
-  else :
-  ?>
-
-  <?php
   $menu_hero_badge  = get_theme_mod( 'santino_menu_hero_badge', 'SANTINO SIGNATURE CAFE MENU' );
   $menu_hero_title  = get_theme_mod( 'santino_menu_hero_title', 'Artisan Coffee &' );
   $menu_hero_accent = get_theme_mod( 'santino_menu_hero_title_accent', 'Beverage Menu' );
@@ -928,7 +939,8 @@ h1, h2, h3, h4, h5, h6,
     </div>
   </section>
 
-  <?php endif; ?>
+</div>
+<?php endif; ?>
 
   <!-- 7. ITEM CUSTOMIZATION MODAL -->
   <div class="modal fade" id="itemCustomModal" tabindex="-1">
@@ -1057,8 +1069,6 @@ h1, h2, h3, h4, h5, h6,
 
     </div>
   </div>
-
-</div>
 
 <?php
 get_footer();

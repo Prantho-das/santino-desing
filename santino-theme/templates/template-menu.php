@@ -6,4 +6,4 @@
  * @package Santino
  */
 
-require_once SANTINO_DIR . '/page-menu.php';
+require get_template_directory() . '/page-menu.php';
