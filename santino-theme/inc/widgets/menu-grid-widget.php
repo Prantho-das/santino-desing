@@ -110,7 +110,7 @@ class Santino_Menu_Grid_Widget extends \Elementor\Widget_Base {
         <section class="menu-items-section py-5" id="menuGridSection">
           <div class="container">
             
-            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 reveal">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
               <div>
                 <?php if ( ! empty( $grid_badge ) ) : ?>
                 <div class="sec-pill-badge-wrap mb-1">
@@ -138,7 +138,10 @@ class Santino_Menu_Grid_Widget extends \Elementor\Widget_Base {
               <?php
               $dynamic_menu_items = class_exists( 'Santino_Handcrafted_Items_System' ) ? Santino_Handcrafted_Items_System::get_all_menu_items() : array();
               if ( ! empty( $dynamic_menu_items ) ) :
-                foreach ( $dynamic_menu_items as $m_item ) :
+                foreach ( $dynamic_menu_items as &$m_item ) :
+                  if ( ! empty( $m_item['img'] ) && strpos( $m_item['img'], '/assets/images/' ) !== false ) {
+                      $m_item['img'] = SANTINO_URI . '/assets/images/' . basename( parse_url( $m_item['img'], PHP_URL_PATH ) );
+                  }
                   $m_badge = ! empty( $m_item['tag'] ) ? $m_item['tag'] : 'Handcrafted';
                   $m_class = ! empty( $m_item['badgeClass'] ) ? $m_item['badgeClass'] : 'badge-teal';
                   $m_price = is_numeric( $m_item['price'] ?? '' ) ? '৳ ' . $m_item['price'] : $m_item['price'];
@@ -164,6 +167,7 @@ class Santino_Menu_Grid_Widget extends \Elementor\Widget_Base {
               </div>
               <?php
                 endforeach;
+                unset( $m_item );
               endif;
               ?>
             </div>

@@ -2,6 +2,32 @@
   font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif);
 }
 
+/* Force all sections on Menu Page to be immediately visible */
+.menu-page-wrap,
+.menu-page-wrap *,
+.elementor-23,
+.elementor-23 * {
+  visibility: visible;
+}
+
+.menu-page-wrap .reveal,
+.menu-page-wrap .reveal-left,
+.menu-page-wrap .reveal-right,
+.menu-page-wrap .reveal-scale,
+.elementor-23 .reveal,
+.elementor-23 .reveal-left,
+.elementor-23 .reveal-right,
+.elementor-23 .reveal-scale,
+body.elementor-editor-active .reveal,
+body.elementor-editor-active .reveal-left,
+body.elementor-editor-active .reveal-right,
+body.elementor-editor-active .reveal-scale {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+  transition: none !important;
+}
+
 .sec-title,
 .font-heading,
 h1, h2, h3, h4, h5, h6,
@@ -295,6 +321,11 @@ h1, h2, h3, h4, h5, h6,
   box-shadow: 0 4px 14px rgba(0, 98, 93, 0.25);
 }
 
+/* Handcrafted Items Section Background */
+.menu-items-section {
+  background-color: #fbf8f5 !important;
+}
+
 /* Menu Product Cards */
 .menu-product-card {
   background: #ffffff;
@@ -448,6 +479,94 @@ h1, h2, h3, h4, h5, h6,
 .btn-customize-pill:hover {
   background: var(--santino-teal, #00625d);
   color: #ffffff;
+}
+
+/* App Download Banner Desktop */
+.app-download-section {
+  padding: 50px 0;
+  background-color: #fbf8f3;
+}
+
+.app-download-card {
+  background: linear-gradient(135deg, #003633 0%, #005652 50%, #002826 100%);
+  border-radius: 24px;
+  padding: 44px 48px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 45px rgba(0, 54, 51, 0.22);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: #ffffff;
+}
+
+.app-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(223, 190, 141, 0.15);
+  color: #dfbe8d;
+  border: 1px solid rgba(223, 190, 141, 0.35);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.app-card-title {
+  color: #ffffff !important;
+  font-weight: 800;
+  font-size: 1.85rem;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+
+.app-card-sub {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.app-store-badge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 8px 18px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.app-store-badge-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #dfbe8d;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.app-store-badge-btn i {
+  font-size: 24px;
+}
+
+.badge-text-top {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.badge-text-main {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
 }
 
 @media (max-width: 991.98px) {

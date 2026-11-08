@@ -108,7 +108,7 @@ class Santino_Menu_App_Widget extends \Elementor\Widget_Base {
         $apple_url  = ! empty( $settings['apple_url'] ) ? ( is_array( $settings['apple_url'] ) ? ( $settings['apple_url']['url'] ?? '' ) : $settings['apple_url'] ) : 'https://apps.apple.com';
         ?>
         <!-- 5. APP PROMO CTA -->
-        <section class="app-download-section reveal">
+        <section class="app-download-section">
           <div class="container">
             <div class="app-download-card">
               <div class="row align-items-center g-4 text-center text-lg-start">

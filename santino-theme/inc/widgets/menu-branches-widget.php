@@ -91,7 +91,7 @@ class Santino_Menu_Branches_Widget extends \Elementor\Widget_Base {
         <section class="cafe-branches-section py-5" id="branches" style="background-color: #fff9f3;">
           <div class="container">
             
-            <div class="sec-heading-center text-center mb-5 reveal">
+            <div class="sec-heading-center text-center mb-5">
               <?php if ( ! empty( $badge ) ) : ?>
               <div class="sec-pill-badge-wrap mb-2">
                 <span class="sec-pill-badge"><i class="bi bi-geo-alt-fill text-danger me-1"></i> <?php echo esc_html( $badge ); ?></span>
@@ -103,7 +103,7 @@ class Santino_Menu_Branches_Widget extends \Elementor\Widget_Base {
               <?php endif; ?>
             </div>
 
-            <div class="d-flex justify-content-center flex-wrap gap-2 mb-5 reveal">
+            <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
               <button class="branch-filter-btn active" data-branch-filter="all">All Locations (<?php echo count( $branches_detailed ); ?>)</button>
               <?php foreach ( $region_filters as $rf ) : ?>
               <button class="branch-filter-btn" data-branch-filter="<?php echo esc_attr( sanitize_title( $rf ) ); ?>"><?php echo esc_html( $rf ); ?></button>
@@ -123,8 +123,11 @@ class Santino_Menu_Branches_Widget extends \Elementor\Widget_Base {
                   } elseif ( $idx % 2 === 0 ) {
                       $card_img = santino_img( 'imgi_27_santino_-_250522-07216.jpg' );
                   }
+                  if ( ! empty( $card_img ) && strpos( $card_img, '/assets/images/' ) !== false ) {
+                      $card_img = SANTINO_URI . '/assets/images/' . basename( parse_url( $card_img, PHP_URL_PATH ) );
+                  }
               ?>
-              <div class="col-lg-4 col-md-6 branch-item-col reveal" data-delay="<?php echo ( $idx + 1 ) * 100; ?>" data-region="<?php echo esc_attr( $b_region ); ?>">
+              <div class="col-lg-4 col-md-6 branch-item-col" data-delay="<?php echo ( $idx + 1 ) * 100; ?>" data-region="<?php echo esc_attr( $b_region ); ?>">
                 <div class="branch-card hover-lift">
                   <div class="branch-card-img" style="background-image: url('<?php echo esc_url( $card_img ); ?>');">
                     <span class="branch-tag-badge"><?php echo esc_html( ! empty( $b['division'] ) ? strtoupper( $b['division'] ) : 'EXPERIENCE HUB' ); ?></span>

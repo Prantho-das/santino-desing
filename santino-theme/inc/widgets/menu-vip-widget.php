@@ -121,6 +121,9 @@ class Santino_Menu_VIP_Widget extends \Elementor\Widget_Base {
         $title_accent = isset( $settings['vip_title_accent'] ) && $settings['vip_title_accent'] !== '' ? $settings['vip_title_accent'] : 'Hot & Cold Hero Brews';
         $desc         = ! empty( $settings['vip_desc'] ) ? $settings['vip_desc'] : ( ! empty( $settings['desc'] ) ? $settings['desc'] : 'Explore our barista favorites including Hot Cappuccino, Iced Latte, Rich Hot Mocha, Iced Mocha, and ice-blended Frappes crafted with 100% premium roasted beans.' );
         $img          = ! empty( $settings['poster_img']['url'] ) ? $settings['poster_img']['url'] : santino_img( 'santino-hero-poster.jpg' );
+        if ( ! empty( $img ) && strpos( $img, '/assets/images/' ) !== false ) {
+            $img = SANTINO_URI . '/assets/images/' . basename( parse_url( $img, PHP_URL_PATH ) );
+        }
         $btn1_text    = isset( $settings['btn1_text'] ) && $settings['btn1_text'] !== '' ? $settings['btn1_text'] : 'Buy 5 Get 6th Free';
         $btn1_url     = ! empty( $settings['btn1_url'] ) ? ( is_array( $settings['btn1_url'] ) ? ( $settings['btn1_url']['url'] ?? '' ) : $settings['btn1_url'] ) : '/membership/';
         $btn2_text    = isset( $settings['btn2_text'] ) && $settings['btn2_text'] !== '' ? $settings['btn2_text'] : 'Explore Full Menu';
@@ -130,7 +133,7 @@ class Santino_Menu_VIP_Widget extends \Elementor\Widget_Base {
         <section class="py-5" style="background: linear-gradient(135deg, #0f2723 0%, #004d49 100%);">
           <div class="container">
             <div class="row align-items-center g-4">
-              <div class="col-lg-5 text-center text-lg-start reveal">
+              <div class="col-lg-5 text-center text-lg-start">
                 <?php if ( ! empty( $badge ) ) : ?>
                 <div class="sec-pill-badge-wrap mb-3">
                   <span class="sec-pill-badge" style="background: rgba(195, 153, 108, 0.2); color: #dfbe8d; border-color: rgba(195, 153, 108, 0.4);">
@@ -159,7 +162,7 @@ class Santino_Menu_VIP_Widget extends \Elementor\Widget_Base {
                 </div>
                 <?php endif; ?>
               </div>
-              <div class="col-lg-7 text-center reveal">
+              <div class="col-lg-7 text-center">
                 <div class="rounded-4 overflow-hidden shadow-lg border border-white-10 text-center" style="max-height: 480px; background: #000;">
                   <img src="<?php echo esc_url( $img ); ?>" alt="Santino Coffee Hero Menu Poster" class="w-100 h-100 object-fit-contain" style="max-height: 480px;">
                 </div>

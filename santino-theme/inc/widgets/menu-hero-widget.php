@@ -188,6 +188,9 @@ class Santino_Menu_Hero_Widget extends \Elementor\Widget_Base {
             foreach ( $settings['category_banners'] as $b ) {
                 $img = ! empty( $b['banner_img']['url'] ) ? $b['banner_img']['url'] : '';
                 if ( $img ) {
+                    if ( strpos( $img, '/assets/images/' ) !== false ) {
+                        $img = SANTINO_URI . '/assets/images/' . basename( parse_url( $img, PHP_URL_PATH ) );
+                    }
                     $banner_items[] = array(
                         'img'   => $img,
                         'slug'  => ! empty( $b['banner_slug'] ) ? $b['banner_slug'] : 'signature-lattes',
@@ -201,32 +204,32 @@ class Santino_Menu_Hero_Widget extends \Elementor\Widget_Base {
         if ( empty( $banner_items ) ) {
             $banner_items = array(
                 array(
-                    'img'   => ! empty( $settings['banner_1_img']['url'] ) ? $settings['banner_1_img']['url'] : santino_img( 'banner-signature-lattes.jpg' ),
-                    'slug'  => ! empty( $settings['banner_1_slug'] ) ? $settings['banner_1_slug'] : 'signature-lattes',
+                    'img'   => SANTINO_URI . '/assets/images/banner-signature-lattes.jpg',
+                    'slug'  => 'signature-lattes',
                     'title' => 'Signature Lattes',
                     'url'   => 'javascript:void(0)',
                 ),
                 array(
-                    'img'   => ! empty( $settings['banner_2_img']['url'] ) ? $settings['banner_2_img']['url'] : santino_img( 'banner-barista-coffee.jpg' ),
-                    'slug'  => ! empty( $settings['banner_2_slug'] ) ? $settings['banner_2_slug'] : 'barista-coffee',
+                    'img'   => SANTINO_URI . '/assets/images/banner-barista-coffee.jpg',
+                    'slug'  => 'barista-coffee',
                     'title' => 'Barista Coffee',
                     'url'   => 'javascript:void(0)',
                 ),
                 array(
-                    'img'   => ! empty( $settings['banner_3_img']['url'] ) ? $settings['banner_3_img']['url'] : santino_img( 'banner-fruity-americano.jpg' ),
-                    'slug'  => ! empty( $settings['banner_3_slug'] ) ? $settings['banner_3_slug'] : 'fruity-americano',
+                    'img'   => SANTINO_URI . '/assets/images/banner-fruity-americano.jpg',
+                    'slug'  => 'fruity-americano',
                     'title' => 'Fruity Americano',
                     'url'   => 'javascript:void(0)',
                 ),
                 array(
-                    'img'   => ! empty( $settings['banner_4_img']['url'] ) ? $settings['banner_4_img']['url'] : santino_img( 'banner-soe-espresso.jpg' ),
-                    'slug'  => ! empty( $settings['banner_4_slug'] ) ? $settings['banner_4_slug'] : 'soe-espresso',
+                    'img'   => SANTINO_URI . '/assets/images/banner-soe-espresso.jpg',
+                    'slug'  => 'soe-espresso',
                     'title' => 'Single Origin (SOE)',
                     'url'   => 'javascript:void(0)',
                 ),
                 array(
-                    'img'   => ! empty( $settings['banner_5_img']['url'] ) ? $settings['banner_5_img']['url'] : santino_img( 'banner-matcha-tea.jpg' ),
-                    'slug'  => ! empty( $settings['banner_5_slug'] ) ? $settings['banner_5_slug'] : 'matcha-tea',
+                    'img'   => SANTINO_URI . '/assets/images/banner-matcha-tea.jpg',
+                    'slug'  => 'matcha-tea',
                     'title' => 'Matcha & Frappe',
                     'url'   => 'javascript:void(0)',
                 ),
@@ -241,7 +244,7 @@ class Santino_Menu_Hero_Widget extends \Elementor\Widget_Base {
 
           <div class="container position-relative" style="z-index: 1;">
             
-            <div class="row align-items-center mb-4 g-3 reveal">
+            <div class="row align-items-center mb-4 g-3">
               <div class="col-lg-6">
                 <?php if ( ! empty( $badge_text ) ) : ?>
                 <div class="sec-pill-badge-wrap mb-2">
@@ -268,7 +271,7 @@ class Santino_Menu_Hero_Widget extends \Elementor\Widget_Base {
             </div>
 
             <!-- Category Visual Banners -->
-            <div class="luckin-category-banners-container reveal">
+            <div class="luckin-category-banners-container">
               <?php foreach ( $banner_items as $bi ) : 
                 $card_href = ( ! empty( $bi['url'] ) && $bi['url'] !== '#' ) ? esc_url( $bi['url'] ) : 'javascript:void(0);';
               ?>
