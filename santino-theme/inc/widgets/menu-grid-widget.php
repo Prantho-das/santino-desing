@@ -145,7 +145,7 @@ class Santino_Menu_Grid_Widget extends \Elementor\Widget_Base {
                   $m_desc  = ! empty( $m_item['roast'] ) ? $m_item['roast'] : ( $m_item['desc'] ?? '' );
               ?>
               <div class="col-md-6 col-lg-4">
-                <div class="menu-product-card">
+                <div class="menu-product-card" onclick="if(typeof openItemCustomModal==='function') openItemCustomModal('<?php echo esc_js( $m_item['id'] ?? '' ); ?>')">
                   <div class="menu-card-image-wrap">
                     <span class="menu-badge-pill <?php echo esc_attr( $m_class ); ?>"><?php echo esc_html( $m_badge ); ?></span>
                     <img src="<?php echo esc_url( $m_item['img'] ); ?>" alt="<?php echo esc_attr( $m_item['name'] ); ?>" class="menu-card-img" loading="lazy">

@@ -20,7 +20,6 @@ class Santino_Elementor_Pages_Sync {
         add_action( 'init', array( __CLASS__, 'ensure_pages' ), 20 );
         add_action( 'admin_init', array( __CLASS__, 'admin_check' ), 20 );
         add_action( 'admin_init', array( __CLASS__, 'auto_split_legacy_member_page' ), 5 );
-        add_action( 'template_redirect', array( __CLASS__, 'auto_split_legacy_member_page' ), 5 );
         add_action( 'elementor/editor/init', array( __CLASS__, 'auto_split_legacy_member_page' ), 5 );
         add_action( 'elementor/editor/before_enqueue_scripts', array( __CLASS__, 'auto_split_legacy_member_page' ), 5 );
         add_action( 'admin_menu', array( __CLASS__, 'register_admin_menu' ) );
@@ -352,7 +351,7 @@ class Santino_Elementor_Pages_Sync {
             $is_menu_page      = ( 23 === (int) $pid || 'menu' === $post->post_name );
 
             if ( $is_menu_page ) {
-                if ( empty( $el_data ) || false !== strpos( $el_data, 'santino_menu_solution' ) || false === strpos( $el_data, 'santino_menu_grid' ) || get_post_meta( $pid, '_elementor_edit_mode', true ) !== 'builder' ) {
+                if ( empty( $el_data ) || false !== strpos( $el_data, 'santino_menu_solution' ) || get_post_meta( $pid, '_elementor_edit_mode', true ) !== 'builder' ) {
                     $structure = self::get_menu_five_sections_structure();
                     $json      = wp_json_encode( $structure, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
                     update_post_meta( $pid, '_elementor_data', wp_slash( $json ) );
@@ -709,6 +708,38 @@ class Santino_Elementor_Pages_Sync {
                                     'title_accent'       => 'Beverage Menu',
                                     'desc_text'          => 'Crafted with master roasted beans, plant-based dairy, and precision Italian extraction.',
                                     'search_placeholder'=> 'Search espresso, cold brew, matcha...',
+                                    'category_banners'   => array(
+                                        array(
+                                            '_id'          => 'b1',
+                                            'banner_img'   => array( 'url' => santino_img( 'banner-signature-lattes.jpg' ) ),
+                                            'banner_title' => 'Signature Lattes',
+                                            'banner_slug'  => 'signature-lattes',
+                                        ),
+                                        array(
+                                            '_id'          => 'b2',
+                                            'banner_img'   => array( 'url' => santino_img( 'banner-barista-coffee.jpg' ) ),
+                                            'banner_title' => 'Barista Coffee',
+                                            'banner_slug'  => 'barista-coffee',
+                                        ),
+                                        array(
+                                            '_id'          => 'b3',
+                                            'banner_img'   => array( 'url' => santino_img( 'banner-fruity-americano.jpg' ) ),
+                                            'banner_title' => 'Fruity Americano',
+                                            'banner_slug'  => 'fruity-americano',
+                                        ),
+                                        array(
+                                            '_id'          => 'b4',
+                                            'banner_img'   => array( 'url' => santino_img( 'banner-soe-espresso.jpg' ) ),
+                                            'banner_title' => 'Single Origin (SOE)',
+                                            'banner_slug'  => 'soe-espresso',
+                                        ),
+                                        array(
+                                            '_id'          => 'b5',
+                                            'banner_img'   => array( 'url' => santino_img( 'banner-matcha-tea.jpg' ) ),
+                                            'banner_title' => 'Matcha & Frappe',
+                                            'banner_slug'  => 'matcha-tea',
+                                        ),
+                                    ),
                                 ),
                             ),
                         ),
@@ -867,6 +898,38 @@ class Santino_Elementor_Pages_Sync {
                             'title_accent'       => 'Beverage Menu',
                             'desc_text'          => 'Crafted with master roasted beans, plant-based dairy, and precision Italian extraction.',
                             'search_placeholder'=> 'Search espresso, cold brew, matcha...',
+                            'category_banners'   => array(
+                                array(
+                                    '_id'          => 'b1',
+                                    'banner_img'   => array( 'url' => santino_img( 'banner-signature-lattes.jpg' ) ),
+                                    'banner_title' => 'Signature Lattes',
+                                    'banner_slug'  => 'signature-lattes',
+                                ),
+                                array(
+                                    '_id'          => 'b2',
+                                    'banner_img'   => array( 'url' => santino_img( 'banner-barista-coffee.jpg' ) ),
+                                    'banner_title' => 'Barista Coffee',
+                                    'banner_slug'  => 'barista-coffee',
+                                ),
+                                array(
+                                    '_id'          => 'b3',
+                                    'banner_img'   => array( 'url' => santino_img( 'banner-fruity-americano.jpg' ) ),
+                                    'banner_title' => 'Fruity Americano',
+                                    'banner_slug'  => 'fruity-americano',
+                                ),
+                                array(
+                                    '_id'          => 'b4',
+                                    'banner_img'   => array( 'url' => santino_img( 'banner-soe-espresso.jpg' ) ),
+                                    'banner_title' => 'Single Origin (SOE)',
+                                    'banner_slug'  => 'soe-espresso',
+                                ),
+                                array(
+                                    '_id'          => 'b5',
+                                    'banner_img'   => array( 'url' => santino_img( 'banner-matcha-tea.jpg' ) ),
+                                    'banner_title' => 'Matcha & Frappe',
+                                    'banner_slug'  => 'matcha-tea',
+                                ),
+                            ),
                         ),
                     ),
                     array(

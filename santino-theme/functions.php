@@ -79,6 +79,19 @@ function santino_is_elementor_page( $post_id = null ) {
     return get_post_meta( $post_id, '_elementor_edit_mode', true ) === 'builder';
 }
 
+add_filter( 'elementor/frontend/element_cache/is_cacheable', '__return_false' );
+add_action( 'save_post', function( $post_id ) {
+    delete_post_meta( $post_id, '_elementor_element_cache' );
+    delete_post_meta( $post_id, '_elementor_css' );
+} );
+add_action( 'elementor/editor/after_save', function( $post_id ) {
+    delete_post_meta( $post_id, '_elementor_element_cache' );
+    delete_post_meta( $post_id, '_elementor_css' );
+    if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->files_manager ) ) {
+        \Elementor\Plugin::$instance->files_manager->clear_cache();
+    }
+} );
+
 
 /**
  * Update WooCommerce Cart Count via AJAX
