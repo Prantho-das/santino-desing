@@ -273,10 +273,12 @@ class Santino_Menu_Hero_Widget extends \Elementor\Widget_Base {
             <!-- Category Visual Banners -->
             <div class="luckin-category-banners-container">
               <?php foreach ( $banner_items as $bi ) : 
-                $card_href = ( ! empty( $bi['url'] ) && $bi['url'] !== '#' ) ? esc_url( $bi['url'] ) : 'javascript:void(0);';
+                $raw_url = ! empty( $bi['url'] ) ? trim( $bi['url'] ) : '';
+                $is_js_or_empty = empty( $raw_url ) || $raw_url === '#' || strpos( $raw_url, 'javascript:' ) === 0;
+                $card_href = $is_js_or_empty ? 'javascript:void(0);' : esc_url( $raw_url );
               ?>
-              <a href="<?php echo $card_href; ?>" onclick="filterByCategory('<?php echo esc_js( $bi['slug'] ); ?>')" class="luckin-banner-card hover-lift">
-                <img src="<?php echo esc_url( $bi['img'] ); ?>" alt="<?php echo esc_attr( $bi['title'] ); ?>" loading="lazy">
+              <a href="<?php echo $card_href; ?>" onclick="if(typeof filterByCategory==='function') { filterByCategory('<?php echo esc_js( $bi['slug'] ); ?>'); return false; }" class="luckin-banner-card hover-lift">
+                <img src="<?php echo esc_url( $bi['img'] ); ?>" alt="<?php echo esc_attr( $bi['title'] ); ?>" loading="eager" decoding="sync">
               </a>
               <?php endforeach; ?>
             </div>

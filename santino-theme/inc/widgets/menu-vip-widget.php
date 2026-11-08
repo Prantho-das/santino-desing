@@ -163,8 +163,8 @@ class Santino_Menu_VIP_Widget extends \Elementor\Widget_Base {
                 <?php endif; ?>
               </div>
               <div class="col-lg-7 text-center">
-                <div class="rounded-4 overflow-hidden shadow-lg border border-white-10 text-center" style="max-height: 480px; background: #000;">
-                  <img src="<?php echo esc_url( $img ); ?>" alt="Santino Coffee Hero Menu Poster" class="w-100 h-100 object-fit-contain" style="max-height: 480px;">
+                <div class="rounded-4 overflow-hidden shadow-lg border border-white-10 text-center d-flex align-items-center justify-content-center" style="max-height: 480px; background: rgba(0, 0, 0, 0.2);">
+                  <img src="<?php echo esc_url( $img ); ?>" alt="Santino Coffee Hero Menu Poster" class="img-fluid rounded-4 shadow-sm" style="max-height: 480px; width: auto; object-fit: contain;" loading="eager" decoding="sync">
                 </div>
               </div>
             </div>
