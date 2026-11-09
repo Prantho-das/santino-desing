@@ -1,0 +1,74 @@
+.membership-page-wrap,
+.santino-member-wrap,
+.pro-banner-hero, 
+.perks-section, 
+.club-portal-section,
+#perks,
+#clubPortal {
+  font-family: var(--kp-font-body, 'Plus Jakarta Sans', sans-serif);
+}
+
+.pro-banner-title,
+.sec-title,
+.perk-title,
+.font-heading,
+.sec-pill-badge,
+.portal-tabs .nav-link,
+.btn-portal-submit,
+.btn-hero-lifestyle,
+.btn-hero-outline,
+.vip-card-surface h4,
+.vip-card-surface .badge,
+.perk-pill-tag {
+  font-family: var(--kp-font-title, 'Montserrat', sans-serif) !important;
+  letter-spacing: -0.3px;
+}
+
+.sec-title {
+  font-size: clamp(2rem, 3.5vw, 2.8rem) !important;
+  font-weight: 900 !important;
+  color: #111111 !important;
+  letter-spacing: -0.5px !important;
+}
+
+.sec-title-accent,
+.menu-title-highlight {
+  color: var(--santino-teal, #00625d) !important;
+}
+
+.sec-pill-badge {
+  font-family: var(--kp-font-title, 'Montserrat', sans-serif) !important;
+  font-weight: 800 !important;
+  letter-spacing: 1px !important;
+  font-size: 0.78rem !important;
+}
+
+.floating-bg-icons {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  z-index: 1 !important;
+}
+
+.float-item {
+  position: absolute !important;
+  color: var(--santino-teal, #00625d) !important;
+  opacity: 0.16 !important;
+  filter: drop-shadow(0 6px 16px rgba(0, 98, 93, 0.15)) !important;
+  will-change: transform !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.float-item svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 65px !important;
+  max-height: 65px !important;
+  display: block !important;
+}

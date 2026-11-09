@@ -373,21 +373,24 @@ class Santino_Elementor_Pages_Sync {
                     $cache_cleared = true;
                 }
             } elseif ( $is_vip_membership ) {
-                if ( empty( $el_data ) || false !== strpos( $el_data, 'santino_membership_solution' ) || false === strpos( $el_data, 'santino_membership_perks' ) ) {
+                $already_migrated = get_post_meta( $pid, '_santino_split_migrated', true );
+                if ( ! empty( $el_data ) && false === strpos( $el_data, 'santino_membership_solution' ) ) {
+                    update_post_meta( $pid, '_santino_split_migrated', '1' );
+                }
+                if ( ! $already_migrated && ( empty( $el_data ) || false !== strpos( $el_data, 'santino_membership_solution' ) ) ) {
                     $structure = self::get_membership_four_sections_structure();
                     $json      = wp_json_encode( $structure, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
                     update_post_meta( $pid, '_elementor_data', wp_slash( $json ) );
                     update_post_meta( $pid, '_elementor_edit_mode', 'builder' );
                     update_post_meta( $pid, '_elementor_version', '3.25.0' );
                     update_post_meta( $pid, '_wp_page_template', 'templates/template-membership.php' );
+                    update_post_meta( $pid, '_santino_split_migrated', '1' );
                     delete_post_meta( $pid, '_elementor_css' );
 
-                    // Clear raw text / CSS from post_content so it's not seen as text editor
                     if ( ! empty( $post->post_content ) ) {
                         wp_update_post( array( 'ID' => $pid, 'post_content' => '' ) );
                     }
 
-                    // Delete revisions & autosaves so Elementor never opens old monolithic widget
                     $revisions = wp_get_post_revisions( $pid );
                     if ( ! empty( $revisions ) ) {
                         foreach ( $revisions as $rev ) {
@@ -397,21 +400,24 @@ class Santino_Elementor_Pages_Sync {
                     $cache_cleared = true;
                 }
             } elseif ( $is_member_portal || ( ! empty( $el_data ) && false !== strpos( $el_data, 'santino_member_portal' ) ) ) {
-                if ( empty( $el_data ) || false !== strpos( $el_data, 'santino_member_portal' ) || false === strpos( $el_data, 'santino_membership_hero' ) ) {
+                $already_migrated = get_post_meta( $pid, '_santino_split_migrated', true );
+                if ( ! empty( $el_data ) && false === strpos( $el_data, 'santino_member_portal' ) ) {
+                    update_post_meta( $pid, '_santino_split_migrated', '1' );
+                }
+                if ( ! $already_migrated && ( empty( $el_data ) || false !== strpos( $el_data, 'santino_member_portal' ) ) ) {
                     $structure = self::get_santino_member_three_sections_structure();
                     $json      = wp_json_encode( $structure, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
                     update_post_meta( $pid, '_elementor_data', wp_slash( $json ) );
                     update_post_meta( $pid, '_elementor_edit_mode', 'builder' );
                     update_post_meta( $pid, '_elementor_version', '3.25.0' );
                     update_post_meta( $pid, '_wp_page_template', 'templates/template-santino-member.php' );
+                    update_post_meta( $pid, '_santino_split_migrated', '1' );
                     delete_post_meta( $pid, '_elementor_css' );
 
-                    // Clear raw text / CSS from post_content
                     if ( ! empty( $post->post_content ) ) {
                         wp_update_post( array( 'ID' => $pid, 'post_content' => '' ) );
                     }
 
-                    // Delete revisions & autosaves so Elementor editor opens 3 clean modular sections
                     $revisions = wp_get_post_revisions( $pid );
                     if ( ! empty( $revisions ) ) {
                         foreach ( $revisions as $rev ) {
@@ -1183,14 +1189,7 @@ class Santino_Elementor_Pages_Sync {
 
             if ( empty( $el_data ) || $el_data === '[]' || $el_data === '""' ) {
                 $needs_structure = true;
-            } elseif ( isset( $data['widgets'] ) ) {
-                foreach ( $data['widgets'] as $w_item ) {
-                    if ( strpos( $el_data, $w_item['widget'] ) === false ) {
-                        $needs_structure = true;
-                        break;
-                    }
-                }
-            } elseif ( isset( $data['widget'] ) && strpos( $el_data, $data['widget'] ) === false ) {
+            } elseif ( false !== strpos( $el_data, 'santino_membership_solution' ) || false !== strpos( $el_data, 'santino_member_portal' ) ) {
                 $needs_structure = true;
             }
 

@@ -184,7 +184,10 @@ class Santino_Second_Nav_Walker extends Walker_Nav_Menu {
         $has_hide_class  = in_array( 'hide-label', (array) $item->classes ) || in_array( 'no-label', (array) $item->classes ) || in_array( 'logo-only', (array) $item->classes );
 
         if ( $has_image ) {
-            $clean_title = '';
+            $is_swapno = ( false !== strpos( $upper_title, 'SWAPNO' ) || false !== strpos( $upper_title, 'SHWAPNO' ) || false !== strpos( $lower_url, '/swapno' ) );
+            if ( $item_hide_label === '1' || $has_hide_class || $hide_label_opt === '1' || $is_swapno ) {
+                $clean_title = '';
+            }
         }
 
         $output .= '<a href="' . $url . '" class="second-menu-item ' . $active . '">';
@@ -307,7 +310,9 @@ function santino_second_bar_fallback() {
         echo $media;
         $lbl = trim( strip_tags( (string) $item['title'] ) );
         if ( $has_logo ) {
-            $lbl = '';
+            if ( $item['alt'] === 'SWAPNO' || $hide_all_labels === '1' ) {
+                $lbl = '';
+            }
         }
         if ( $lbl !== '' && $lbl !== '&nbsp;' && $lbl !== '(no label)' && $lbl !== '#' ) {
             echo ' <span>' . esc_html( $lbl ) . '</span>';

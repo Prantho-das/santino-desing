@@ -845,6 +845,7 @@ h1, h2, h3, h4, h5, h6,
   vertical-align: middle;
   display: inline-block;
   transition: transform 0.2s ease;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08));
 }
 .second-menu-item:hover .second-menu-logo {
   transform: scale(1.08);

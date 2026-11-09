@@ -67,7 +67,7 @@ function santino_is_elementor_page( $post_id = null ) {
         return true;
     }
     if ( ! $post_id ) {
-        $post_id = get_the_ID() ? get_the_ID() : get_queried_object_id();
+        $post_id = get_queried_object_id() ?: get_the_ID();
     }
     if ( ! $post_id ) {
         return false;
@@ -131,6 +131,9 @@ function santino_enqueue_scripts() {
     }
     if ( file_exists( SANTINO_DIR . '/assets/css/menu-page.css' ) ) {
         wp_enqueue_style( 'santino-menu-style', SANTINO_URI . '/assets/css/menu-page.css', array( 'santino-theme-style' ), SANTINO_VERSION );
+    }
+    if ( file_exists( SANTINO_DIR . '/assets/css/membership-page.css' ) ) {
+        wp_enqueue_style( 'santino-membership-style', SANTINO_URI . '/assets/css/membership-page.css', array( 'santino-theme-style' ), SANTINO_VERSION );
     }
 
     // Bootstrap JS
