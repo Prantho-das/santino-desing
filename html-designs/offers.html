@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7 Days, 7 Reasons to Celebrate | Santino Coffee Offers</title>
+  <meta name="description" content="Enjoy Santino Coffee's dynamic 7-day 3+1 FREE beverage offers across Dhaka cafes, stackable with Santino VIP Coffee Club stamps.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --santino-teal: #00625d; --santino-gold: #c3996c; --santino-gold-light: #dfbe8d; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; color: #12211e; background: #ffffff; }
+    .font-heading, h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
+    .top-contact-bar { background: #002d2b; color: rgba(255,255,255,0.85); font-size: 12px; padding: 8px 0; }
+    .top-contact-bar a { color: #dfbe8d; text-decoration: none; }
+    .site-header { background: #ffffff; border-bottom: 1px solid #e8f0ed; position: sticky; top: 0; z-index: 1000; }
+    .nav-link-custom { color: #12211e; font-weight: 700; font-size: 13px; text-transform: uppercase; text-decoration: none; padding: 8px 14px; letter-spacing: 0.5px; }
+    .nav-link-custom:hover, .nav-link-custom.active { color: #00625d; }
+    .sec-pill-badge-wrap { display: inline-flex; align-items: center; gap: 12px; }
+    .sec-pill-line { width: 32px; height: 2px; background: #c3996c; display: inline-block; }
+    .sec-pill-badge { font-size: 11px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #00625d; }
+    .sec-pill-badge-wrap.light .sec-pill-badge { color: #dfbe8d; }
+    .sec-title { font-weight: 900; font-size: clamp(1.75rem, 3.2vw, 2.5rem); color: #12211e; letter-spacing: -0.5px; }
+    .sec-title-accent { color: #00625d; }
+    .btn-hero-lifestyle, .btn-hero-outline {
+      font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13.5px; letter-spacing: 0.6px;
+      text-transform: uppercase; padding: 13px 30px; border-radius: 50px; display: inline-flex;
+      align-items: center; gap: 8px; text-decoration: none; transition: all 0.25s ease;
+    }
+    .btn-hero-lifestyle { background: #00625d; border: 2px solid #00625d; color: #fff; box-shadow: 0 6px 18px rgba(0,98,93,0.35); }
+    .btn-hero-lifestyle:hover { background: #004d49; color: #fff; transform: translateY(-2px); }
+    .btn-hero-outline { background: transparent; border: 2px solid rgba(255,255,255,0.85); color: #fff; }
+    .btn-hero-outline:hover { background: #fff; color: #00625d; }
+    .santino-today-spotlight {
+      background: linear-gradient(135deg, #004d49 0%, #002d2b 65%, #011d1c 100%);
+      border: 1.5px solid rgba(223,190,141,0.55); border-radius: 22px; padding: 26px 30px;
+      box-shadow: 0 18px 40px rgba(0,77,73,0.22);
+    }
+    .santino-live-pill {
+      background: rgba(223,190,141,0.2); color: #dfbe8d; border: 1px solid rgba(223,190,141,0.45);
+      font-size: 11px; letter-spacing: 0.8px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .santino-live-pill .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.25); }
+    .santino-countdown-pill { background: rgba(255,255,255,0.12); color: #fff; font-size: 11px; padding: 6px 12px; }
+    .santino-promo-day-card {
+      background: #fff; border: 1.5px solid #e3eeea; border-radius: 20px; padding: 24px 22px;
+      height: 100%; display: flex; flex-direction: column; transition: all 0.3s ease;
+      box-shadow: 0 8px 22px rgba(0,77,73,0.04);
+    }
+    .santino-promo-day-card:hover { transform: translateY(-6px); border-color: rgba(195,153,108,0.6); box-shadow: 0 18px 36px rgba(0,77,73,0.1); }
+    .santino-promo-day-card.is-today-active {
+      background: linear-gradient(180deg, #ffffff 0%, #f0faf7 100%);
+      border: 2px solid #00625d; box-shadow: 0 18px 38px rgba(0,98,93,0.18), 0 0 0 4px rgba(223,190,141,0.25);
+    }
+    .promo-day-label { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: 1.2px; color: #00625d; }
+    .promo-status-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; background: #f0f6f4; color: #4b6360; }
+    .is-today-active .promo-status-tag { background: #00625d; color: #dfbe8d; }
+    .promo-offer-pill { display: inline-block; align-self: flex-start; background: linear-gradient(135deg, rgba(0,98,93,0.1) 0%, rgba(195,153,108,0.2) 100%); color: #004d49; font-weight: 800; font-size: 13px; padding: 5px 12px; border-radius: 8px; }
+    .promo-items-title { font-size: 1.15rem; font-weight: 800; color: #12211e; line-height: 1.35; }
+    .promo-claim-link { font-size: 12.5px; font-weight: 700; color: #00625d; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+    .site-footer { background: #0b1918; color: rgba(255,255,255,0.75); padding: 60px 0 30px; font-size: 14px; }
+    .footer-title { color: #fff; font-weight: 700; font-size: 15px; margin-bottom: 16px; }
+    .footer-links { list-style: none; padding: 0; }
+    .footer-links li { margin-bottom: 8px; }
+    .footer-links a { color: rgba(255,255,255,0.65); text-decoration: none; }
+    .footer-links a:hover { color: #dfbe8d; }
+  </style>
+</head>
+<body>
+  <div class="top-contact-bar d-none d-lg-block">
+    <div class="container-fluid px-lg-5 d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span>Sales &amp; Service: <a href="tel:+8801613334514">+880 1613-334514</a></span>
+        <span>Email: <a href="mailto:sales@santino.com.bd">sales@santino.com.bd</a></span>
+      </div>
+      <div class="d-flex gap-3">
+        <a href="membership.html">VIP Coffee Club</a>
+        <span>|</span>
+        <a href="menu.html">Menu</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container-fluid px-lg-5 py-3 d-flex align-items-center justify-content-between">
+      <a href="index.html" class="fw-bold text-decoration-none" style="color:#00625d;font-family:'Montserrat',sans-serif;font-size:20px;">SANTINO COFFEE</a>
+      <nav class="d-none d-lg-flex align-items-center gap-1">
+        <a href="index.html" class="nav-link-custom">Home</a>
+        <a href="menu.html" class="nav-link-custom">Menu</a>
+        <a href="offers.html" class="nav-link-custom active">Daily Offers</a>
+        <a href="membership.html" class="nav-link-custom">VIP Club</a>
+      </nav>
+      <a href="membership.html#clubPortal" class="btn-hero-lifestyle py-2 px-4" style="font-size:12px;">VIP Portal</a>
+    </div>
+  </header>
+
+  <section class="position-relative d-flex align-items-center text-center text-white" style="min-height: 410px; background: linear-gradient(135deg, #002d2b 0%, #00625d 100%); padding: 80px 0;">
+    <div class="container" style="max-width: 820px;">
+      <div class="sec-pill-badge-wrap light mb-3">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge"><i class="bi bi-stars me-1 text-warning"></i> 7 DAYS, 7 REASONS TO CELEBRATE</span>
+        <span class="sec-pill-line"></span>
+      </div>
+      <h1 class="mb-3" style="font-size: clamp(2.2rem, 4.5vw, 3.4rem); font-weight: 900; line-height: 1.18;">
+        Daily <span style="color: #dfbe8d;">3 + 1 FREE</span> Cafe Offers
+      </h1>
+      <p class="mb-4 mx-auto" style="max-width: 620px; font-size: 1.05rem; color: rgba(255,255,255,0.9);">
+        Order 3 handcrafted cups and get the 4th free every day of the week — plus earn 3 VIP Stamps toward your Buy 5, Get 1 Free card!
+      </p>
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="#dailyPromos" class="btn-hero-lifestyle"><span>Today's Live Offer</span> <i class="bi bi-arrow-down-short"></i></a>
+        <a href="membership.html#clubPortal" class="btn-hero-outline"><i class="bi bi-gem text-warning"></i> <span>VIP Stamp Portal</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 santino-daily-promos-section" id="dailyPromos" data-wa-number="8801613334514" style="background: linear-gradient(180deg, #ffffff 0%, #f5f9f8 100%);">
+    <div class="container py-lg-3">
+      <div class="text-center mx-auto mb-4" style="max-width: 720px;">
+        <div class="sec-pill-badge-wrap mb-2">
+          <span class="sec-pill-line"></span>
+          <span class="sec-pill-badge"><i class="bi bi-calendar2-heart-fill me-1"></i> WEEKLY PROMOTION CALENDAR</span>
+          <span class="sec-pill-line"></span>
+        </div>
+        <h2 class="sec-title mb-2">7 Days, <span class="sec-title-accent">7 Reasons</span> to Celebrate</h2>
+        <p class="text-muted mb-0">Today's active offer highlights automatically based on Dhaka local time (UTC+6).</p>
+      </div>
+
+      <div class="santino-today-spotlight mb-4">
+        <div class="row align-items-center g-3">
+          <div class="col-lg-8">
+            <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
+              <span class="badge rounded-pill santino-live-pill"><span class="live-dot"></span> TODAY'S LIVE OFFER &bull; <span class="js-today-day-name">TODAY</span></span>
+              <span class="badge rounded-pill santino-countdown-pill"><i class="bi bi-clock me-1"></i> Ends in <span class="js-dhaka-countdown">00:00:00</span></span>
+            </div>
+            <h3 class="fw-bold text-white mb-1 js-today-title">3 + 1 FREE — Loading Today's Special...</h3>
+            <p class="mb-0 text-white-50 small">Order 3 cups &amp; get the 4th cup 100% free. VIP Members also earn 3 Coffee Stamps on paid cups!</p>
+          </div>
+          <div class="col-lg-4 text-lg-end">
+            <a href="https://wa.me/8801613334514" target="_blank" class="btn-hero-lifestyle js-today-wa-btn">
+              <i class="bi bi-whatsapp"></i> <span>Claim Today's Offer</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 g-md-4 justify-content-center" id="promoCardsGrid"></div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-white border-top text-center">
+    <div class="container py-3" style="max-width: 740px;">
+      <div class="sec-pill-badge-wrap mb-2">
+        <span class="sec-pill-line"></span>
+        <span class="sec-pill-badge"><i class="bi bi-award-fill me-1"></i> STACK WITH VIP CLUB</span>
+        <span class="sec-pill-line"></span>
+      </div>
+      <h2 class="sec-title mb-2">Keep Earning Your <span class="sec-title-accent">5-Cup Stamp Rewards</span></h2>
+      <p class="text-muted mb-4">All existing Santino VIP perks remain active: Buy 5 Get 1 Free stamp card, 15% off roasted beans, Birthday Month Treat &amp; Cupping Masterclasses.</p>
+      <a href="membership.html#clubPortal" class="btn-hero-lifestyle"><span>Open VIP Stamp Portal</span> <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+      <div>&copy; 2026 Santino Coffee. All Rights Reserved.</div>
+      <div class="d-flex gap-3">
+        <a href="membership.html" class="text-decoration-none text-white-50">VIP Coffee Club</a>
+        <a href="menu.html" class="text-decoration-none text-white-50">Menu</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const promos = [
+        { key: 'sunday',    day: 'Sunday',    title: '3 + 1 FREE', items: 'Hot or Iced Chocolate',             badge: 'Weekend Kickoff' },
+        { key: 'monday',    day: 'Monday',    title: '3 + 1 FREE', items: 'Hot or Cold Latte',                 badge: 'Monday Fuel' },
+        { key: 'tuesday',   day: 'Tuesday',   title: '3 + 1 FREE', items: 'Mocha / Caramel / Hazelnut Frappe', badge: 'Frappe Mania' },
+        { key: 'wednesday', day: 'Wednesday', title: '3 + 1 FREE', items: 'Chai Latte',                        badge: 'Midweek Comfort' },
+        { key: 'thursday',  day: 'Thursday',  title: '3 + 1 FREE', items: 'Hot Cappuccino',                    badge: 'Classic Thursday' },
+        { key: 'friday',    day: 'Friday',    title: '3 + 1 FREE', items: 'Iced Mocha',                        badge: 'Friday Chill' },
+        { key: 'saturday',  day: 'Saturday',  title: '3 + 1 FREE', items: 'Iced Latte',                        badge: 'Weekend Vibes' }
+      ];
+
+      function getDhakaNow() {
+        const now = new Date();
+        return new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (6 * 3600000));
+      }
+
+      const grid = document.getElementById('promoCardsGrid');
+      const waNum = '8801613334514';
+      grid.innerHTML = promos.map(function(p) {
+        const waMsg = encodeURIComponent('Hi Santino! I want to claim the ' + p.day + ' (' + p.title + ' - ' + p.items + ') special offer.');
+        return '<div class="col-xl-3 col-lg-4 col-md-6">' +
+          '<div class="santino-promo-day-card" data-promo-day="' + p.key + '" data-promo-day-label="' + p.day + '" data-promo-title="' + p.title + '" data-promo-items="' + p.items + '">' +
+            '<div class="d-flex justify-content-between align-items-center mb-3">' +
+              '<span class="promo-day-label">' + p.day.toUpperCase() + '</span>' +
+              '<span class="promo-status-tag">' + p.badge + '</span>' +
+            '</div>' +
+            '<div class="promo-offer-pill mb-2">' + p.title + '</div>' +
+            '<h4 class="promo-items-title mb-3">' + p.items + '</h4>' +
+            '<div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">' +
+              '<span class="small text-muted"><i class="bi bi-cup-hot text-success me-1"></i> +3 VIP Stamps</span>' +
+              '<a href="https://wa.me/' + waNum + '?text=' + waMsg + '" target="_blank" class="promo-claim-link">Order <i class="bi bi-arrow-right"></i></a>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      function syncToday() {
+        const dhaka = getDhakaNow();
+        const todayKey = promos[dhaka.getDay()].key;
+        const section = document.getElementById('dailyPromos');
+        let active = null;
+        section.querySelectorAll('.santino-promo-day-card').forEach(function(card) {
+          const isToday = card.getAttribute('data-promo-day') === todayKey;
+          card.classList.toggle('is-today-active', isToday);
+          if (isToday) {
+            card.querySelector('.promo-status-tag').textContent = 'TODAY LIVE';
+            active = card;
+          }
+        });
+        if (active) {
+          const day = active.getAttribute('data-promo-day-label');
+          const title = active.getAttribute('data-promo-title');
+          const items = active.getAttribute('data-promo-items');
+          section.querySelector('.js-today-day-name').textContent = day.toUpperCase();
+          section.querySelector('.js-today-title').textContent = title + ' — ' + items;
+          section.querySelector('.js-today-wa-btn').href = 'https://wa.me/' + waNum + '?text=' + encodeURIComponent("Hi Santino! I want to claim today's (" + day + ") " + title + " - " + items + " offer.");
+        }
+        const pad = function(n) { return n < 10 ? '0' + n : String(n); };
+        section.querySelector('.js-dhaka-countdown').textContent = pad(23 - dhaka.getHours()) + ':' + pad(59 - dhaka.getMinutes()) + ':' + pad(59 - dhaka.getSeconds());
+      }
+      syncToday();
+      setInterval(syncToday, 1000);
+    })();
+  </script>
+</body>
+</html>

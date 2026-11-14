@@ -27,6 +27,22 @@ class Santino_Rest_Api {
             'callback'            => array( __CLASS__, 'get_all_data' ),
             'permission_callback' => '__return_true',
         ) );
+
+        register_rest_route( 'santino/v1', '/promotions', array(
+            'methods'             => 'GET',
+            'callback'            => array( __CLASS__, 'get_promotions' ),
+            'permission_callback' => '__return_true',
+        ) );
+    }
+
+    public static function get_promotions( $request ) {
+        $promos    = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_daily_promotions() : array();
+        $today_key = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_today_dhaka_key() : strtolower( wp_date( 'l' ) );
+        return rest_ensure_response( array(
+            'today_key'  => $today_key,
+            'today'      => $promos[ $today_key ] ?? null,
+            'promotions' => $promos,
+        ) );
     }
 
     public static function get_branches( $request ) {

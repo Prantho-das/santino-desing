@@ -156,6 +156,8 @@ function santino_enqueue_scripts() {
         'theme_uri'    => SANTINO_URI,
         'branches'     => class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_cafe_branches() : array(),
         'redeem_items' => $redeem_items,
+        'promotions'   => class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_daily_promotions() : array(),
+        'dhaka_day'    => class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_today_dhaka_key() : '',
     ) );
 
     wp_localize_script( 'santino-menu-js', 'santino_menu_data', array(
@@ -230,6 +232,7 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     require_once SANTINO_DIR . '/inc/widgets/brands-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/machines-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/beans-solution-widget.php';
+    require_once SANTINO_DIR . '/inc/widgets/daily-promotions-widget.php';
 
     $widgets_manager->register( new \Santino_Hero_Banner_Widget() );
     $widgets_manager->register( new \Santino_Pro_Banner_Widget() );
@@ -277,6 +280,7 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     $widgets_manager->register( new \Santino_Brands_Solution_Widget() );
     $widgets_manager->register( new \Santino_Machines_Solution_Widget() );
     $widgets_manager->register( new \Santino_Beans_Solution_Widget() );
+    $widgets_manager->register( new \Santino_Daily_Promotions_Widget() );
 }
 add_action( 'elementor/widgets/register', 'santino_register_elementor_widgets' );
 

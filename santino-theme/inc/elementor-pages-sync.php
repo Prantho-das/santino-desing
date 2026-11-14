@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Santino_Elementor_Pages_Sync {
 
-    const SYNC_VERSION = '2.0.0';
+    const SYNC_VERSION = '2.1.0';
 
     public static function init() {
         add_action( 'init', array( __CLASS__, 'ensure_pages' ), 20 );
@@ -153,6 +153,7 @@ class Santino_Elementor_Pages_Sync {
 
         $is_menu_page      = ( ( isset( $_REQUEST['layout_type'] ) && in_array( $_REQUEST['layout_type'], array( 'menu_native', 'menu_sections' ), true ) ) || 'menu' === $post->post_name || 23 === (int) $page_id );
         $is_vip_membership = ( 22 === (int) $page_id || 'membership' === $post->post_name );
+        $is_offers_page    = ( 'offers' === $post->post_name );
         $is_member_portal  = ( 36426 === (int) $page_id || in_array( $post->post_name, array( 'santino-member', 'coffee-club' ), true ) || false !== stripos( $post->post_title, 'Santino Member' ) );
 
         if ( $is_menu_page ) {
@@ -173,6 +174,9 @@ class Santino_Elementor_Pages_Sync {
             if ( $is_vip_membership ) {
                 update_post_meta( $page_id, '_wp_page_template', 'templates/template-membership.php' );
                 $structure = self::get_membership_four_sections_structure();
+            } elseif ( $is_offers_page ) {
+                update_post_meta( $page_id, '_wp_page_template', 'templates/template-offers.php' );
+                $structure = self::get_offers_three_sections_structure();
             } elseif ( $is_member_portal ) {
                 update_post_meta( $page_id, '_wp_page_template', 'templates/template-santino-member.php' );
                 $structure = self::get_santino_member_three_sections_structure();
@@ -266,7 +270,7 @@ class Santino_Elementor_Pages_Sync {
                     $sync_url    = wp_nonce_url( admin_url( 'admin-post.php?action=santino_sync_specific_page&target_page_id=' . $p_id ), 'santino_sync_nonce_' . $p_id );
                     $el_edit_url = admin_url( 'post.php?post=' . $p_id . '&action=elementor' );
                     $is_el       = get_post_meta( $p_id, '_elementor_edit_mode', true ) === 'builder';
-                    $is_special  = ( 36426 === (int) $p_id || in_array( $p->post_name, array( 'santino-member', 'membership', 'coffee-club' ), true ) );
+                    $is_special  = ( 36426 === (int) $p_id || in_array( $p->post_name, array( 'santino-member', 'membership', 'coffee-club', 'offers' ), true ) );
                 ?>
                     <div class="postbox" style="padding: 18px 20px; margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; border-radius: 8px; border: 1px solid <?php echo $is_special ? '#00625d' : '#cbd5e1'; ?>; <?php if ( $is_special ) echo 'border-left: 4px solid #00625d;'; ?> box-shadow: 0 2px 6px rgba(0,0,0,0.03); background: #ffffff;">
                         <div>
@@ -306,7 +310,7 @@ class Santino_Elementor_Pages_Sync {
             $target_ids[] = intval( $_GET['post'] );
         }
 
-        $slugs = array( 'santino-member', 'membership', 'coffee-club', 'menu' );
+        $slugs = array( 'santino-member', 'membership', 'coffee-club', 'menu', 'offers' );
         foreach ( $slugs as $slug ) {
             $p = get_page_by_path( $slug );
             if ( $p ) {
@@ -347,6 +351,7 @@ class Santino_Elementor_Pages_Sync {
 
             $el_data           = get_post_meta( $pid, '_elementor_data', true );
             $is_vip_membership = ( 22 === (int) $pid || 'membership' === $post->post_name );
+            $is_offers_page    = ( 'offers' === $post->post_name );
             $is_member_portal  = ( 36426 === (int) $pid || in_array( $post->post_name, array( 'santino-member', 'coffee-club' ), true ) || false !== stripos( $post->post_title, 'Santino Member' ) );
             $is_menu_page      = ( 23 === (int) $pid || 'menu' === $post->post_name );
 
@@ -397,6 +402,19 @@ class Santino_Elementor_Pages_Sync {
                             wp_delete_post_revision( $rev->ID );
                         }
                     }
+                    $cache_cleared = true;
+                }
+            } elseif ( $is_offers_page ) {
+                $already_migrated = get_post_meta( $pid, '_santino_split_migrated', true );
+                if ( ! $already_migrated && empty( $el_data ) ) {
+                    $structure = self::get_offers_three_sections_structure();
+                    $json      = wp_json_encode( $structure, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+                    update_post_meta( $pid, '_elementor_data', wp_slash( $json ) );
+                    update_post_meta( $pid, '_elementor_edit_mode', 'builder' );
+                    update_post_meta( $pid, '_elementor_version', '3.25.0' );
+                    update_post_meta( $pid, '_wp_page_template', 'templates/template-offers.php' );
+                    update_post_meta( $pid, '_santino_split_migrated', '1' );
+                    delete_post_meta( $pid, '_elementor_css' );
                     $cache_cleared = true;
                 }
             } elseif ( $is_member_portal || ( ! empty( $el_data ) && false !== strpos( $el_data, 'santino_member_portal' ) ) ) {
@@ -544,6 +562,112 @@ class Santino_Elementor_Pages_Sync {
         );
     }
 
+    public static function get_offers_three_sections_structure() {
+        return array(
+            array(
+                'id'       => substr( md5( 'sec_offers_hero_' . microtime() ), 0, 7 ),
+                'elType'   => 'section',
+                'isInner'  => false,
+                'settings' => array(
+                    '_title' => '1. Offers Hero Banner',
+                    'layout' => 'full_width',
+                    'gap'    => 'no',
+                ),
+                'elements' => array(
+                    array(
+                        'id'       => substr( md5( 'col_offers_hero_' . microtime() ), 0, 7 ),
+                        'elType'   => 'column',
+                        'isInner'  => false,
+                        'settings' => array( '_column_size' => 100 ),
+                        'elements' => array(
+                            array(
+                                'id'         => substr( md5( 'w_offers_hero_' . microtime() ), 0, 7 ),
+                                'elType'     => 'widget',
+                                'isInner'    => false,
+                                'widgetType' => 'santino_membership_hero',
+                                'settings'   => array(
+                                    'badge_text' => '7 DAYS, 7 REASONS TO CELEBRATE',
+                                    'title'      => 'Daily <span style="color: #dfbe8d;">3 + 1 FREE</span> Cafe Offers',
+                                    'desc'       => 'Order 3 handcrafted cups and get the 4th free every day of the week — plus earn 3 VIP Stamps toward your 5-Cup Free Drink Card!',
+                                    'btn1_text'  => 'See Today\'s Offer',
+                                    'btn1_url'   => array( 'url' => '#dailyPromos' ),
+                                    'btn2_text'  => 'VIP Stamp Portal',
+                                    'btn2_url'   => array( 'url' => '/membership/#clubPortal' ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            array(
+                'id'       => substr( md5( 'sec_offers_grid_' . microtime() ), 0, 7 ),
+                'elType'   => 'section',
+                'isInner'  => false,
+                'settings' => array(
+                    '_title' => '2. Dynamic 7-Day Promotions',
+                    'layout' => 'full_width',
+                    'gap'    => 'no',
+                ),
+                'elements' => array(
+                    array(
+                        'id'       => substr( md5( 'col_offers_grid_' . microtime() ), 0, 7 ),
+                        'elType'   => 'column',
+                        'isInner'  => false,
+                        'settings' => array( '_column_size' => 100 ),
+                        'elements' => array(
+                            array(
+                                'id'         => substr( md5( 'w_offers_grid_' . microtime() ), 0, 7 ),
+                                'elType'     => 'widget',
+                                'isInner'    => false,
+                                'widgetType' => 'santino_daily_promotions',
+                                'settings'   => array(
+                                    'layout'      => 'grid',
+                                    'data_source' => 'wp_admin',
+                                    'show_header' => 'yes',
+                                    'badge_text'  => '7 DAYS, 7 REASONS TO CELEBRATE',
+                                    'title'       => 'Daily Special <span class="sec-title-accent">3 + 1 FREE</span> Offers',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            array(
+                'id'       => substr( md5( 'sec_offers_cta_' . microtime() ), 0, 7 ),
+                'elType'   => 'section',
+                'isInner'  => false,
+                'settings' => array(
+                    '_title' => '3. VIP Stack & Stamp CTA',
+                    'layout' => 'full_width',
+                    'gap'    => 'no',
+                ),
+                'elements' => array(
+                    array(
+                        'id'       => substr( md5( 'col_offers_cta_' . microtime() ), 0, 7 ),
+                        'elType'   => 'column',
+                        'isInner'  => false,
+                        'settings' => array( '_column_size' => 100 ),
+                        'elements' => array(
+                            array(
+                                'id'         => substr( md5( 'w_offers_cta_' . microtime() ), 0, 7 ),
+                                'elType'     => 'widget',
+                                'isInner'    => false,
+                                'widgetType' => 'santino_membership_cta',
+                                'settings'   => array(
+                                    'badge_text' => 'STACK WITH VIP CLUB',
+                                    'title'      => 'Double Your Rewards With VIP Membership',
+                                    'desc'       => 'Claim any 3 + 1 FREE daily offer and submit your invoice in the Santino VIP Portal to collect 3 Coffee Stamps + 15% off artisan beans.',
+                                    'btn_text'   => 'Log Invoice & Earn Stamps →',
+                                    'btn_url'    => array( 'url' => '/membership/#clubPortal' ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        );
+    }
+
     public static function get_membership_four_sections_structure() {
         return array(
             array(
@@ -607,6 +731,37 @@ class Santino_Elementor_Pages_Sync {
                                     'badge_text' => 'EXCLUSIVE PRIVILEGES',
                                     'title'      => 'Crafted Exclusively for Connoisseurs',
                                     'desc'       => 'Elevate every cup with exclusive roastery privileges, private sensory workshops, and member-only pricing.',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            array(
+                'id'       => substr( md5( 'sec_daily_promos_' . microtime() ), 0, 7 ),
+                'elType'   => 'section',
+                'isInner'  => false,
+                'settings' => array(
+                    '_title' => '2.5 Daily 3+1 FREE Offers',
+                    'layout' => 'full_width',
+                    'gap'    => 'no',
+                ),
+                'elements' => array(
+                    array(
+                        'id'       => substr( md5( 'col_daily_promos_' . microtime() ), 0, 7 ),
+                        'elType'   => 'column',
+                        'isInner'  => false,
+                        'settings' => array( '_column_size' => 100 ),
+                        'elements' => array(
+                            array(
+                                'id'         => substr( md5( 'w_daily_promos_' . microtime() ), 0, 7 ),
+                                'elType'     => 'widget',
+                                'isInner'    => false,
+                                'widgetType' => 'santino_daily_promotions',
+                                'settings'   => array(
+                                    'layout'     => 'grid',
+                                    'badge_text' => '7 DAYS, 7 REASONS TO CELEBRATE',
+                                    'title'      => 'Daily Special <span class="sec-title-accent">3 + 1 FREE</span> Offers',
                                 ),
                             ),
                         ),
@@ -1108,6 +1263,44 @@ class Santino_Elementor_Pages_Sync {
                             'desc'       => 'Visit our barista bars across Gulshan, Banani, Dhanmondi & Uttara.',
                             'btn_text'   => 'Explore Full Menu →',
                             'btn_url'    => array( 'url' => '/menu/' ),
+                        ),
+                    ),
+                ),
+            ),
+            'offers' => array(
+                'title'    => 'Daily Offers',
+                'template' => 'templates/template-offers.php',
+                'widgets'  => array(
+                    array(
+                        'widget'   => 'santino_membership_hero',
+                        'settings' => array(
+                            'badge_text' => '7 DAYS, 7 REASONS TO CELEBRATE',
+                            'title'      => 'Daily <span style="color: #dfbe8d;">3 + 1 FREE</span> Cafe Offers',
+                            'desc'       => 'Order 3 handcrafted cups and get the 4th free every day of the week — plus earn 3 VIP Stamps toward your 5-Cup Free Drink Card!',
+                            'btn1_text'  => 'See Today\'s Offer',
+                            'btn1_url'   => array( 'url' => '#dailyPromos' ),
+                            'btn2_text'  => 'VIP Stamp Portal',
+                            'btn2_url'   => array( 'url' => '/membership/#clubPortal' ),
+                        ),
+                    ),
+                    array(
+                        'widget'   => 'santino_daily_promotions',
+                        'settings' => array(
+                            'layout'      => 'grid',
+                            'data_source' => 'wp_admin',
+                            'show_header' => 'yes',
+                            'badge_text'  => '7 DAYS, 7 REASONS TO CELEBRATE',
+                            'title'       => 'Daily Special <span class="sec-title-accent">3 + 1 FREE</span> Offers',
+                        ),
+                    ),
+                    array(
+                        'widget'   => 'santino_membership_cta',
+                        'settings' => array(
+                            'badge_text' => 'STACK WITH VIP CLUB',
+                            'title'      => 'Double Your Rewards With VIP Membership',
+                            'desc'       => 'Claim any 3 + 1 FREE daily offer and submit your invoice in the Santino VIP Portal to collect 3 Coffee Stamps + 15% off artisan beans.',
+                            'btn_text'   => 'Log Invoice & Earn Stamps →',
+                            'btn_url'    => array( 'url' => '/membership/#clubPortal' ),
                         ),
                     ),
                 ),

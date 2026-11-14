@@ -513,11 +513,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const formData = new FormData(this);
       formData.set('cups', cupsVal);
+      const promoSelect = this.querySelector('select[name="promo_id"]');
+      const promoCheck = this.querySelector('input[name="promo_claimed"]');
+      if (promoSelect && promoSelect.value) {
+        formData.set('promo_claimed', 'yes');
+        formData.set('promo_id', promoSelect.value);
+      } else {
+        formData.set('promo_claimed', (promoCheck && promoCheck.checked) ? 'yes' : 'no');
+      }
+      if (typeof santino_ajax !== 'undefined' && santino_ajax.dhaka_day) {
+        formData.set('promo_day', santino_ajax.dhaka_day);
+      }
       const summaryInput = this.querySelector('.santino-items-consumed-summary');
       if (summaryInput && summaryInput.value) {
         formData.set('items_consumed', summaryInput.value);
       }
       formData.append('action', 'santino_submit_invoice');
+      formData.append('request_source', 'portal_invoice_tab');
+      formData.append('request_page', window.location.pathname + window.location.search);
       if (typeof santino_ajax !== 'undefined') {
         formData.append('security', santino_ajax.nonce);
       }
@@ -899,7 +912,10 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Submitting...';
 
         const formData = new FormData(this);
+        const isQrSource = window.location.search.indexOf('qr') !== -1 || window.location.search.indexOf('voucher') !== -1;
         formData.append('action', 'santino_submit_redeem');
+        formData.append('request_source', isQrSource ? 'qr_portal_redeem' : 'portal_redeem_modal');
+        formData.append('request_page', window.location.pathname + window.location.search);
         if (typeof santino_ajax !== 'undefined') {
           formData.append('security', santino_ajax.nonce);
         }
@@ -1591,3 +1607,183 @@ document.addEventListener('click', function(e) {
     alert('Network error. Please try again.');
   });
 });
+
+(function initSantinoDailyPromos() {
+  const section = document.querySelector('.santino-daily-promos-section');
+  const tabPane = document.querySelector('.santino-today-offer-tab-pane');
+  if (!section && !tabPane) return;
+
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+  function getDhakaNow() {
+    const now = new Date();
+    const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+    return new Date(utcMs + (6 * 3600000));
+  }
+
+  function isMatchToday(el, todayKey, dhakaDateStr) {
+    const sched = el.getAttribute('data-promo-day') || '';
+    if (sched === 'everyday') return true;
+    if (sched === 'weekends') return todayKey === 'friday' || todayKey === 'saturday';
+    if (sched === 'date_range') {
+      const s = el.getAttribute('data-promo-start') || '';
+      const e = el.getAttribute('data-promo-end') || '';
+      if (s && dhakaDateStr < s) return false;
+      if (e && dhakaDateStr > e) return false;
+      return true;
+    }
+    return sched === todayKey;
+  }
+
+  function syncDailyPromoHighlight() {
+    const dhakaNow = getDhakaNow();
+    const todayKey = days[dhakaNow.getDay()];
+    const pad = function(n) { return n < 10 ? '0' + n : String(n); };
+    const dhakaDateStr = dhakaNow.getFullYear() + '-' + pad(dhakaNow.getMonth() + 1) + '-' + pad(dhakaNow.getDate());
+    const hrs = 23 - dhakaNow.getHours();
+    const mins = 59 - dhakaNow.getMinutes();
+    const secs = 59 - dhakaNow.getSeconds();
+    const countdownStr = pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
+
+    if (section) {
+      const cards = section.querySelectorAll('.santino-promo-day-card');
+      let activeCard = null;
+
+      cards.forEach(function(card) {
+        const isToday = isMatchToday(card, todayKey, dhakaDateStr);
+        card.classList.toggle('is-today-active', isToday);
+        const tag = card.querySelector('.promo-status-tag');
+        if (tag && isToday) {
+          tag.textContent = 'TODAY LIVE';
+          if (!activeCard) activeCard = card;
+        }
+      });
+
+      if (activeCard) {
+        const dayLabel = activeCard.getAttribute('data-promo-day-label') || todayKey;
+        const title = activeCard.getAttribute('data-promo-title') || '3 + 1 FREE';
+        const items = activeCard.getAttribute('data-promo-items') || '';
+        const waNum = section.getAttribute('data-wa-number') || '8801613334514';
+
+        const dayEl = section.querySelector('.js-today-day-name');
+        const titleEl = section.querySelector('.js-today-title');
+        const waBtn = section.querySelector('.js-today-wa-btn');
+
+        if (dayEl) dayEl.textContent = dayLabel.toUpperCase();
+        if (titleEl) titleEl.textContent = title + ' — ' + items;
+        if (waBtn) {
+          const msg = "Hi Santino! I want to claim today's (" + dayLabel + ") " + title + " - " + items + " offer.";
+          waBtn.href = 'https://wa.me/' + waNum + '?text=' + encodeURIComponent(msg);
+        }
+      }
+
+      section.querySelectorAll('.js-dhaka-countdown').forEach(function(el) {
+        el.textContent = countdownStr;
+      });
+    }
+
+    if (tabPane) {
+      const rows = tabPane.querySelectorAll('.js-tab-schedule-row');
+      let activeRow = null;
+      rows.forEach(function(row) {
+        const isToday = isMatchToday(row, todayKey, dhakaDateStr);
+        row.classList.toggle('bg-white', isToday);
+        row.classList.toggle('shadow-sm', isToday);
+        row.classList.toggle('border', isToday);
+        row.classList.toggle('border-success', isToday);
+        if (isToday && !activeRow) activeRow = row;
+      });
+
+      if (activeRow) {
+        const dayLabel = activeRow.getAttribute('data-promo-day-label') || todayKey;
+        const title = activeRow.getAttribute('data-promo-title') || '3 + 1 FREE';
+        const items = activeRow.getAttribute('data-promo-items') || '';
+        const waNum = tabPane.getAttribute('data-wa-number') || '8801613334514';
+
+        const dayEl = tabPane.querySelector('.js-tab-today-day');
+        const badgeEl = tabPane.querySelector('.js-tab-today-badge');
+        const itemsEl = tabPane.querySelector('.js-tab-today-items');
+        const waBtn = tabPane.querySelector('.js-tab-today-wa');
+
+        if (dayEl) dayEl.textContent = dayLabel.toUpperCase();
+        if (badgeEl) badgeEl.textContent = title;
+        if (itemsEl) itemsEl.textContent = items;
+        if (waBtn) {
+          const msg = "Hi Santino! I want to claim today's (" + dayLabel + ") " + title + " - " + items + " offer.";
+          waBtn.href = 'https://wa.me/' + waNum + '?text=' + encodeURIComponent(msg);
+        }
+      }
+
+      tabPane.querySelectorAll('.js-dhaka-countdown').forEach(function(el) {
+        el.textContent = countdownStr;
+      });
+    }
+  }
+
+  const todayOfferForm = document.getElementById('santinoTodayOfferInvoiceForm');
+  if (todayOfferForm) {
+    const offerSelect = todayOfferForm.querySelector('.js-today-offer-select');
+    const cupsHidden = todayOfferForm.querySelector('.js-today-offer-cups');
+    const itemsHidden = todayOfferForm.querySelector('.js-today-offer-items-input');
+    const stampsLabel = tabPane ? tabPane.querySelector('.js-today-offer-stamps-label') : null;
+
+    if (offerSelect) {
+      offerSelect.addEventListener('change', function() {
+        const opt = this.options[this.selectedIndex];
+        if (!opt) return;
+        const paid = opt.getAttribute('data-paid-cups') || '3';
+        const items = opt.getAttribute('data-items') || '';
+        const title = opt.getAttribute('data-title') || '';
+        if (cupsHidden) cupsHidden.value = paid;
+        if (itemsHidden) itemsHidden.value = title + ' — ' + items;
+        if (stampsLabel) stampsLabel.textContent = '+' + paid + ' Stamps';
+      });
+    }
+
+    todayOfferForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const origText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Submitting Offer Invoice...';
+      }
+
+      const formData = new FormData(this);
+      formData.append('action', 'santino_submit_invoice');
+      formData.append('request_source', 'today_offer_tab');
+      formData.append('request_page', window.location.pathname + window.location.search);
+      if (typeof santino_ajax !== 'undefined') {
+        formData.append('security', santino_ajax.nonce);
+      }
+      const ajaxUrl = (typeof santino_ajax !== 'undefined') ? santino_ajax.ajax_url : '/wp-admin/admin-ajax.php';
+
+      fetch(ajaxUrl, { method: 'POST', body: formData })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = origText;
+          }
+          const resBox = document.getElementById('todayOfferInvoiceResponseBox');
+          if (!resBox) return;
+          resBox.style.display = 'block';
+          if (data.success) {
+            resBox.innerHTML = '<div class="alert alert-success rounded-3 p-3 mb-0 small"><strong>✓ Offer Invoice Logged!</strong> ' + data.data.message + '</div>';
+            todayOfferForm.reset();
+          } else {
+            resBox.innerHTML = '<div class="alert alert-danger rounded-3 p-3 mb-0 small">' + (data.data && data.data.message ? data.data.message : 'Submission failed.') + '</div>';
+          }
+        })
+        .catch(function() {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = origText;
+          }
+        });
+    });
+  }
+
+  syncDailyPromoHighlight();
+  setInterval(syncDailyPromoHighlight, 1000);
+})();

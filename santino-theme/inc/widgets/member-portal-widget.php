@@ -827,6 +827,11 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                           <i class="bi bi-person-check-fill me-1"></i> Join Coffee Club
                         </button>
                       </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="today-offer-tab" data-bs-toggle="pill" data-bs-target="#today-offer-pane" type="button" role="tab">
+                          <i class="bi bi-stars me-1 text-warning"></i> Today's Offer
+                        </button>
+                      </li>
                     </ul>
 
                     <div class="tab-content flex-grow-1" id="loyaltyTabsContent">
@@ -931,6 +936,7 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                                 <?php endforeach; ?>
                               </select>
                             </div>
+                            <?php if ( class_exists( 'Santino_Membership_System' ) ) { echo Santino_Membership_System::render_promo_selector_field(); } ?>
                           </div>
 
                           <div class="mb-4">
@@ -1019,6 +1025,7 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                           </button>
                         </form>
                       </div>
+                      <?php if ( class_exists( 'Santino_Membership_System' ) ) { echo Santino_Membership_System::render_today_offer_tab_pane(); } ?>
                     </div>
                   </div>
                 </div>

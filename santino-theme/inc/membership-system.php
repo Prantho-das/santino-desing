@@ -67,6 +67,7 @@ class Santino_Membership_System {
         // Shortcodes
         add_shortcode( 'santino_stamp_portal', array( __CLASS__, 'render_stamp_portal_shortcode' ) );
         add_shortcode( 'santino_vip_card', array( __CLASS__, 'render_vip_card_shortcode' ) );
+        add_shortcode( 'santino_daily_promotions', array( __CLASS__, 'render_daily_promotions_shortcode' ) );
 
         add_action( 'post_edit_form_tag', array( __CLASS__, 'add_post_enctype' ) );
         add_action( 'admin_footer', array( __CLASS__, 'render_admin_receipt_modal' ) );
@@ -829,6 +830,19 @@ class Santino_Membership_System {
         }
     }
 
+    public static function resolve_request_source_label( $source, $fallback = 'Membership Portal' ) {
+        $map = array(
+            'portal_redeem_modal'  => 'Membership Portal (Redeem Modal)',
+            'qr_portal_redeem'     => 'QR Scan Portal Redeem',
+            'admin_direct_counter' => 'Admin Direct Counter',
+            'today_offer_tab'      => "Today's Offer Tab",
+            'portal_invoice_tab'   => 'Log Invoice Tab',
+            'offers_page'          => 'Offers Page',
+            'rest_api'             => 'REST API',
+        );
+        return $map[ $source ] ?? ( $source ? ucwords( str_replace( '_', ' ', $source ) ) : $fallback );
+    }
+
     public static function set_invoice_columns( $columns ) {
         return array(
             'cb'            => $columns['cb'],
@@ -839,6 +853,7 @@ class Santino_Membership_System {
             'items_consumed'=> __( 'Items Consumed', 'santino' ),
             'phone'         => __( 'Customer Phone', 'santino' ),
             'branch'        => __( 'Cafe Branch', 'santino' ),
+            'source'        => __( 'Request Source', 'santino' ),
             'status'        => __( 'Verification Status', 'santino' ),
             'actions'       => __( 'Quick Action', 'santino' ),
             'date'          => __( 'Submitted Date', 'santino' ),
@@ -867,7 +882,14 @@ class Santino_Membership_System {
                 break;
             case 'cups':
                 $cups = intval( get_post_meta( $post_id, '_santino_invoice_cups', true ) ?: 1 );
+                $promo_claimed = get_post_meta( $post_id, '_santino_invoice_promo_claimed', true );
+                $promo_day     = get_post_meta( $post_id, '_santino_invoice_promo_day', true );
+                $promo_title   = get_post_meta( $post_id, '_santino_invoice_promo_title', true );
                 echo '<strong style="color:#00625d; font-size:13px;">' . esc_html( $cups ) . ' ☕</strong>';
+                if ( $promo_claimed === 'yes' ) {
+                    $label = $promo_title ? ( $promo_day ? strtoupper( $promo_day ) . ': ' . $promo_title : $promo_title ) : ( $promo_day ? strtoupper( $promo_day ) . ' PROMO' : 'PROMO' );
+                    echo '<br><span style="display:inline-block;margin-top:3px;background:#fef3c7;color:#92400e;border:1px solid #f59e0b;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;">' . esc_html( $label ) . '</span>';
+                }
                 break;
             case 'items_consumed':
                 $items = get_post_meta( $post_id, '_santino_invoice_items_consumed', true );
@@ -883,6 +905,18 @@ class Santino_Membership_System {
                 break;
             case 'branch':
                 echo esc_html( get_post_meta( $post_id, '_santino_invoice_branch', true ) ?: 'Santino Flagship' );
+                break;
+            case 'source':
+                $inv_src  = get_post_meta( $post_id, '_santino_invoice_source', true );
+                $inv_page = get_post_meta( $post_id, '_santino_invoice_source_page', true );
+                $is_promo = get_post_meta( $post_id, '_santino_invoice_promo_claimed', true ) === 'yes';
+                $label    = self::resolve_request_source_label( $inv_src, $is_promo ? "Today's Offer Tab" : 'Log Invoice Tab' );
+                $bg       = $is_promo ? '#fef3c7' : '#e0f2fe';
+                $fg       = $is_promo ? '#92400e' : '#0369a1';
+                echo '<span style="display:inline-block; background:' . esc_attr( $bg ) . '; color:' . esc_attr( $fg ) . '; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:600;">' . esc_html( $label ) . '</span>';
+                if ( $inv_page ) {
+                    echo '<div style="font-size:10px; color:#64748b; margin-top:2px; word-break:break-all;">' . esc_html( $inv_page ) . '</div>';
+                }
                 break;
             case 'status':
                 $status = get_post_meta( $post_id, '_santino_invoice_status', true ) ?: 'pending';
@@ -916,6 +950,7 @@ class Santino_Membership_System {
             'phone'       => __( 'Customer Phone', 'santino' ),
             'free_item'   => __( 'Free Item Selected', 'santino' ),
             'branch'      => __( 'Cafe Branch', 'santino' ),
+            'source'      => __( 'Request Source', 'santino' ),
             'status'      => __( 'Portal Approval', 'santino' ),
             'actions'     => __( 'Barista Action', 'santino' ),
             'date'        => __( 'Requested Date', 'santino' ),
@@ -932,6 +967,22 @@ class Santino_Membership_System {
                 break;
             case 'branch':
                 echo esc_html( get_post_meta( $post_id, '_santino_redeem_branch', true ) ?: 'Santino Flagship' );
+                break;
+            case 'source':
+                $src      = get_post_meta( $post_id, '_santino_redeem_source', true );
+                $src_page = get_post_meta( $post_id, '_santino_redeem_source_page', true );
+                $src_ip   = get_post_meta( $post_id, '_santino_redeem_ip', true );
+                $by_user  = get_post_meta( $post_id, '_santino_redeem_by_user', true );
+                $label    = self::resolve_request_source_label( $src, 'Membership Portal' );
+                echo '<span style="display:inline-block; background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:600;">' . esc_html( $label ) . '</span>';
+                if ( $src_page ) {
+                    echo '<div style="font-size:10px; color:#64748b; margin-top:2px; word-break:break-all;">' . esc_html( $src_page ) . '</div>';
+                }
+                if ( $by_user ) {
+                    echo '<div style="font-size:10px; color:#475569;">By: ' . esc_html( $by_user ) . '</div>';
+                } elseif ( $src_ip ) {
+                    echo '<div style="font-size:10px; color:#94a3b8;">IP: ' . esc_html( $src_ip ) . '</div>';
+                }
                 break;
             case 'status':
                 $status = get_post_meta( $post_id, '_santino_redeem_status', true ) ?: 'pending';
@@ -1149,6 +1200,12 @@ class Santino_Membership_System {
             update_post_meta( $redeem_id, '_santino_redeem_status', 'approved' );
             update_post_meta( $redeem_id, '_santino_redeem_member_id', $member_id );
             update_post_meta( $redeem_id, '_santino_redeem_approved_at', current_time( 'mysql' ) );
+            update_post_meta( $redeem_id, '_santino_redeem_source', 'admin_direct_counter' );
+            update_post_meta( $redeem_id, '_santino_redeem_source_page', 'wp-admin/post.php?post=' . $member_id );
+            $current_admin = wp_get_current_user();
+            if ( $current_admin && $current_admin->ID ) {
+                update_post_meta( $redeem_id, '_santino_redeem_by_user', $current_admin->user_login );
+            }
         }
 
         // Mark matching voucher redeemed if any
@@ -1721,6 +1778,45 @@ class Santino_Membership_System {
             update_post_meta( $inv_post_id, '_santino_invoice_member_post_id', $member_post_id );
         }
 
+        $promo_claimed  = sanitize_text_field( $_POST['promo_claimed'] ?? 'no' );
+        $promo_day      = sanitize_text_field( $_POST['promo_day'] ?? '' );
+        $promo_id       = sanitize_text_field( $_POST['promo_id'] ?? '' );
+        $promo_title    = sanitize_text_field( $_POST['promo_title'] ?? '' );
+        $request_source = sanitize_text_field( $_POST['request_source'] ?? '' );
+        $request_page   = sanitize_text_field( $_POST['request_page'] ?? '' );
+        if ( empty( $request_page ) && function_exists( 'wp_get_referer' ) ) {
+            $ref = wp_get_referer();
+            if ( $ref ) {
+                $request_page = wp_parse_url( $ref, PHP_URL_PATH ) ?: $ref;
+            }
+        }
+
+        if ( ! empty( $promo_id ) ) {
+            $matched_promo = null;
+            foreach ( self::get_daily_promotions() as $pr ) {
+                if ( ( $pr['id'] ?? '' ) === $promo_id ) {
+                    $matched_promo = $pr;
+                    break;
+                }
+            }
+            if ( ! $matched_promo || ! self::is_promo_active_today( $matched_promo ) ) {
+                wp_delete_post( $inv_post_id, true );
+                wp_send_json_error( array( 'message' => __( 'Selected promotion is no longer active today. Please refresh the page and try again.', 'santino' ) ) );
+            }
+            $promo_claimed = 'yes';
+            $promo_title   = $matched_promo['title'] . ' — ' . $matched_promo['items'];
+            $promo_day     = $matched_promo['day'];
+            if ( ! empty( $matched_promo['paid_cups'] ) ) {
+                $cups = max( 1, intval( $matched_promo['paid_cups'] ) );
+            }
+        } elseif ( $promo_claimed === 'yes' && $cups === 4 ) {
+            $cups = 3;
+        }
+
+        if ( empty( $request_source ) ) {
+            $request_source = ( $promo_claimed === 'yes' ) ? 'today_offer_tab' : 'portal_invoice_tab';
+        }
+
         update_post_meta( $inv_post_id, '_santino_invoice_number', $invoice_no );
         update_post_meta( $inv_post_id, '_santino_invoice_cups', $cups );
         update_post_meta( $inv_post_id, '_santino_invoice_phone', $phone );
@@ -1728,6 +1824,16 @@ class Santino_Membership_System {
         update_post_meta( $inv_post_id, '_santino_invoice_branch', $branch );
         update_post_meta( $inv_post_id, '_santino_invoice_status', 'pending' );
         update_post_meta( $inv_post_id, '_santino_invoice_submitted_at', current_time( 'mysql' ) );
+        update_post_meta( $inv_post_id, '_santino_invoice_source', $request_source );
+        if ( $request_page ) {
+            update_post_meta( $inv_post_id, '_santino_invoice_source_page', $request_page );
+        }
+        if ( $promo_claimed === 'yes' ) {
+            update_post_meta( $inv_post_id, '_santino_invoice_promo_claimed', 'yes' );
+            update_post_meta( $inv_post_id, '_santino_invoice_promo_day', $promo_day ?: self::get_today_dhaka_key() );
+            if ( $promo_id ) update_post_meta( $inv_post_id, '_santino_invoice_promo_id', $promo_id );
+            if ( $promo_title ) update_post_meta( $inv_post_id, '_santino_invoice_promo_title', $promo_title );
+        }
 
         wp_send_json_success( array(
             'message'    => sprintf( __( 'Invoice #%s (%d Cups) submitted successfully! Member ID: %s. Admin verification will credit your stamp balance.', 'santino' ), $invoice_no, $cups, $member_id ),
@@ -1742,10 +1848,19 @@ class Santino_Membership_System {
     public static function handle_ajax_redeem_submit() {
         check_ajax_referer( 'santino_frontend_nonce', 'security' );
 
-        $phone       = sanitize_text_field( $_POST['phone'] ?? '' );
-        $free_item   = sanitize_text_field( $_POST['free_item'] ?? '' );
-        $branch      = sanitize_text_field( $_POST['branch'] ?? 'Gulshan-2 Flagship Experience Center' );
-        $redeem_code = sanitize_text_field( $_POST['redeem_code'] ?? '' );
+        $phone          = self::normalize_phone( sanitize_text_field( $_POST['phone'] ?? '' ) );
+        $free_item      = sanitize_text_field( $_POST['free_item'] ?? '' );
+        $branch         = sanitize_text_field( $_POST['branch'] ?? 'Gulshan-2 Flagship Experience Center' );
+        $redeem_code    = sanitize_text_field( $_POST['redeem_code'] ?? '' );
+        $request_source = sanitize_text_field( $_POST['request_source'] ?? 'portal_redeem_modal' );
+        $request_page   = sanitize_text_field( $_POST['request_page'] ?? '' );
+        if ( empty( $request_page ) && function_exists( 'wp_get_referer' ) ) {
+            $ref = wp_get_referer();
+            if ( $ref ) {
+                $request_page = wp_parse_url( $ref, PHP_URL_PATH ) ?: $ref;
+            }
+        }
+        $request_ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '' );
 
         if ( empty( $phone ) || empty( $free_item ) ) {
             wp_send_json_error( array( 'message' => __( 'Please select your mobile number and preferred free beverage.', 'santino' ) ) );
@@ -1806,6 +1921,13 @@ class Santino_Membership_System {
         }
         update_post_meta( $redeem_post_id, '_santino_redeem_status', 'pending' );
         update_post_meta( $redeem_post_id, '_santino_redeem_created_at', current_time( 'mysql' ) );
+        update_post_meta( $redeem_post_id, '_santino_redeem_source', $request_source ?: 'portal_redeem_modal' );
+        if ( $request_page ) {
+            update_post_meta( $redeem_post_id, '_santino_redeem_source_page', $request_page );
+        }
+        if ( $request_ip ) {
+            update_post_meta( $redeem_post_id, '_santino_redeem_ip', $request_ip );
+        }
 
         $print_url = add_query_arg( array(
             'santino_print_voucher' => '1',
@@ -1976,6 +2098,15 @@ class Santino_Membership_System {
             'manage_options',
             'santino-loyalty-stats',
             array( __CLASS__, 'render_loyalty_dashboard' )
+        );
+
+        add_submenu_page(
+            'edit.php?post_type=santino_member',
+            __( 'Daily 7-Day Promotions', 'santino' ),
+            __( 'Daily Promotions', 'santino' ),
+            'manage_options',
+            'santino-daily-promotions',
+            array( __CLASS__, 'render_daily_promotions_page' )
         );
     }
 
@@ -2826,21 +2957,61 @@ class Santino_Membership_System {
             'orderby'        => 'date',
             'order'          => 'DESC',
         ) );
+
+        $promo_inv_count = (int) $wpdb->get_var( "
+            SELECT COUNT(*)
+            FROM {$wpdb->postmeta} pm
+            INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+            WHERE p.post_type = 'santino_invoice'
+              AND p.post_status = 'publish'
+              AND pm.meta_key = '_santino_invoice_promo_claimed'
+              AND pm.meta_value = 'yes'
+        " );
+
+        $trend_labels   = array();
+        $trend_invoices = array();
+        $trend_cups     = array();
+        for ( $i = 6; $i >= 0; $i-- ) {
+            $d_str            = wp_date( 'Y-m-d', strtotime( "-{$i} days" ) );
+            $trend_labels[]   = wp_date( 'M j', strtotime( "-{$i} days" ) );
+            $row_t            = $wpdb->get_row( $wpdb->prepare( "
+                SELECT COUNT(p.ID) as inv_cnt, SUM(CAST(COALESCE(pm_c.meta_value, 1) AS UNSIGNED)) as cup_cnt
+                FROM {$wpdb->posts} p
+                LEFT JOIN {$wpdb->postmeta} pm_c ON pm_c.post_id = p.ID AND pm_c.meta_key = '_santino_invoice_cups'
+                WHERE p.post_type = 'santino_invoice'
+                  AND p.post_status = 'publish'
+                  AND DATE(p.post_date) = %s
+            ", $d_str ) );
+            $trend_invoices[] = $row_t ? (int) $row_t->inv_cnt : 0;
+            $trend_cups[]     = $row_t ? (int) $row_t->cup_cnt : 0;
+        }
+
+        $chart_branch_labels   = array();
+        $chart_branch_cups     = array();
+        $chart_branch_invoices = array();
+        if ( ! empty( $branch_rows ) ) {
+            foreach ( array_slice( $branch_rows, 0, 8 ) as $br ) {
+                $chart_branch_labels[]   = $br->branch_name;
+                $chart_branch_cups[]     = (int) $br->approved_cups;
+                $chart_branch_invoices[] = (int) $br->total_invoices;
+            }
+        }
         ?>
         <style>
-            .loyalty-report-wrap { max-width: 1300px; margin: 20px auto 40px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; }
-            .loyalty-grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin: 22px 0; }
-            .loyalty-card { background: #fff; padding: 20px 22px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
+            .loyalty-report-wrap { width: 100%; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; }
+            .loyalty-grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin: 18px 0; }
+            .loyalty-charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-bottom: 22px; }
+            .loyalty-card { background: #fff; padding: 18px 20px; border-radius: 6px; border: 1px solid #c3c4c7; box-shadow: 0 1px 1px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
             .loyalty-card-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
-            .loyalty-label { color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-            .loyalty-value { font-size: 30px; font-weight: 800; color: #0f172a; line-height: 1.1; }
-            .loyalty-sub { font-size: 12px; color: #94a3b8; margin-top: 6px; font-weight: 500; }
-            .loyalty-section { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.04); padding: 24px; margin-bottom: 24px; }
-            .loyalty-title { font-size: 16px; font-weight: 700; color: #0f172a; margin: 0 0 16px; display: flex; align-items: center; justify-content: space-between; }
+            .loyalty-label { color: #646970; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px; }
+            .loyalty-value { font-size: 28px; font-weight: 800; color: #1d2327; line-height: 1.1; }
+            .loyalty-sub { font-size: 12px; color: #646970; margin-top: 6px; font-weight: 500; }
+            .loyalty-section { background: #fff; border-radius: 6px; border: 1px solid #c3c4c7; box-shadow: 0 1px 1px rgba(0,0,0,0.04); padding: 20px; margin-bottom: 20px; }
+            .loyalty-title { font-size: 15px; font-weight: 700; color: #1d2327; margin: 0 0 14px; display: flex; align-items: center; justify-content: space-between; }
             .loyalty-table { width: 100%; border-collapse: collapse; text-align: left; }
-            .loyalty-table th { background: #f8fafc; color: #475569; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 14px; border-bottom: 1px solid #e2e8f0; }
-            .loyalty-table td { padding: 12px 14px; border-bottom: 1px solid #f1f5f9; font-size: 13px; color: #334155; vertical-align: middle; }
-            .loyalty-table tr:hover td { background: #f8fafc; }
+            .loyalty-table th { background: #f6f7f7; color: #2c3338; font-size: 12px; font-weight: 600; padding: 10px 12px; border-bottom: 1px solid #c3c4c7; }
+            .loyalty-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f1; font-size: 13px; color: #2c3338; vertical-align: middle; }
+            .loyalty-table tr:hover td { background: #f6f7f7; }
             .badge-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
             .badge-approved { background: #dcfce7; color: #15803d; }
             .badge-pending { background: #fef9c3; color: #854d0e; }
@@ -2849,21 +3020,32 @@ class Santino_Membership_System {
         </style>
 
         <div class="wrap loyalty-report-wrap">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 8px;">
-                <div>
-                    <h1 style="font-size: 26px; font-weight: 800; color: #00625d; margin: 0; display: flex; align-items: center; gap: 10px;">
-                        ☕ Santino Club — Executive Loyalty & Stamp Report
-                    </h1>
-                    <p style="margin: 4px 0 0; color: #64748b; font-size: 14px;">Complete real-time analytics across cafe branches, verified cup throughput, member milestones, and rewards.</p>
+            <h1 class="wp-heading-inline">Loyalty Reports &amp; Analytics</h1>
+            <a href="<?php echo admin_url( 'edit.php?post_type=santino_invoice' ); ?>" class="page-title-action">
+                Verify Invoices <?php echo ( $pending_inv > 0 ) ? '(' . $pending_inv . ' Pending)' : ''; ?>
+            </a>
+            <a href="<?php echo admin_url( 'edit.php?post_type=santino_redeem' ); ?>" class="page-title-action">
+                Redeem Approvals <?php echo ( $pending_red > 0 ) ? '(' . $pending_red . ' Pending)' : ''; ?>
+            </a>
+            <a href="<?php echo admin_url( 'edit.php?post_type=santino_member&page=santino-daily-promotions' ); ?>" class="page-title-action">
+                Daily Promotions (<?php echo esc_html( $promo_inv_count ); ?> Claimed)
+            </a>
+            <hr class="wp-header-end">
+
+            <div class="loyalty-charts-grid" style="margin-top: 16px;">
+                <div class="loyalty-section" style="margin-bottom:0;">
+                    <div class="loyalty-title"><span>7-Day Cup &amp; Invoice Activity</span></div>
+                    <div style="height:240px; position:relative;"><canvas id="santinoTrendChart"></canvas></div>
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <a href="<?php echo admin_url( 'edit.php?post_type=santino_invoice' ); ?>" class="button button-primary" style="background: #00625d; border-color: #004d49; font-weight: 700;">
-                        Verify Invoices <?php echo ( $pending_inv > 0 ) ? '(' . $pending_inv . ' Pending)' : ''; ?>
-                    </a>
-                    <a href="<?php echo admin_url( 'edit.php?post_type=santino_redeem' ); ?>" class="button" style="font-weight: 600;">
-                        Redeem Approvals <?php echo ( $pending_red > 0 ) ? '(' . $pending_red . ' Pending)' : ''; ?>
-                    </a>
+                <div class="loyalty-section" style="margin-bottom:0;">
+                    <div class="loyalty-title"><span>Branch Cup Throughput</span></div>
+                    <div style="height:240px; position:relative;"><canvas id="santinoBranchChart"></canvas></div>
                 </div>
+                <div class="loyalty-section" style="margin-bottom:0;">
+                    <div class="loyalty-title"><span>Invoice Status &amp; Promo Split</span></div>
+                    <div style="height:240px; position:relative;"><canvas id="santinoStatusChart"></canvas></div>
+                </div>
+            </div>
             </div>
 
             <!-- KPI Metric Cards Grid -->
@@ -3158,6 +3340,61 @@ class Santino_Membership_System {
             </div>
             <?php endif; ?>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+        <script>
+        (function() {
+            if (typeof Chart === 'undefined') return;
+            var trendCtx = document.getElementById('santinoTrendChart');
+            if (trendCtx) {
+                new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: <?php echo wp_json_encode( $trend_labels ); ?>,
+                        datasets: [
+                            { label: 'Cups Logged', data: <?php echo wp_json_encode( $trend_cups ); ?>, borderColor: '#00625d', backgroundColor: 'rgba(0,98,93,0.12)', fill: true, tension: 0.35 },
+                            { label: 'Invoices', data: <?php echo wp_json_encode( $trend_invoices ); ?>, borderColor: '#c3996c', backgroundColor: 'rgba(195,153,108,0.1)', fill: false, tension: 0.35 }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+                });
+            }
+
+            var branchCtx = document.getElementById('santinoBranchChart');
+            if (branchCtx) {
+                new Chart(branchCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: <?php echo wp_json_encode( $chart_branch_labels ); ?>,
+                        datasets: [
+                            { label: 'Approved Cups', data: <?php echo wp_json_encode( $chart_branch_cups ); ?>, backgroundColor: '#00625d', borderRadius: 4 },
+                            { label: 'Total Invoices', data: <?php echo wp_json_encode( $chart_branch_invoices ); ?>, backgroundColor: '#c3996c', borderRadius: 4 }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+                });
+            }
+
+            var statusCtx = document.getElementById('santinoStatusChart');
+            if (statusCtx) {
+                new Chart(statusCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Approved', 'Pending', 'Rejected', 'Promo Claimed'],
+                        datasets: [{
+                            data: [
+                                <?php echo intval( $inv_status_counts['approved'] ); ?>,
+                                <?php echo intval( $inv_status_counts['pending'] ); ?>,
+                                <?php echo intval( $inv_status_counts['rejected'] ); ?>,
+                                <?php echo intval( $promo_inv_count ); ?>
+                            ],
+                            backgroundColor: ['#16a34a', '#eab308', '#dc2626', '#00625d']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                });
+            }
+        })();
+        </script>
         <?php
     }
 
@@ -3522,6 +3759,1090 @@ class Santino_Membership_System {
                     <div style="font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase;">Valid Thru</div>
                     <div style="font-size: 13px; font-weight: 600; color: #c5a059; margin-top: 2px;"><?php echo esc_html( $atts['expiry'] ); ?></div>
                 </div>
+            </div>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    public static function get_default_daily_promotions() {
+        return array(
+            array( 'id' => 'promo_sun', 'schedule' => 'sunday',    'day' => 'Sunday',    'title' => '3 + 1 FREE', 'buy_qty' => 3, 'free_qty' => 1, 'selected_items' => array(), 'custom_items' => 'Hot or Iced Chocolate',             'items' => 'Hot or Iced Chocolate',             'badge' => 'Weekend Kickoff',  'paid_cups' => 3, 'start_date' => '', 'end_date' => '', 'active' => true ),
+            array( 'id' => 'promo_mon', 'schedule' => 'monday',    'day' => 'Monday',    'title' => '3 + 1 FREE', 'buy_qty' => 3, 'free_qty' => 1, 'selected_items' => array(), 'custom_items' => 'Hot or Cold Latte',                 'items' => 'Hot or Cold Latte',                 'badge' => 'Monday Fuel',      'paid_cups' => 3, 'start_date' => '', 'end_date' => '', 'active' => true ),
+            array( 'id' => 'promo_tue', 'schedule' => 'tuesday',   'day' => 'Tuesday',   'title' => '3 + 1 FREE', 'buy_qty' => 3, 'free_qty' => 1, 'selected_items' => array(), 'custom_items' => 'Mocha / Caramel / Hazelnut Frappe', 'items' => 'Mocha / Caramel / Hazelnut Frappe', 'badge' => 'Frappe Mania',     'paid_cups' => 3, 'start_date' => '', 'end_date' => '', 'active' => true ),
+            array( 'id' => 'promo_wed', 'schedule' => 'wednesday', 'day' => 'Wednesday', 'title' => '3 + 1 FREE', 'buy_qty' => 3, 'free_qty' => 1, 'selected_items' => array(), 'custom_items' => 'Chai Latte',                        'items' => 'Chai Latte',                        'badge' => 'Midweek Comfort',  'paid_cups' => 3, 'start_date' => '', 'end_date' => '', 'active' => true ),
+            array( 'id' => 'promo_thu', 'schedule' => 'thursday',  'day' => 'Thursday',  'title' => '3 + 1 FREE', 'buy_qty' => 3, 'free_qty' => 1, 'selected_items' => array( 'Hot Cappuccino' ), 'custom_items' => '',                   'items' => 'Hot Cappuccino',                    'badge' => 'Classic Thursday', 'paid_cups' => 3, 'start_date' => '', 'end_date' => '', 'active' => true ),
+            array( 'id' => 'promo_fri', 'schedule' => 'friday',    'day' => 'Friday',    'title' => '3 + 1 FREE', 'buy_qty' => 3, 'free_qty' => 1, 'selected_items' => array( 'Iced Mocha' ),     'custom_items' => '',                   'items' => 'Iced Mocha',                        'badge' => 'Friday Chill',     'paid_cups' => 3, 'start_date' => '', 'end_date' => '', 'active' => true ),
+            array( 'id' => 'promo_sat', 'schedule' => 'saturday',  'day' => 'Saturday',  'title' => '3 + 1 FREE', 'buy_qty' => 3, 'free_qty' => 1, 'selected_items' => array( 'Iced Latte' ),     'custom_items' => '',                   'items' => 'Iced Latte',                        'badge' => 'Weekend Vibes',    'paid_cups' => 3, 'start_date' => '', 'end_date' => '', 'active' => true ),
+        );
+    }
+
+    public static function get_schedule_label( $schedule, $start_date = '', $end_date = '' ) {
+        $map = array(
+            'sunday'     => 'Sunday',
+            'monday'     => 'Monday',
+            'tuesday'    => 'Tuesday',
+            'wednesday'  => 'Wednesday',
+            'thursday'   => 'Thursday',
+            'friday'     => 'Friday',
+            'saturday'   => 'Saturday',
+            'everyday'   => 'Every Day',
+            'weekends'   => 'Weekends (Fri-Sat)',
+            'date_range' => ( $start_date || $end_date ) ? trim( $start_date . ' to ' . $end_date ) : 'Custom Dates',
+        );
+        return $map[ $schedule ] ?? ucfirst( $schedule );
+    }
+
+    public static function get_daily_promotions() {
+        $defaults = self::get_default_daily_promotions();
+        $saved    = get_option( 'santino_daily_promotions', array() );
+        if ( ! is_array( $saved ) || empty( $saved ) ) {
+            return $defaults;
+        }
+        $normalized = array();
+        foreach ( $saved as $k => $row ) {
+            if ( ! is_array( $row ) ) {
+                continue;
+            }
+            $sched      = sanitize_text_field( $row['schedule'] ?? ( is_string( $k ) && ! is_numeric( $k ) ? $k : 'everyday' ) );
+            $start_date = sanitize_text_field( $row['start_date'] ?? '' );
+            $end_date   = sanitize_text_field( $row['end_date'] ?? '' );
+            $buy_qty    = max( 1, intval( $row['buy_qty'] ?? ( $row['paid_cups'] ?? 3 ) ) );
+            $free_qty   = max( 0, intval( $row['free_qty'] ?? 1 ) );
+            $sel_items  = isset( $row['selected_items'] ) && is_array( $row['selected_items'] )
+                ? array_values( array_filter( array_map( 'sanitize_text_field', $row['selected_items'] ) ) )
+                : array();
+            $custom_it  = sanitize_text_field( $row['custom_items'] ?? '' );
+            $items_str  = sanitize_text_field( $row['items'] ?? '' );
+            if ( empty( $items_str ) ) {
+                $parts     = $custom_it !== '' ? array_merge( $sel_items, array( $custom_it ) ) : $sel_items;
+                $items_str = implode( ', ', $parts );
+            }
+            if ( empty( $sel_items ) && $custom_it === '' && $items_str !== '' ) {
+                $custom_it = $items_str;
+            }
+            $normalized[] = array(
+                'id'             => sanitize_text_field( $row['id'] ?? 'promo_' . uniqid() ),
+                'schedule'       => $sched,
+                'day'            => self::get_schedule_label( $sched, $start_date, $end_date ),
+                'title'          => sanitize_text_field( $row['title'] ?? ( $free_qty > 0 ? $buy_qty . ' + ' . $free_qty . ' FREE' : 'Buy ' . $buy_qty ) ),
+                'buy_qty'        => $buy_qty,
+                'free_qty'       => $free_qty,
+                'selected_items' => $sel_items,
+                'custom_items'   => $custom_it,
+                'items'          => $items_str,
+                'badge'          => sanitize_text_field( $row['badge'] ?? '' ),
+                'paid_cups'      => max( 1, intval( $row['paid_cups'] ?? $buy_qty ) ),
+                'start_date'     => $start_date,
+                'end_date'       => $end_date,
+                'active'         => ! empty( $row['active'] ),
+            );
+        }
+        return ! empty( $normalized ) ? $normalized : $defaults;
+    }
+
+    public static function get_today_dhaka_date() {
+        try {
+            $dt = new DateTime( 'now', new DateTimeZone( 'Asia/Dhaka' ) );
+            return $dt->format( 'Y-m-d' );
+        } catch ( Exception $e ) {
+            return wp_date( 'Y-m-d' );
+        }
+    }
+
+    public static function is_promo_active_today( $promo, $today_key = null, $today_date = null ) {
+        if ( empty( $promo['active'] ) ) {
+            return false;
+        }
+        $today_key  = $today_key ?: self::get_today_dhaka_key();
+        $today_date = $today_date ?: self::get_today_dhaka_date();
+        $sched      = $promo['schedule'] ?? 'everyday';
+
+        if ( $sched === 'everyday' ) {
+            return true;
+        }
+        if ( $sched === 'weekends' ) {
+            return in_array( $today_key, array( 'friday', 'saturday' ), true );
+        }
+        if ( $sched === 'date_range' ) {
+            $s = $promo['start_date'] ?? '';
+            $e = $promo['end_date'] ?? '';
+            if ( $s && $today_date < $s ) return false;
+            if ( $e && $today_date > $e ) return false;
+            return true;
+        }
+        return $sched === $today_key;
+    }
+
+    public static function get_today_dhaka_key() {
+        try {
+            $dt = new DateTime( 'now', new DateTimeZone( 'Asia/Dhaka' ) );
+            return strtolower( $dt->format( 'l' ) );
+        } catch ( Exception $e ) {
+            return strtolower( wp_date( 'l' ) );
+        }
+    }
+
+    public static function render_daily_promotions_page() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'Permission denied' );
+        }
+
+        $notice = '';
+        if ( isset( $_POST['santino_reset_promos'] ) && check_admin_referer( 'santino_save_daily_promos', 'santino_promo_nonce' ) ) {
+            update_option( 'santino_daily_promotions', self::get_default_daily_promotions() );
+            $notice = '<div class="notice notice-success is-dismissible"><p>Promotions reset to 7-Day defaults.</p></div>';
+        } elseif ( isset( $_POST['santino_save_promos'] ) && check_admin_referer( 'santino_save_daily_promos', 'santino_promo_nonce' ) ) {
+            $posted = isset( $_POST['promos'] ) && is_array( $_POST['promos'] ) ? $_POST['promos'] : array();
+            $clean  = array();
+            foreach ( $posted as $row ) {
+                if ( ! is_array( $row ) ) continue;
+                $buy_qty    = max( 1, intval( $row['buy_qty'] ?? ( $row['paid_cups'] ?? 3 ) ) );
+                $free_qty   = max( 0, intval( $row['free_qty'] ?? 1 ) );
+                $auto_title = $free_qty > 0 ? $buy_qty . ' + ' . $free_qty . ' FREE' : 'Buy ' . $buy_qty;
+                $title      = sanitize_text_field( $row['title'] ?? '' );
+                $sel_items  = isset( $row['selected_items'] ) && is_array( $row['selected_items'] )
+                    ? array_values( array_filter( array_map( 'sanitize_text_field', $row['selected_items'] ) ) )
+                    : array();
+                $custom_it  = sanitize_text_field( $row['custom_items'] ?? '' );
+                $item_parts = $custom_it !== '' ? array_merge( $sel_items, array( $custom_it ) ) : $sel_items;
+                $items      = implode( ', ', array_unique( array_filter( $item_parts ) ) );
+                if ( $items === '' && ! empty( $row['items'] ) ) {
+                    $items = sanitize_text_field( $row['items'] );
+                }
+                if ( empty( $title ) && empty( $items ) ) continue;
+                $sched      = sanitize_text_field( $row['schedule'] ?? 'everyday' );
+                $start_date = sanitize_text_field( $row['start_date'] ?? '' );
+                $end_date   = sanitize_text_field( $row['end_date'] ?? '' );
+                $paid_cups  = max( 1, intval( $row['paid_cups'] ?? $buy_qty ) );
+                $clean[]    = array(
+                    'id'             => sanitize_text_field( $row['id'] ?? 'promo_' . wp_generate_password( 6, false ) ),
+                    'schedule'       => $sched,
+                    'day'            => self::get_schedule_label( $sched, $start_date, $end_date ),
+                    'title'          => $title ?: $auto_title,
+                    'buy_qty'        => $buy_qty,
+                    'free_qty'       => $free_qty,
+                    'selected_items' => $sel_items,
+                    'custom_items'   => $custom_it,
+                    'items'          => $items ?: 'Signature Coffee',
+                    'badge'          => sanitize_text_field( $row['badge'] ?? '' ),
+                    'paid_cups'      => $paid_cups,
+                    'start_date'     => $start_date,
+                    'end_date'       => $end_date,
+                    'active'         => ! empty( $row['active'] ),
+                );
+            }
+            update_option( 'santino_daily_promotions', $clean );
+            $notice = '<div class="notice notice-success is-dismissible"><p>Dynamic Promotions saved successfully (' . count( $clean ) . ' promotions).</p></div>';
+        }
+
+        $promos       = self::get_daily_promotions();
+        $menu_choices = self::get_order_item_choices();
+        $today_key    = self::get_today_dhaka_key();
+        $today_date   = self::get_today_dhaka_date();
+        $schedules    = array(
+            'sunday'     => 'Sunday',
+            'monday'     => 'Monday',
+            'tuesday'    => 'Tuesday',
+            'wednesday'  => 'Wednesday',
+            'thursday'   => 'Thursday',
+            'friday'     => 'Friday',
+            'saturday'   => 'Saturday',
+            'everyday'   => 'Every Day',
+            'weekends'   => 'Weekends (Fri-Sat)',
+            'date_range' => 'Custom Date Range',
+        );
+        $active_today_count = 0;
+        foreach ( $promos as $pr ) {
+            if ( self::is_promo_active_today( $pr, $today_key, $today_date ) ) {
+                $active_today_count++;
+            }
+        }
+        ?>
+        <style>
+        .santino-promo-admin-wrap { max-width: 100%; }
+        .santino-promo-hero {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            background: linear-gradient(135deg, #004d49 0%, #00625d 60%, #0d2b28 100%);
+            color: #fff;
+            padding: 20px 24px;
+            border-radius: 12px;
+            margin: 14px 0 18px;
+            box-shadow: 0 4px 16px rgba(0, 77, 73, 0.16);
+        }
+        .santino-promo-hero h2 { margin: 0 0 4px; color: #fff; font-size: 20px; font-weight: 700; letter-spacing: -0.2px; }
+        .santino-promo-hero p { margin: 0; color: rgba(255,255,255,0.82); font-size: 13px; }
+        .santino-promo-hero-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .santino-hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: 1px solid rgba(255,255,255,0.28);
+        }
+        .santino-hero-btn-gold { background: #dfbe8d; color: #041a18; border-color: #dfbe8d; }
+        .santino-hero-btn-gold:hover { background: #e8cda3; color: #041a18; }
+        .santino-hero-btn-ghost { background: rgba(255,255,255,0.12); color: #fff; }
+        .santino-hero-btn-ghost:hover { background: rgba(255,255,255,0.22); color: #fff; }
+        .santino-promo-kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        .santino-kpi-card {
+            background: #fff;
+            border: 1px solid #dcdcde;
+            border-left: 4px solid #00625d;
+            border-radius: 10px;
+            padding: 14px 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .santino-kpi-card.is-green { border-left-color: #00a32a; }
+        .santino-kpi-card.is-gold { border-left-color: #dba617; }
+        .santino-kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: #646970; font-weight: 600; margin-bottom: 4px; }
+        .santino-kpi-val { font-size: 22px; font-weight: 700; color: #1d2327; line-height: 1.2; }
+        .santino-kpi-sub { font-size: 11.5px; color: #646970; margin-top: 3px; }
+        .santino-promo-card {
+            background: #fff;
+            border: 1px solid #dcdcde;
+            border-radius: 12px;
+            overflow: visible;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        #santinoPromoTable { border: 0; border-radius: 12px; overflow: visible; }
+        #santinoPromoTable thead th {
+            background: #f6f7f7;
+            font-weight: 600;
+            color: #1d2327;
+            padding: 12px 14px;
+            border-bottom: 2px solid #00625d;
+            font-size: 12.5px;
+        }
+        #santinoPromoTable tbody tr.santino-promo-row td {
+            padding: 14px;
+            vertical-align: top;
+            border-bottom: 1px solid #f0f0f1;
+        }
+        #santinoPromoTable tbody tr.santino-promo-row.is-today-row {
+            background: #f0faf7 !important;
+        }
+        #santinoPromoTable tbody tr.santino-promo-row.is-today-row td:first-child {
+            box-shadow: inset 4px 0 0 #00a32a;
+        }
+        .santino-today-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #86efac;
+            border-radius: 999px;
+            padding: 2px 9px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .santino-qty-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 6px;
+            align-items: end;
+            margin-bottom: 7px;
+        }
+        .santino-qty-box label { display: block; font-size: 10.5px; font-weight: 600; color: #50575e; text-transform: uppercase; margin-bottom: 2px; }
+        .santino-qty-box input { width: 100%; text-align: center; font-weight: 700; border-radius: 6px; }
+        .santino-qty-plus { font-weight: 800; color: #00625d; padding-bottom: 6px; font-size: 14px; }
+        .santino-picker-wrap { position: relative; }
+        .santino-selected-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 6px;
+            min-height: 24px;
+        }
+        .santino-item-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #e6f4f1;
+            color: #004d49;
+            border: 1px solid #b5dcd5;
+            border-radius: 999px;
+            padding: 2px 9px;
+            font-size: 11.5px;
+            font-weight: 600;
+        }
+        .santino-item-pill button {
+            background: none;
+            border: 0;
+            color: #00625d;
+            cursor: pointer;
+            font-weight: 800;
+            padding: 0 2px;
+            line-height: 1;
+            font-size: 13px;
+        }
+        .santino-picker-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px !important;
+            border-radius: 6px !important;
+        }
+        .santino-picker-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            width: 100%;
+            min-width: 260px;
+            max-width: 340px;
+            background: #fff;
+            border: 1px solid #c3c4c7;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.14);
+            z-index: 999;
+            padding: 8px;
+        }
+        .santino-picker-dropdown.is-open { display: block; }
+        .santino-picker-search { width: 100%; margin-bottom: 6px; font-size: 12px; border-radius: 6px; }
+        .santino-picker-list { max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 3px; }
+        .santino-picker-option {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 4px 6px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            margin: 0;
+        }
+        .santino-picker-option:hover { background: #f0faf7; }
+        .santino-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 22px;
+        }
+        .santino-switch input { opacity: 0; width: 0; height: 0; }
+        .santino-switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #c3c4c7;
+            transition: .2s;
+            border-radius: 22px;
+        }
+        .santino-switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .2s;
+            border-radius: 50%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .santino-switch input:checked + .santino-switch-slider { background-color: #00a32a; }
+        .santino-switch input:checked + .santino-switch-slider:before { transform: translateX(18px); }
+        .santino-promo-footer-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: #f6f7f7;
+            border-top: 1px solid #dcdcde;
+            border-radius: 0 0 12px 12px;
+        }
+        .santino-save-btn {
+            background: #00625d !important;
+            border-color: #004d49 !important;
+            padding: 4px 18px !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+        }
+        .santino-save-btn:hover { background: #004d49 !important; }
+        </style>
+
+        <div class="wrap santino-promo-admin-wrap">
+            <h1 class="wp-heading-inline"><?php esc_html_e( 'Daily Promotions', 'santino' ); ?></h1>
+            <hr class="wp-header-end">
+
+            <?php echo $notice; ?>
+
+            <div class="santino-promo-hero">
+                <div>
+                    <h2>☕ Santino Daily Promotions &amp; Offer Builder</h2>
+                    <p>Configure dynamic Buy + Free quantities, cafe menu items, schedules, and Dhaka-time live offers.</p>
+                </div>
+                <div class="santino-promo-hero-actions">
+                    <a href="#" id="santinoAddPromoRowBtn" class="santino-hero-btn santino-hero-btn-gold">+ Add New Promotion</a>
+                    <a href="<?php echo esc_url( home_url( '/offers/' ) ); ?>" target="_blank" class="santino-hero-btn santino-hero-btn-ghost">View Offers Page ↗</a>
+                </div>
+            </div>
+
+            <div class="santino-promo-kpis">
+                <div class="santino-kpi-card">
+                    <div class="santino-kpi-label">Total Configured Offers</div>
+                    <div class="santino-kpi-val"><?php echo count( $promos ); ?></div>
+                    <div class="santino-kpi-sub">Across weekly &amp; custom schedules</div>
+                </div>
+                <div class="santino-kpi-card is-green">
+                    <div class="santino-kpi-label">Live Today (Asia/Dhaka)</div>
+                    <div class="santino-kpi-val"><?php echo esc_html( $active_today_count ); ?> Active</div>
+                    <div class="santino-kpi-sub"><?php echo esc_html( ucfirst( $today_key ) . ', ' . $today_date ); ?></div>
+                </div>
+                <div class="santino-kpi-card is-gold">
+                    <div class="santino-kpi-label">Dynamic Cafe Menu Items</div>
+                    <div class="santino-kpi-val"><?php echo count( $menu_choices ); ?></div>
+                    <div class="santino-kpi-sub">Synced from Handcrafted Menu</div>
+                </div>
+            </div>
+
+            <form method="post" class="santino-promo-card">
+                <?php wp_nonce_field( 'santino_save_daily_promos', 'santino_promo_nonce' ); ?>
+                <table class="wp-list-table widefat fixed striped table-view-list" id="santinoPromoTable">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="manage-column" style="width:175px;"><?php esc_html_e( 'Schedule', 'santino' ); ?></th>
+                            <th scope="col" class="manage-column" style="width:205px;"><?php esc_html_e( 'Offer Qty & Title', 'santino' ); ?></th>
+                            <th scope="col" class="manage-column"><?php esc_html_e( 'Featured Beverage / Items', 'santino' ); ?></th>
+                            <th scope="col" class="manage-column" style="width:155px;"><?php esc_html_e( 'Badge Tag', 'santino' ); ?></th>
+                            <th scope="col" class="manage-column" style="width:80px; text-align:center;"><?php esc_html_e( 'Stamps', 'santino' ); ?></th>
+                            <th scope="col" class="manage-column" style="width:75px; text-align:center;"><?php esc_html_e( 'Active', 'santino' ); ?></th>
+                            <th scope="col" class="manage-column" style="width:75px; text-align:center;"><?php esc_html_e( 'Action', 'santino' ); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody id="santinoPromoTableBody">
+                        <?php foreach ( $promos as $idx => $p ) :
+                            $is_today  = self::is_promo_active_today( $p, $today_key, $today_date );
+                            $sched     = $p['schedule'] ?? 'everyday';
+                            $buy_qty   = max( 1, intval( $p['buy_qty'] ?? ( $p['paid_cups'] ?? 3 ) ) );
+                            $free_qty  = max( 0, intval( $p['free_qty'] ?? 1 ) );
+                            $sel_items = isset( $p['selected_items'] ) && is_array( $p['selected_items'] ) ? $p['selected_items'] : array();
+                            $custom_it = $p['custom_items'] ?? '';
+                            if ( empty( $sel_items ) && $custom_it === '' && ! empty( $p['items'] ) ) {
+                                $custom_it = $p['items'];
+                            }
+                        ?>
+                            <tr class="santino-promo-row<?php echo $is_today ? ' is-today-row' : ''; ?>">
+                                <td>
+                                    <input type="hidden" name="promos[<?php echo $idx; ?>][id]" value="<?php echo esc_attr( $p['id'] ); ?>">
+                                    <select name="promos[<?php echo $idx; ?>][schedule]" class="santino-sched-select" style="width:100%; border-radius:6px;">
+                                        <?php foreach ( $schedules as $sk => $sl ) : ?>
+                                            <option value="<?php echo esc_attr( $sk ); ?>" <?php selected( $sched, $sk ); ?>><?php echo esc_html( $sl ); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="santino-date-range-wrap" style="margin-top:6px; display:<?php echo $sched === 'date_range' ? 'flex' : 'none'; ?>; flex-direction:column; gap:4px;">
+                                        <input type="date" name="promos[<?php echo $idx; ?>][start_date]" value="<?php echo esc_attr( $p['start_date'] ?? '' ); ?>" style="width:100%; border-radius:6px;">
+                                        <input type="date" name="promos[<?php echo $idx; ?>][end_date]" value="<?php echo esc_attr( $p['end_date'] ?? '' ); ?>" style="width:100%; border-radius:6px;">
+                                    </div>
+                                    <?php if ( $is_today ) : ?>
+                                        <div><span class="santino-today-pill">● LIVE TODAY</span></div>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <div class="santino-qty-grid">
+                                        <div class="santino-qty-box">
+                                            <label>Buy Qty</label>
+                                            <input type="number" min="1" max="20" name="promos[<?php echo $idx; ?>][buy_qty]" value="<?php echo esc_attr( $buy_qty ); ?>" class="small-text santino-qty-buy">
+                                        </div>
+                                        <div class="santino-qty-plus">+</div>
+                                        <div class="santino-qty-box">
+                                            <label>Free Qty</label>
+                                            <input type="number" min="0" max="10" name="promos[<?php echo $idx; ?>][free_qty]" value="<?php echo esc_attr( $free_qty ); ?>" class="small-text santino-qty-free">
+                                        </div>
+                                    </div>
+                                    <input type="text" name="promos[<?php echo $idx; ?>][title]" value="<?php echo esc_attr( $p['title'] ); ?>" class="regular-text santino-promo-title" style="width:100%; border-radius:6px; font-weight:600;" placeholder="3 + 1 FREE" required>
+                                </td>
+                                <td>
+                                    <div class="santino-picker-wrap">
+                                        <div class="santino-selected-pills">
+                                            <?php foreach ( $sel_items as $si ) : ?>
+                                                <span class="santino-item-pill" data-val="<?php echo esc_attr( $si ); ?>"><?php echo esc_html( $si ); ?> <button type="button" class="santino-pill-remove" aria-label="Remove">&times;</button></span>
+                                            <?php endforeach; ?>
+                                        </div>
+                                        <button type="button" class="button button-small santino-picker-toggle">
+                                            <span class="dashicons dashicons-coffee" style="font-size:14px; width:14px; height:14px; line-height:1.3;"></span>
+                                            Select Menu Items (<?php echo count( $sel_items ); ?>)
+                                        </button>
+                                        <div class="santino-picker-dropdown">
+                                            <input type="text" class="santino-picker-search" placeholder="Search cafe menu items...">
+                                            <div class="santino-picker-list">
+                                                <?php foreach ( $menu_choices as $mc ) : ?>
+                                                    <label class="santino-picker-option">
+                                                        <input type="checkbox" name="promos[<?php echo $idx; ?>][selected_items][]" value="<?php echo esc_attr( $mc ); ?>" class="santino-picker-cb" <?php checked( in_array( $mc, $sel_items, true ) ); ?>>
+                                                        <span><?php echo esc_html( $mc ); ?></span>
+                                                    </label>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="text" name="promos[<?php echo $idx; ?>][custom_items]" value="<?php echo esc_attr( $custom_it ); ?>" class="regular-text" style="width:100%; margin-top:7px; font-size:12px; border-radius:6px;" placeholder="Optional custom item / note (e.g. Hot or Iced)">
+                                </td>
+                                <td><input type="text" name="promos[<?php echo $idx; ?>][badge]" value="<?php echo esc_attr( $p['badge'] ); ?>" class="regular-text" style="width:100%; border-radius:6px;" placeholder="SPECIAL"></td>
+                                <td style="text-align:center;"><input type="number" min="1" max="20" name="promos[<?php echo $idx; ?>][paid_cups]" value="<?php echo esc_attr( intval( $p['paid_cups'] ?? $buy_qty ) ); ?>" class="small-text santino-paid-cups" style="width:62px; text-align:center; font-weight:700; border-radius:6px;"></td>
+                                <td style="text-align:center; padding-top:18px;">
+                                    <label class="santino-switch">
+                                        <input type="checkbox" name="promos[<?php echo $idx; ?>][active]" value="1" <?php checked( ! empty( $p['active'] ) ); ?>>
+                                        <span class="santino-switch-slider"></span>
+                                    </label>
+                                </td>
+                                <td style="text-align:center; padding-top:16px;"><button type="button" class="button button-small button-link-delete santino-del-promo-btn"><?php esc_html_e( 'Delete', 'santino' ); ?></button></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+                <div class="santino-promo-footer-bar">
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <button type="submit" name="santino_save_promos" class="button button-primary santino-save-btn"><?php esc_html_e( 'Save All Promotions', 'santino' ); ?></button>
+                        <button type="submit" name="santino_reset_promos" class="button" onclick="return confirm('Reset to default 7-day 3+1 FREE offers?');"><?php esc_html_e( 'Reset Defaults', 'santino' ); ?></button>
+                    </div>
+                    <span style="font-size:12px; color:#646970;">Changes reflect immediately on <strong>/offers/</strong>, <strong>Today's Offer Tab</strong>, and <strong>Invoice Logs</strong>.</span>
+                </div>
+            </form>
+        </div>
+        <script>
+        (function() {
+            let nextIdx = <?php echo count( $promos ); ?>;
+            const tbody = document.getElementById('santinoPromoTableBody');
+            const addBtn = document.getElementById('santinoAddPromoRowBtn');
+            const menuChoices = <?php echo wp_json_encode( $menu_choices ); ?>;
+
+            function escapeHtml(str) {
+                return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            }
+
+            function buildMenuCheckboxesHtml(idx) {
+                return menuChoices.map(function(item) {
+                    const esc = escapeHtml(item);
+                    return '<label class="santino-picker-option">' +
+                        '<input type="checkbox" name="promos[' + idx + '][selected_items][]" value="' + esc + '" class="santino-picker-cb">' +
+                        '<span>' + esc + '</span>' +
+                    '</label>';
+                }).join('');
+            }
+
+            function syncPickerPills(row) {
+                const pillsBox = row.querySelector('.santino-selected-pills');
+                const toggleBtn = row.querySelector('.santino-picker-toggle');
+                const cbs = row.querySelectorAll('.santino-picker-cb:checked');
+                if (!pillsBox) return;
+                pillsBox.innerHTML = '';
+                cbs.forEach(function(cb) {
+                    const pill = document.createElement('span');
+                    pill.className = 'santino-item-pill';
+                    pill.setAttribute('data-val', cb.value);
+                    pill.innerHTML = escapeHtml(cb.value) + ' <button type="button" class="santino-pill-remove" aria-label="Remove">&times;</button>';
+                    pill.querySelector('.santino-pill-remove').addEventListener('click', function() {
+                        cb.checked = false;
+                        syncPickerPills(row);
+                    });
+                    pillsBox.appendChild(pill);
+                });
+                if (toggleBtn) {
+                    toggleBtn.innerHTML = '<span class="dashicons dashicons-coffee" style="font-size:14px; width:14px; height:14px; line-height:1.3;"></span> Select Menu Items (' + cbs.length + ')';
+                }
+            }
+
+            function bindRowEvents(row) {
+                const sel = row.querySelector('.santino-sched-select');
+                const dateWrap = row.querySelector('.santino-date-range-wrap');
+                if (sel && dateWrap) {
+                    sel.addEventListener('change', function() {
+                        dateWrap.style.display = this.value === 'date_range' ? 'flex' : 'none';
+                    });
+                }
+
+                const buyInput = row.querySelector('.santino-qty-buy');
+                const freeInput = row.querySelector('.santino-qty-free');
+                const titleInput = row.querySelector('.santino-promo-title');
+                const stampsInput = row.querySelector('.santino-paid-cups');
+                function syncQtyFields() {
+                    const b = Math.max(1, parseInt(buyInput ? buyInput.value : 3, 10) || 3);
+                    const f = Math.max(0, parseInt(freeInput ? freeInput.value : 1, 10) || 0);
+                    if (titleInput) {
+                        titleInput.value = f > 0 ? (b + ' + ' + f + ' FREE') : ('Buy ' + b);
+                    }
+                    if (stampsInput) {
+                        stampsInput.value = b;
+                    }
+                }
+                if (buyInput) buyInput.addEventListener('input', syncQtyFields);
+                if (freeInput) freeInput.addEventListener('input', syncQtyFields);
+
+                const toggleBtn = row.querySelector('.santino-picker-toggle');
+                const dropdown = row.querySelector('.santino-picker-dropdown');
+                const searchInput = row.querySelector('.santino-picker-search');
+                if (toggleBtn && dropdown) {
+                    toggleBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        document.querySelectorAll('.santino-picker-dropdown.is-open').forEach(function(d) {
+                            if (d !== dropdown) d.classList.remove('is-open');
+                        });
+                        dropdown.classList.toggle('is-open');
+                        if (dropdown.classList.contains('is-open') && searchInput) {
+                            searchInput.focus();
+                        }
+                    });
+                    dropdown.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                    });
+                }
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        const q = this.value.toLowerCase();
+                        row.querySelectorAll('.santino-picker-option').forEach(function(opt) {
+                            opt.style.display = opt.textContent.toLowerCase().indexOf(q) !== -1 ? 'flex' : 'none';
+                        });
+                    });
+                }
+                row.querySelectorAll('.santino-picker-cb').forEach(function(cb) {
+                    cb.addEventListener('change', function() {
+                        syncPickerPills(row);
+                    });
+                });
+                row.querySelectorAll('.santino-pill-remove').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        const pill = btn.closest('.santino-item-pill');
+                        const val = pill ? pill.getAttribute('data-val') : '';
+                        row.querySelectorAll('.santino-picker-cb').forEach(function(cb) {
+                            if (cb.value === val) cb.checked = false;
+                        });
+                        syncPickerPills(row);
+                    });
+                });
+
+                const delBtn = row.querySelector('.santino-del-promo-btn');
+                if (delBtn) {
+                    delBtn.addEventListener('click', function() {
+                        row.remove();
+                    });
+                }
+            }
+
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.santino-picker-dropdown.is-open').forEach(function(d) {
+                    d.classList.remove('is-open');
+                });
+            });
+
+            tbody.querySelectorAll('.santino-promo-row').forEach(bindRowEvents);
+
+            addBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const idx = nextIdx++;
+                const tr = document.createElement('tr');
+                tr.className = 'santino-promo-row';
+                tr.innerHTML =
+                    '<td>' +
+                        '<input type="hidden" name="promos[' + idx + '][id]" value="promo_' + Date.now() + '_' + idx + '">' +
+                        '<select name="promos[' + idx + '][schedule]" class="santino-sched-select" style="width:100%; border-radius:6px;">' +
+                            '<option value="everyday">Every Day</option>' +
+                            '<option value="sunday">Sunday</option>' +
+                            '<option value="monday">Monday</option>' +
+                            '<option value="tuesday">Tuesday</option>' +
+                            '<option value="wednesday">Wednesday</option>' +
+                            '<option value="thursday">Thursday</option>' +
+                            '<option value="friday">Friday</option>' +
+                            '<option value="saturday">Saturday</option>' +
+                            '<option value="weekends">Weekends (Fri-Sat)</option>' +
+                            '<option value="date_range">Custom Date Range</option>' +
+                        '</select>' +
+                        '<div class="santino-date-range-wrap" style="margin-top:6px; display:none; flex-direction:column; gap:4px;">' +
+                            '<input type="date" name="promos[' + idx + '][start_date]" style="width:100%; font-size:11px; border-radius:6px;">' +
+                            '<input type="date" name="promos[' + idx + '][end_date]" style="width:100%; font-size:11px; border-radius:6px;">' +
+                        '</div>' +
+                    '</td>' +
+                    '<td>' +
+                        '<div class="santino-qty-grid">' +
+                            '<div class="santino-qty-box"><label>Buy Qty</label><input type="number" min="1" max="20" name="promos[' + idx + '][buy_qty]" value="3" class="small-text santino-qty-buy"></div>' +
+                            '<div class="santino-qty-plus">+</div>' +
+                            '<div class="santino-qty-box"><label>Free Qty</label><input type="number" min="0" max="10" name="promos[' + idx + '][free_qty]" value="1" class="small-text santino-qty-free"></div>' +
+                        '</div>' +
+                        '<input type="text" name="promos[' + idx + '][title]" value="3 + 1 FREE" class="regular-text santino-promo-title" style="width:100%; border-radius:6px; font-weight:600;" required>' +
+                    '</td>' +
+                    '<td>' +
+                        '<div class="santino-picker-wrap">' +
+                            '<div class="santino-selected-pills"></div>' +
+                            '<button type="button" class="button button-small santino-picker-toggle"><span class="dashicons dashicons-coffee" style="font-size:14px; width:14px; height:14px; line-height:1.3;"></span> Select Menu Items (0)</button>' +
+                            '<div class="santino-picker-dropdown">' +
+                                '<input type="text" class="santino-picker-search" placeholder="Search cafe menu items...">' +
+                                '<div class="santino-picker-list">' + buildMenuCheckboxesHtml(idx) + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<input type="text" name="promos[' + idx + '][custom_items]" value="" class="regular-text" style="width:100%; margin-top:7px; font-size:12px; border-radius:6px;" placeholder="Optional custom item / note (e.g. Hot or Iced)">' +
+                    '</td>' +
+                    '<td><input type="text" name="promos[' + idx + '][badge]" value="NEW OFFER" class="regular-text" style="width:100%; border-radius:6px;"></td>' +
+                    '<td style="text-align:center;"><input type="number" min="1" max="20" name="promos[' + idx + '][paid_cups]" value="3" class="small-text santino-paid-cups" style="width:62px; text-align:center; font-weight:700; border-radius:6px;"></td>' +
+                    '<td style="text-align:center; padding-top:18px;"><label class="santino-switch"><input type="checkbox" name="promos[' + idx + '][active]" value="1" checked><span class="santino-switch-slider"></span></label></td>' +
+                    '<td style="text-align:center; padding-top:16px;"><button type="button" class="button button-small button-link-delete santino-del-promo-btn">Delete</button></td>';
+                tbody.appendChild(tr);
+                bindRowEvents(tr);
+            });
+        })();
+        </script>
+        <?php
+    }
+
+    public static function render_daily_promotions_markup( $args = array() ) {
+        $args = wp_parse_args( $args, array(
+            'layout'        => 'grid',
+            'badge_text'    => '7 DAYS, 7 REASONS TO CELEBRATE',
+            'title'         => 'Daily Special <span class="sec-title-accent">3 + 1 FREE</span> Offers',
+            'subtitle'      => 'Every day brings a signature handcrafted privilege across all Santino flagship cafes.',
+            'whatsapp'      => '8801613334514',
+            'show_header'   => true,
+            'custom_promos' => array(),
+        ) );
+
+        $promos     = ! empty( $args['custom_promos'] ) && is_array( $args['custom_promos'] ) ? $args['custom_promos'] : self::get_daily_promotions();
+        $today_key  = self::get_today_dhaka_key();
+        $today_date = self::get_today_dhaka_date();
+        $wa_num     = preg_replace( '/[^0-9]/', '', $args['whatsapp'] ) ?: '8801613334514';
+
+        $today_list = array();
+        foreach ( $promos as $p ) {
+            if ( self::is_promo_active_today( $p, $today_key, $today_date ) ) {
+                $today_list[] = $p;
+            }
+        }
+        $today_p = ! empty( $today_list ) ? $today_list[0] : reset( $promos );
+
+        ob_start();
+        ?>
+        <section class="py-5 santino-daily-promos-section position-relative overflow-hidden" id="dailyPromos" data-dhaka-today="<?php echo esc_attr( $today_key ); ?>" data-wa-number="<?php echo esc_attr( $wa_num ); ?>">
+            <div class="container py-lg-3 position-relative" style="z-index:2;">
+                <?php if ( $args['show_header'] ) : ?>
+                <div class="text-center mx-auto mb-4" style="max-width: 720px;">
+                    <div class="sec-pill-badge-wrap mb-2">
+                        <span class="sec-pill-line"></span>
+                        <span class="sec-pill-badge"><i class="bi bi-calendar2-heart-fill me-1"></i> <?php echo esc_html( $args['badge_text'] ); ?></span>
+                        <span class="sec-pill-line"></span>
+                    </div>
+                    <h2 class="sec-title mb-2"><?php echo wp_kses_post( $args['title'] ); ?></h2>
+                    <p class="text-muted mb-0" style="font-size: 0.98rem; line-height: 1.55;"><?php echo esc_html( $args['subtitle'] ); ?></p>
+                </div>
+                <?php endif; ?>
+
+                <div class="santino-today-spotlight mb-4" id="santinoTodaySpotlight">
+                    <div class="row align-items-center g-3">
+                        <div class="col-lg-8">
+                            <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
+                                <span class="badge rounded-pill santino-live-pill"><span class="live-dot"></span> TODAY'S LIVE OFFER &bull; <span class="js-today-day-name"><?php echo esc_html( strtoupper( $today_p['day'] ) ); ?></span></span>
+                                <span class="badge rounded-pill santino-countdown-pill"><i class="bi bi-clock me-1"></i> Ends in <span class="js-dhaka-countdown">00:00:00</span></span>
+                            </div>
+                            <h3 class="font-heading fw-bold text-white mb-1 js-today-title"><?php echo esc_html( $today_p['title'] . ' — ' . $today_p['items'] ); ?></h3>
+                            <p class="mb-0 text-white-50 small">Order 3 cups &amp; get the 4th cup 100% free. VIP Members also earn 3 Coffee Stamps on paid cups!</p>
+                        </div>
+                        <div class="col-lg-4 text-lg-end">
+                            <a href="https://wa.me/<?php echo esc_attr( $wa_num ); ?>?text=<?php echo rawurlencode( 'Hi Santino! I want to claim today\'s (' . $today_p['day'] . ') ' . $today_p['title'] . ' - ' . $today_p['items'] . ' offer.' ); ?>" target="_blank" class="btn-hero-lifestyle js-today-wa-btn">
+                                <i class="bi bi-whatsapp"></i> <span>Claim Today's Offer</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <?php if ( $args['layout'] !== 'banner' ) : ?>
+                <div class="row g-3 g-md-4 justify-content-center">
+                    <?php foreach ( $promos as $p ) :
+                        if ( empty( $p['active'] ) ) continue;
+                        $sched    = $p['schedule'] ?? strtolower( $p['day'] ?? 'everyday' );
+                        $is_today = self::is_promo_active_today( $p, $today_key, $today_date );
+                        $stamps   = max( 1, intval( $p['paid_cups'] ?? 3 ) );
+                        $wa_msg   = 'Hi Santino! I want to claim the ' . $p['day'] . ' (' . $p['title'] . ' - ' . $p['items'] . ') special offer.';
+                    ?>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="santino-promo-day-card <?php echo $is_today ? 'is-today-active' : ''; ?>" data-promo-day="<?php echo esc_attr( $sched ); ?>" data-promo-start="<?php echo esc_attr( $p['start_date'] ?? '' ); ?>" data-promo-end="<?php echo esc_attr( $p['end_date'] ?? '' ); ?>" data-promo-day-label="<?php echo esc_attr( $p['day'] ); ?>" data-promo-title="<?php echo esc_attr( $p['title'] ); ?>" data-promo-items="<?php echo esc_attr( $p['items'] ); ?>">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="promo-day-label"><?php echo esc_html( strtoupper( $p['day'] ) ); ?></span>
+                                <span class="promo-status-tag"><?php echo $is_today ? 'TODAY LIVE' : esc_html( $p['badge'] ?: 'WEEKLY' ); ?></span>
+                            </div>
+                            <div class="promo-offer-pill mb-2"><?php echo esc_html( $p['title'] ); ?></div>
+                            <h4 class="font-heading promo-items-title mb-3"><?php echo esc_html( $p['items'] ); ?></h4>
+                            <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                                <span class="small text-muted"><i class="bi bi-cup-hot text-teal me-1"></i> +<?php echo esc_html( $stamps ); ?> VIP Stamps</span>
+                                <a href="https://wa.me/<?php echo esc_attr( $wa_num ); ?>?text=<?php echo rawurlencode( $wa_msg ); ?>" target="_blank" class="promo-claim-link">
+                                    Order <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </div>
+        </section>
+        <style>
+        .santino-daily-promos-section { background: linear-gradient(180deg, #ffffff 0%, #f5f9f8 100%); }
+        .santino-today-spotlight {
+            background: linear-gradient(135deg, #004d49 0%, #002d2b 65%, #011d1c 100%);
+            border: 1.5px solid rgba(223, 190, 141, 0.55);
+            border-radius: 22px;
+            padding: 26px 30px;
+            box-shadow: 0 18px 40px rgba(0, 77, 73, 0.22);
+        }
+        .santino-live-pill {
+            background: rgba(223, 190, 141, 0.2);
+            color: #dfbe8d;
+            border: 1px solid rgba(223, 190, 141, 0.45);
+            font-size: 11px;
+            letter-spacing: 0.8px;
+            padding: 6px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .santino-live-pill .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+        }
+        .santino-countdown-pill {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            font-size: 11px;
+            padding: 6px 12px;
+        }
+        .santino-promo-day-card {
+            background: #ffffff;
+            border: 1.5px solid #e3eeea;
+            border-radius: 20px;
+            padding: 24px 22px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 22px rgba(0, 77, 73, 0.04);
+        }
+        .santino-promo-day-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(195, 153, 108, 0.6);
+            box-shadow: 0 18px 36px rgba(0, 77, 73, 0.1);
+        }
+        .santino-promo-day-card.is-today-active {
+            background: linear-gradient(180deg, #ffffff 0%, #f0faf7 100%);
+            border: 2px solid #00625d;
+            box-shadow: 0 18px 38px rgba(0, 98, 93, 0.18), 0 0 0 4px rgba(223, 190, 141, 0.25);
+        }
+        .promo-day-label {
+            font-family: var(--kp-font-title, 'Montserrat', sans-serif);
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 1.2px;
+            color: #00625d;
+        }
+        .promo-status-tag {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #f0f6f4;
+            color: #4b6360;
+        }
+        .is-today-active .promo-status-tag {
+            background: #00625d;
+            color: #dfbe8d;
+        }
+        .promo-offer-pill {
+            display: inline-block;
+            align-self: flex-start;
+            background: linear-gradient(135deg, rgba(0, 98, 93, 0.1) 0%, rgba(195, 153, 108, 0.2) 100%);
+            color: #004d49;
+            font-weight: 800;
+            font-size: 13px;
+            padding: 5px 12px;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+        }
+        .promo-items-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #12211e;
+            line-height: 1.35;
+        }
+        .promo-claim-link {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #00625d;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .promo-claim-link:hover { color: #93683a; }
+        </style>
+        <?php
+        return ob_get_clean();
+    }
+
+    public static function render_daily_promotions_shortcode( $atts ) {
+        $atts = shortcode_atts( array(
+            'layout'     => 'grid',
+            'badge_text' => '7 DAYS, 7 REASONS TO CELEBRATE',
+            'title'      => 'Daily Special <span class="sec-title-accent">3 + 1 FREE</span> Offers',
+            'subtitle'   => 'Every day brings a signature handcrafted privilege across all Santino flagship cafes.',
+            'whatsapp'   => '8801613334514',
+        ), $atts );
+        return self::render_daily_promotions_markup( $atts );
+    }
+
+    public static function get_today_active_promotions() {
+        $promos     = self::get_daily_promotions();
+        $today_key  = self::get_today_dhaka_key();
+        $today_date = self::get_today_dhaka_date();
+        $list       = array();
+        foreach ( $promos as $p ) {
+            if ( self::is_promo_active_today( $p, $today_key, $today_date ) ) {
+                $list[] = $p;
+            }
+        }
+        return ! empty( $list ) ? $list : array( reset( $promos ) );
+    }
+
+    public static function render_promo_selector_field() {
+        $today_list = self::get_today_active_promotions();
+        ob_start();
+        ?>
+        <div class="col-md-12">
+            <div class="p-3 rounded-3" style="background:#f0faf7; border:1px dashed #00625d;">
+                <label class="form-label small fw-bold text-dark mb-1">
+                    <i class="bi bi-stars text-warning me-1"></i> Claimed Today's Special Offer? <span class="text-muted fw-normal">(Optional)</span>
+                </label>
+                <select name="promo_id" class="form-select form-select-sm santino-promo-select">
+                    <option value="">-- Regular Order (No Special Offer) --</option>
+                    <?php foreach ( $today_list as $tp ) : ?>
+                        <option value="<?php echo esc_attr( $tp['id'] ); ?>" data-paid-cups="<?php echo esc_attr( intval( $tp['paid_cups'] ?? 3 ) ); ?>" data-promo-title="<?php echo esc_attr( $tp['title'] . ' — ' . $tp['items'] ); ?>">
+                            <?php echo esc_html( $tp['title'] . ' — ' . $tp['items'] . ' (+' . intval( $tp['paid_cups'] ?? 3 ) . ' Stamps)' ); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    public static function render_today_offer_tab_pane( $wa_num = '8801613334514' ) {
+        $promos     = self::get_daily_promotions();
+        $today_key  = self::get_today_dhaka_key();
+        $today_date = self::get_today_dhaka_date();
+        $wa_clean   = preg_replace( '/[^0-9]/', '', $wa_num ) ?: '8801613334514';
+        $today_list = self::get_today_active_promotions();
+        $today_p    = $today_list[0];
+        $branches   = self::get_cafe_branches();
+        $wa_msg     = 'Hi Santino! I want to claim today\'s (' . $today_p['day'] . ') ' . $today_p['title'] . ' - ' . $today_p['items'] . ' offer.';
+
+        ob_start();
+        ?>
+        <div class="tab-pane fade santino-today-offer-tab-pane" id="today-offer-pane" role="tabpanel" data-wa-number="<?php echo esc_attr( $wa_clean ); ?>">
+            <div class="p-3 p-md-4 rounded-4 text-white mb-3 position-relative overflow-hidden" style="background: linear-gradient(135deg, #004d49 0%, #002d2b 70%, #011d1c 100%); border: 1.5px solid rgba(223,190,141,0.5);">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                    <span class="badge rounded-pill px-3 py-1" style="background: rgba(223,190,141,0.2); color: #dfbe8d; border: 1px solid rgba(223,190,141,0.45); font-size: 11px;">
+                        <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;margin-right:6px;"></span>
+                        LIVE TODAY &bull; <span class="js-tab-today-day"><?php echo esc_html( strtoupper( $today_p['day'] ) ); ?></span>
+                    </span>
+                    <span class="badge rounded-pill px-3 py-1" style="background: rgba(255,255,255,0.12); color: #ffffff; font-size: 11px;">
+                        <i class="bi bi-clock me-1"></i> Ends in <span class="js-dhaka-countdown">00:00:00</span>
+                    </span>
+                </div>
+
+                <div class="fw-bold text-uppercase mb-1" style="color: #dfbe8d; font-size: 11.5px; letter-spacing: 1px;">
+                    <span class="js-tab-today-badge"><?php echo esc_html( $today_p['title'] ); ?></span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h4 class="font-heading fw-bold text-white mb-0 js-tab-today-items" style="font-size: 1.35rem;">
+                        <?php echo esc_html( $today_p['items'] ); ?>
+                    </h4>
+                    <a href="https://wa.me/<?php echo esc_attr( $wa_clean ); ?>?text=<?php echo rawurlencode( $wa_msg ); ?>" target="_blank" class="btn btn-sm fw-bold px-3 py-1 rounded-pill js-tab-today-wa" style="background: #dfbe8d; color: #002d2b;">
+                        <i class="bi bi-whatsapp me-1"></i> Order on WhatsApp
+                    </a>
+                </div>
+            </div>
+
+            <div class="border rounded-4 p-3 p-md-4 bg-white shadow-sm mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="font-heading fw-bold text-dark mb-0" style="font-size: 1rem;">Log Invoice For Today's Offer</h5>
+                        <p class="text-muted mb-0" style="font-size: 12px;">Submit your receipt to auto-credit <strong class="text-teal js-today-offer-stamps-label">+<?php echo esc_html( intval( $today_p['paid_cups'] ?? 3 ) ); ?> Stamps</strong></p>
+                    </div>
+                    <span class="badge rounded-pill" style="background:#f0faf7; color:#00625d; border:1px solid #d5e5e1;">Auto-Linked</span>
+                </div>
+
+                <div id="todayOfferInvoiceResponseBox" style="display:none;" class="mb-3"></div>
+
+                <form id="santinoTodayOfferInvoiceForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark mb-1">Active Offer Claimed *</label>
+                        <select name="promo_id" class="form-select js-today-offer-select" required>
+                            <?php foreach ( $today_list as $tp ) : ?>
+                                <option value="<?php echo esc_attr( $tp['id'] ); ?>" data-paid-cups="<?php echo esc_attr( intval( $tp['paid_cups'] ?? 3 ) ); ?>" data-items="<?php echo esc_attr( $tp['items'] ); ?>" data-title="<?php echo esc_attr( $tp['title'] ); ?>">
+                                    <?php echo esc_html( $tp['title'] . ' — ' . $tp['items'] . ' (+' . intval( $tp['paid_cups'] ?? 3 ) . ' Stamps)' ); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Invoice / Memo Number *</label>
+                            <input type="text" name="invoice_number" class="form-control" placeholder="e.g. SNT-2026-9042" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Phone Number / WhatsApp *</label>
+                            <input type="tel" name="phone" class="form-control" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" required>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Cafe Branch Visited</label>
+                            <select name="branch" class="form-select">
+                                <?php foreach ( $branches as $b ) : ?>
+                                    <option value="<?php echo esc_attr( $b ); ?>"><?php echo esc_html( $b ); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Receipt Photo *</label>
+                            <input type="file" name="invoice_image" class="form-control" accept="image/*" required>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="promo_claimed" value="yes">
+                    <input type="hidden" name="promo_day" value="<?php echo esc_attr( $today_key ); ?>">
+                    <input type="hidden" name="cups" class="js-today-offer-cups" value="<?php echo esc_attr( intval( $today_p['paid_cups'] ?? 3 ) ); ?>">
+                    <input type="hidden" name="items_consumed" class="js-today-offer-items-input" value="<?php echo esc_attr( $today_p['title'] . ' — ' . $today_p['items'] ); ?>">
+
+                    <button type="submit" class="btn btn-portal-submit w-100 font-heading text-uppercase">
+                        Submit Today's Offer Invoice →
+                    </button>
+                </form>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center px-1">
+                <span class="small text-muted">Want to see all 7 days?</span>
+                <a href="<?php echo esc_url( home_url( '/offers/' ) ); ?>" class="small fw-bold text-decoration-none" style="color: #00625d;">View Full Weekly Offers &rarr;</a>
             </div>
         </div>
         <?php
