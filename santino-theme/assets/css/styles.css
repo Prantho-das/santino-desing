@@ -13085,7 +13085,10 @@ html, body {
 }
 
 .hero-carousel .carousel-item.active {
-  display: block !important;
+  display: flex !important;
+  align-items: center;
+  width: 100% !important;
+  min-height: 85vh;
   opacity: 1 !important;
 }
 
@@ -13095,6 +13098,22 @@ html, body {
   min-height: 85vh;
   position: relative;
   overflow: hidden;
+  display: block;
+}
+.elementor-widget-santino_hero_banner .hero-carousel,
+.elementor-widget-santino_hero_banner .hero-carousel .carousel-inner {
+  width: 100% !important;
+  min-height: 85vh;
+  display: block;
+}
+@media (max-width: 991.98px) {
+  .elementor-widget-santino_hero_banner .hero-banner-section,
+  .hero-banner-section,
+  .elementor-widget-santino_hero_banner .hero-carousel,
+  .elementor-widget-santino_hero_banner .hero-carousel .carousel-inner,
+  .hero-carousel .carousel-item.active {
+    min-height: auto !important;
+  }
 }
 
 .elementor-widget-santino_hero_banner .hero-video-wrap,

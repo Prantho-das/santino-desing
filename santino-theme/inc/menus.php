@@ -85,6 +85,28 @@ class Santino_Second_Nav_Walker extends Walker_Nav_Menu {
         $upper_title = strtoupper( trim( $title ) );
         $lower_url   = strtolower( $url );
 
+        $slot = '';
+        if ( strpos( $upper_title, 'BFC' ) !== false || strpos( $lower_url, '/bfc' ) !== false ) {
+            $slot = 'bfc';
+        } elseif ( strpos( $upper_title, 'SWAPNO' ) !== false || strpos( $upper_title, 'SHWAPNO' ) !== false || strpos( $lower_url, '/swapno' ) !== false ) {
+            $slot = 'swapno';
+        } elseif ( strpos( $upper_title, 'MEMBER' ) !== false || strpos( $upper_title, 'CLUB' ) !== false || strpos( $lower_url, '/membership' ) !== false ) {
+            $slot = 'membership';
+        } elseif ( strpos( $upper_title, 'MENU' ) !== false || strpos( $lower_url, '/menu' ) !== false ) {
+            $slot = 'menu';
+        }
+
+        if ( $slot !== '' ) {
+            $custom_url = get_theme_mod( 'santino_' . $slot . '_url' );
+            if ( ! empty( $custom_url ) ) {
+                $url = esc_url( $custom_url );
+            }
+            $custom_title = get_theme_mod( 'santino_' . $slot . '_title' );
+            if ( $custom_title !== false && $custom_title !== null ) {
+                $title = $custom_title;
+            }
+        }
+
         if ( $this->item_index > 0 ) {
             $output .= '<span class="second-menu-sep text-muted">|</span>';
         }
@@ -184,8 +206,8 @@ class Santino_Second_Nav_Walker extends Walker_Nav_Menu {
         $has_hide_class  = in_array( 'hide-label', (array) $item->classes ) || in_array( 'no-label', (array) $item->classes ) || in_array( 'logo-only', (array) $item->classes );
 
         if ( $has_image ) {
-            $is_swapno = ( false !== strpos( $upper_title, 'SWAPNO' ) || false !== strpos( $upper_title, 'SHWAPNO' ) || false !== strpos( $lower_url, '/swapno' ) );
-            if ( $item_hide_label === '1' || $has_hide_class || $hide_label_opt === '1' || $is_swapno ) {
+            $hide_all = ( ! empty( $hide_label_opt ) && $hide_label_opt !== '0' );
+            if ( $item_hide_label === '1' || $has_hide_class || $hide_all ) {
                 $clean_title = '';
             }
         }
@@ -201,7 +223,7 @@ class Santino_Second_Nav_Walker extends Walker_Nav_Menu {
 
 function santino_render_second_menu_bar() {
     $enable = get_theme_mod( 'santino_second_bar_enable', '1' );
-    if ( $enable === '0' || $enable === false || $enable === 0 ) {
+    if ( empty( $enable ) || $enable === '0' ) {
         return;
     }
     ?>
@@ -310,7 +332,8 @@ function santino_second_bar_fallback() {
         echo $media;
         $lbl = trim( strip_tags( (string) $item['title'] ) );
         if ( $has_logo ) {
-            if ( $item['alt'] === 'SWAPNO' || $hide_all_labels === '1' ) {
+            $hide_all = ( ! empty( $hide_all_labels ) && $hide_all_labels !== '0' );
+            if ( $hide_all ) {
                 $lbl = '';
             }
         }

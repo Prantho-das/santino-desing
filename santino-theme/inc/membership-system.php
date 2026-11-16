@@ -1041,7 +1041,14 @@ class Santino_Membership_System {
         }
 
         if ( $member ) {
-            $member_post_id   = $member->ID;
+            $member_post_id = $member->ID;
+            $is_promo_only  = ( get_post_meta( $invoice_id, '_santino_invoice_promo_claimed', true ) === 'yes' );
+            if ( $is_promo_only ) {
+                update_post_meta( $invoice_id, '_santino_invoice_stamps_credited', 'promo_only' );
+                update_post_meta( $invoice_id, '_santino_invoice_member_post_id', $member_post_id );
+                return 0;
+            }
+
             $current_stamps   = intval( get_post_meta( $member_post_id, '_santino_cup_stamps', true ) ?: 0 );
             $total_cups       = intval( get_post_meta( $member_post_id, '_santino_total_approved_cups', true ) ?: 0 );
             $total_free       = intval( get_post_meta( $member_post_id, '_santino_total_free_coffees', true ) ?: 0 );
@@ -1696,8 +1703,44 @@ class Santino_Membership_System {
         }
 
         // Invoice image upload is mandatory
-        if ( empty( $_FILES['invoice_image']['name'] ) ) {
+        if ( empty( $_FILES['invoice_image']['name'] ) || ( isset( $_FILES['invoice_image']['error'] ) && $_FILES['invoice_image']['error'] !== UPLOAD_ERR_OK ) ) {
             wp_send_json_error( array( 'message' => __( 'Receipt image upload is mandatory. Please attach a clear photo of your memo.', 'santino' ) ) );
+        }
+
+        $allowed_mimes = array( 'image/jpeg', 'image/png', 'image/webp', 'image/gif' );
+        $file_type     = wp_check_filetype_and_ext( $_FILES['invoice_image']['tmp_name'], $_FILES['invoice_image']['name'] );
+        if ( empty( $file_type['type'] ) || ! in_array( $file_type['type'], $allowed_mimes, true ) ) {
+            wp_send_json_error( array( 'message' => __( 'Invalid receipt file format. Please upload a JPG, PNG, or WebP image.', 'santino' ) ) );
+        }
+
+        $promo_claimed  = sanitize_text_field( $_POST['promo_claimed'] ?? 'no' );
+        $promo_day      = sanitize_text_field( $_POST['promo_day'] ?? '' );
+        $promo_id       = sanitize_text_field( $_POST['promo_id'] ?? '' );
+        $promo_title    = sanitize_text_field( $_POST['promo_title'] ?? '' );
+
+        if ( $promo_claimed === 'yes' && empty( $promo_id ) ) {
+            wp_send_json_error( array( 'message' => __( 'Please select an active offer before submitting.', 'santino' ) ) );
+        }
+
+        if ( ! empty( $promo_id ) ) {
+            $matched_promo = null;
+            foreach ( self::get_daily_promotions() as $pr ) {
+                if ( ( $pr['id'] ?? '' ) === $promo_id ) {
+                    $matched_promo = $pr;
+                    break;
+                }
+            }
+            if ( ! $matched_promo || ! self::is_promo_active_today( $matched_promo ) ) {
+                wp_send_json_error( array( 'message' => __( 'Selected promotion is no longer active today. Please refresh the page and try again.', 'santino' ) ) );
+            }
+            $promo_claimed = 'yes';
+            $promo_title   = $matched_promo['title'] . ' — ' . $matched_promo['items'];
+            $promo_day     = $matched_promo['day'];
+            if ( ! empty( $matched_promo['paid_cups'] ) ) {
+                $cups = max( 1, intval( $matched_promo['paid_cups'] ) );
+            }
+        } elseif ( $promo_claimed === 'yes' && $cups === 4 ) {
+            $cups = 3;
         }
 
         // Check if invoice already submitted
@@ -1778,10 +1821,6 @@ class Santino_Membership_System {
             update_post_meta( $inv_post_id, '_santino_invoice_member_post_id', $member_post_id );
         }
 
-        $promo_claimed  = sanitize_text_field( $_POST['promo_claimed'] ?? 'no' );
-        $promo_day      = sanitize_text_field( $_POST['promo_day'] ?? '' );
-        $promo_id       = sanitize_text_field( $_POST['promo_id'] ?? '' );
-        $promo_title    = sanitize_text_field( $_POST['promo_title'] ?? '' );
         $request_source = sanitize_text_field( $_POST['request_source'] ?? '' );
         $request_page   = sanitize_text_field( $_POST['request_page'] ?? '' );
         if ( empty( $request_page ) && function_exists( 'wp_get_referer' ) ) {
@@ -1789,28 +1828,6 @@ class Santino_Membership_System {
             if ( $ref ) {
                 $request_page = wp_parse_url( $ref, PHP_URL_PATH ) ?: $ref;
             }
-        }
-
-        if ( ! empty( $promo_id ) ) {
-            $matched_promo = null;
-            foreach ( self::get_daily_promotions() as $pr ) {
-                if ( ( $pr['id'] ?? '' ) === $promo_id ) {
-                    $matched_promo = $pr;
-                    break;
-                }
-            }
-            if ( ! $matched_promo || ! self::is_promo_active_today( $matched_promo ) ) {
-                wp_delete_post( $inv_post_id, true );
-                wp_send_json_error( array( 'message' => __( 'Selected promotion is no longer active today. Please refresh the page and try again.', 'santino' ) ) );
-            }
-            $promo_claimed = 'yes';
-            $promo_title   = $matched_promo['title'] . ' — ' . $matched_promo['items'];
-            $promo_day     = $matched_promo['day'];
-            if ( ! empty( $matched_promo['paid_cups'] ) ) {
-                $cups = max( 1, intval( $matched_promo['paid_cups'] ) );
-            }
-        } elseif ( $promo_claimed === 'yes' && $cups === 4 ) {
-            $cups = 3;
         }
 
         if ( empty( $request_source ) ) {
@@ -1835,8 +1852,12 @@ class Santino_Membership_System {
             if ( $promo_title ) update_post_meta( $inv_post_id, '_santino_invoice_promo_title', $promo_title );
         }
 
+        $success_msg = ( $promo_claimed === 'yes' )
+            ? sprintf( __( 'Today\'s Offer invoice #%s submitted successfully! Member ID: %s. Admin will verify your offer receipt shortly.', 'santino' ), $invoice_no, $member_id )
+            : sprintf( __( 'Invoice #%s (%d Cups) submitted successfully! Member ID: %s. Admin verification will credit your stamp balance.', 'santino' ), $invoice_no, $cups, $member_id );
+
         wp_send_json_success( array(
-            'message'    => sprintf( __( 'Invoice #%s (%d Cups) submitted successfully! Member ID: %s. Admin verification will credit your stamp balance.', 'santino' ), $invoice_no, $cups, $member_id ),
+            'message'    => $success_msg,
             'invoice_no' => $invoice_no,
             'cups'       => $cups,
             'member_id'  => $member_id,
@@ -4707,7 +4728,7 @@ class Santino_Membership_System {
         return self::render_daily_promotions_markup( $atts );
     }
 
-    public static function get_today_active_promotions() {
+    public static function get_today_active_promotions( $fallback = false ) {
         $promos     = self::get_daily_promotions();
         $today_key  = self::get_today_dhaka_key();
         $today_date = self::get_today_dhaka_date();
@@ -4717,11 +4738,17 @@ class Santino_Membership_System {
                 $list[] = $p;
             }
         }
-        return ! empty( $list ) ? $list : array( reset( $promos ) );
+        if ( ! empty( $list ) ) {
+            return $list;
+        }
+        return $fallback ? array( reset( $promos ) ) : array();
     }
 
     public static function render_promo_selector_field() {
-        $today_list = self::get_today_active_promotions();
+        $today_list = self::get_today_active_promotions( false );
+        if ( empty( $today_list ) ) {
+            return '';
+        }
         ob_start();
         ?>
         <div class="col-md-12">
@@ -4733,7 +4760,7 @@ class Santino_Membership_System {
                     <option value="">-- Regular Order (No Special Offer) --</option>
                     <?php foreach ( $today_list as $tp ) : ?>
                         <option value="<?php echo esc_attr( $tp['id'] ); ?>" data-paid-cups="<?php echo esc_attr( intval( $tp['paid_cups'] ?? 3 ) ); ?>" data-promo-title="<?php echo esc_attr( $tp['title'] . ' — ' . $tp['items'] ); ?>">
-                            <?php echo esc_html( $tp['title'] . ' — ' . $tp['items'] . ' (+' . intval( $tp['paid_cups'] ?? 3 ) . ' Stamps)' ); ?>
+                            <?php echo esc_html( $tp['title'] . ' — ' . $tp['items'] . ' (Special Offer)' ); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -4748,14 +4775,24 @@ class Santino_Membership_System {
         $today_key  = self::get_today_dhaka_key();
         $today_date = self::get_today_dhaka_date();
         $wa_clean   = preg_replace( '/[^0-9]/', '', $wa_num ) ?: '8801613334514';
-        $today_list = self::get_today_active_promotions();
-        $today_p    = $today_list[0];
+        $today_list = self::get_today_active_promotions( false );
+        $has_active = ! empty( $today_list );
+        $today_p    = $has_active ? $today_list[0] : null;
         $branches   = self::get_cafe_branches();
-        $wa_msg     = 'Hi Santino! I want to claim today\'s (' . $today_p['day'] . ') ' . $today_p['title'] . ' - ' . $today_p['items'] . ' offer.';
 
         ob_start();
         ?>
         <div class="tab-pane fade santino-today-offer-tab-pane" id="today-offer-pane" role="tabpanel" data-wa-number="<?php echo esc_attr( $wa_clean ); ?>">
+            <?php if ( ! $has_active ) : ?>
+            <div class="p-4 rounded-4 text-center border bg-light mb-3">
+                <div class="fs-3 mb-2" style="color: #00625d;"><i class="bi bi-calendar-x"></i></div>
+                <h5 class="font-heading fw-bold text-dark mb-1">No Active Special Offer Today</h5>
+                <p class="text-muted small mb-3">Check our full 7-day weekly offer schedule to see upcoming deals.</p>
+                <a href="<?php echo esc_url( home_url( '/offers/' ) ); ?>" class="btn btn-sm fw-bold px-4 py-2 rounded-pill text-white" style="background: #00625d;">
+                    <i class="bi bi-stars me-1"></i> View All Offers &rarr;
+                </a>
+            </div>
+            <?php else : ?>
             <div class="p-3 p-md-4 rounded-4 text-white mb-3 position-relative overflow-hidden" style="background: linear-gradient(135deg, #004d49 0%, #002d2b 70%, #011d1c 100%); border: 1.5px solid rgba(223,190,141,0.5);">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
                     <span class="badge rounded-pill px-3 py-1" style="background: rgba(223,190,141,0.2); color: #dfbe8d; border: 1px solid rgba(223,190,141,0.45); font-size: 11px;">
@@ -4774,8 +4811,8 @@ class Santino_Membership_System {
                     <h4 class="font-heading fw-bold text-white mb-0 js-tab-today-items" style="font-size: 1.35rem;">
                         <?php echo esc_html( $today_p['items'] ); ?>
                     </h4>
-                    <a href="https://wa.me/<?php echo esc_attr( $wa_clean ); ?>?text=<?php echo rawurlencode( $wa_msg ); ?>" target="_blank" class="btn btn-sm fw-bold px-3 py-1 rounded-pill js-tab-today-wa" style="background: #dfbe8d; color: #002d2b;">
-                        <i class="bi bi-whatsapp me-1"></i> Order on WhatsApp
+                    <a href="<?php echo esc_url( home_url( '/offers/' ) ); ?>" class="btn btn-sm fw-bold px-3 py-2 rounded-pill" style="background: #dfbe8d; color: #002d2b;">
+                        <i class="bi bi-stars me-1"></i> View All Offers &rarr;
                     </a>
                 </div>
             </div>
@@ -4784,9 +4821,9 @@ class Santino_Membership_System {
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
                         <h5 class="font-heading fw-bold text-dark mb-0" style="font-size: 1rem;">Log Invoice For Today's Offer</h5>
-                        <p class="text-muted mb-0" style="font-size: 12px;">Submit your receipt to auto-credit <strong class="text-teal js-today-offer-stamps-label">+<?php echo esc_html( intval( $today_p['paid_cups'] ?? 3 ) ); ?> Stamps</strong></p>
+                        <p class="text-muted mb-0" style="font-size: 12px;">Submit your receipt to claim today's special offer.</p>
                     </div>
-                    <span class="badge rounded-pill" style="background:#f0faf7; color:#00625d; border:1px solid #d5e5e1;">Auto-Linked</span>
+                    <span class="badge rounded-pill" style="background:#f0faf7; color:#00625d; border:1px solid #d5e5e1;">Offer Only</span>
                 </div>
 
                 <div id="todayOfferInvoiceResponseBox" style="display:none;" class="mb-3"></div>
@@ -4797,7 +4834,7 @@ class Santino_Membership_System {
                         <select name="promo_id" class="form-select js-today-offer-select" required>
                             <?php foreach ( $today_list as $tp ) : ?>
                                 <option value="<?php echo esc_attr( $tp['id'] ); ?>" data-paid-cups="<?php echo esc_attr( intval( $tp['paid_cups'] ?? 3 ) ); ?>" data-items="<?php echo esc_attr( $tp['items'] ); ?>" data-title="<?php echo esc_attr( $tp['title'] ); ?>">
-                                    <?php echo esc_html( $tp['title'] . ' — ' . $tp['items'] . ' (+' . intval( $tp['paid_cups'] ?? 3 ) . ' Stamps)' ); ?>
+                                    <?php echo esc_html( $tp['title'] . ' — ' . $tp['items'] ); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -4810,7 +4847,7 @@ class Santino_Membership_System {
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-dark mb-1">Phone Number / WhatsApp *</label>
-                            <input type="tel" name="phone" class="form-control" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" required>
+                            <input type="tel" name="phone" class="form-control santino-phone-validate" placeholder="017XXXXXXXX" pattern="^(?:\+?880|0)?1[3-9]\d{8}$" maxlength="15" title="Enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX)" required>
                         </div>
                     </div>
 
@@ -4825,7 +4862,7 @@ class Santino_Membership_System {
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-dark mb-1">Receipt Photo *</label>
-                            <input type="file" name="invoice_image" class="form-control" accept="image/*" required>
+                            <input type="file" name="invoice_image" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg" required>
                         </div>
                     </div>
 
@@ -4839,6 +4876,7 @@ class Santino_Membership_System {
                     </button>
                 </form>
             </div>
+            <?php endif; ?>
 
             <div class="d-flex justify-content-between align-items-center px-1">
                 <span class="small text-muted">Want to see all 7 days?</span>

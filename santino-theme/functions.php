@@ -87,9 +87,6 @@ add_action( 'save_post', function( $post_id ) {
 add_action( 'elementor/editor/after_save', function( $post_id ) {
     delete_post_meta( $post_id, '_elementor_element_cache' );
     delete_post_meta( $post_id, '_elementor_css' );
-    if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->files_manager ) ) {
-        \Elementor\Plugin::$instance->files_manager->clear_cache();
-    }
 } );
 
 
@@ -217,6 +214,11 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     require_once SANTINO_DIR . '/inc/widgets/training-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/swapno-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/our-story-solution-widget.php';
+    foreach ( array( 'story-vision-widget.php', 'story-chapters-widget.php', 'story-marquee-widget.php' ) as $sw_file ) {
+        if ( file_exists( SANTINO_DIR . '/inc/widgets/' . $sw_file ) ) {
+            require_once SANTINO_DIR . '/inc/widgets/' . $sw_file;
+        }
+    }
     require_once SANTINO_DIR . '/inc/widgets/membership-solution-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/member-portal-widget.php';
     require_once SANTINO_DIR . '/inc/widgets/membership-hero-widget.php';
@@ -265,6 +267,9 @@ function santino_register_elementor_widgets( $widgets_manager ) {
     $widgets_manager->register( new \Santino_Training_Solution_Widget() );
     $widgets_manager->register( new \Santino_Swapno_Solution_Widget() );
     $widgets_manager->register( new \Santino_Our_Story_Solution_Widget() );
+    if ( class_exists( '\Santino_Story_Vision_Widget' ) ) { $widgets_manager->register( new \Santino_Story_Vision_Widget() ); }
+    if ( class_exists( '\Santino_Story_Chapters_Widget' ) ) { $widgets_manager->register( new \Santino_Story_Chapters_Widget() ); }
+    if ( class_exists( '\Santino_Story_Marquee_Widget' ) ) { $widgets_manager->register( new \Santino_Story_Marquee_Widget() ); }
     $widgets_manager->register( new \Santino_Membership_Solution_Widget() );
     $widgets_manager->register( new \Santino_Member_Portal_Widget() );
     $widgets_manager->register( new \Santino_Membership_Hero_Widget() );

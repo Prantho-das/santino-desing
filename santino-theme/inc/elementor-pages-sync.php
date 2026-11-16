@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Santino_Elementor_Pages_Sync {
 
-    const SYNC_VERSION = '2.1.0';
+    const SYNC_VERSION = '2.5.0';
 
     public static function init() {
         add_action( 'init', array( __CLASS__, 'ensure_pages' ), 20 );
@@ -26,6 +26,94 @@ class Santino_Elementor_Pages_Sync {
         add_action( 'add_meta_boxes', array( __CLASS__, 'add_syncer_meta_box' ) );
         add_action( 'admin_bar_menu', array( __CLASS__, 'add_admin_bar_item' ), 100 );
         add_action( 'admin_post_santino_sync_specific_page', array( __CLASS__, 'handle_specific_page_sync' ) );
+        add_action( 'admin_post_santino_cleanup_unused_pages', array( __CLASS__, 'handle_cleanup_unused_pages' ) );
+    }
+
+    public static function get_protected_page_ids_and_slugs() {
+        $protected_slugs = array_unique( array_merge(
+            array_keys( self::get_pages_config() ),
+            array(
+                'home', 'machines', 'beans', 'training', 'office-cafe', 'horeca',
+                'our-story', 'membership', 'santino-member', 'coffee-club', 'menu',
+                'offers', 'brands', 'bfc', 'swapno', 'certificate-verification',
+                'shop', 'cart', 'checkout', 'my-account', 'privacy-policy',
+            )
+        ) );
+
+        $protected_ids = array();
+        $option_keys   = array(
+            'page_on_front', 'page_for_posts', 'wp_page_for_privacy_policy',
+            'woocommerce_shop_page_id', 'woocommerce_cart_page_id',
+            'woocommerce_checkout_page_id', 'woocommerce_myaccount_page_id',
+            'woocommerce_terms_page_id',
+        );
+        foreach ( $option_keys as $opt ) {
+            $val = intval( get_option( $opt ) );
+            if ( $val > 0 ) {
+                $protected_ids[] = $val;
+            }
+        }
+
+        $menu_items = get_posts( array(
+            'post_type'      => 'nav_menu_item',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'meta_query'     => array(
+                array( 'key' => '_menu_item_object', 'value' => 'page' ),
+            ),
+        ) );
+        foreach ( $menu_items as $mi ) {
+            $obj_id = intval( get_post_meta( $mi->ID, '_menu_item_object_id', true ) );
+            if ( $obj_id > 0 ) {
+                $protected_ids[] = $obj_id;
+            }
+        }
+
+        return array(
+            'ids'   => array_unique( $protected_ids ),
+            'slugs' => $protected_slugs,
+        );
+    }
+
+    public static function is_page_protected( $page, $protected = null ) {
+        if ( ! $protected ) {
+            $protected = self::get_protected_page_ids_and_slugs();
+        }
+        if ( in_array( (int) $page->ID, $protected['ids'], true ) ) {
+            return true;
+        }
+        $slug = strtolower( (string) $page->post_name );
+        return in_array( $slug, $protected['slugs'], true );
+    }
+
+    public static function handle_cleanup_unused_pages() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'Unauthorized' );
+        }
+        check_admin_referer( 'santino_cleanup_unused_pages' );
+
+        $protected = self::get_protected_page_ids_and_slugs();
+        $all_pages = get_posts( array(
+            'post_type'      => 'page',
+            'post_status'    => array( 'publish', 'draft', 'pending', 'private' ),
+            'posts_per_page' => -1,
+        ) );
+
+        $trashed = 0;
+        foreach ( $all_pages as $p ) {
+            if ( self::is_page_protected( $p, $protected ) ) {
+                continue;
+            }
+            if ( wp_trash_post( $p->ID ) ) {
+                $trashed++;
+            }
+        }
+
+        wp_safe_redirect( add_query_arg( array(
+            'page'          => 'santino-elementor-syncer',
+            'cleaned_count' => $trashed,
+        ), admin_url( 'admin.php' ) ) );
+        exit;
     }
 
     public static function register_admin_menu() {
@@ -154,6 +242,7 @@ class Santino_Elementor_Pages_Sync {
         $is_menu_page      = ( ( isset( $_REQUEST['layout_type'] ) && in_array( $_REQUEST['layout_type'], array( 'menu_native', 'menu_sections' ), true ) ) || 'menu' === $post->post_name || 23 === (int) $page_id );
         $is_vip_membership = ( 22 === (int) $page_id || 'membership' === $post->post_name );
         $is_offers_page    = ( 'offers' === $post->post_name );
+        $is_our_story_page = ( 'our-story' === $post->post_name );
         $is_member_portal  = ( 36426 === (int) $page_id || in_array( $post->post_name, array( 'santino-member', 'coffee-club' ), true ) || false !== stripos( $post->post_title, 'Santino Member' ) );
 
         if ( $is_menu_page ) {
@@ -177,6 +266,9 @@ class Santino_Elementor_Pages_Sync {
             } elseif ( $is_offers_page ) {
                 update_post_meta( $page_id, '_wp_page_template', 'templates/template-offers.php' );
                 $structure = self::get_offers_three_sections_structure();
+            } elseif ( $is_our_story_page ) {
+                update_post_meta( $page_id, '_wp_page_template', 'templates/template-our-story.php' );
+                $structure = self::get_our_story_six_sections_structure();
             } elseif ( $is_member_portal ) {
                 update_post_meta( $page_id, '_wp_page_template', 'templates/template-santino-member.php' );
                 $structure = self::get_santino_member_three_sections_structure();
@@ -226,8 +318,18 @@ class Santino_Elementor_Pages_Sync {
             'order'          => 'ASC',
         ) );
 
-        $synced_id    = isset( $_GET['synced_id'] ) ? intval( $_GET['synced_id'] ) : 0;
-        $synced_title = isset( $_GET['synced_title'] ) ? sanitize_text_field( rawurldecode( $_GET['synced_title'] ) ) : '';
+        $synced_id     = isset( $_GET['synced_id'] ) ? intval( $_GET['synced_id'] ) : 0;
+        $synced_title  = isset( $_GET['synced_title'] ) ? sanitize_text_field( rawurldecode( $_GET['synced_title'] ) ) : '';
+        $cleaned_count = isset( $_GET['cleaned_count'] ) ? intval( $_GET['cleaned_count'] ) : -1;
+
+        $protected    = self::get_protected_page_ids_and_slugs();
+        $unused_count = 0;
+        foreach ( $all_pages as $ap ) {
+            if ( ! self::is_page_protected( $ap, $protected ) ) {
+                $unused_count++;
+            }
+        }
+        $cleanup_url = wp_nonce_url( admin_url( 'admin-post.php?action=santino_cleanup_unused_pages' ), 'santino_cleanup_unused_pages' );
         ?>
         <div class="wrap" style="max-width: 1400px; margin: 25px auto;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
@@ -237,8 +339,25 @@ class Santino_Elementor_Pages_Sync {
                     </h1>
                     <span class="count" style="margin-left: 10px; color: #64748b; font-weight: 600; font-size: 14px;">(<?php echo count( $all_pages ); ?> <?php _e( 'Pages', 'santino' ); ?>)</span>
                 </div>
+                <div>
+                    <?php if ( $unused_count > 0 ) : ?>
+                        <a href="<?php echo esc_url( $cleanup_url ); ?>" class="button" style="background: #dc2626; border-color: #b91c1c; color: #ffffff; font-weight: 700; padding: 4px 14px; height: auto;" onclick="return confirm('<?php echo esc_js( sprintf( __( 'Move %d unused page(s) to Trash? All %d required/menu/system pages and their data will remain 100%% safe.', 'santino' ), $unused_count, count( $all_pages ) - $unused_count ) ); ?>');">
+                            🗑️ <?php echo sprintf( __( 'Remove %d Unused Pages (Move to Trash)', 'santino' ), $unused_count ); ?>
+                        </a>
+                    <?php else : ?>
+                        <span class="button disabled" style="background: #f1f5f9; color: #64748b; border-color: #cbd5e1; font-weight: 600;">
+                            ✓ <?php _e( 'All Pages Are Needed (0 Unused)', 'santino' ); ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
             </div>
             <hr class="wp-header-end" style="margin-bottom: 20px;">
+
+            <?php if ( $cleaned_count >= 0 ) : ?>
+                <div class="notice notice-success is-dismissible" style="border-left-color: #00625d; padding: 14px 18px; margin: 15px 0 25px 0; border-radius: 6px; background: #f0fdf4;">
+                    <strong style="color: #166534;">✓ <?php echo sprintf( __( '%d unused page(s) moved to Trash. All required pages and their data are untouched.', 'santino' ), $cleaned_count ); ?></strong>
+                </div>
+            <?php endif; ?>
 
             <?php if ( $synced_id ) : 
                 $el_edit_url = admin_url( 'post.php?post=' . $synced_id . '&action=elementor' );
@@ -269,10 +388,11 @@ class Santino_Elementor_Pages_Sync {
                     $p_id        = $p->ID;
                     $sync_url    = wp_nonce_url( admin_url( 'admin-post.php?action=santino_sync_specific_page&target_page_id=' . $p_id ), 'santino_sync_nonce_' . $p_id );
                     $el_edit_url = admin_url( 'post.php?post=' . $p_id . '&action=elementor' );
-                    $is_el       = get_post_meta( $p_id, '_elementor_edit_mode', true ) === 'builder';
-                    $is_special  = ( 36426 === (int) $p_id || in_array( $p->post_name, array( 'santino-member', 'membership', 'coffee-club', 'offers' ), true ) );
+                    $is_el        = get_post_meta( $p_id, '_elementor_edit_mode', true ) === 'builder';
+                    $is_protected = self::is_page_protected( $p, $protected );
+                    $is_special   = ( 36426 === (int) $p_id || in_array( $p->post_name, array( 'santino-member', 'membership', 'coffee-club', 'offers' ), true ) );
                 ?>
-                    <div class="postbox" style="padding: 18px 20px; margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; border-radius: 8px; border: 1px solid <?php echo $is_special ? '#00625d' : '#cbd5e1'; ?>; <?php if ( $is_special ) echo 'border-left: 4px solid #00625d;'; ?> box-shadow: 0 2px 6px rgba(0,0,0,0.03); background: #ffffff;">
+                    <div class="postbox" style="padding: 18px 20px; margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; border-radius: 8px; border: 1px solid <?php echo $is_special ? '#00625d' : ( $is_protected ? '#cbd5e1' : '#fca5a5' ); ?>; <?php if ( $is_special ) echo 'border-left: 4px solid #00625d;'; ?> box-shadow: 0 2px 6px rgba(0,0,0,0.03); background: #ffffff;">
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
                                 <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #0f172a; line-height: 1.35;">
@@ -282,8 +402,11 @@ class Santino_Elementor_Pages_Sync {
                                     #<?php echo esc_html( $p_id ); ?>
                                 </span>
                             </div>
-                            <div style="font-size: 12px; color: #64748b; margin-bottom: 16px;">
+                            <div style="font-size: 12px; color: #64748b; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
                                 <code>/<?php echo esc_html( $p->post_name ); ?>/</code>
+                                <span style="font-size: 10.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: <?php echo $is_protected ? '#ecfdf5' : '#fef2f2'; ?>; color: <?php echo $is_protected ? '#047857' : '#b91c1c'; ?>;">
+                                    <?php echo $is_protected ? __( 'Protected', 'santino' ) : __( 'Unused', 'santino' ); ?>
+                                </span>
                             </div>
                         </div>
 
@@ -1045,6 +1168,38 @@ class Santino_Elementor_Pages_Sync {
         );
     }
 
+    public static function get_our_story_six_sections_structure() {
+        $configs = self::get_pages_config();
+        $widgets = $configs['our-story']['widgets'] ?? array();
+        $structure = array();
+        foreach ( $widgets as $idx => $w_item ) {
+            $structure[] = array(
+                'id'       => substr( md5( 'our_story_sec_' . $idx . microtime() ), 0, 7 ),
+                'elType'   => 'section',
+                'settings' => array(
+                    'layout' => 'full_width',
+                    'gap'    => 'no',
+                ),
+                'elements' => array(
+                    array(
+                        'id'       => substr( md5( 'our_story_col_' . $idx . microtime() ), 0, 7 ),
+                        'elType'   => 'column',
+                        'settings' => array( '_column_size' => 100 ),
+                        'elements' => array(
+                            array(
+                                'id'         => substr( md5( 'our_story_w_' . $idx . microtime() ), 0, 7 ),
+                                'elType'     => 'widget',
+                                'widgetType' => $w_item['widget'],
+                                'settings'   => $w_item['settings'] ?? array(),
+                            ),
+                        ),
+                    ),
+                ),
+            );
+        }
+        return $structure;
+    }
+
     public static function get_pages_config() {
         return array(
             'menu' => array(
@@ -1305,6 +1460,160 @@ class Santino_Elementor_Pages_Sync {
                     ),
                 ),
             ),
+            'our-story' => array(
+                'title'    => 'About Us (Our Story)',
+                'template' => 'templates/template-our-story.php',
+                'widgets'  => array(
+                    array(
+                        'widget'   => 'santino_pro_banner',
+                        'settings' => array(
+                            'badge_text'   => 'SINCE 1996 • 30+ YEARS ROASTING HERITAGE',
+                            'title'        => 'The Game Changer in Specialty Coffee Culture',
+                            'subtitle'     => 'From direct origin estates in Ethiopia and Colombia to precision roasting labs, championship barista academies, and nationwide supermarket presence in Bangladesh.',
+                            'btn1_text'    => 'Discover Our Story',
+                            'btn1_icon'    => 'bi bi-arrow-right',
+                            'btn1_target'  => '#vision',
+                            'btn2_text'    => 'Explore Menu',
+                            'btn2_url'     => '/menu/',
+                            'bg_type'      => 'video',
+                            'bg_image'     => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'imgi_20_santino_-_250522-07574.jpg' ) : '' ),
+                            'bg_video_url' => 'https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/ab6140f6-129c-4ae9-aaa0-20190c43183b.mp4',
+                        ),
+                    ),
+                    array(
+                        'widget'   => 'santino_floating_metrics',
+                        'settings' => array(
+                            'metric1_num'   => '30+',
+                            'metric1_label' => 'Years of Roasting Mastery',
+                            'metric1_icon'  => 'bi bi-clock-history',
+                            'metric2_num'   => '500+',
+                            'metric2_label' => 'Hotels, Cafes & Corporate Hubs',
+                            'metric2_icon'  => 'bi bi-building',
+                            'metric3_num'   => '100%',
+                            'metric3_label' => 'FSSC22000 Food Certified',
+                            'metric3_icon'  => 'bi bi-patch-check-fill',
+                            'metric4_num'   => '1,000+',
+                            'metric4_label' => 'Certified Barista Graduates',
+                            'metric4_icon'  => 'bi bi-mortarboard-fill',
+                        ),
+                    ),
+                    array(
+                        'widget'   => 'santino_story_vision',
+                        'settings' => array(
+                            'vision_badge' => 'OUR PURPOSE & VISION',
+                            'vision_title' => 'Innovation Grounded in <span class="sec-title-accent">Heritage</span>',
+                            'vision_desc'  => 'Santino Coffee was born with a single mission: to empower coffee entrepreneurs, businesses, and coffee lovers with world-class beans, precision machinery, and deep sensory knowledge. We believe that every cup tells a story of dedicated farmers, meticulous roast masters, and passionate baristas.',
+                            'vision_cards' => array(
+                                array(
+                                    '_id'   => 'vc1',
+                                    'icon'  => 'bi bi-globe-americas',
+                                    'badge' => 'Direct Farm Sourcing',
+                                    'title' => 'Authentic Origin',
+                                    'desc'  => '100% ethically sourced Rainforest Alliance certified green beans from direct partner estates.',
+                                ),
+                                array(
+                                    '_id'   => 'vc2',
+                                    'icon'  => 'bi bi-fire',
+                                    'badge' => 'Master Roasting',
+                                    'title' => 'Precision Roasting',
+                                    'desc'  => 'Custom roast profiles digitally calibrated to temperature, humidity, and peak flavor release.',
+                                ),
+                                array(
+                                    '_id'   => 'vc3',
+                                    'icon'  => 'bi bi-shield-check',
+                                    'badge' => 'Dedicated 24/7 Care',
+                                    'title' => 'Continuous Care',
+                                    'desc'  => '24/7 technical breakdown support, preventive maintenance, and barista training academies.',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'widget'   => 'santino_story_chapters',
+                        'settings' => array(
+                            'chapters_list' => array(
+                                array(
+                                    '_id'             => 'ch1',
+                                    'badge'           => 'CHAPTER 01',
+                                    'title'           => 'Artisan Roasting &amp; <span class="sec-title-accent">Quality Without Compromise</span>',
+                                    'desc'            => 'Everything we roast represents an unyielding dedication to excellence. Our roastery facilities operate under strict FSSC22000 food safety certifications, roasting single origins and private label blends with high batch consistency.',
+                                    'bullets'         => "Rainforest Alliance Certified: Direct farm relationships ensuring sustainable livelihood for growers.\nCustom Private Label OEM: Tailored flavor curves designed for five-star hotels and specialty roasteries.\nReal-Time Profile Tracking: Digital thermocouple logging ensuring ±0.5°C batch consistency.",
+                                    'image'           => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'bd-barista-latte-art.jpg' ) : '' ),
+                                    'fallback_img'    => 'bd-barista-latte-art.jpg',
+                                    'img_badge_icon'  => 'bi bi-fire text-danger fs-4',
+                                    'img_badge_title' => 'Artisan Roastery Lab',
+                                    'img_badge_sub'   => 'Small Batch Custom Roasts',
+                                    'btn_text'        => 'Explore Bean Collections',
+                                    'btn_url'         => array( 'url' => '/beans/' ),
+                                    'reverse_layout'  => '',
+                                ),
+                                array(
+                                    '_id'             => 'ch2',
+                                    'badge'           => 'CHAPTER 02',
+                                    'title'           => 'State-of-the-Art Espresso &amp; <span class="sec-title-accent">Bionic Robotics</span>',
+                                    'desc'            => 'We partner with the world\'s most prestigious espresso machine innovators — Victoria Arduino, Nuova Simonelli, Kalerm, and CAYE Robotics — delivering commercial extraction consistency that elevates customer retention and operational speed.',
+                                    'bullets'         => "T3 Genius PureBrew Technology: Variable water flow and gravimetric dosing on Victoria Arduino Black Eagle & Eagle One.\nCAYE Bionic Barista Robotic Arms: Fully automated 6-axis barista robots delivering flawless latte art in under 60 seconds.\nTurnkey Machine Leasing: Complete corporate rental packages with guaranteed zero-downtime maintenance.",
+                                    'image'           => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'imgi_29_maverick-VA_1200x1200_fc8d047e-bc19-4666-8e3a-90081b8cdca7.webp' ) : '' ),
+                                    'fallback_img'    => 'imgi_29_maverick-VA_1200x1200_fc8d047e-bc19-4666-8e3a-90081b8cdca7.webp',
+                                    'img_badge_icon'  => 'bi bi-cpu-fill text-primary fs-4',
+                                    'img_badge_title' => 'Next-Gen Automation',
+                                    'img_badge_sub'   => 'Victoria Arduino & Bionic Robots',
+                                    'btn_text'        => 'View Machine Catalog',
+                                    'btn_url'         => array( 'url' => '/machines/' ),
+                                    'reverse_layout'  => 'yes',
+                                ),
+                                array(
+                                    '_id'             => 'ch3',
+                                    'badge'           => 'CHAPTER 03',
+                                    'title'           => 'Empowering the Next Generation of <span class="sec-title-accent">Coffee Leaders</span>',
+                                    'desc'            => 'Knowledge is the heartbeat of our craft. Santino Barista Academy offers internationally structured certification programs, crop-to-cup sensory training, and competitive coaching for aspiring champions in Bangladesh.',
+                                    'bullets'         => "Foundational to Master Barista: Milk texturing, espresso calibration, workflow ergonomics, and cupping.\nCorporate Staff Upskilling: Standardizing beverage execution across multi-branch restaurant operations.\nSpecialty Brewing Modules: V60, Chemex, Aeropress, Cold Brew, and Syphon sensory mastery.",
+                                    'image'           => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'bd-barista-training.jpg' ) : '' ),
+                                    'fallback_img'    => 'bd-barista-training.jpg',
+                                    'img_badge_icon'  => 'bi bi-trophy-fill text-warning fs-4',
+                                    'img_badge_title' => 'Championship Coaching',
+                                    'img_badge_sub'   => 'Certified Barista Trainers',
+                                    'btn_text'        => 'Enroll in Barista Academy',
+                                    'btn_url'         => array( 'url' => '/training/' ),
+                                    'reverse_layout'  => '',
+                                ),
+                                array(
+                                    '_id'             => 'ch4',
+                                    'badge'           => 'CHAPTER 04',
+                                    'title'           => 'Everyday Specialty Coffee for <span class="sec-title-accent">Every Community</span>',
+                                    'desc'            => 'We are bridging the gap between luxury specialty coffee and everyday accessibility. Today, Santino roasted bean packs are available on retail shelves at Shwapno Superstores nationwide, and freshly brewed coffees are served across 50+ BFC restaurant locations.',
+                                    'bullets'         => "100+ Shwapno Outlets: Freshly sealed 250g & 1kg bags available at your neighborhood supermarket.\n50+ BFC Quick Service Bars: Hot and iced espresso beverages brewed on authentic commercial Italian machines.\nB2B Direct Supply: Fast scheduled deliveries maintaining optimal bean degassing periods.",
+                                    'image'           => array( 'url' => function_exists( 'santino_img' ) ? santino_img( 'shwapno_santino_retail.jpg' ) : '' ),
+                                    'fallback_img'    => 'shwapno_santino_retail.jpg',
+                                    'img_badge_icon'  => 'bi bi-shop-window text-success fs-4',
+                                    'img_badge_title' => 'Nationwide Presence',
+                                    'img_badge_sub'   => 'Shwapno Superstores & BFC Dining',
+                                    'btn_text'        => 'Explore Retail Outlets',
+                                    'btn_url'         => array( 'url' => '/swapno/' ),
+                                    'reverse_layout'  => 'yes',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'widget'   => 'santino_story_marquee',
+                        'settings' => array(
+                            'marquee_badge' => 'MOMENTS AT SANTINO',
+                            'marquee_title' => 'Inside Our Roastery, <span class="sec-title-accent">Cafes &amp; Labs</span>',
+                        ),
+                    ),
+                    array(
+                        'widget'   => 'santino_membership_cta',
+                        'settings' => array(
+                            'badge_text' => 'BECOME A PARTNER',
+                            'title'      => 'Ready to Elevate Your Coffee Experience?',
+                            'desc'       => 'Whether you are opening a specialty cafe, outfitting a hotel with commercial espresso machinery, or looking for freshly roasted wholesale beans, Santino is your total solutions partner.',
+                            'btn_text'   => 'Explore Drinks Menu →',
+                            'btn_url'    => array( 'url' => '/menu/' ),
+                        ),
+                    ),
+                ),
+            ),
         );
     }
 
@@ -1382,7 +1691,7 @@ class Santino_Elementor_Pages_Sync {
 
             if ( empty( $el_data ) || $el_data === '[]' || $el_data === '""' ) {
                 $needs_structure = true;
-            } elseif ( false !== strpos( $el_data, 'santino_membership_solution' ) || false !== strpos( $el_data, 'santino_member_portal' ) ) {
+            } elseif ( false !== strpos( $el_data, 'santino_membership_solution' ) || false !== strpos( $el_data, 'santino_member_portal' ) || false !== strpos( $el_data, 'santino_our_story_solution' ) ) {
                 $needs_structure = true;
             }
 

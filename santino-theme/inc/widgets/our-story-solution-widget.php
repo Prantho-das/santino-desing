@@ -57,6 +57,247 @@ class Santino_Our_Story_Solution_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        $this->add_control(
+            'hero_video_url',
+            array(
+                'label'       => esc_html__( 'Hero Video URL (MP4)', 'santino' ),
+                'type'        => \Elementor\Controls_Manager::TEXT,
+                'default'     => '',
+                'description' => esc_html__( 'Leave blank to use Customizer/default video.', 'santino' ),
+            )
+        );
+
+        $this->add_control(
+            'hero_poster',
+            array(
+                'label'   => esc_html__( 'Hero Poster / Fallback Image', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::MEDIA,
+                'default' => array( 'url' => '' ),
+            )
+        );
+
+        $this->add_control(
+            'hero_btn1_text',
+            array(
+                'label'   => esc_html__( 'Primary Button Text', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Discover Our Story',
+            )
+        );
+
+        $this->add_control(
+            'hero_btn1_url',
+            array(
+                'label'   => esc_html__( 'Primary Button Link', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::URL,
+                'default' => array( 'url' => '#vision' ),
+            )
+        );
+
+        $this->add_control(
+            'hero_btn2_text',
+            array(
+                'label'   => esc_html__( 'Secondary Button Text', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Explore Menu',
+            )
+        );
+
+        $this->add_control(
+            'hero_btn2_url',
+            array(
+                'label'   => esc_html__( 'Secondary Button Link', 'santino' ),
+                'type'    => \Elementor\Controls_Manager::URL,
+                'default' => array( 'url' => '/menu/' ),
+            )
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_metrics',
+            array(
+                'label' => esc_html__( 'Floating Metrics Cards', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $m_rep = new \Elementor\Repeater();
+        $m_rep->add_control( 'icon', array( 'label' => esc_html__( 'Bootstrap Icon Class', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'bi bi-clock-history' ) );
+        $m_rep->add_control( 'num', array( 'label' => esc_html__( 'Number / Value', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => '30+' ) );
+        $m_rep->add_control( 'label', array( 'label' => esc_html__( 'Label', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Years of Roasting Mastery' ) );
+
+        $this->add_control(
+            'metrics_list',
+            array(
+                'label'       => esc_html__( 'Metrics', 'santino' ),
+                'type'        => \Elementor\Controls_Manager::REPEATER,
+                'fields'      => $m_rep->get_controls(),
+                'title_field' => '{{{ num }}} — {{{ label }}}',
+                'default'     => array(
+                    array( 'icon' => 'bi bi-clock-history', 'num' => '30+', 'label' => 'Years of Roasting Mastery' ),
+                    array( 'icon' => 'bi bi-building', 'num' => '500+', 'label' => 'Hotels, Cafes & Corporate Hubs' ),
+                    array( 'icon' => 'bi bi-patch-check-fill', 'num' => '100%', 'label' => 'FSSC22000 Food Certified' ),
+                    array( 'icon' => 'bi bi-mortarboard-fill', 'num' => '1,000+', 'label' => 'Certified Barista Graduates' ),
+                ),
+            )
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_vision',
+            array(
+                'label' => esc_html__( 'Purpose & Vision', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control( 'vision_badge', array( 'label' => esc_html__( 'Section Badge', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'OUR PURPOSE & VISION' ) );
+        $this->add_control( 'vision_title', array( 'label' => esc_html__( 'Section Title (HTML)', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Innovation Grounded in <span class="sec-title-accent">Heritage</span>' ) );
+        $this->add_control( 'vision_desc', array( 'label' => esc_html__( 'Vision Description', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXTAREA, 'default' => 'Santino Coffee was born with a single mission: to empower coffee entrepreneurs, businesses, and coffee lovers with world-class beans, precision machinery, and deep sensory knowledge. We believe that every cup tells a story of dedicated farmers, meticulous roast masters, and passionate baristas.' ) );
+
+        $v_rep = new \Elementor\Repeater();
+        $v_rep->add_control( 'icon', array( 'label' => esc_html__( 'Icon Class', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'bi bi-globe-americas' ) );
+        $v_rep->add_control( 'badge', array( 'label' => esc_html__( 'Pill Badge', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Direct Farm Sourcing' ) );
+        $v_rep->add_control( 'title', array( 'label' => esc_html__( 'Card Title', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Authentic Origin' ) );
+        $v_rep->add_control( 'desc', array( 'label' => esc_html__( 'Card Description', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXTAREA, 'default' => '100% ethically sourced Rainforest Alliance certified green beans from direct partner estates.' ) );
+
+        $this->add_control(
+            'vision_cards',
+            array(
+                'label'       => esc_html__( 'Vision Cards', 'santino' ),
+                'type'        => \Elementor\Controls_Manager::REPEATER,
+                'fields'      => $v_rep->get_controls(),
+                'title_field' => '{{{ title }}}',
+                'default'     => array(
+                    array( 'icon' => 'bi bi-globe-americas', 'badge' => 'Direct Farm Sourcing', 'title' => 'Authentic Origin', 'desc' => '100% ethically sourced Rainforest Alliance certified green beans from direct partner estates.' ),
+                    array( 'icon' => 'bi bi-fire', 'badge' => 'Master Roasting', 'title' => 'Precision Roasting', 'desc' => 'Custom roast profiles digitally calibrated to temperature, humidity, and peak flavor release.' ),
+                    array( 'icon' => 'bi bi-shield-check', 'badge' => 'Dedicated 24/7 Care', 'title' => 'Continuous Care', 'desc' => '24/7 technical breakdown support, preventive maintenance, and barista training academies.' ),
+                ),
+            )
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_chapters',
+            array(
+                'label' => esc_html__( 'Story Chapters', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $c_rep = new \Elementor\Repeater();
+        $c_rep->add_control( 'badge', array( 'label' => esc_html__( 'Chapter Badge', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'CHAPTER 01' ) );
+        $c_rep->add_control( 'title', array( 'label' => esc_html__( 'Chapter Title (HTML)', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Artisan Roasting &amp; <span class="sec-title-accent">Quality Without Compromise</span>' ) );
+        $c_rep->add_control( 'desc', array( 'label' => esc_html__( 'Description', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXTAREA, 'default' => '' ) );
+        $c_rep->add_control( 'bullets', array( 'label' => esc_html__( 'Bullet Points (One per line, "Bold Title: text")', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXTAREA, 'default' => '' ) );
+        $c_rep->add_control( 'image', array( 'label' => esc_html__( 'Chapter Image', 'santino' ), 'type' => \Elementor\Controls_Manager::MEDIA, 'default' => array( 'url' => '' ) ) );
+        $c_rep->add_control( 'fallback_img', array( 'label' => esc_html__( 'Fallback Asset Filename', 'santino' ), 'type' => \Elementor\Controls_Manager::HIDDEN, 'default' => 'bd-barista-latte-art.jpg' ) );
+        $c_rep->add_control( 'img_badge_icon', array( 'label' => esc_html__( 'Image Badge Icon', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'bi bi-fire text-danger fs-4' ) );
+        $c_rep->add_control( 'img_badge_title', array( 'label' => esc_html__( 'Image Badge Title', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Artisan Roastery Lab' ) );
+        $c_rep->add_control( 'img_badge_sub', array( 'label' => esc_html__( 'Image Badge Subtitle', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Small Batch Custom Roasts' ) );
+        $c_rep->add_control( 'btn_text', array( 'label' => esc_html__( 'Button Text', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Explore More' ) );
+        $c_rep->add_control( 'btn_url', array( 'label' => esc_html__( 'Button Link', 'santino' ), 'type' => \Elementor\Controls_Manager::URL, 'default' => array( 'url' => '/beans/' ) ) );
+        $c_rep->add_control( 'reverse_layout', array( 'label' => esc_html__( 'Reverse Image/Text Side', 'santino' ), 'type' => \Elementor\Controls_Manager::SWITCHER, 'default' => '' ) );
+
+        $this->add_control(
+            'chapters_list',
+            array(
+                'label'       => esc_html__( 'Chapters', 'santino' ),
+                'type'        => \Elementor\Controls_Manager::REPEATER,
+                'fields'      => $c_rep->get_controls(),
+                'title_field' => '{{{ badge }}} — {{{ img_badge_title }}}',
+                'default'     => array(
+                    array(
+                        'badge'           => 'CHAPTER 01',
+                        'title'           => 'Artisan Roasting &amp; <span class="sec-title-accent">Quality Without Compromise</span>',
+                        'desc'            => 'Everything we roast represents an unyielding dedication to excellence. Our roastery facilities operate under strict FSSC22000 food safety certifications, roasting single origins and private label blends with high batch consistency.',
+                        'bullets'         => "Rainforest Alliance Certified: Direct farm relationships ensuring sustainable livelihood for growers.\nCustom Private Label OEM: Tailored flavor curves designed for five-star hotels and specialty roasteries.\nReal-Time Profile Tracking: Digital thermocouple logging ensuring ±0.5°C batch consistency.",
+                        'fallback_img'    => 'bd-barista-latte-art.jpg',
+                        'img_badge_icon'  => 'bi bi-fire text-danger fs-4',
+                        'img_badge_title' => 'Artisan Roastery Lab',
+                        'img_badge_sub'   => 'Small Batch Custom Roasts',
+                        'btn_text'        => 'Explore Bean Collections',
+                        'btn_url'         => array( 'url' => '/beans/' ),
+                        'reverse_layout'  => '',
+                    ),
+                    array(
+                        'badge'           => 'CHAPTER 02',
+                        'title'           => 'State-of-the-Art Espresso &amp; <span class="sec-title-accent">Bionic Robotics</span>',
+                        'desc'            => 'We partner with the world\'s most prestigious espresso machine innovators — Victoria Arduino, Nuova Simonelli, Kalerm, and CAYE Robotics — delivering commercial extraction consistency that elevates customer retention and operational speed.',
+                        'bullets'         => "T3 Genius PureBrew Technology: Variable water flow and gravimetric dosing on Victoria Arduino Black Eagle & Eagle One.\nCAYE Bionic Barista Robotic Arms: Fully automated 6-axis barista robots delivering flawless latte art in under 60 seconds.\nTurnkey Machine Leasing: Complete corporate rental packages with guaranteed zero-downtime maintenance.",
+                        'fallback_img'    => 'imgi_29_maverick-VA_1200x1200_fc8d047e-bc19-4666-8e3a-90081b8cdca7.webp',
+                        'img_badge_icon'  => 'bi bi-cpu-fill text-primary fs-4',
+                        'img_badge_title' => 'Next-Gen Automation',
+                        'img_badge_sub'   => 'Victoria Arduino & Bionic Robots',
+                        'btn_text'        => 'View Machine Catalog',
+                        'btn_url'         => array( 'url' => '/machines/' ),
+                        'reverse_layout'  => 'yes',
+                    ),
+                    array(
+                        'badge'           => 'CHAPTER 03',
+                        'title'           => 'Empowering the Next Generation of <span class="sec-title-accent">Coffee Leaders</span>',
+                        'desc'            => 'Knowledge is the heartbeat of our craft. Santino Barista Academy offers internationally structured certification programs, crop-to-cup sensory training, and competitive coaching for aspiring champions in Bangladesh.',
+                        'bullets'         => "Foundational to Master Barista: Milk texturing, espresso calibration, workflow ergonomics, and cupping.\nCorporate Staff Upskilling: Standardizing beverage execution across multi-branch restaurant operations.\nSpecialty Brewing Modules: V60, Chemex, Aeropress, Cold Brew, and Syphon sensory mastery.",
+                        'fallback_img'    => 'bd-barista-training.jpg',
+                        'img_badge_icon'  => 'bi bi-trophy-fill text-warning fs-4',
+                        'img_badge_title' => 'Championship Coaching',
+                        'img_badge_sub'   => 'Certified Barista Trainers',
+                        'btn_text'        => 'Enroll in Barista Academy',
+                        'btn_url'         => array( 'url' => '/training/' ),
+                        'reverse_layout'  => '',
+                    ),
+                    array(
+                        'badge'           => 'CHAPTER 04',
+                        'title'           => 'Everyday Specialty Coffee for <span class="sec-title-accent">Every Community</span>',
+                        'desc'            => 'We are bridging the gap between luxury specialty coffee and everyday accessibility. Today, Santino roasted bean packs are available on retail shelves at Shwapno Superstores nationwide, and freshly brewed coffees are served across 50+ BFC restaurant locations.',
+                        'bullets'         => "100+ Shwapno Outlets: Freshly sealed 250g & 1kg bags available at your neighborhood supermarket.\n50+ BFC Quick Service Bars: Hot and iced espresso beverages brewed on authentic commercial Italian machines.\nB2B Direct Supply: Fast scheduled deliveries maintaining optimal bean degassing periods.",
+                        'fallback_img'    => 'shwapno_santino_retail.jpg',
+                        'img_badge_icon'  => 'bi bi-shop-window text-success fs-4',
+                        'img_badge_title' => 'Nationwide Presence',
+                        'img_badge_sub'   => 'Shwapno Superstores & BFC Dining',
+                        'btn_text'        => 'Explore Retail Outlets',
+                        'btn_url'         => array( 'url' => '/swapno/' ),
+                        'reverse_layout'  => 'yes',
+                    ),
+                ),
+            )
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_marquee',
+            array(
+                'label' => esc_html__( 'Photo Reel / Gallery', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control( 'marquee_badge', array( 'label' => esc_html__( 'Badge Text', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'MOMENTS AT SANTINO' ) );
+        $this->add_control( 'marquee_title', array( 'label' => esc_html__( 'Section Title (HTML)', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Inside Our Roastery, <span class="sec-title-accent">Cafes &amp; Labs</span>' ) );
+        $this->add_control( 'reel_row1_gallery', array( 'label' => esc_html__( 'Row 1 Photos (Optional Override)', 'santino' ), 'type' => \Elementor\Controls_Manager::GALLERY, 'default' => array() ) );
+        $this->add_control( 'reel_row2_gallery', array( 'label' => esc_html__( 'Row 2 Photos (Optional Override)', 'santino' ), 'type' => \Elementor\Controls_Manager::GALLERY, 'default' => array() ) );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_cta',
+            array(
+                'label' => esc_html__( 'Bottom CTA Banner', 'santino' ),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            )
+        );
+
+        $this->add_control( 'cta_badge', array( 'label' => esc_html__( 'CTA Badge', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'BECOME A PARTNER' ) );
+        $this->add_control( 'cta_title', array( 'label' => esc_html__( 'CTA Title (HTML)', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Ready to Elevate Your <span style="color: #dfbe8d;">Coffee Experience?</span>' ) );
+        $this->add_control( 'cta_desc', array( 'label' => esc_html__( 'CTA Description', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXTAREA, 'default' => 'Whether you are opening a specialty cafe, outfitting a hotel with commercial espresso machinery, or looking for freshly roasted wholesale beans, Santino is your total solutions partner.' ) );
+        $this->add_control( 'cta_btn1_text', array( 'label' => esc_html__( 'Primary Button Text (Modal)', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Book A Roastery Visit' ) );
+        $this->add_control( 'cta_btn2_text', array( 'label' => esc_html__( 'Secondary Button Text', 'santino' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Explore Drinks Menu' ) );
+        $this->add_control( 'cta_btn2_url', array( 'label' => esc_html__( 'Secondary Button Link', 'santino' ), 'type' => \Elementor\Controls_Manager::URL, 'default' => array( 'url' => '/menu/' ) ) );
+
         $this->end_controls_section();
     }
 
@@ -488,10 +729,12 @@ class Santino_Our_Story_Solution_Widget extends \Elementor\Widget_Base {
           <section class="story-video-hero position-relative overflow-hidden text-center">
             <div class="story-video-wrap">
               <?php
-              $story_vid = get_theme_mod( 'santino_story_video_mp4' );
+              $story_vid = ! empty( $settings['hero_video_url'] ) ? $settings['hero_video_url'] : get_theme_mod( 'santino_story_video_mp4' );
               if ( ! $story_vid ) $story_vid = get_theme_mod( 'santino_story_video_url', 'https://ilucky-fe-outside-oss-prod.luckincdn.com/iadmin/ab6140f6-129c-4ae9-aaa0-20190c43183b.mp4' );
-              $story_poster = get_theme_mod( 'santino_story_poster_img' );
-              if ( ! $story_poster ) $story_poster = santino_img('imgi_20_santino_-_250522-07574.jpg');
+              $story_poster = ! empty( $settings['hero_poster']['url'] ) ? $settings['hero_poster']['url'] : get_theme_mod( 'santino_story_poster_img' );
+              if ( ! $story_poster && function_exists( 'santino_img' ) ) $story_poster = santino_img( 'imgi_20_santino_-_250522-07574.jpg' );
+              $btn1_url = ! empty( $settings['hero_btn1_url']['url'] ) ? $settings['hero_btn1_url']['url'] : '#vision';
+              $btn2_url = ! empty( $settings['hero_btn2_url']['url'] ) ? $settings['hero_btn2_url']['url'] : home_url( '/menu/' );
               ?>
               <video class="story-video-bg" autoplay muted loop playsinline poster="<?php echo esc_url( $story_poster ); ?>">
                 <source src="<?php echo esc_url( $story_vid ); ?>" type="video/mp4">
@@ -500,6 +743,7 @@ class Santino_Our_Story_Solution_Widget extends \Elementor\Widget_Base {
             </div>
             
             <div class="container position-relative" style="max-width: 860px; z-index: 3;">
+              <?php if ( ! empty( $settings['hero_badge'] ) ) : ?>
               <div class="sec-pill-badge-wrap light mb-3">
                 <span class="sec-pill-line"></span>
                 <span class="sec-pill-badge light">
@@ -507,6 +751,7 @@ class Santino_Our_Story_Solution_Widget extends \Elementor\Widget_Base {
                 </span>
                 <span class="sec-pill-line"></span>
               </div>
+              <?php endif; ?>
 
               <h1 class="pro-banner-title mb-3" style="font-family: var(--kp-font-title, 'Montserrat', sans-serif); font-size: clamp(2.4rem, 4.8vw, 3.8rem); font-weight: 900; line-height: 1.18; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 14px rgba(0,0,0,0.6);">
                 <?php echo esc_html( $settings['hero_title'] ); ?>
@@ -517,278 +762,194 @@ class Santino_Our_Story_Solution_Widget extends \Elementor\Widget_Base {
               </p>
 
               <div class="pro-banner-actions d-flex justify-content-center align-items-center gap-3 flex-wrap">
-                <a href="#vision" class="btn-hero-lifestyle">
-                  <span>Discover Our Story</span>
+                <?php if ( ! empty( $settings['hero_btn1_text'] ) ) : ?>
+                <a href="<?php echo esc_url( $btn1_url ); ?>" class="btn-hero-lifestyle">
+                  <span><?php echo esc_html( $settings['hero_btn1_text'] ); ?></span>
                   <i class="bi bi-arrow-right"></i>
                 </a>
-                <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="btn-hero-outline">
+                <?php endif; ?>
+                <?php if ( ! empty( $settings['hero_btn2_text'] ) ) : ?>
+                <a href="<?php echo esc_url( $btn2_url ); ?>" class="btn-hero-outline">
                   <i class="bi bi-arrow-down-short text-warning"></i>
-                  <span>Explore Menu</span>
+                  <span><?php echo esc_html( $settings['hero_btn2_text'] ); ?></span>
                 </a>
+                <?php endif; ?>
               </div>
             </div>
           </section>
 
+          <?php if ( ! empty( $settings['metrics_list'] ) ) : ?>
           <div class="story-metrics-floating-wrap">
             <div class="container">
               <div class="row g-3 g-md-4 text-center justify-content-center">
+                <?php foreach ( $settings['metrics_list'] as $m ) : ?>
                 <div class="col-lg-3 col-6">
                   <div class="metric-card-pro">
-                    <div class="metric-card-icon"><i class="bi bi-clock-history"></i></div>
-                    <div class="metric-num">30+</div>
-                    <div class="metric-label">Years of Roasting Mastery</div>
+                    <div class="metric-card-icon"><i class="<?php echo esc_attr( $m['icon'] ?: 'bi bi-stars' ); ?>"></i></div>
+                    <div class="metric-num"><?php echo esc_html( $m['num'] ); ?></div>
+                    <div class="metric-label"><?php echo esc_html( $m['label'] ); ?></div>
                   </div>
                 </div>
-                <div class="col-lg-3 col-6">
-                  <div class="metric-card-pro">
-                    <div class="metric-card-icon"><i class="bi bi-building"></i></div>
-                    <div class="metric-num">500+</div>
-                    <div class="metric-label">Hotels, Cafes &amp; Corporate Hubs</div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                  <div class="metric-card-pro">
-                    <div class="metric-card-icon"><i class="bi bi-patch-check-fill"></i></div>
-                    <div class="metric-num">100%</div>
-                    <div class="metric-label">FSSC22000 Food Certified</div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                  <div class="metric-card-pro">
-                    <div class="metric-card-icon"><i class="bi bi-mortarboard-fill"></i></div>
-                    <div class="metric-num">1,000+</div>
-                    <div class="metric-label">Certified Barista Graduates</div>
-                  </div>
-                </div>
+                <?php endforeach; ?>
               </div>
             </div>
           </div>
+          <?php endif; ?>
 
           <section class="story-vision-section py-5 my-lg-2 position-relative" id="vision">
             <div class="container position-relative" style="z-index: 1;">
               <div class="row justify-content-center text-center">
                 <div class="col-xl-9 col-lg-10">
+                  <?php if ( ! empty( $settings['vision_badge'] ) ) : ?>
                   <div class="sec-pill-badge-wrap mb-3">
                     <span class="sec-pill-line"></span>
-                    <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> OUR PURPOSE &amp; VISION</span>
+                    <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> <?php echo esc_html( $settings['vision_badge'] ); ?></span>
                     <span class="sec-pill-line"></span>
                   </div>
-                  <h2 class="sec-title mb-3">Innovation Grounded in <span class="sec-title-accent">Heritage</span></h2>
+                  <?php endif; ?>
+                  <h2 class="sec-title mb-3"><?php echo wp_kses_post( $settings['vision_title'] ); ?></h2>
                   <p class="story-vision-text mb-4" style="max-width: 780px; margin: 0 auto 35px;">
-                    Santino Coffee was born with a single mission: to empower coffee entrepreneurs, businesses, and coffee lovers with world-class beans, precision machinery, and deep sensory knowledge. We believe that every cup tells a story of dedicated farmers, meticulous roast masters, and passionate baristas.
+                    <?php echo esc_html( $settings['vision_desc'] ); ?>
                   </p>
                   
+                  <?php if ( ! empty( $settings['vision_cards'] ) ) : ?>
                   <div class="row g-4 mt-2">
+                    <?php foreach ( $settings['vision_cards'] as $vc ) : ?>
                     <div class="col-md-4">
                       <div class="vision-feature-card">
-                        <div class="vision-icon-wrap"><i class="bi bi-globe-americas"></i></div>
-                        <span class="vision-badge-pill">Direct Farm Sourcing</span>
-                        <h4>Authentic Origin</h4>
-                        <p>100% ethically sourced Rainforest Alliance certified green beans from direct partner estates.</p>
+                        <div class="vision-icon-wrap"><i class="<?php echo esc_attr( $vc['icon'] ?: 'bi bi-globe-americas' ); ?>"></i></div>
+                        <?php if ( ! empty( $vc['badge'] ) ) : ?>
+                        <span class="vision-badge-pill"><?php echo esc_html( $vc['badge'] ); ?></span>
+                        <?php endif; ?>
+                        <h4><?php echo esc_html( $vc['title'] ); ?></h4>
+                        <p><?php echo esc_html( $vc['desc'] ); ?></p>
                       </div>
                     </div>
-                    <div class="col-md-4">
-                      <div class="vision-feature-card">
-                        <div class="vision-icon-wrap"><i class="bi bi-fire"></i></div>
-                        <span class="vision-badge-pill">Master Roasting</span>
-                        <h4>Precision Roasting</h4>
-                        <p>Custom roast profiles digitally calibrated to temperature, humidity, and peak flavor release.</p>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="vision-feature-card">
-                        <div class="vision-icon-wrap"><i class="bi bi-shield-check"></i></div>
-                        <span class="vision-badge-pill">Dedicated 24/7 Care</span>
-                        <h4>Continuous Care</h4>
-                        <p>24/7 technical breakdown support, preventive maintenance, and barista training academies.</p>
-                      </div>
-                    </div>
+                    <?php endforeach; ?>
                   </div>
+                  <?php endif; ?>
                 </div>
               </div>
             </div>
           </section>
 
+          <?php if ( ! empty( $settings['chapters_list'] ) ) : ?>
           <section class="story-split-chapters-section py-5 position-relative">
             <div class="container">
-              <div class="story-split-row row align-items-center g-5 mb-5 pb-lg-5">
+              <?php
+              $ch_total = count( $settings['chapters_list'] );
+              foreach ( $settings['chapters_list'] as $idx => $ch ) :
+                  $is_last    = ( $idx === $ch_total - 1 );
+                  $is_rev     = ( ( $ch['reverse_layout'] ?? '' ) === 'yes' );
+                  $ch_img     = ! empty( $ch['image']['url'] ) ? $ch['image']['url'] : ( ! empty( $ch['fallback_img'] ) && function_exists( 'santino_img' ) ? santino_img( $ch['fallback_img'] ) : '' );
+                  $ch_btn_url = ! empty( $ch['btn_url']['url'] ) ? $ch['btn_url']['url'] : '#';
+                  $bullets    = array_filter( array_map( 'trim', explode( "\n", (string) ( $ch['bullets'] ?? '' ) ) ) );
+              ?>
+              <div class="story-split-row row align-items-center g-5 <?php echo $is_last ? '' : 'mb-5 pb-lg-5'; ?> <?php echo $is_rev ? 'flex-lg-row-reverse' : ''; ?>">
                 <div class="col-lg-6">
                   <div class="story-split-img-wrapper position-relative">
-                    <img src="<?php echo santino_img('bd-barista-latte-art.jpg'); ?>" alt="Artisan Roastery" class="story-split-img shadow-sm">
+                    <?php if ( $ch_img ) : ?>
+                    <img src="<?php echo esc_url( $ch_img ); ?>" alt="<?php echo esc_attr( strip_tags( $ch['title'] ) ); ?>" class="story-split-img shadow-sm">
+                    <?php endif; ?>
+                    <?php if ( ! empty( $ch['img_badge_title'] ) ) : ?>
                     <div class="story-img-badge">
-                      <i class="bi bi-fire text-danger fs-4"></i>
+                      <i class="<?php echo esc_attr( $ch['img_badge_icon'] ?: 'bi bi-stars fs-4' ); ?>"></i>
                       <div>
-                        <strong>Artisan Roastery Lab</strong>
-                        <span>Small Batch Custom Roasts</span>
+                        <strong><?php echo esc_html( $ch['img_badge_title'] ); ?></strong>
+                        <span><?php echo esc_html( $ch['img_badge_sub'] ?? '' ); ?></span>
                       </div>
                     </div>
+                    <?php endif; ?>
                   </div>
                 </div>
-                <div class="col-lg-6 ps-lg-5">
+                <div class="col-lg-6 <?php echo $is_rev ? 'pe-lg-5' : 'ps-lg-5'; ?>">
+                  <?php if ( ! empty( $ch['badge'] ) ) : ?>
                   <div class="sec-pill-badge-wrap mb-3">
                     <span class="sec-pill-line"></span>
-                    <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> CHAPTER 01</span>
+                    <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> <?php echo esc_html( $ch['badge'] ); ?></span>
                     <span class="sec-pill-line"></span>
                   </div>
-                  <h3 class="story-chapter-title">Artisan Roasting &amp; <span class="sec-title-accent">Quality Without Compromise</span></h3>
-                  <p class="story-chapter-desc">
-                    Everything we roast represents an unyielding dedication to excellence. Our roastery facilities operate under strict FSSC22000 food safety certifications, roasting single origins and private label blends with high batch consistency.
-                  </p>
+                  <?php endif; ?>
+                  <h3 class="story-chapter-title"><?php echo wp_kses_post( $ch['title'] ); ?></h3>
+                  <?php if ( ! empty( $ch['desc'] ) ) : ?>
+                  <p class="story-chapter-desc"><?php echo esc_html( $ch['desc'] ); ?></p>
+                  <?php endif; ?>
+                  <?php if ( ! empty( $bullets ) ) : ?>
                   <ul class="story-bullet-list">
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>Rainforest Alliance Certified:</strong> Direct farm relationships ensuring sustainable livelihood for growers.</span></li>
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>Custom Private Label OEM:</strong> Tailored flavor curves designed for five-star hotels and specialty roasteries.</span></li>
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>Real-Time Profile Tracking:</strong> Digital thermocouple logging ensuring ±0.5°C batch consistency.</span></li>
+                    <?php foreach ( $bullets as $b_line ) :
+                        $parts = explode( ':', $b_line, 2 );
+                    ?>
+                    <li>
+                      <i class="bi bi-check-circle-fill"></i>
+                      <span>
+                        <?php if ( count( $parts ) === 2 ) : ?>
+                          <strong><?php echo esc_html( trim( $parts[0] ) ); ?>:</strong> <?php echo esc_html( trim( $parts[1] ) ); ?>
+                        <?php else : ?>
+                          <?php echo esc_html( $b_line ); ?>
+                        <?php endif; ?>
+                      </span>
+                    </li>
+                    <?php endforeach; ?>
                   </ul>
-                  <a href="<?php echo esc_url( home_url( '/beans/' ) ); ?>" class="btn-hero-lifestyle mt-2">
-                    <span>Explore Bean Collections</span>
+                  <?php endif; ?>
+                  <?php if ( ! empty( $ch['btn_text'] ) ) : ?>
+                  <a href="<?php echo esc_url( $ch_btn_url ); ?>" class="btn-hero-lifestyle mt-2">
+                    <span><?php echo esc_html( $ch['btn_text'] ); ?></span>
                     <i class="bi bi-arrow-right"></i>
                   </a>
+                  <?php endif; ?>
                 </div>
               </div>
-
-              <div class="story-split-row row align-items-center g-5 mb-5 pb-lg-5 flex-lg-row-reverse">
-                <div class="col-lg-6">
-                  <div class="story-split-img-wrapper position-relative">
-                    <img src="<?php echo santino_img('imgi_29_maverick-VA_1200x1200_fc8d047e-bc19-4666-8e3a-90081b8cdca7.webp'); ?>" alt="Victoria Arduino Machinery" class="story-split-img shadow-sm">
-                    <div class="story-img-badge">
-                      <i class="bi bi-cpu-fill text-primary fs-4"></i>
-                      <div>
-                        <strong>Next-Gen Automation</strong>
-                        <span>Victoria Arduino &amp; Bionic Robots</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 pe-lg-5">
-                  <div class="sec-pill-badge-wrap mb-3">
-                    <span class="sec-pill-line"></span>
-                    <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> CHAPTER 02</span>
-                    <span class="sec-pill-line"></span>
-                  </div>
-                  <h3 class="story-chapter-title">State-of-the-Art Espresso &amp; <span class="sec-title-accent">Bionic Robotics</span></h3>
-                  <p class="story-chapter-desc">
-                    We partner with the world's most prestigious espresso machine innovators — Victoria Arduino, Nuova Simonelli, Kalerm, and CAYE Robotics — delivering commercial extraction consistency that elevates customer retention and operational speed.
-                  </p>
-                  <ul class="story-bullet-list">
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>T3 Genius PureBrew Technology:</strong> Variable water flow and gravimetric dosing on Victoria Arduino Black Eagle &amp; Eagle One.</span></li>
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>CAYE Bionic Barista Robotic Arms:</strong> Fully automated 6-axis barista robots delivering flawless latte art in under 60 seconds.</span></li>
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>Turnkey Machine Leasing:</strong> Complete corporate rental packages with guaranteed zero-downtime maintenance.</span></li>
-                  </ul>
-                  <a href="<?php echo esc_url( home_url( '/machines/' ) ); ?>" class="btn-hero-lifestyle mt-2">
-                    <span>View Machine Catalog</span>
-                    <i class="bi bi-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
-
-              <div class="story-split-row row align-items-center g-5 mb-5 pb-lg-5">
-                <div class="col-lg-6">
-                  <div class="story-split-img-wrapper position-relative">
-                    <img src="<?php echo santino_img('bd-barista-training.jpg'); ?>" alt="Barista Training Academy" class="story-split-img shadow-sm">
-                    <div class="story-img-badge">
-                      <i class="bi bi-trophy-fill text-warning fs-4"></i>
-                      <div>
-                        <strong>Championship Coaching</strong>
-                        <span>Certified Barista Trainers</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 ps-lg-5">
-                  <div class="sec-pill-badge-wrap mb-3">
-                    <span class="sec-pill-line"></span>
-                    <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> CHAPTER 03</span>
-                    <span class="sec-pill-line"></span>
-                  </div>
-                  <h3 class="story-chapter-title">Empowering the Next Generation of <span class="sec-title-accent">Coffee Leaders</span></h3>
-                  <p class="story-chapter-desc">
-                    Knowledge is the heartbeat of our craft. Santino Barista Academy offers internationally structured certification programs, crop-to-cup sensory training, and competitive coaching for aspiring champions in Bangladesh.
-                  </p>
-                  <ul class="story-bullet-list">
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>Foundational to Master Barista:</strong> Milk texturing, espresso calibration, workflow ergonomics, and cupping.</span></li>
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>Corporate Staff Upskilling:</strong> Standardizing beverage execution across multi-branch restaurant operations.</span></li>
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>Specialty Brewing Modules:</strong> V60, Chemex, Aeropress, Cold Brew, and Syphon sensory mastery.</span></li>
-                  </ul>
-                  <a href="<?php echo esc_url( home_url( '/training/' ) ); ?>" class="btn-hero-lifestyle mt-2">
-                    <span>Enroll in Barista Academy</span>
-                    <i class="bi bi-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
-
-              <div class="story-split-row row align-items-center g-5 flex-lg-row-reverse">
-                <div class="col-lg-6">
-                  <div class="story-split-img-wrapper position-relative">
-                    <img src="<?php echo santino_img('shwapno_santino_retail.jpg'); ?>" alt="Shwapno Supermarket Partnership" class="story-split-img shadow-sm">
-                    <div class="story-img-badge">
-                      <i class="bi bi-shop-window text-success fs-4"></i>
-                      <div>
-                        <strong>Nationwide Presence</strong>
-                        <span>Shwapno Superstores &amp; BFC Dining</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 pe-lg-5">
-                  <div class="sec-pill-badge-wrap mb-3">
-                    <span class="sec-pill-line"></span>
-                    <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> CHAPTER 04</span>
-                    <span class="sec-pill-line"></span>
-                  </div>
-                  <h3 class="story-chapter-title">Everyday Specialty Coffee for <span class="sec-title-accent">Every Community</span></h3>
-                  <p class="story-chapter-desc">
-                    We are bridging the gap between luxury specialty coffee and everyday accessibility. Today, Santino roasted bean packs are available on retail shelves at Shwapno Superstores nationwide, and freshly brewed coffees are served across 50+ BFC restaurant locations.
-                  </p>
-                  <ul class="story-bullet-list">
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>100+ Shwapno Outlets:</strong> Freshly sealed 250g &amp; 1kg bags available at your neighborhood supermarket.</span></li>
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>50+ BFC Quick Service Bars:</strong> Hot and iced espresso beverages brewed on authentic commercial Italian machines.</span></li>
-                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>B2B Direct Supply:</strong> Fast scheduled deliveries maintaining optimal bean degassing periods.</span></li>
-                  </ul>
-                  <a href="<?php echo esc_url( home_url( '/swapno/' ) ); ?>" class="btn-hero-lifestyle mt-2">
-                    <span>Explore Retail Outlets</span>
-                    <i class="bi bi-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
+              <?php endforeach; ?>
             </div>
           </section>
+          <?php endif; ?>
 
           <section class="story-marquee-reel-section py-5 my-4 bg-light">
             <div class="container-fluid px-0">
               <div class="text-center mb-4">
+                <?php if ( ! empty( $settings['marquee_badge'] ) ) : ?>
                 <div class="sec-pill-badge-wrap mb-2">
                   <span class="sec-pill-line"></span>
-                  <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> MOMENTS AT SANTINO</span>
+                  <span class="sec-pill-badge"><i class="bi bi-circle-fill"></i> <?php echo esc_html( $settings['marquee_badge'] ); ?></span>
                   <span class="sec-pill-line"></span>
                 </div>
-                <h3 class="sec-title mt-1">Inside Our Roastery, <span class="sec-title-accent">Cafes &amp; Labs</span></h3>
+                <?php endif; ?>
+                <h3 class="sec-title mt-1"><?php echo wp_kses_post( $settings['marquee_title'] ); ?></h3>
               </div>
+
+              <?php
+              $r1 = array();
+              if ( ! empty( $settings['reel_row1_gallery'] ) ) {
+                  foreach ( $settings['reel_row1_gallery'] as $g ) { if ( ! empty( $g['url'] ) ) $r1[] = $g['url']; }
+              } else {
+                  foreach ( array( 'imgi_20_santino_-_250522-07574.jpg', 'imgi_23_santino_-_250522-07495.jpg', 'imgi_25_santino_-_250522-07618.jpg', 'imgi_26_santino_-_250522-07312.jpg', 'imgi_27_santino_-_250522-07216.jpg', 'bd-barista-latte-art.jpg' ) as $f ) {
+                      if ( function_exists( 'santino_img' ) ) $r1[] = santino_img( $f );
+                  }
+              }
+              $r2 = array();
+              if ( ! empty( $settings['reel_row2_gallery'] ) ) {
+                  foreach ( $settings['reel_row2_gallery'] as $g ) { if ( ! empty( $g['url'] ) ) $r2[] = $g['url']; }
+              } else {
+                  foreach ( array( 'shwapno_santino_retail.jpg', 'bfc_santino_foodservice.jpg', 'bd-barista-training.jpg', 'santino_cup_specialist.jpg', 'menu-raw-coconut-latte.jpg', 'menu-cappuccino-hot.jpg' ) as $f ) {
+                      if ( function_exists( 'santino_img' ) ) $r2[] = santino_img( $f );
+                  }
+              }
+              ?>
 
               <div class="story-photo-marquee-track track-left mb-3">
                 <div class="story-marquee-row">
-                  <img src="<?php echo santino_img('imgi_20_santino_-_250522-07574.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('imgi_23_santino_-_250522-07495.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('imgi_25_santino_-_250522-07618.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('imgi_26_santino_-_250522-07312.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('imgi_27_santino_-_250522-07216.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('bd-barista-latte-art.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('imgi_20_santino_-_250522-07574.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('imgi_23_santino_-_250522-07495.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('imgi_25_santino_-_250522-07618.jpg'); ?>" alt="" class="reel-photo">
+                  <?php foreach ( array_merge( $r1, array_slice( $r1, 0, 3 ) ) as $img_u ) : ?>
+                    <img src="<?php echo esc_url( $img_u ); ?>" alt="" class="reel-photo">
+                  <?php endforeach; ?>
                 </div>
               </div>
 
               <div class="story-photo-marquee-track track-right">
                 <div class="story-marquee-row">
-                  <img src="<?php echo santino_img('shwapno_santino_retail.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('bfc_santino_foodservice.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('bd-barista-training.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('santino_cup_specialist.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('menu-raw-coconut-latte.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('menu-cappuccino-hot.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('shwapno_santino_retail.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('bfc_santino_foodservice.jpg'); ?>" alt="" class="reel-photo">
-                  <img src="<?php echo santino_img('bd-barista-training.jpg'); ?>" alt="" class="reel-photo">
+                  <?php foreach ( array_merge( $r2, array_slice( $r2, 0, 3 ) ) as $img_u ) : ?>
+                    <img src="<?php echo esc_url( $img_u ); ?>" alt="" class="reel-photo">
+                  <?php endforeach; ?>
                 </div>
               </div>
             </div>
@@ -798,26 +959,32 @@ class Santino_Our_Story_Solution_Widget extends \Elementor\Widget_Base {
             <div class="container">
               <div class="p-4 p-md-5 rounded-4 position-relative text-white overflow-hidden shadow-lg" style="background: linear-gradient(135deg, #002b28 0%, #00504b 50%, #002220 100%); border: 1px solid rgba(212, 175, 55, 0.35);">
                 <div class="position-relative" style="z-index: 2;">
+                  <?php if ( ! empty( $settings['cta_badge'] ) ) : ?>
                   <div class="sec-pill-badge-wrap light mb-3">
                     <span class="sec-pill-line"></span>
                     <span class="sec-pill-badge light">
-                      <i class="bi bi-handshake me-1" style="color: #dfbe8d;"></i> BECOME A PARTNER
+                      <i class="bi bi-handshake me-1" style="color: #dfbe8d;"></i> <?php echo esc_html( $settings['cta_badge'] ); ?>
                     </span>
                     <span class="sec-pill-line"></span>
                   </div>
-                  <h2 class="sec-title text-white mb-3">Ready to Elevate Your <span style="color: #dfbe8d;">Coffee Experience?</span></h2>
+                  <?php endif; ?>
+                  <h2 class="sec-title text-white mb-3"><?php echo wp_kses_post( $settings['cta_title'] ); ?></h2>
                   <p class="text-white-50 mx-auto mb-4" style="max-width: 680px; font-size: 1.05rem; line-height: 1.6;">
-                    Whether you are opening a specialty cafe, outfitting a hotel with commercial espresso machinery, or looking for freshly roasted wholesale beans, Santino is your total solutions partner.
+                    <?php echo esc_html( $settings['cta_desc'] ); ?>
                   </p>
                   <div class="d-flex justify-content-center flex-wrap gap-3">
+                    <?php if ( ! empty( $settings['cta_btn1_text'] ) ) : ?>
                     <button class="btn-hero-lifestyle" data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                      <span>Book A Roastery Visit</span>
+                      <span><?php echo esc_html( $settings['cta_btn1_text'] ); ?></span>
                       <i class="bi bi-arrow-right"></i>
                     </button>
-                    <a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>" class="btn-hero-outline">
+                    <?php endif; ?>
+                    <?php if ( ! empty( $settings['cta_btn2_text'] ) ) : ?>
+                    <a href="<?php echo esc_url( ! empty( $settings['cta_btn2_url']['url'] ) ? $settings['cta_btn2_url']['url'] : home_url( '/menu/' ) ); ?>" class="btn-hero-outline">
                       <i class="bi bi-arrow-down-short text-warning"></i>
-                      <span>Explore Drinks Menu</span>
+                      <span><?php echo esc_html( $settings['cta_btn2_text'] ); ?></span>
                     </a>
+                    <?php endif; ?>
                   </div>
                 </div>
               </div>

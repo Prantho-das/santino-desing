@@ -21,20 +21,47 @@
   <?php get_template_part( 'template-parts/floating-bar' ); ?>
 
   <!-- Top Contact Bar (Desktop) -->
+  <?php
+  $tb_enable = get_theme_mod( 'santino_top_bar_enable', '1' );
+  if ( ! empty( $tb_enable ) && $tb_enable !== '0' ) :
+    $tb_sales_lbl    = get_theme_mod( 'santino_top_bar_sales_label', 'For Sales & Service:' );
+    $tb_sales_ph     = get_theme_mod( 'santino_top_bar_sales_phone', '+880 1613-334514' );
+    $tb_train_lbl    = get_theme_mod( 'santino_top_bar_training_label', 'For Training:' );
+    $tb_train_ph     = get_theme_mod( 'santino_top_bar_training_phone', '+880 1606-291393' );
+    $tb_email_lbl    = get_theme_mod( 'santino_top_bar_email_label', 'Email:' );
+    $tb_email        = get_theme_mod( 'santino_top_bar_email', 'sales@santino.com.bd' );
+    $tb_link1_text   = get_theme_mod( 'santino_top_bar_link1_text', 'Our Story' );
+    $tb_link1_url    = get_theme_mod( 'santino_top_bar_link1_url' ) ?: home_url( '/our-story/' );
+    $tb_link2_text   = get_theme_mod( 'santino_top_bar_link2_text', 'Find Our Cafes' );
+    $tb_link2_url    = get_theme_mod( 'santino_top_bar_link2_url' ) ?: home_url( '/menu/#branches' );
+  ?>
   <div class="top-contact-bar d-none d-lg-block">
     <div class="container-fluid px-lg-5 d-flex justify-content-between align-items-center">
       <div class="d-flex gap-4">
-        <span>For Sales &amp; Service: <a href="tel:+8801613334514">+880 1613-334514</a></span>
-        <span>For Training: <a href="tel:+8801606291393">+880 1606-291393</a></span>
-        <span>Email: <a href="mailto:sales@santino.com.bd">sales@santino.com.bd</a></span>
+        <?php if ( $tb_sales_ph !== '' ) : ?>
+          <span><?php echo esc_html( $tb_sales_lbl ); ?> <a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $tb_sales_ph ) ); ?>"><?php echo esc_html( $tb_sales_ph ); ?></a></span>
+        <?php endif; ?>
+        <?php if ( $tb_train_ph !== '' ) : ?>
+          <span><?php echo esc_html( $tb_train_lbl ); ?> <a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $tb_train_ph ) ); ?>"><?php echo esc_html( $tb_train_ph ); ?></a></span>
+        <?php endif; ?>
+        <?php if ( $tb_email !== '' ) : ?>
+          <span><?php echo esc_html( $tb_email_lbl ); ?> <a href="mailto:<?php echo esc_attr( $tb_email ); ?>"><?php echo esc_html( $tb_email ); ?></a></span>
+        <?php endif; ?>
       </div>
       <div class="d-flex gap-3">
-        <a href="<?php echo esc_url( home_url( '/our-story/' ) ); ?>">Our Story</a>
-        <span>|</span>
-        <a href="<?php echo esc_url( home_url( '/menu/#branches' ) ); ?>">Find Our Cafes</a>
+        <?php if ( $tb_link1_text !== '' ) : ?>
+          <a href="<?php echo esc_url( $tb_link1_url ); ?>"><?php echo esc_html( $tb_link1_text ); ?></a>
+        <?php endif; ?>
+        <?php if ( $tb_link1_text !== '' && $tb_link2_text !== '' ) : ?>
+          <span>|</span>
+        <?php endif; ?>
+        <?php if ( $tb_link2_text !== '' ) : ?>
+          <a href="<?php echo esc_url( $tb_link2_url ); ?>"><?php echo esc_html( $tb_link2_text ); ?></a>
+        <?php endif; ?>
       </div>
     </div>
   </div>
+  <?php endif; ?>
 
   <!-- Header Navigation -->
   <header class="site-header">

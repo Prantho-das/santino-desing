@@ -134,136 +134,490 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
         ?>
         <style>
         .club-portal-section {
-          background: linear-gradient(180deg, #f8faf9 0%, #edf3f1 100%);
+          background: radial-gradient(circle at 12% 18%, rgba(0, 98, 93, 0.06) 0%, transparent 45%),
+                      radial-gradient(circle at 88% 82%, rgba(195, 153, 108, 0.09) 0%, transparent 45%),
+                      linear-gradient(180deg, #f7faf9 0%, #eaf1ef 100%);
           position: relative;
+          overflow-x: clip;
+          overflow-y: visible;
         }
         .vip-card-surface {
-          background: linear-gradient(135deg, #004d49 0%, #002d2b 60%, #011d1c 100%);
-          border: 1px solid rgba(195, 153, 108, 0.4);
-          border-radius: 20px;
+          background: radial-gradient(circle at 88% 12%, rgba(223, 190, 141, 0.22) 0%, transparent 50%),
+                      linear-gradient(135deg, #014642 0%, #002826 55%, #001615 100%);
+          border: 1px solid rgba(223, 190, 141, 0.38);
+          border-radius: 24px;
           color: #ffffff;
-          padding: 28px;
+          padding: clamp(20px, 3vw, 30px);
           position: relative;
           overflow: hidden;
-          box-shadow: 0 20px 40px rgba(0, 77, 73, 0.22);
+          box-shadow: 0 24px 48px -12px rgba(0, 45, 43, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+          transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+        }
+        .vip-card-surface:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 28px 54px -12px rgba(0, 45, 43, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.16);
         }
         .vip-card-watermark {
           position: absolute;
-          right: -25px;
-          bottom: -35px;
-          font-size: 160px;
+          right: -20px;
+          bottom: -30px;
+          font-size: clamp(120px, 18vw, 165px);
           color: rgba(255, 255, 255, 0.04);
           pointer-events: none;
           z-index: 1;
         }
         .gold-chip {
-          width: 42px;
+          width: 44px;
           height: 32px;
-          border-radius: 6px;
-          background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 50%, #b88a59 100%);
-          border: 1px solid rgba(255,255,255,0.4);
-          display: inline-block;
+          border-radius: 7px;
+          background: linear-gradient(135deg, #ebd0a3 0%, #c89f70 50%, #9f7545 100%);
+          border: 1px solid rgba(255, 255, 255, 0.45);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+          position: relative;
+          flex-shrink: 0;
+        }
+        .gold-chip::after {
+          content: "";
+          position: absolute;
+          inset: 6px;
+          border: 1px solid rgba(0, 45, 43, 0.22);
+          border-radius: 3px;
+        }
+        .vip-tracker-box {
+          background: rgba(0, 0, 0, 0.24);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(223, 190, 141, 0.22);
+          border-radius: 18px;
+          padding: clamp(12px, 2.5vw, 18px);
+          position: relative;
+          z-index: 2;
+        }
+        .vip-stamps-grid {
+          display: grid;
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+          gap: clamp(4px, 1.5vw, 10px);
+          align-items: start;
+          padding-top: 6px;
+        }
+        .vip-stamp-col {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          min-width: 0;
         }
         .stamp-slot {
-          width: 44px;
-          height: 44px;
+          width: clamp(34px, 8.5vw, 44px);
+          height: clamp(34px, 8.5vw, 44px);
           border-radius: 50%;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          font-size: 18px;
+          font-size: clamp(14px, 3vw, 18px);
+          transition: transform 0.25s ease;
         }
         .stamp-slot.active {
-          background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%);
+          background: linear-gradient(135deg, #ebd0a3 0%, #c3996c 100%);
           color: #002d2b;
           border: 2px solid #ffffff;
+          box-shadow: 0 4px 12px rgba(223, 190, 141, 0.35);
         }
         .stamp-slot.empty {
-          background: rgba(255, 255, 255, 0.08);
-          border: 1.5px dashed rgba(195, 153, 108, 0.4);
-          color: rgba(255, 255, 255, 0.4);
-          font-size: 13px;
+          background: rgba(255, 255, 255, 0.06);
+          border: 1.5px dashed rgba(223, 190, 141, 0.38);
+          color: rgba(255, 255, 255, 0.55);
+          font-size: clamp(11px, 2.4vw, 13px);
           font-weight: 700;
         }
         .stamp-slot.reward {
-          background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%);
+          background: linear-gradient(135deg, #f3dcaf 0%, #c3996c 100%);
           border: 2px solid #ffffff;
+          box-shadow: 0 0 16px rgba(223, 190, 141, 0.45);
         }
-        .portal-tabs .nav-link {
-          color: #4b6360;
-          background: #ffffff;
-          border: 1px solid #dbe5e2;
-          border-radius: 12px;
-          padding: 10px 18px;
-          font-weight: 700;
-          font-size: 13.5px;
-        }
-        .portal-tabs .nav-link.active {
-          background: #00625d !important;
-          color: #ffffff !important;
-          border-color: #00625d !important;
-        }
-        .portal-card {
-          background: #ffffff;
-          border: 1px solid #dbe5e2;
+        .portal-steps-card {
+          background: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(0, 98, 93, 0.1);
           border-radius: 20px;
-          box-shadow: 0 15px 35px rgba(0, 77, 73, 0.06);
+          padding: clamp(12px, 2vw, 18px);
+          box-shadow: 0 12px 30px rgba(0, 77, 73, 0.05);
         }
-        .btn-portal-submit {
-          background: var(--santino-teal, #00625d);
-          color: #ffffff;
-          border: none;
-          border-radius: 10px;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          padding: 14px 24px;
-          transition: background 0.3s ease;
+        .portal-steps-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 8px;
         }
-        .btn-portal-submit:hover {
-          background: #004d49;
-          color: #ffffff;
-        }
-        .portal-lookup-group {
-          background: #ffffff;
-          border-radius: 50px;
-          padding: 6px 8px 6px 20px;
+        .portal-step-item {
           display: flex;
+          flex-direction: column;
           align-items: center;
-          gap: 12px;
-          border: 1.5px solid #d8e5e1;
+          text-align: center;
+          padding: 10px 6px;
+          border-radius: 14px;
+          transition: background 0.25s ease, transform 0.25s ease;
+          position: relative;
         }
-        .portal-lookup-field {
-          flex: 1;
+        .portal-step-item:hover {
+          background: rgba(0, 98, 93, 0.04);
+          transform: translateY(-2px);
+        }
+        .portal-step-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 12px;
+          background: rgba(0, 98, 93, 0.08);
+          color: #00625d;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.15rem;
+          margin-bottom: 8px;
+        }
+        .portal-step-item.is-reward .portal-step-icon {
+          background: rgba(195, 153, 108, 0.16);
+          color: #b4844e;
+        }
+        #clubPortal .portal-card {
+          background: #ffffff;
+          border: 1px solid rgba(0, 98, 93, 0.11);
+          border-radius: 24px;
+          padding: clamp(20px, 3.2vw, 32px);
+          box-shadow: 0 20px 45px rgba(0, 77, 73, 0.07);
+        }
+        #clubPortal .portal-tabs {
+          display: flex !important;
+          flex-wrap: nowrap !important;
+          gap: 6px;
+          background: #f1f6f4;
+          padding: 6px;
+          border-radius: 16px;
+          border: 1px solid #e1ece8;
+        }
+        #clubPortal .portal-tabs .nav-item {
+          flex: 1 1 auto;
+          min-width: 0;
+        }
+        #clubPortal .portal-tabs .nav-link {
+          width: 100%;
+          min-height: 44px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+          color: #46605d;
+          background: transparent;
+          border: none;
+          border-radius: 12px;
+          padding: 9px 14px;
+          font-weight: 700;
+          font-size: 12.5px;
+          white-space: nowrap;
+          transition: all 0.25s ease;
+        }
+        #clubPortal .portal-tabs .nav-link:hover:not(.active) {
+          background: rgba(255, 255, 255, 0.75);
+          color: #004d49;
+        }
+        #clubPortal .portal-tabs .nav-link.active {
+          background: linear-gradient(135deg, #006e68 0%, #005450 100%) !important;
+          color: #ffffff !important;
+          box-shadow: 0 6px 16px rgba(0, 98, 93, 0.25);
+        }
+        #clubPortal .portal-tabs .nav-link.active i {
+          color: #ffffff !important;
+        }
+        #clubPortal .portal-lookup-group {
+          background: #f8fbfa;
+          border-radius: 50px;
+          padding: 6px 6px 6px 18px !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 10px !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+          border: 1.5px solid #d5e4df;
+          transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+        #clubPortal .portal-lookup-group:focus-within {
+          background: #ffffff;
+          border-color: #00625d;
+          box-shadow: 0 0 0 4px rgba(0, 98, 93, 0.11);
+        }
+        #clubPortal .portal-lookup-field {
+          flex: 1 1 0% !important;
+          min-width: 0 !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 10px !important;
+        }
+        #clubPortal .portal-lookup-field input {
+          border: none !important;
+          outline: none !important;
+          box-shadow: none !important;
+          width: 100% !important;
+          min-width: 0 !important;
+          flex: 1 1 0% !important;
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: #1f2d2b;
+          background: transparent !important;
+          padding: 8px 0 !important;
+        }
+        #clubPortal .btn-lookup-action {
+          flex: 0 0 auto !important;
+          width: auto !important;
+          min-width: max-content !important;
+          background: linear-gradient(135deg, #006e68 0%, #005450 100%) !important;
+          color: #ffffff !important;
+          border: none !important;
+          min-height: 42px;
+          padding: 10px 22px !important;
+          border-radius: 50px !important;
+          font-weight: 700;
+          font-size: 12px;
+          letter-spacing: 0.6px;
+          text-transform: uppercase;
+          white-space: nowrap !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 6px;
+          cursor: pointer;
+          box-shadow: 0 6px 16px rgba(0, 98, 93, 0.22);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        #clubPortal .btn-lookup-action:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 8px 20px rgba(0, 98, 93, 0.3);
+        }
+        #clubPortal .portal-quick-info {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 10px;
+          margin-top: 20px;
+        }
+        #clubPortal .portal-info-pill {
           display: flex;
           align-items: center;
           gap: 10px;
+          padding: 12px 14px;
+          border-radius: 14px;
+          background: #f7faf9;
+          border: 1px solid #e3eeea;
         }
-        .portal-lookup-field input {
-          border: none;
-          outline: none;
-          width: 100%;
-          font-size: 0.95rem;
-          color: #333;
-          background: transparent;
-        }
-        .btn-lookup-action {
-          background: var(--santino-teal, #00625d);
-          color: #ffffff;
-          border: none;
-          padding: 10px 22px;
-          border-radius: 50px;
-          font-weight: 700;
-          font-size: 12px;
-          letter-spacing: 0.5px;
-          text-transform: uppercase;
+        #clubPortal .portal-info-pill i {
+          width: 34px;
+          height: 34px;
+          border-radius: 10px;
+          background: rgba(0, 98, 93, 0.08);
+          color: #00625d;
           display: inline-flex;
           align-items: center;
-          gap: 6px;
+          justify-content: center;
+          flex-shrink: 0;
+          font-size: 1rem;
+        }
+        #clubPortal .portal-card .form-control,
+        #clubPortal .portal-card .form-select {
+          border-radius: 12px;
+          border: 1.5px solid #dbe5e2;
+          min-height: 44px;
+          font-size: 0.92rem;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        #clubPortal .portal-card .form-control:focus,
+        #clubPortal .portal-card .form-select:focus {
+          border-color: #00625d;
+          box-shadow: 0 0 0 4px rgba(0, 98, 93, 0.1);
+        }
+        #clubPortal .btn-portal-submit {
+          background: linear-gradient(135deg, #006e68 0%, #00504c 100%);
+          color: #ffffff;
+          border: none;
+          border-radius: 14px;
+          min-height: 48px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          padding: 13px 24px;
+          box-shadow: 0 10px 24px rgba(0, 98, 93, 0.22);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        #clubPortal .btn-portal-submit:hover {
+          background: linear-gradient(135deg, #005b56 0%, #00423e 100%);
+          color: #ffffff;
+          transform: translateY(-1px);
+          box-shadow: 0 12px 28px rgba(0, 98, 93, 0.28);
+        }
+        @media (max-width: 991.98px) {
+          #clubPortal .portal-tabs {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+        @media (max-width: 575.98px) {
+          #clubPortal .portal-quick-info {
+            grid-template-columns: 1fr;
+          }
+          #clubPortal .portal-lookup-group {
+            flex-direction: column !important;
+            border-radius: 18px !important;
+            padding: 10px !important;
+            align-items: stretch !important;
+          }
+          #clubPortal .portal-lookup-field {
+            padding: 2px 6px;
+          }
+          #clubPortal .btn-lookup-action {
+            width: 100% !important;
+            border-radius: 12px !important;
+          }
+          .portal-step-item {
+            padding: 8px 3px;
+          }
+        }
+        #clubPortal .snt-ss-wrap {
+          position: relative;
+          width: 100%;
+          z-index: 2;
+        }
+        #clubPortal .snt-ss-wrap.is-open {
+          z-index: 9999 !important;
+        }
+        #clubPortal .snt-ss-native {
+          position: absolute !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+          width: 1px !important;
+          height: 1px !important;
+          left: 50%;
+          bottom: 0;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        #clubPortal .snt-ss-trigger {
+          width: 100%;
+          min-height: 44px;
+          padding: 9px 14px;
+          border-radius: 12px;
+          border: 1.5px solid #dbe5e2;
+          background: #ffffff;
+          color: #1f2d2b;
+          font-size: 0.92rem;
+          font-weight: 500;
+          text-align: left;
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        #clubPortal .santino-row-main .snt-ss-trigger {
+          border: none !important;
+          background: transparent !important;
+          min-height: 40px;
+          padding: 6px 10px;
+          box-shadow: none !important;
+        }
+        #clubPortal .snt-ss-trigger-text {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        #clubPortal .snt-ss-trigger.is-placeholder .snt-ss-trigger-text {
+          color: #7c928d;
+        }
+        #clubPortal .snt-ss-chevron {
+          color: #00625d;
+          font-size: 0.85rem;
+          flex-shrink: 0;
+          transition: transform 0.2s ease;
+        }
+        #clubPortal .snt-ss-wrap.is-open .snt-ss-trigger {
+          border-color: #00625d;
+          box-shadow: 0 0 0 4px rgba(0, 98, 93, 0.1);
+        }
+        #clubPortal .snt-ss-wrap.is-open .snt-ss-chevron {
+          transform: rotate(180deg);
+        }
+        #clubPortal .snt-ss-panel {
+          position: absolute;
+          top: calc(100% + 6px);
+          left: 0;
+          right: 0;
+          z-index: 99999 !important;
+          background: #ffffff;
+          border: 1.5px solid #d5e4df;
+          border-radius: 16px;
+          box-shadow: 0 18px 40px rgba(0, 45, 43, 0.18);
+          overflow: hidden;
+          display: none;
+        }
+        #clubPortal .snt-ss-wrap.is-open-up .snt-ss-panel {
+          top: auto;
+          bottom: calc(100% + 6px);
+        }
+        #clubPortal .snt-ss-wrap.is-open .snt-ss-panel {
+          display: block;
+        }
+        #clubPortal .snt-ss-search-box {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 12px;
+          border-bottom: 1px solid #e8f0ed;
+          background: #f8fbfa;
+        }
+        #clubPortal .snt-ss-search-box i {
+          color: #00625d;
+          font-size: 0.9rem;
+        }
+        #clubPortal .snt-ss-search {
+          border: none !important;
+          outline: none !important;
+          background: transparent !important;
+          width: 100%;
+          font-size: 0.88rem;
+          color: #1f2d2b;
+          padding: 2px 0;
+        }
+        #clubPortal .snt-ss-list {
+          max-height: 220px;
+          overflow-y: auto;
+          padding: 6px;
+        }
+        #clubPortal .snt-ss-opt {
+          padding: 9px 12px;
+          border-radius: 10px;
+          font-size: 0.89rem;
+          color: #1f2d2b;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px;
+          transition: background 0.15s ease, color 0.15s ease;
+        }
+        #clubPortal .snt-ss-opt:hover {
+          background: #f0faf7;
+          color: #004d49;
+        }
+        #clubPortal .snt-ss-opt.is-selected {
+          background: #e6f4f1;
+          color: #00625d;
+          font-weight: 700;
+        }
+        #clubPortal .snt-ss-empty {
+          padding: 14px 10px;
+          text-align: center;
+          font-size: 0.84rem;
+          color: #7c928d;
         }
         </style>
 
-        <section class="py-5 club-portal-section position-relative overflow-hidden" id="clubPortal">
+        <section class="py-5 club-portal-section position-relative" id="clubPortal">
           <div class="container py-lg-4">
             
             <?php if ( $badge_text !== '' || $title !== '' || $desc !== '' ) : ?>
@@ -309,62 +663,62 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
                       <div class="font-monospace text-white-50 small" style="letter-spacing: 2px;">SNT-REG-•••• ••••</div>
                     </div>
 
-                    <div class="p-3 rounded-4 mb-3 position-relative" style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(195, 153, 108, 0.25); z-index: 2;">
-                      <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="vip-tracker-box mb-3">
+                      <div class="d-flex justify-content-between align-items-center mb-2 gap-2 flex-wrap">
                         <span class="small fw-bold" style="color: #dfbe8d; font-size: 11.5px;">5-Cup Stamp Card Tracker</span>
-                        <span class="badge rounded-pill" style="background: rgba(195, 153, 108, 0.25); color: #dfbe8d; font-size: 10px;">BUY 5, GET 1 FREE</span>
+                        <span class="badge rounded-pill" style="background: rgba(195, 153, 108, 0.25); color: #ebd0a3; font-size: 10px; border: 1px solid rgba(223, 190, 141, 0.3);">BUY 5, GET 1 FREE</span>
                       </div>
                       
-                      <div class="d-flex justify-content-between align-items-center py-2 px-1">
-                        <div class="text-center">
+                      <div class="vip-stamps-grid">
+                        <div class="vip-stamp-col">
                           <div class="stamp-slot active mb-1">☕</div>
                           <div style="font-size: 9.5px; color: #dfbe8d;">Cup 1</div>
                         </div>
-                        <div class="text-center">
+                        <div class="vip-stamp-col">
                           <div class="stamp-slot active mb-1">☕</div>
                           <div style="font-size: 9.5px; color: #dfbe8d;">Cup 2</div>
                         </div>
-                        <div class="text-center">
+                        <div class="vip-stamp-col">
                           <div class="stamp-slot empty mb-1">3</div>
                           <div class="text-white-50" style="font-size: 9.5px;">Cup 3</div>
                         </div>
-                        <div class="text-center">
+                        <div class="vip-stamp-col">
                           <div class="stamp-slot empty mb-1">4</div>
                           <div class="text-white-50" style="font-size: 9.5px;">Cup 4</div>
                         </div>
-                        <div class="text-center">
+                        <div class="vip-stamp-col">
                           <div class="stamp-slot empty mb-1">5</div>
                           <div class="text-white-50" style="font-size: 9.5px;">Cup 5</div>
                         </div>
-                        <div class="text-center">
-                          <div class="stamp-slot reward mb-1"><i class="bi bi-gift-fill" style="color: #002d2b; font-size: 16px;"></i></div>
+                        <div class="vip-stamp-col">
+                          <div class="stamp-slot reward mb-1"><i class="bi bi-gift-fill" style="color: #002d2b; font-size: 15px;"></i></div>
                           <div style="font-size: 9.5px; color: #dfbe8d; font-weight: 700;">FREE #6</div>
                         </div>
                       </div>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center text-white-50 small position-relative" style="z-index: 2; font-size: 11px;">
+                    <div class="d-flex justify-content-between align-items-center text-white-50 small position-relative gap-2 flex-wrap" style="z-index: 2; font-size: 11px;">
                       <span>Valid across all Dhaka branches</span>
                       <span style="color: #dfbe8d;"><i class="bi bi-patch-check-fill me-1"></i> Auto-Verified</span>
                     </div>
                   </div>
 
-                  <div class="p-3 bg-white rounded-4 border shadow-sm">
-                    <div class="row g-2 text-center">
-                      <div class="col-4">
-                        <div class="fs-4 text-teal mb-1"><i class="bi bi-cup-hot"></i></div>
+                  <div class="portal-steps-card">
+                    <div class="portal-steps-grid">
+                      <div class="portal-step-item">
+                        <div class="portal-step-icon"><i class="bi bi-cup-hot"></i></div>
                         <div class="fw-bold small text-dark">1. Sip Coffee</div>
-                        <div class="text-muted" style="font-size: 10px;">At partner cafes</div>
+                        <div class="text-muted" style="font-size: 10.5px;">At partner cafes</div>
                       </div>
-                      <div class="col-4 border-start border-end">
-                        <div class="fs-4 text-teal mb-1"><i class="bi bi-receipt"></i></div>
+                      <div class="portal-step-item">
+                        <div class="portal-step-icon"><i class="bi bi-receipt"></i></div>
                         <div class="fw-bold small text-dark">2. Log Memo</div>
-                        <div class="text-muted" style="font-size: 10px;">Submit invoice &amp; cups</div>
+                        <div class="text-muted" style="font-size: 10.5px;">Submit invoice &amp; cups</div>
                       </div>
-                      <div class="col-4">
-                        <div class="fs-4 text-teal mb-1" style="color: #c3996c !important;"><i class="bi bi-gift"></i></div>
+                      <div class="portal-step-item is-reward">
+                        <div class="portal-step-icon"><i class="bi bi-gift"></i></div>
                         <div class="fw-bold small text-dark">3. Get Free Cup</div>
-                        <div class="text-muted" style="font-size: 10px;">Buy 5, Get 1 Free</div>
+                        <div class="text-muted" style="font-size: 10.5px;">Buy 5, Get 1 Free</div>
                       </div>
                     </div>
                   </div>
@@ -372,8 +726,8 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
               </div>
 
               <div class="col-lg-7">
-                <div class="portal-card p-4 p-md-5 h-100 d-flex flex-column justify-content-between">
-                  <ul class="nav nav-pills portal-tabs gap-2 mb-4 justify-content-start" id="loyaltyTabs" role="tablist">
+                <div class="portal-card">
+                  <ul class="nav nav-pills portal-tabs mb-4" id="loyaltyTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                       <button class="nav-link active" id="stamps-tab" data-bs-toggle="pill" data-bs-target="#stamps-pane" type="button" role="tab">
                         <i class="bi bi-search me-1"></i> <?php echo esc_html( $tab1_title ); ?>
@@ -417,6 +771,23 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
                       </form>
 
                       <div id="liveStampCardContainer" style="display: none;"></div>
+
+                      <div class="portal-quick-info">
+                        <div class="portal-info-pill">
+                          <i class="bi bi-cup-hot-fill"></i>
+                          <div>
+                            <div class="fw-bold text-dark" style="font-size: 12px;">5 Stamps = 1 Free</div>
+                            <div class="text-muted" style="font-size: 11px;">Claim any handcrafted cup</div>
+                          </div>
+                        </div>
+                        <div class="portal-info-pill">
+                          <i class="bi bi-lightning-charge-fill"></i>
+                          <div>
+                            <div class="fw-bold text-dark" style="font-size: 12px;">Instant Sync</div>
+                            <div class="text-muted" style="font-size: 11px;">Live balance across Dhaka</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     <div class="tab-pane fade" id="invoice-pane" role="tabpanel">

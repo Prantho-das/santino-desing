@@ -11,6 +11,46 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function santino_customize_register( $wp_customize ) {
     // ----------------------------------------------------
+    // Section 0: Top Contact Bar
+    // ----------------------------------------------------
+    $wp_customize->add_section(
+        'santino_top_bar_settings',
+        array(
+            'title'       => __( 'Santino: Top Contact Bar', 'santino' ),
+            'priority'    => 24,
+            'description' => __( 'Edit phone numbers, email, and links in the top green bar.', 'santino' ),
+        )
+    );
+
+    $wp_customize->add_setting( 'santino_top_bar_enable', array( 'default' => '1', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'santino_top_bar_enable', array(
+        'label'   => __( 'Show Top Contact Bar', 'santino' ),
+        'section' => 'santino_top_bar_settings',
+        'type'    => 'checkbox',
+    ) );
+
+    $top_bar_fields = array(
+        'santino_top_bar_sales_label'    => array( 'Sales & Service Label', 'For Sales & Service:', 'text', 'sanitize_text_field' ),
+        'santino_top_bar_sales_phone'    => array( 'Sales & Service Phone', '+880 1613-334514', 'text', 'sanitize_text_field' ),
+        'santino_top_bar_training_label' => array( 'Training Label', 'For Training:', 'text', 'sanitize_text_field' ),
+        'santino_top_bar_training_phone' => array( 'Training Phone', '+880 1606-291393', 'text', 'sanitize_text_field' ),
+        'santino_top_bar_email_label'    => array( 'Email Label', 'Email:', 'text', 'sanitize_text_field' ),
+        'santino_top_bar_email'          => array( 'Email Address', 'sales@santino.com.bd', 'email', 'sanitize_email' ),
+        'santino_top_bar_link1_text'     => array( 'Right Link 1 Text', 'Our Story', 'text', 'sanitize_text_field' ),
+        'santino_top_bar_link1_url'      => array( 'Right Link 1 URL', '', 'url', 'esc_url_raw' ),
+        'santino_top_bar_link2_text'     => array( 'Right Link 2 Text', 'Find Our Cafes', 'text', 'sanitize_text_field' ),
+        'santino_top_bar_link2_url'      => array( 'Right Link 2 URL', '', 'url', 'esc_url_raw' ),
+    );
+    foreach ( $top_bar_fields as $id => $cfg ) {
+        $wp_customize->add_setting( $id, array( 'default' => $cfg[1], 'sanitize_callback' => $cfg[3] ) );
+        $wp_customize->add_control( $id, array(
+            'label'   => __( $cfg[0], 'santino' ),
+            'section' => 'santino_top_bar_settings',
+            'type'    => $cfg[2],
+        ) );
+    }
+
+    // ----------------------------------------------------
     // Section 1: Branding & Logos
     // ----------------------------------------------------
     $wp_customize->add_section(

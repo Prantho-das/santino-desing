@@ -374,11 +374,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const firstRow = container.querySelector('.santino-order-item-row');
         if (firstRow) {
           const newRow = firstRow.cloneNode(true);
+          newRow.querySelectorAll('.snt-ss-wrap').forEach(function(w) {
+            const innerSel = w.querySelector('select');
+            if (innerSel && w.parentNode) {
+              innerSel.classList.remove('snt-ss-native');
+              delete innerSel.dataset.sntSsReady;
+              w.parentNode.insertBefore(innerSel, w);
+            }
+            w.remove();
+          });
           const sel = newRow.querySelector('.santino-item-select');
-          if (sel) sel.selectedIndex = 0;
+          if (sel) {
+            sel.classList.remove('snt-ss-native');
+            delete sel.dataset.sntSsReady;
+            sel.selectedIndex = 0;
+          }
           const qty = newRow.querySelector('.santino-row-qty');
           if (qty) qty.value = 1;
           container.appendChild(newRow);
+          if (typeof window.santinoInitSearchableSelects === 'function') {
+            window.santinoInitSearchableSelects(newRow);
+          }
           santinoUpdateOrderItemsTotals(form);
         }
       }
@@ -1742,6 +1758,43 @@ document.addEventListener('click', function(e) {
 
     todayOfferForm.addEventListener('submit', function(e) {
       e.preventDefault();
+      const resBox = document.getElementById('todayOfferInvoiceResponseBox');
+      const showOfferErr = function(msg) {
+        if (!resBox) return;
+        resBox.style.display = 'block';
+        resBox.innerHTML = '<div class="alert alert-danger rounded-3 p-3 mb-0 small">' + msg + '</div>';
+      };
+
+      const invInput = this.querySelector('input[name="invoice_number"]');
+      const phoneInput = this.querySelector('input[name="phone"]');
+      const fileInput = this.querySelector('input[name="invoice_image"]');
+
+      if (offerSelect && !offerSelect.value) {
+        showOfferErr('Please select an active offer.');
+        return;
+      }
+      if (!invInput || !invInput.value.trim()) {
+        showOfferErr('Please enter your Invoice / Memo Number.');
+        return;
+      }
+      const cleanPhone = phoneInput ? phoneInput.value.replace(/[\s\-()]/g, '') : '';
+      if (!/^(?:\+?880|0)1[3-9]\d{8}$/.test(cleanPhone)) {
+        showOfferErr('Please enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX).');
+        return;
+      }
+      if (phoneInput) phoneInput.value = cleanPhone;
+
+      if (!fileInput || !fileInput.files || !fileInput.files.length) {
+        showOfferErr('Receipt photo is mandatory.');
+        return;
+      }
+      const file = fileInput.files[0];
+      if (!/^image\/(jpeg|png|webp|gif)$/i.test(file.type) || file.size > 10 * 1024 * 1024) {
+        showOfferErr('Please upload a valid JPG, PNG, or WebP receipt image (max 10MB).');
+        return;
+      }
+
+      if (resBox) resBox.style.display = 'none';
       const submitBtn = this.querySelector('button[type="submit"]');
       const origText = submitBtn ? submitBtn.innerHTML : '';
       if (submitBtn) {
@@ -1765,12 +1818,12 @@ document.addEventListener('click', function(e) {
             submitBtn.disabled = false;
             submitBtn.innerHTML = origText;
           }
-          const resBox = document.getElementById('todayOfferInvoiceResponseBox');
           if (!resBox) return;
           resBox.style.display = 'block';
           if (data.success) {
             resBox.innerHTML = '<div class="alert alert-success rounded-3 p-3 mb-0 small"><strong>✓ Offer Invoice Logged!</strong> ' + data.data.message + '</div>';
             todayOfferForm.reset();
+            if (offerSelect) offerSelect.dispatchEvent(new Event('change'));
           } else {
             resBox.innerHTML = '<div class="alert alert-danger rounded-3 p-3 mb-0 small">' + (data.data && data.data.message ? data.data.message : 'Submission failed.') + '</div>';
           }
@@ -1780,9 +1833,145 @@ document.addEventListener('click', function(e) {
             submitBtn.disabled = false;
             submitBtn.innerHTML = origText;
           }
+          showOfferErr('Network or server error. Please try again.');
         });
     });
   }
+
+  function santinoInitSearchableSelects(root) {
+    const scope = root || document.getElementById('clubPortal') || document.querySelector('.club-portal-section');
+    if (!scope) return;
+    const selects = scope.querySelectorAll('select');
+    selects.forEach(function(sel) {
+      if (sel.dataset.sntSsReady === '1') return;
+      sel.dataset.sntSsReady = '1';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'snt-ss-wrap';
+      sel.parentNode.insertBefore(wrap, sel);
+      wrap.appendChild(sel);
+      sel.classList.add('snt-ss-native');
+
+      const trigger = document.createElement('button');
+      trigger.type = 'button';
+      trigger.className = 'snt-ss-trigger';
+      trigger.innerHTML = '<span class="snt-ss-trigger-text"></span><i class="bi bi-chevron-down snt-ss-chevron"></i>';
+      wrap.appendChild(trigger);
+
+      const panel = document.createElement('div');
+      panel.className = 'snt-ss-panel';
+      panel.innerHTML = '<div class="snt-ss-search-box"><i class="bi bi-search"></i><input type="text" class="snt-ss-search" placeholder="Search option..."></div><div class="snt-ss-list"></div>';
+      wrap.appendChild(panel);
+
+      const searchInput = panel.querySelector('.snt-ss-search');
+      const listEl = panel.querySelector('.snt-ss-list');
+      const triggerText = trigger.querySelector('.snt-ss-trigger-text');
+
+      function syncTrigger() {
+        const opt = sel.options[sel.selectedIndex];
+        const label = opt ? opt.textContent.trim() : '';
+        triggerText.textContent = label || 'Select...';
+        if (!opt || opt.disabled || opt.value === '') {
+          trigger.classList.add('is-placeholder');
+        } else {
+          trigger.classList.remove('is-placeholder');
+        }
+      }
+
+      function renderOptions(filter) {
+        const q = (filter || '').trim().toLowerCase();
+        listEl.innerHTML = '';
+        let count = 0;
+        Array.from(sel.options).forEach(function(opt, idx) {
+          if (opt.disabled && opt.value === '') return;
+          const txt = opt.textContent.trim();
+          if (q && txt.toLowerCase().indexOf(q) === -1) return;
+          count++;
+          const item = document.createElement('div');
+          item.className = 'snt-ss-opt' + (idx === sel.selectedIndex ? ' is-selected' : '');
+          item.innerHTML = '<span>' + txt.replace(/</g, '&lt;') + '</span>' + (idx === sel.selectedIndex ? '<i class="bi bi-check2"></i>' : '');
+          item.addEventListener('click', function() {
+            sel.selectedIndex = idx;
+            sel.dispatchEvent(new Event('change', { bubbles: true }));
+            syncTrigger();
+            wrap.classList.remove('is-open');
+          });
+          listEl.appendChild(item);
+        });
+        if (count === 0) {
+          listEl.innerHTML = '<div class="snt-ss-empty">No matching option found</div>';
+        }
+      }
+
+      trigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const wasOpen = wrap.classList.contains('is-open');
+        document.querySelectorAll('.snt-ss-wrap.is-open').forEach(function(o) {
+          o.classList.remove('is-open');
+        });
+        if (!wasOpen) {
+          const rect = trigger.getBoundingClientRect();
+          const spaceBelow = window.innerHeight - rect.bottom;
+          if (spaceBelow < 260 && rect.top > 260) {
+            wrap.classList.add('is-open-up');
+          } else {
+            wrap.classList.remove('is-open-up');
+          }
+          wrap.classList.add('is-open');
+          searchInput.value = '';
+          renderOptions('');
+          setTimeout(function() { searchInput.focus(); }, 20);
+        }
+      });
+
+      searchInput.addEventListener('input', function() {
+        renderOptions(this.value);
+      });
+      searchInput.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+
+      sel.addEventListener('change', syncTrigger);
+      sel.addEventListener('invalid', function() {
+        wrap.classList.add('is-open');
+        renderOptions('');
+        trigger.focus();
+      });
+
+      const parentForm = sel.closest('form');
+      if (parentForm && !parentForm.dataset.sntSsResetBound) {
+        parentForm.dataset.sntSsResetBound = '1';
+        parentForm.addEventListener('reset', function() {
+          setTimeout(function() {
+            parentForm.querySelectorAll('select.snt-ss-native').forEach(function(s) {
+              s.dispatchEvent(new Event('change'));
+            });
+          }, 10);
+        });
+      }
+
+      syncTrigger();
+    });
+  }
+
+  window.santinoInitSearchableSelects = santinoInitSearchableSelects;
+  santinoInitSearchableSelects();
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.snt-ss-wrap')) {
+      document.querySelectorAll('.snt-ss-wrap.is-open').forEach(function(o) {
+        o.classList.remove('is-open');
+      });
+    }
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.snt-ss-wrap.is-open').forEach(function(o) {
+        o.classList.remove('is-open');
+      });
+    }
+  });
 
   syncDailyPromoHighlight();
   setInterval(syncDailyPromoHighlight, 1000);
