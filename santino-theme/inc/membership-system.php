@@ -3922,6 +3922,18 @@ class Santino_Membership_System {
         }
     }
 
+    public static function get_dhaka_countdown_initial() {
+        try {
+            $now = new DateTime( 'now', new DateTimeZone( 'Asia/Dhaka' ) );
+            $end = clone $now;
+            $end->setTime( 23, 59, 59 );
+            $diff = $now->diff( $end );
+            return sprintf( '%02d:%02d:%02d', $diff->h, $diff->i, $diff->s );
+        } catch ( Exception $e ) {
+            return '12:00:00';
+        }
+    }
+
     public static function render_daily_promotions_page() {
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_die( 'Permission denied' );
@@ -4585,7 +4597,7 @@ class Santino_Membership_System {
                         <div class="col-lg-8">
                             <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
                                 <span class="badge rounded-pill santino-live-pill"><span class="live-dot"></span> TODAY'S LIVE OFFER &bull; <span class="js-today-day-name"><?php echo esc_html( strtoupper( $today_p['day'] ) ); ?></span></span>
-                                <span class="badge rounded-pill santino-countdown-pill"><i class="bi bi-clock me-1"></i> Ends in <span class="js-dhaka-countdown">00:00:00</span></span>
+                                <span class="badge rounded-pill santino-countdown-pill"><i class="bi bi-clock me-1"></i> Ends in <span class="js-dhaka-countdown"><?php echo esc_html( self::get_dhaka_countdown_initial() ); ?></span></span>
                             </div>
                             <h3 class="font-heading fw-bold text-white mb-1 js-today-title"><?php echo esc_html( $today_p['title'] . ' — ' . $today_p['items'] ); ?></h3>
                             <p class="mb-0 text-white-50 small">Order 3 cups &amp; get the 4th cup 100% free. VIP Members also earn 3 Coffee Stamps on paid cups!</p>
@@ -4818,18 +4830,18 @@ class Santino_Membership_System {
                         LIVE TODAY &bull; <span class="js-tab-today-day"><?php echo esc_html( strtoupper( $today_p['day'] ) ); ?></span>
                     </span>
                     <span class="badge rounded-pill px-3 py-1" style="background: rgba(255,255,255,0.12); color: #ffffff; font-size: 11px;">
-                        <i class="bi bi-clock me-1"></i> Ends in <span class="js-dhaka-countdown">00:00:00</span>
+                        <i class="bi bi-clock me-1"></i> Ends in <span class="js-dhaka-countdown"><?php echo esc_html( self::get_dhaka_countdown_initial() ); ?></span>
                     </span>
                 </div>
 
                 <div class="fw-bold text-uppercase mb-1" style="color: #dfbe8d; font-size: 11.5px; letter-spacing: 1px;">
                     <span class="js-tab-today-badge"><?php echo esc_html( $today_p['title'] ); ?></span>
                 </div>
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <h4 class="font-heading fw-bold text-white mb-0 js-tab-today-items" style="font-size: 1.35rem;">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-2">
+                    <h4 class="font-heading fw-bold text-white mb-0 js-tab-today-items flex-grow-1" style="font-size: 1.35rem;">
                         <?php echo esc_html( $today_p['items'] ); ?>
                     </h4>
-                    <a href="<?php echo esc_url( home_url( '/offers/' ) ); ?>" class="btn btn-sm fw-bold px-3 py-2 rounded-pill" style="background: #dfbe8d; color: #002d2b;">
+                    <a href="<?php echo esc_url( home_url( '/offers/' ) ); ?>" class="btn btn-sm fw-bold px-3 py-2 rounded-pill text-nowrap" style="background: #dfbe8d; color: #002d2b; border: none; white-space: nowrap;">
                         <i class="bi bi-stars me-1"></i> View All Offers &rarr;
                     </a>
                 </div>

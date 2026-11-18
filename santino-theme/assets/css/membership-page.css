@@ -73,29 +73,193 @@
   display: block !important;
 }
 
-/* Mobile Portal Tabs & Dock Spacing */
-#clubPortal .portal-tabs .nav-link {
+/* Bulletproof Portal Tabs & Mobile Spacing */
+#clubPortal .portal-tabs,
+.portal-tabs {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+  background: #eef4f1 !important;
+  padding: 6px !important;
+  border-radius: 16px !important;
+  border: 1px solid #d8e5e0 !important;
+  list-style: none !important;
+  margin: 0 0 24px 0 !important;
+}
+
+#clubPortal .portal-tabs .nav-item,
+.portal-tabs .nav-item {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#clubPortal .portal-tabs .nav-link,
+.portal-tabs .nav-link {
+  width: 100% !important;
+  min-height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  gap: 6px !important;
   color: #1a332f !important;
   background: #ffffff !important;
   border: 1.5px solid #d4e2dd !important;
+  border-radius: 12px !important;
+  padding: 8px 6px !important;
   font-weight: 700 !important;
+  font-size: 12.5px !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  box-shadow: 0 2px 5px rgba(0, 40, 35, 0.04) !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
 }
 
-#clubPortal .portal-tabs .nav-link i {
+#clubPortal .portal-tabs .nav-link i,
+.portal-tabs .nav-link i {
   color: #00625d !important;
+  font-size: 14px !important;
+  flex-shrink: 0 !important;
 }
 
-#clubPortal .portal-tabs .nav-link.active {
-  background: linear-gradient(135deg, #006e68 0%, #004d49 100%) !important;
-  color: #ffffff !important;
-  border-color: #004d49 !important;
+#clubPortal .portal-tabs .nav-link:hover:not(.active),
+.portal-tabs .nav-link:hover:not(.active) {
+  background: #f4faf7 !important;
+  color: #004d49 !important;
+  border-color: #00625d !important;
 }
 
-#clubPortal .portal-tabs .nav-link.active i {
+#clubPortal .portal-tabs .nav-link.active,
+.portal-tabs .nav-link.active {
+  background: #00625d !important;
   color: #ffffff !important;
+  border-color: #00625d !important;
+  box-shadow: 0 4px 14px rgba(0, 98, 93, 0.28) !important;
+}
+
+#clubPortal .portal-tabs .nav-link.active i,
+.portal-tabs .nav-link.active i {
+  color: #ffffff !important;
+}
+
+/* Scoped Multi-Item Order Row & Buttons */
+#clubPortal .santino-order-item-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: #ffffff !important;
+  border: 1.5px solid #d5e5e0 !important;
+  border-radius: 16px !important;
+  padding: 8px 12px !important;
+  min-height: 52px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+#clubPortal .santino-row-main {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+}
+#clubPortal .santino-item-select {
+  width: 100% !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: #1a332f !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+  text-overflow: ellipsis !important;
+}
+#clubPortal .santino-row-actions {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+#clubPortal .santino-stepper-capsule {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: #f1f8f7 !important;
+  border: 1px solid #cce5e3 !important;
+  border-radius: 50px !important;
+  height: 36px !important;
+  padding: 2px 3px !important;
+}
+#clubPortal .santino-stepper-btn {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50% !important;
+  border: none !important;
+  background: #ffffff !important;
+  color: #00625d !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+}
+#clubPortal .santino-stepper-val {
+  width: 26px !important;
+  text-align: center !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  color: #00625d !important;
+  border: none !important;
+  background: transparent !important;
+}
+#clubPortal .santino-add-order-item-wrap {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+}
+#clubPortal .santino-add-order-item-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  background: #f0fdfa !important;
+  color: #00625d !important;
+  border: 1.5px solid #00625d !important;
+  border-radius: 50px !important;
+  padding: 8px 18px !important;
+  box-shadow: 0 2px 5px rgba(0, 98, 93, 0.06) !important;
+}
+#clubPortal .tab-content,
+#clubPortal .tab-pane {
+  overflow: visible !important;
 }
 
 @media (max-width: 991.98px) {
+  #clubPortal .portal-tabs,
+  .portal-tabs {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    padding: 8px !important;
+  }
+  #clubPortal .portal-tabs .nav-link,
+  .portal-tabs .nav-link {
+    min-height: 48px !important;
+    font-size: 12.5px !important;
+    padding: 8px 6px !important;
+    white-space: normal !important;
+    text-align: center !important;
+    line-height: 1.25 !important;
+  }
   .club-portal-section,
   #clubPortal {
     padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important;
@@ -103,23 +267,49 @@
 }
 
 @media (max-width: 575.98px) {
-  #clubPortal .portal-tabs {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 7px !important;
-    padding: 7px !important;
+  #clubPortal .portal-tabs,
+  .portal-tabs {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+    padding: 6px !important;
   }
-  #clubPortal .portal-tabs .nav-link {
-    font-size: 11.5px !important;
-    padding: 9px 4px !important;
-    text-align: center !important;
-    min-height: 48px !important;
-    line-height: 1.25 !important;
+  #clubPortal .portal-tabs .nav-link,
+  .portal-tabs .nav-link {
+    font-size: 11px !important;
+    min-height: 46px !important;
+    padding: 6px 4px !important;
     white-space: normal !important;
+    line-height: 1.2 !important;
   }
   #clubPortal .portal-card {
-    padding: 18px 14px 28px !important;
+    padding: 16px 12px 28px !important;
     border-radius: 18px !important;
+  }
+  #clubPortal .santino-order-item-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 10px 12px !important;
+    gap: 8px !important;
+    border-radius: 14px !important;
+  }
+  #clubPortal .santino-row-main {
+    width: 100% !important;
+  }
+  #clubPortal .santino-item-select {
+    padding-bottom: 6px !important;
+    border-bottom: 1px solid #eef4f1 !important;
+  }
+  #clubPortal .santino-row-actions {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+  #clubPortal .santino-add-order-item-wrap {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  #clubPortal .santino-add-order-item-btn {
+    width: 100% !important;
+    white-space: nowrap !important;
   }
   #santinoMembershipForm .form-control,
   #santinoMembershipForm .form-select,

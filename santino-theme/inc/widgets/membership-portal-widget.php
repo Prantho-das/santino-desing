@@ -286,39 +286,48 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
           box-shadow: 0 20px 45px rgba(0, 77, 73, 0.07);
         }
         #clubPortal .portal-tabs {
-          display: flex !important;
-          flex-wrap: nowrap !important;
-          gap: 8px;
-          background: #eef4f1;
-          padding: 8px;
-          border-radius: 18px;
-          border: 1px solid #d8e5e0;
+          display: grid !important;
+          grid-template-columns: repeat(4, 1fr) !important;
+          gap: 6px !important;
+          background: #eef4f1 !important;
+          padding: 6px !important;
+          border-radius: 16px !important;
+          border: 1px solid #d8e5e0 !important;
+          list-style: none !important;
         }
         #clubPortal .portal-tabs .nav-item {
-          flex: 1 1 auto;
-          min-width: 0;
+          width: 100% !important;
+          min-width: 0 !important;
+          display: flex !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
         #clubPortal .portal-tabs .nav-link {
-          width: 100%;
-          min-height: 46px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
+          width: 100% !important;
+          min-height: 48px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 6px !important;
           color: #1a332f !important;
           background: #ffffff !important;
           border: 1.5px solid #d4e2dd !important;
-          border-radius: 12px;
-          padding: 10px 14px;
-          font-weight: 700;
-          font-size: 13px;
-          box-shadow: 0 2px 6px rgba(0, 40, 35, 0.04);
-          transition: all 0.25s ease;
+          border-radius: 12px !important;
+          padding: 8px 6px !important;
+          font-weight: 700 !important;
+          font-size: 12.5px !important;
+          line-height: 1.25 !important;
+          text-align: center !important;
+          white-space: normal !important;
+          word-break: normal !important;
+          box-shadow: 0 2px 5px rgba(0, 40, 35, 0.04) !important;
+          transition: all 0.2s ease !important;
+          box-sizing: border-box !important;
         }
         #clubPortal .portal-tabs .nav-link i {
-          color: #00625d;
-          font-size: 14px;
-          transition: color 0.2s ease;
+          color: #00625d !important;
+          font-size: 14px !important;
+          flex-shrink: 0 !important;
         }
         #clubPortal .portal-tabs .nav-link:hover:not(.active) {
           background: #f4faf7 !important;
@@ -326,10 +335,10 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
           border-color: #00625d !important;
         }
         #clubPortal .portal-tabs .nav-link.active {
-          background: linear-gradient(135deg, #006e68 0%, #004d49 100%) !important;
+          background: #00625d !important;
           color: #ffffff !important;
-          border-color: #004d49 !important;
-          box-shadow: 0 6px 18px rgba(0, 98, 93, 0.28) !important;
+          border-color: #00625d !important;
+          box-shadow: 0 4px 14px rgba(0, 98, 93, 0.28) !important;
         }
         #clubPortal .portal-tabs .nav-link.active i {
           color: #ffffff !important;
@@ -457,17 +466,112 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
           transform: translateY(-1px);
           box-shadow: 0 12px 28px rgba(0, 98, 93, 0.28);
         }
+        /* Scoped Multi-Item Order Row & Buttons */
+        #clubPortal .santino-order-item-row {
+          display: flex !important;
+          align-items: center !important;
+          gap: 10px !important;
+          background: #ffffff !important;
+          border: 1.5px solid #d5e5e0 !important;
+          border-radius: 16px !important;
+          padding: 8px 12px !important;
+          min-height: 52px !important;
+          box-sizing: border-box !important;
+          width: 100% !important;
+        }
+        #clubPortal .santino-row-main {
+          flex: 1 1 0% !important;
+          min-width: 0 !important;
+        }
+        #clubPortal .santino-item-select {
+          width: 100% !important;
+          height: 38px !important;
+          min-height: 38px !important;
+          font-size: 13.5px !important;
+          font-weight: 600 !important;
+          color: #1a332f !important;
+          background: transparent !important;
+          border: none !important;
+          outline: none !important;
+          cursor: pointer !important;
+          text-overflow: ellipsis !important;
+        }
+        #clubPortal .santino-row-actions {
+          flex: 0 0 auto !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 6px !important;
+        }
+        #clubPortal .santino-stepper-capsule {
+          display: inline-flex !important;
+          align-items: center !important;
+          background: #f1f8f7 !important;
+          border: 1px solid #cce5e3 !important;
+          border-radius: 50px !important;
+          height: 36px !important;
+          padding: 2px 3px !important;
+        }
+        #clubPortal .santino-stepper-btn {
+          width: 30px !important;
+          height: 30px !important;
+          border-radius: 50% !important;
+          border: none !important;
+          background: #ffffff !important;
+          color: #00625d !important;
+          font-size: 15px !important;
+          font-weight: 700 !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          cursor: pointer !important;
+        }
+        #clubPortal .santino-stepper-val {
+          width: 26px !important;
+          text-align: center !important;
+          font-weight: 800 !important;
+          font-size: 13px !important;
+          color: #00625d !important;
+          border: none !important;
+          background: transparent !important;
+        }
+        #clubPortal .santino-add-order-item-wrap {
+          display: flex !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          gap: 8px !important;
+          flex-wrap: wrap !important;
+        }
+        #clubPortal .santino-add-order-item-btn {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 7px !important;
+          font-size: 12px !important;
+          font-weight: 700 !important;
+          letter-spacing: 0.3px !important;
+          text-transform: uppercase !important;
+          white-space: nowrap !important;
+          background: #f0fdfa !important;
+          color: #00625d !important;
+          border: 1.5px solid #00625d !important;
+          border-radius: 50px !important;
+          padding: 8px 18px !important;
+          box-shadow: 0 2px 5px rgba(0, 98, 93, 0.06) !important;
+        }
+        #clubPortal .tab-content,
+        #clubPortal .tab-pane {
+          overflow: visible !important;
+        }
         @media (max-width: 991.98px) {
           #clubPortal .portal-tabs {
-            display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            grid-template-columns: repeat(2, 1fr) !important;
             gap: 8px !important;
             padding: 8px !important;
           }
           #clubPortal .portal-tabs .nav-link {
-            min-height: 48px;
+            min-height: 48px !important;
             font-size: 12.5px !important;
-            padding: 8px 10px !important;
+            padding: 8px 6px !important;
             white-space: normal !important;
             text-align: center;
             line-height: 1.25;
@@ -478,18 +582,47 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
             padding-bottom: 95px !important;
           }
           #clubPortal .portal-card {
-            padding: 18px 14px 28px !important;
+            padding: 16px 12px 28px !important;
             border-radius: 18px !important;
           }
           #clubPortal .portal-tabs {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            grid-template-columns: repeat(2, 1fr) !important;
             gap: 6px !important;
             padding: 6px !important;
           }
           #clubPortal .portal-tabs .nav-link {
-            font-size: 11.5px !important;
-            padding: 8px 4px !important;
-            gap: 5px;
+            font-size: 11px !important;
+            padding: 6px 4px !important;
+            min-height: 46px !important;
+            gap: 4px;
+            white-space: normal !important;
+            line-height: 1.2 !important;
+          }
+          #clubPortal .santino-order-item-row {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            padding: 10px 12px !important;
+            gap: 8px !important;
+            border-radius: 14px !important;
+          }
+          #clubPortal .santino-row-main {
+            width: 100% !important;
+          }
+          #clubPortal .santino-item-select {
+            padding-bottom: 6px !important;
+            border-bottom: 1px solid #eef4f1 !important;
+          }
+          #clubPortal .santino-row-actions {
+            width: 100% !important;
+            justify-content: space-between !important;
+          }
+          #clubPortal .santino-add-order-item-wrap {
+            flex-direction: column !important;
+            align-items: stretch !important;
+          }
+          #clubPortal .santino-add-order-item-btn {
+            width: 100% !important;
+            white-space: nowrap !important;
           }
           #clubPortal .portal-quick-info {
             grid-template-columns: 1fr;
@@ -866,7 +999,7 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
                             <div class="santino-order-item-row">
                               <div class="santino-row-main">
                                 <select name="order_items[]" class="santino-item-select" required>
-                                  <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
+                                  <option value="" disabled selected>Select Coffee / Item</option>
                                   <?php 
                                   $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
                                   foreach ( $ordered_items as $item_choice ) : ?>
@@ -887,7 +1020,7 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
                             </div>
                           </div>
 
-                          <div class="d-flex justify-content-between align-items-center pt-2">
+                          <div class="d-flex justify-content-between align-items-center pt-2 santino-add-order-item-wrap">
                             <button type="button" class="btn santino-add-order-item-btn">
                               <i class="bi bi-plus-circle-fill"></i> Add Another Item
                             </button>

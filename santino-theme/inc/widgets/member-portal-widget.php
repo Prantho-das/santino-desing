@@ -895,7 +895,7 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                               <div class="santino-order-item-row">
                                 <div class="santino-row-main">
                                   <select name="order_items[]" class="santino-item-select" required>
-                                    <option value="" disabled selected>-- Select Ordered Coffee / Item --</option>
+                                    <option value="" disabled selected>Select Coffee / Item</option>
                                     <?php 
                                     $ordered_items = class_exists( 'Santino_Membership_System' ) ? Santino_Membership_System::get_order_item_choices() : array();
                                     foreach ( $ordered_items as $item_choice ) : ?>
