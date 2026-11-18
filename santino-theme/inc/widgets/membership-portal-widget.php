@@ -288,11 +288,11 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
         #clubPortal .portal-tabs {
           display: flex !important;
           flex-wrap: nowrap !important;
-          gap: 6px;
-          background: #f1f6f4;
-          padding: 6px;
-          border-radius: 16px;
-          border: 1px solid #e1ece8;
+          gap: 8px;
+          background: #eef4f1;
+          padding: 8px;
+          border-radius: 18px;
+          border: 1px solid #d8e5e0;
         }
         #clubPortal .portal-tabs .nav-item {
           flex: 1 1 auto;
@@ -300,29 +300,36 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
         }
         #clubPortal .portal-tabs .nav-link {
           width: 100%;
-          min-height: 44px;
+          min-height: 46px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 7px;
-          color: #46605d;
-          background: transparent;
-          border: none;
+          gap: 8px;
+          color: #1a332f !important;
+          background: #ffffff !important;
+          border: 1.5px solid #d4e2dd !important;
           border-radius: 12px;
-          padding: 9px 14px;
+          padding: 10px 14px;
           font-weight: 700;
-          font-size: 12.5px;
-          white-space: nowrap;
+          font-size: 13px;
+          box-shadow: 0 2px 6px rgba(0, 40, 35, 0.04);
           transition: all 0.25s ease;
         }
+        #clubPortal .portal-tabs .nav-link i {
+          color: #00625d;
+          font-size: 14px;
+          transition: color 0.2s ease;
+        }
         #clubPortal .portal-tabs .nav-link:hover:not(.active) {
-          background: rgba(255, 255, 255, 0.75);
-          color: #004d49;
+          background: #f4faf7 !important;
+          color: #004d49 !important;
+          border-color: #00625d !important;
         }
         #clubPortal .portal-tabs .nav-link.active {
-          background: linear-gradient(135deg, #006e68 0%, #005450 100%) !important;
+          background: linear-gradient(135deg, #006e68 0%, #004d49 100%) !important;
           color: #ffffff !important;
-          box-shadow: 0 6px 16px rgba(0, 98, 93, 0.25);
+          border-color: #004d49 !important;
+          box-shadow: 0 6px 18px rgba(0, 98, 93, 0.28) !important;
         }
         #clubPortal .portal-tabs .nav-link.active i {
           color: #ffffff !important;
@@ -453,10 +460,37 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
         @media (max-width: 991.98px) {
           #clubPortal .portal-tabs {
             display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+            padding: 8px !important;
+          }
+          #clubPortal .portal-tabs .nav-link {
+            min-height: 48px;
+            font-size: 12.5px !important;
+            padding: 8px 10px !important;
+            white-space: normal !important;
+            text-align: center;
+            line-height: 1.25;
           }
         }
         @media (max-width: 575.98px) {
+          #clubPortal {
+            padding-bottom: 95px !important;
+          }
+          #clubPortal .portal-card {
+            padding: 18px 14px 28px !important;
+            border-radius: 18px !important;
+          }
+          #clubPortal .portal-tabs {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 6px !important;
+            padding: 6px !important;
+          }
+          #clubPortal .portal-tabs .nav-link {
+            font-size: 11.5px !important;
+            padding: 8px 4px !important;
+            gap: 5px;
+          }
           #clubPortal .portal-quick-info {
             grid-template-columns: 1fr;
           }
@@ -468,10 +502,17 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
           }
           #clubPortal .portal-lookup-field {
             padding: 2px 6px;
+            font-size: 16px !important;
           }
           #clubPortal .btn-lookup-action {
             width: 100% !important;
             border-radius: 12px !important;
+            min-height: 46px;
+          }
+          #clubPortal .form-control,
+          #clubPortal .form-select {
+            font-size: 16px !important;
+            min-height: 48px !important;
           }
           .portal-step-item {
             padding: 8px 3px;
@@ -907,10 +948,10 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
                         </div>
 
                         <div class="row g-3 mb-3">
-                          <div class="col-md-6">
-                            <label class="form-label small fw-bold text-dark">Birth Month *</label>
-                            <select name="birth_month" class="form-select" required>
-                              <option value="">Select Birth Month</option>
+                          <div class="col-6">
+                            <label class="form-label small fw-bold text-dark">Birth Month <span class="text-muted fw-normal">(Optional)</span></label>
+                            <select name="birth_month" class="form-select">
+                              <option value="">Month</option>
                               <option value="January">January</option>
                               <option value="February">February</option>
                               <option value="March">March</option>
@@ -925,10 +966,10 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
                               <option value="December">December</option>
                             </select>
                           </div>
-                          <div class="col-md-6">
-                            <label class="form-label small fw-bold text-dark">Birth Day *</label>
-                            <select name="birth_day" class="form-select" required>
-                              <option value="">Select Birth Day</option>
+                          <div class="col-6">
+                            <label class="form-label small fw-bold text-dark">Birth Day <span class="text-muted fw-normal">(Optional)</span></label>
+                            <select name="birth_day" class="form-select">
+                              <option value="">Day</option>
                               <?php for ( $d = 1; $d <= 31; $d++ ) : ?>
                                 <option value="<?php echo sprintf( '%02d', $d ); ?>"><?php echo sprintf( '%02d', $d ); ?></option>
                               <?php endfor; ?>
@@ -938,8 +979,8 @@ class Santino_Membership_Portal_Widget extends \Elementor\Widget_Base {
 
                         <div class="row g-3 mb-4">
                           <div class="col-md-12">
-                            <label class="form-label small fw-bold text-dark">Email Address *</label>
-                            <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                            <label class="form-label small fw-bold text-dark">Email Address <span class="text-muted fw-normal">(Optional)</span></label>
+                            <input type="email" name="email" class="form-control" placeholder="name@example.com (optional)">
                           </div>
                         </div>
 

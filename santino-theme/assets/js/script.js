@@ -192,11 +192,20 @@ document.addEventListener('DOMContentLoaded', () => {
         method: 'POST',
         body: formData
       })
-      .then(res => res.json())
+      .then(res => res.text().then(text => {
+        try {
+          return JSON.parse(text);
+        } catch(e) {
+          return { success: false, data: { message: text && text !== '-1' ? text : 'Error connecting to server. Please try again.' } };
+        }
+      }))
       .then(data => {
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
+        }
+        if (typeof data !== 'object' || data === null || data === -1) {
+          data = { success: false, data: { message: 'Server returned an invalid response. Please try again.' } };
         }
         const resBox = document.getElementById('membershipResponseBox');
         if (data.success) {
@@ -206,32 +215,33 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="alert alert-success rounded-4 p-4 text-center shadow-sm">
                 <i class="bi bi-patch-check-fill text-success fs-1 d-block mb-2"></i>
                 <h4 class="fw-bold mb-2">Membership Activated!</h4>
-                <p class="mb-3 text-muted">${data.data.message}</p>
+                <p class="mb-3 text-muted">${data.data ? data.data.message : 'Welcome to Santino Coffee Club!'}</p>
                 <div class="p-3 bg-white rounded-3 border d-inline-block text-dark text-start">
                   <div class="small text-muted text-uppercase">Santino Member ID</div>
-                  <div class="fs-4 fw-bold text-success font-monospace">${data.data.member_id}</div>
-                  <div class="small text-muted mt-1">Tier: <strong>${data.data.tier}</strong></div>
+                  <div class="fs-4 fw-bold text-success font-monospace">${data.data ? data.data.member_id : ''}</div>
+                  <div class="small text-muted mt-1">Tier: <strong>${data.data ? data.data.tier : 'REGULAR MEMBER'}</strong></div>
                 </div>
               </div>
             `;
             membershipForm.reset();
             resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
-            alert(data.data.message + '\nYour ID: ' + data.data.member_id);
+            alert((data.data ? data.data.message : 'Membership Activated!') + '\nYour ID: ' + (data.data ? data.data.member_id : ''));
             membershipForm.reset();
           }
         } else {
+          const errMsg = (data && data.data && data.data.message) ? data.data.message : 'Could not complete registration. Please check information and try again.';
           if (resBox) {
             resBox.style.display = 'block';
             resBox.innerHTML = `
               <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm">
                 <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-1"></i>
-                <strong>${data.data ? data.data.message : 'Error submitting form.'}</strong>
+                <strong>${errMsg}</strong>
               </div>
             `;
             resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
-            alert(data.data ? data.data.message : 'Error submitting form.');
+            alert(errMsg);
           }
         }
       })
@@ -241,7 +251,19 @@ document.addEventListener('DOMContentLoaded', () => {
           submitBtn.innerHTML = originalText;
         }
         console.error('Submission error:', err);
-        alert('Could not submit application. Please check network connection.');
+        const resBox = document.getElementById('membershipResponseBox');
+        if (resBox) {
+          resBox.style.display = 'block';
+          resBox.innerHTML = `
+            <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm">
+              <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-1"></i>
+              <strong>Could not submit application. Please check your internet connection.</strong>
+            </div>
+          `;
+          resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          alert('Could not submit application. Please check network connection.');
+        }
       });
     });
   }
@@ -557,11 +579,20 @@ document.addEventListener('DOMContentLoaded', () => {
         method: 'POST',
         body: formData
       })
-      .then(res => res.json())
+      .then(res => res.text().then(text => {
+        try {
+          return JSON.parse(text);
+        } catch(e) {
+          return { success: false, data: { message: text && text !== '-1' ? text : 'Could not submit invoice. Please try again.' } };
+        }
+      }))
       .then(data => {
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
+        }
+        if (typeof data !== 'object' || data === null || data === -1) {
+          data = { success: false, data: { message: 'Server returned an invalid response. Please try again.' } };
         }
         const resBox = document.getElementById('invoiceResponseBox');
         if (data.success) {
@@ -586,17 +617,18 @@ document.addEventListener('DOMContentLoaded', () => {
             invoiceForm.reset();
           }
         } else {
+          const errMsg = (data && data.data && data.data.message) ? data.data.message : 'Error submitting invoice. Please check all fields.';
           if (resBox) {
             resBox.style.display = 'block';
             resBox.innerHTML = `
               <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm text-wrap" style="word-break: break-word;">
                 <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-1"></i>
-                <strong class="small">${data.data ? data.data.message : 'Error submitting invoice.'}</strong>
+                <strong class="small">${errMsg}</strong>
               </div>
             `;
             resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
-            alert(data.data ? data.data.message : 'Error submitting invoice.');
+            alert(errMsg);
           }
         }
       })
@@ -605,8 +637,20 @@ document.addEventListener('DOMContentLoaded', () => {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
         }
-        console.error('Invoice error:', err);
-        alert('Could not submit invoice. Please check network connection.');
+        console.error('Invoice submit error:', err);
+        const resBox = document.getElementById('invoiceResponseBox');
+        if (resBox) {
+          resBox.style.display = 'block';
+          resBox.innerHTML = `
+            <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm text-wrap" style="word-break: break-word;">
+              <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-1"></i>
+              <strong class="small">Could not submit invoice. Please check your internet connection.</strong>
+            </div>
+          `;
+          resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          alert('Could not submit invoice. Please check network connection.');
+        }
       });
     });
   }

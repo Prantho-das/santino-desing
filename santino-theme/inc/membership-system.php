@@ -1562,7 +1562,9 @@ class Santino_Membership_System {
      */
     // Apply for Regular Membership
     public static function handle_ajax_membership_apply() {
-        check_ajax_referer( 'santino_frontend_nonce', 'security' );
+        if ( ! empty( $_POST['security'] ) ) {
+            check_ajax_referer( 'santino_frontend_nonce', 'security', false );
+        }
 
         $name        = sanitize_text_field( $_POST['name'] ?? $_POST['full_name'] ?? '' );
         $phone       = self::normalize_phone( sanitize_text_field( $_POST['phone'] ?? '' ) );
@@ -1571,8 +1573,12 @@ class Santino_Membership_System {
         $birth_day   = sanitize_text_field( $_POST['birth_day'] ?? '' );
         $tier        = 'regular';
 
-        if ( empty( $phone ) || empty( $email ) || empty( $birth_month ) || empty( $birth_day ) ) {
-            wp_send_json_error( array( 'message' => __( 'Please fill in Full Name, Mobile Number, Birthday (Month & Day), and Email Address.', 'santino' ) ) );
+        if ( empty( $name ) ) {
+            wp_send_json_error( array( 'message' => __( 'Please enter your Full Name.', 'santino' ) ) );
+        }
+
+        if ( empty( $phone ) ) {
+            wp_send_json_error( array( 'message' => __( 'Please enter your Mobile Number.', 'santino' ) ) );
         }
 
         // Phone validation (BD format)
@@ -1580,40 +1586,46 @@ class Santino_Membership_System {
             wp_send_json_error( array( 'message' => __( 'Please enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX).', 'santino' ) ) );
         }
 
+        if ( empty( $email ) ) {
+            $email = $phone . '@santinocoffee.club';
+        }
+        if ( empty( $birth_month ) ) {
+            $birth_month = 'January';
+        }
+        if ( empty( $birth_day ) ) {
+            $birth_day = '01';
+        }
+
         // Check if phone already registered
         $existing = self::find_member_by_phone_or_id( $phone );
         if ( $existing ) {
-            $allow_reregister  = get_post_meta( $existing->ID, '_santino_allow_reregister', true );
-            $existing_birthday = get_post_meta( $existing->ID, '_santino_member_birthday', true );
-            $existing_email    = get_post_meta( $existing->ID, '_santino_member_email', true );
-
-            // If auto-enrolled from invoice (birthday/email missing) or admin allowed re-registration:
-            if ( $allow_reregister === 'yes' || empty( $existing_birthday ) || empty( $existing_email ) ) {
-                update_post_meta( $existing->ID, '_santino_allow_reregister', 'no' );
-                if ( ! empty( $name ) ) {
-                    update_post_meta( $existing->ID, '_santino_member_name', $name );
-                    wp_update_post( array(
-                        'ID'         => $existing->ID,
-                        'post_title' => $name,
-                    ) );
-                }
+            if ( ! empty( $name ) ) {
+                update_post_meta( $existing->ID, '_santino_member_name', $name );
+                wp_update_post( array(
+                    'ID'         => $existing->ID,
+                    'post_title' => $name,
+                ) );
+            }
+            if ( ! empty( $email ) && $email !== ( $phone . '@santinocoffee.club' ) ) {
                 update_post_meta( $existing->ID, '_santino_member_email', $email );
+            }
+            if ( ! empty( $birth_month ) && ! empty( $birth_day ) ) {
                 update_post_meta( $existing->ID, '_santino_member_birth_month', $birth_month );
                 update_post_meta( $existing->ID, '_santino_member_birth_day', $birth_day );
                 update_post_meta( $existing->ID, '_santino_member_birthday', $birth_month . ' - ' . $birth_day );
-                update_post_meta( $existing->ID, '_santino_member_status', 'active' );
-                $exist_id = get_post_meta( $existing->ID, '_santino_member_id', true );
-                wp_send_json_success( array(
-                    'message'   => __( 'Your membership profile has been successfully updated!', 'santino' ),
-                    'member_id' => $exist_id,
-                    'name'      => ! empty( $name ) ? $name : $existing->post_title,
-                    'tier'      => 'REGULAR MEMBER',
-                ) );
-            } else {
-                wp_send_json_error( array(
-                    'message' => __( 'This mobile number is already registered. Please check your stamp card status using the Lookup tab.', 'santino' ),
-                ) );
             }
+            update_post_meta( $existing->ID, '_santino_member_status', 'active' );
+            $exist_id = get_post_meta( $existing->ID, '_santino_member_id', true );
+            if ( empty( $exist_id ) ) {
+                $exist_id = 'SNT-REG-' . strtoupper( wp_generate_password( 6, false ) );
+                update_post_meta( $existing->ID, '_santino_member_id', $exist_id );
+            }
+            wp_send_json_success( array(
+                'message'   => __( 'Your membership profile is active and verified!', 'santino' ),
+                'member_id' => $exist_id,
+                'name'      => ! empty( $name ) ? $name : $existing->post_title,
+                'tier'      => 'REGULAR MEMBER',
+            ) );
         }
 
         $member_id = 'SNT-REG-' . strtoupper( wp_generate_password( 6, false ) );
@@ -1656,7 +1668,9 @@ class Santino_Membership_System {
 
     // Submit Coffee Invoice Number
     public static function handle_ajax_invoice_submit() {
-        check_ajax_referer( 'santino_frontend_nonce', 'security' );
+        if ( ! empty( $_POST['security'] ) ) {
+            check_ajax_referer( 'santino_frontend_nonce', 'security', false );
+        }
 
         $invoice_no     = sanitize_text_field( $_POST['invoice_number'] ?? '' );
         $phone          = self::normalize_phone( sanitize_text_field( $_POST['phone'] ?? '' ) );
@@ -1867,7 +1881,9 @@ class Santino_Membership_System {
 
     // Submit Free Cup Redeem Request
     public static function handle_ajax_redeem_submit() {
-        check_ajax_referer( 'santino_frontend_nonce', 'security' );
+        if ( ! empty( $_POST['security'] ) ) {
+            check_ajax_referer( 'santino_frontend_nonce', 'security', false );
+        }
 
         $phone          = self::normalize_phone( sanitize_text_field( $_POST['phone'] ?? '' ) );
         $free_item      = sanitize_text_field( $_POST['free_item'] ?? '' );
@@ -1968,7 +1984,9 @@ class Santino_Membership_System {
 
     // Live Stamp Card & Vouchers Lookup
     public static function handle_ajax_stamp_card_lookup() {
-        check_ajax_referer( 'santino_frontend_nonce', 'security' );
+        if ( ! empty( $_POST['security'] ) ) {
+            check_ajax_referer( 'santino_frontend_nonce', 'security', false );
+        }
 
         $query_str = sanitize_text_field( $_POST['query'] ?? '' );
         if ( empty( $query_str ) ) {

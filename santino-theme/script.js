@@ -192,11 +192,20 @@ document.addEventListener('DOMContentLoaded', () => {
         method: 'POST',
         body: formData
       })
-      .then(res => res.json())
+      .then(res => res.text().then(text => {
+        try {
+          return JSON.parse(text);
+        } catch(e) {
+          return { success: false, data: { message: text && text !== '-1' ? text : 'Error connecting to server. Please try again.' } };
+        }
+      }))
       .then(data => {
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
+        }
+        if (typeof data !== 'object' || data === null || data === -1) {
+          data = { success: false, data: { message: 'Server returned an invalid response. Please try again.' } };
         }
         const resBox = document.getElementById('membershipResponseBox');
         if (data.success) {
@@ -206,32 +215,33 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="alert alert-success rounded-4 p-4 text-center shadow-sm">
                 <i class="bi bi-patch-check-fill text-success fs-1 d-block mb-2"></i>
                 <h4 class="fw-bold mb-2">Membership Activated!</h4>
-                <p class="mb-3 text-muted">${data.data.message}</p>
+                <p class="mb-3 text-muted">${data.data ? data.data.message : 'Welcome to Santino Coffee Club!'}</p>
                 <div class="p-3 bg-white rounded-3 border d-inline-block text-dark text-start">
                   <div class="small text-muted text-uppercase">Santino Member ID</div>
-                  <div class="fs-4 fw-bold text-success font-monospace">${data.data.member_id}</div>
-                  <div class="small text-muted mt-1">Tier: <strong>${data.data.tier}</strong></div>
+                  <div class="fs-4 fw-bold text-success font-monospace">${data.data ? data.data.member_id : ''}</div>
+                  <div class="small text-muted mt-1">Tier: <strong>${data.data ? data.data.tier : 'REGULAR MEMBER'}</strong></div>
                 </div>
               </div>
             `;
             membershipForm.reset();
             resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
-            alert(data.data.message + '\nYour ID: ' + data.data.member_id);
+            alert((data.data ? data.data.message : 'Membership Activated!') + '\nYour ID: ' + (data.data ? data.data.member_id : ''));
             membershipForm.reset();
           }
         } else {
+          const errMsg = (data && data.data && data.data.message) ? data.data.message : 'Could not complete registration. Please check information and try again.';
           if (resBox) {
             resBox.style.display = 'block';
             resBox.innerHTML = `
               <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm">
                 <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-1"></i>
-                <strong>${data.data ? data.data.message : 'Error submitting form.'}</strong>
+                <strong>${errMsg}</strong>
               </div>
             `;
             resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
-            alert(data.data ? data.data.message : 'Error submitting form.');
+            alert(errMsg);
           }
         }
       })
@@ -241,7 +251,19 @@ document.addEventListener('DOMContentLoaded', () => {
           submitBtn.innerHTML = originalText;
         }
         console.error('Submission error:', err);
-        alert('Could not submit application. Please check network connection.');
+        const resBox = document.getElementById('membershipResponseBox');
+        if (resBox) {
+          resBox.style.display = 'block';
+          resBox.innerHTML = `
+            <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm">
+              <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-1"></i>
+              <strong>Could not submit application. Please check your internet connection.</strong>
+            </div>
+          `;
+          resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          alert('Could not submit application. Please check network connection.');
+        }
       });
     });
   }
@@ -374,11 +396,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const firstRow = container.querySelector('.santino-order-item-row');
         if (firstRow) {
           const newRow = firstRow.cloneNode(true);
+          newRow.querySelectorAll('.snt-ss-wrap').forEach(function(w) {
+            const innerSel = w.querySelector('select');
+            if (innerSel && w.parentNode) {
+              innerSel.classList.remove('snt-ss-native');
+              delete innerSel.dataset.sntSsReady;
+              w.parentNode.insertBefore(innerSel, w);
+            }
+            w.remove();
+          });
           const sel = newRow.querySelector('.santino-item-select');
-          if (sel) sel.selectedIndex = 0;
+          if (sel) {
+            sel.classList.remove('snt-ss-native');
+            delete sel.dataset.sntSsReady;
+            sel.selectedIndex = 0;
+          }
           const qty = newRow.querySelector('.santino-row-qty');
           if (qty) qty.value = 1;
           container.appendChild(newRow);
+          if (typeof window.santinoInitSearchableSelects === 'function') {
+            window.santinoInitSearchableSelects(newRow);
+          }
           santinoUpdateOrderItemsTotals(form);
         }
       }
@@ -513,11 +551,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const formData = new FormData(this);
       formData.set('cups', cupsVal);
+      const promoSelect = this.querySelector('select[name="promo_id"]');
+      const promoCheck = this.querySelector('input[name="promo_claimed"]');
+      if (promoSelect && promoSelect.value) {
+        formData.set('promo_claimed', 'yes');
+        formData.set('promo_id', promoSelect.value);
+      } else {
+        formData.set('promo_claimed', (promoCheck && promoCheck.checked) ? 'yes' : 'no');
+      }
+      if (typeof santino_ajax !== 'undefined' && santino_ajax.dhaka_day) {
+        formData.set('promo_day', santino_ajax.dhaka_day);
+      }
       const summaryInput = this.querySelector('.santino-items-consumed-summary');
       if (summaryInput && summaryInput.value) {
         formData.set('items_consumed', summaryInput.value);
       }
       formData.append('action', 'santino_submit_invoice');
+      formData.append('request_source', 'portal_invoice_tab');
+      formData.append('request_page', window.location.pathname + window.location.search);
       if (typeof santino_ajax !== 'undefined') {
         formData.append('security', santino_ajax.nonce);
       }
@@ -528,11 +579,20 @@ document.addEventListener('DOMContentLoaded', () => {
         method: 'POST',
         body: formData
       })
-      .then(res => res.json())
+      .then(res => res.text().then(text => {
+        try {
+          return JSON.parse(text);
+        } catch(e) {
+          return { success: false, data: { message: text && text !== '-1' ? text : 'Could not submit invoice. Please try again.' } };
+        }
+      }))
       .then(data => {
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
+        }
+        if (typeof data !== 'object' || data === null || data === -1) {
+          data = { success: false, data: { message: 'Server returned an invalid response. Please try again.' } };
         }
         const resBox = document.getElementById('invoiceResponseBox');
         if (data.success) {
@@ -557,17 +617,18 @@ document.addEventListener('DOMContentLoaded', () => {
             invoiceForm.reset();
           }
         } else {
+          const errMsg = (data && data.data && data.data.message) ? data.data.message : 'Error submitting invoice. Please check all fields.';
           if (resBox) {
             resBox.style.display = 'block';
             resBox.innerHTML = `
               <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm text-wrap" style="word-break: break-word;">
                 <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-1"></i>
-                <strong class="small">${data.data ? data.data.message : 'Error submitting invoice.'}</strong>
+                <strong class="small">${errMsg}</strong>
               </div>
             `;
             resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
-            alert(data.data ? data.data.message : 'Error submitting invoice.');
+            alert(errMsg);
           }
         }
       })
@@ -576,8 +637,20 @@ document.addEventListener('DOMContentLoaded', () => {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
         }
-        console.error('Invoice error:', err);
-        alert('Could not submit invoice. Please check network connection.');
+        console.error('Invoice submit error:', err);
+        const resBox = document.getElementById('invoiceResponseBox');
+        if (resBox) {
+          resBox.style.display = 'block';
+          resBox.innerHTML = `
+            <div class="alert alert-danger rounded-4 p-3 text-center shadow-sm text-wrap" style="word-break: break-word;">
+              <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-1"></i>
+              <strong class="small">Could not submit invoice. Please check your internet connection.</strong>
+            </div>
+          `;
+          resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          alert('Could not submit invoice. Please check network connection.');
+        }
       });
     });
   }
@@ -899,7 +972,10 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Submitting...';
 
         const formData = new FormData(this);
+        const isQrSource = window.location.search.indexOf('qr') !== -1 || window.location.search.indexOf('voucher') !== -1;
         formData.append('action', 'santino_submit_redeem');
+        formData.append('request_source', isQrSource ? 'qr_portal_redeem' : 'portal_redeem_modal');
+        formData.append('request_page', window.location.pathname + window.location.search);
         if (typeof santino_ajax !== 'undefined') {
           formData.append('security', santino_ajax.nonce);
         }
@@ -1591,3 +1667,356 @@ document.addEventListener('click', function(e) {
     alert('Network error. Please try again.');
   });
 });
+
+(function initSantinoDailyPromos() {
+  const section = document.querySelector('.santino-daily-promos-section');
+  const tabPane = document.querySelector('.santino-today-offer-tab-pane');
+  if (!section && !tabPane) return;
+
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+  function getDhakaNow() {
+    const now = new Date();
+    const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+    return new Date(utcMs + (6 * 3600000));
+  }
+
+  function isMatchToday(el, todayKey, dhakaDateStr) {
+    const sched = el.getAttribute('data-promo-day') || '';
+    if (sched === 'everyday') return true;
+    if (sched === 'weekends') return todayKey === 'friday' || todayKey === 'saturday';
+    if (sched === 'date_range') {
+      const s = el.getAttribute('data-promo-start') || '';
+      const e = el.getAttribute('data-promo-end') || '';
+      if (s && dhakaDateStr < s) return false;
+      if (e && dhakaDateStr > e) return false;
+      return true;
+    }
+    return sched === todayKey;
+  }
+
+  function syncDailyPromoHighlight() {
+    const dhakaNow = getDhakaNow();
+    const todayKey = days[dhakaNow.getDay()];
+    const pad = function(n) { return n < 10 ? '0' + n : String(n); };
+    const dhakaDateStr = dhakaNow.getFullYear() + '-' + pad(dhakaNow.getMonth() + 1) + '-' + pad(dhakaNow.getDate());
+    const hrs = 23 - dhakaNow.getHours();
+    const mins = 59 - dhakaNow.getMinutes();
+    const secs = 59 - dhakaNow.getSeconds();
+    const countdownStr = pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
+
+    if (section) {
+      const cards = section.querySelectorAll('.santino-promo-day-card');
+      let activeCard = null;
+
+      cards.forEach(function(card) {
+        const isToday = isMatchToday(card, todayKey, dhakaDateStr);
+        card.classList.toggle('is-today-active', isToday);
+        const tag = card.querySelector('.promo-status-tag');
+        if (tag && isToday) {
+          tag.textContent = 'TODAY LIVE';
+          if (!activeCard) activeCard = card;
+        }
+      });
+
+      if (activeCard) {
+        const dayLabel = activeCard.getAttribute('data-promo-day-label') || todayKey;
+        const title = activeCard.getAttribute('data-promo-title') || '3 + 1 FREE';
+        const items = activeCard.getAttribute('data-promo-items') || '';
+        const waNum = section.getAttribute('data-wa-number') || '8801613334514';
+
+        const dayEl = section.querySelector('.js-today-day-name');
+        const titleEl = section.querySelector('.js-today-title');
+        const waBtn = section.querySelector('.js-today-wa-btn');
+
+        if (dayEl) dayEl.textContent = dayLabel.toUpperCase();
+        if (titleEl) titleEl.textContent = title + ' — ' + items;
+        if (waBtn) {
+          const msg = "Hi Santino! I want to claim today's (" + dayLabel + ") " + title + " - " + items + " offer.";
+          waBtn.href = 'https://wa.me/' + waNum + '?text=' + encodeURIComponent(msg);
+        }
+      }
+
+      section.querySelectorAll('.js-dhaka-countdown').forEach(function(el) {
+        el.textContent = countdownStr;
+      });
+    }
+
+    if (tabPane) {
+      const rows = tabPane.querySelectorAll('.js-tab-schedule-row');
+      let activeRow = null;
+      rows.forEach(function(row) {
+        const isToday = isMatchToday(row, todayKey, dhakaDateStr);
+        row.classList.toggle('bg-white', isToday);
+        row.classList.toggle('shadow-sm', isToday);
+        row.classList.toggle('border', isToday);
+        row.classList.toggle('border-success', isToday);
+        if (isToday && !activeRow) activeRow = row;
+      });
+
+      if (activeRow) {
+        const dayLabel = activeRow.getAttribute('data-promo-day-label') || todayKey;
+        const title = activeRow.getAttribute('data-promo-title') || '3 + 1 FREE';
+        const items = activeRow.getAttribute('data-promo-items') || '';
+        const waNum = tabPane.getAttribute('data-wa-number') || '8801613334514';
+
+        const dayEl = tabPane.querySelector('.js-tab-today-day');
+        const badgeEl = tabPane.querySelector('.js-tab-today-badge');
+        const itemsEl = tabPane.querySelector('.js-tab-today-items');
+        const waBtn = tabPane.querySelector('.js-tab-today-wa');
+
+        if (dayEl) dayEl.textContent = dayLabel.toUpperCase();
+        if (badgeEl) badgeEl.textContent = title;
+        if (itemsEl) itemsEl.textContent = items;
+        if (waBtn) {
+          const msg = "Hi Santino! I want to claim today's (" + dayLabel + ") " + title + " - " + items + " offer.";
+          waBtn.href = 'https://wa.me/' + waNum + '?text=' + encodeURIComponent(msg);
+        }
+      }
+
+      tabPane.querySelectorAll('.js-dhaka-countdown').forEach(function(el) {
+        el.textContent = countdownStr;
+      });
+    }
+  }
+
+  const todayOfferForm = document.getElementById('santinoTodayOfferInvoiceForm');
+  if (todayOfferForm) {
+    const offerSelect = todayOfferForm.querySelector('.js-today-offer-select');
+    const cupsHidden = todayOfferForm.querySelector('.js-today-offer-cups');
+    const itemsHidden = todayOfferForm.querySelector('.js-today-offer-items-input');
+    const stampsLabel = tabPane ? tabPane.querySelector('.js-today-offer-stamps-label') : null;
+
+    if (offerSelect) {
+      offerSelect.addEventListener('change', function() {
+        const opt = this.options[this.selectedIndex];
+        if (!opt) return;
+        const paid = opt.getAttribute('data-paid-cups') || '3';
+        const items = opt.getAttribute('data-items') || '';
+        const title = opt.getAttribute('data-title') || '';
+        if (cupsHidden) cupsHidden.value = paid;
+        if (itemsHidden) itemsHidden.value = title + ' — ' + items;
+        if (stampsLabel) stampsLabel.textContent = '+' + paid + ' Stamps';
+      });
+    }
+
+    todayOfferForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const resBox = document.getElementById('todayOfferInvoiceResponseBox');
+      const showOfferErr = function(msg) {
+        if (!resBox) return;
+        resBox.style.display = 'block';
+        resBox.innerHTML = '<div class="alert alert-danger rounded-3 p-3 mb-0 small">' + msg + '</div>';
+      };
+
+      const invInput = this.querySelector('input[name="invoice_number"]');
+      const phoneInput = this.querySelector('input[name="phone"]');
+      const fileInput = this.querySelector('input[name="invoice_image"]');
+
+      if (offerSelect && !offerSelect.value) {
+        showOfferErr('Please select an active offer.');
+        return;
+      }
+      if (!invInput || !invInput.value.trim()) {
+        showOfferErr('Please enter your Invoice / Memo Number.');
+        return;
+      }
+      const cleanPhone = phoneInput ? phoneInput.value.replace(/[\s\-()]/g, '') : '';
+      if (!/^(?:\+?880|0)1[3-9]\d{8}$/.test(cleanPhone)) {
+        showOfferErr('Please enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX).');
+        return;
+      }
+      if (phoneInput) phoneInput.value = cleanPhone;
+
+      if (!fileInput || !fileInput.files || !fileInput.files.length) {
+        showOfferErr('Receipt photo is mandatory.');
+        return;
+      }
+      const file = fileInput.files[0];
+      if (!/^image\/(jpeg|png|webp|gif)$/i.test(file.type) || file.size > 10 * 1024 * 1024) {
+        showOfferErr('Please upload a valid JPG, PNG, or WebP receipt image (max 10MB).');
+        return;
+      }
+
+      if (resBox) resBox.style.display = 'none';
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const origText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Submitting Offer Invoice...';
+      }
+
+      const formData = new FormData(this);
+      formData.append('action', 'santino_submit_invoice');
+      formData.append('request_source', 'today_offer_tab');
+      formData.append('request_page', window.location.pathname + window.location.search);
+      if (typeof santino_ajax !== 'undefined') {
+        formData.append('security', santino_ajax.nonce);
+      }
+      const ajaxUrl = (typeof santino_ajax !== 'undefined') ? santino_ajax.ajax_url : '/wp-admin/admin-ajax.php';
+
+      fetch(ajaxUrl, { method: 'POST', body: formData })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = origText;
+          }
+          if (!resBox) return;
+          resBox.style.display = 'block';
+          if (data.success) {
+            resBox.innerHTML = '<div class="alert alert-success rounded-3 p-3 mb-0 small"><strong>✓ Offer Invoice Logged!</strong> ' + data.data.message + '</div>';
+            todayOfferForm.reset();
+            if (offerSelect) offerSelect.dispatchEvent(new Event('change'));
+          } else {
+            resBox.innerHTML = '<div class="alert alert-danger rounded-3 p-3 mb-0 small">' + (data.data && data.data.message ? data.data.message : 'Submission failed.') + '</div>';
+          }
+        })
+        .catch(function() {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = origText;
+          }
+          showOfferErr('Network or server error. Please try again.');
+        });
+    });
+  }
+
+  function santinoInitSearchableSelects(root) {
+    const scope = root || document.getElementById('clubPortal') || document.querySelector('.club-portal-section');
+    if (!scope) return;
+    const selects = scope.querySelectorAll('select');
+    selects.forEach(function(sel) {
+      if (sel.dataset.sntSsReady === '1') return;
+      sel.dataset.sntSsReady = '1';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'snt-ss-wrap';
+      sel.parentNode.insertBefore(wrap, sel);
+      wrap.appendChild(sel);
+      sel.classList.add('snt-ss-native');
+
+      const trigger = document.createElement('button');
+      trigger.type = 'button';
+      trigger.className = 'snt-ss-trigger';
+      trigger.innerHTML = '<span class="snt-ss-trigger-text"></span><i class="bi bi-chevron-down snt-ss-chevron"></i>';
+      wrap.appendChild(trigger);
+
+      const panel = document.createElement('div');
+      panel.className = 'snt-ss-panel';
+      panel.innerHTML = '<div class="snt-ss-search-box"><i class="bi bi-search"></i><input type="text" class="snt-ss-search" placeholder="Search option..."></div><div class="snt-ss-list"></div>';
+      wrap.appendChild(panel);
+
+      const searchInput = panel.querySelector('.snt-ss-search');
+      const listEl = panel.querySelector('.snt-ss-list');
+      const triggerText = trigger.querySelector('.snt-ss-trigger-text');
+
+      function syncTrigger() {
+        const opt = sel.options[sel.selectedIndex];
+        const label = opt ? opt.textContent.trim() : '';
+        triggerText.textContent = label || 'Select...';
+        if (!opt || opt.disabled || opt.value === '') {
+          trigger.classList.add('is-placeholder');
+        } else {
+          trigger.classList.remove('is-placeholder');
+        }
+      }
+
+      function renderOptions(filter) {
+        const q = (filter || '').trim().toLowerCase();
+        listEl.innerHTML = '';
+        let count = 0;
+        Array.from(sel.options).forEach(function(opt, idx) {
+          if (opt.disabled && opt.value === '') return;
+          const txt = opt.textContent.trim();
+          if (q && txt.toLowerCase().indexOf(q) === -1) return;
+          count++;
+          const item = document.createElement('div');
+          item.className = 'snt-ss-opt' + (idx === sel.selectedIndex ? ' is-selected' : '');
+          item.innerHTML = '<span>' + txt.replace(/</g, '&lt;') + '</span>' + (idx === sel.selectedIndex ? '<i class="bi bi-check2"></i>' : '');
+          item.addEventListener('click', function() {
+            sel.selectedIndex = idx;
+            sel.dispatchEvent(new Event('change', { bubbles: true }));
+            syncTrigger();
+            wrap.classList.remove('is-open');
+          });
+          listEl.appendChild(item);
+        });
+        if (count === 0) {
+          listEl.innerHTML = '<div class="snt-ss-empty">No matching option found</div>';
+        }
+      }
+
+      trigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const wasOpen = wrap.classList.contains('is-open');
+        document.querySelectorAll('.snt-ss-wrap.is-open').forEach(function(o) {
+          o.classList.remove('is-open');
+        });
+        if (!wasOpen) {
+          const rect = trigger.getBoundingClientRect();
+          const spaceBelow = window.innerHeight - rect.bottom;
+          if (spaceBelow < 260 && rect.top > 260) {
+            wrap.classList.add('is-open-up');
+          } else {
+            wrap.classList.remove('is-open-up');
+          }
+          wrap.classList.add('is-open');
+          searchInput.value = '';
+          renderOptions('');
+          setTimeout(function() { searchInput.focus(); }, 20);
+        }
+      });
+
+      searchInput.addEventListener('input', function() {
+        renderOptions(this.value);
+      });
+      searchInput.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+
+      sel.addEventListener('change', syncTrigger);
+      sel.addEventListener('invalid', function() {
+        wrap.classList.add('is-open');
+        renderOptions('');
+        trigger.focus();
+      });
+
+      const parentForm = sel.closest('form');
+      if (parentForm && !parentForm.dataset.sntSsResetBound) {
+        parentForm.dataset.sntSsResetBound = '1';
+        parentForm.addEventListener('reset', function() {
+          setTimeout(function() {
+            parentForm.querySelectorAll('select.snt-ss-native').forEach(function(s) {
+              s.dispatchEvent(new Event('change'));
+            });
+          }, 10);
+        });
+      }
+
+      syncTrigger();
+    });
+  }
+
+  window.santinoInitSearchableSelects = santinoInitSearchableSelects;
+  santinoInitSearchableSelects();
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.snt-ss-wrap')) {
+      document.querySelectorAll('.snt-ss-wrap.is-open').forEach(function(o) {
+        o.classList.remove('is-open');
+      });
+    }
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.snt-ss-wrap.is-open').forEach(function(o) {
+        o.classList.remove('is-open');
+      });
+    }
+  });
+
+  syncDailyPromoHighlight();
+  setInterval(syncDailyPromoHighlight, 1000);
+})();

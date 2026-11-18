@@ -695,13 +695,14 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
           border: 2px solid #ffffff;
         }
         .portal-tabs .nav-link {
-          color: #4b6360;
-          background: #ffffff;
-          border: 1px solid #dbe5e2;
+          color: #1a332f !important;
+          background: #ffffff !important;
+          border: 1.5px solid #d4e2dd !important;
           border-radius: 12px;
           padding: 10px 18px;
           font-weight: 700;
           font-size: 13.5px;
+          box-shadow: 0 2px 5px rgba(0, 40, 35, 0.04);
         }
         .portal-tabs .nav-link.active {
           background: #00625d !important;
@@ -1244,10 +1245,10 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                             </div>
                           </div>
                           <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">Birth Month *</label>
-                              <select name="birth_month" class="form-select" required>
-                                <option value="">Select Month</option>
+                            <div class="col-6">
+                              <label class="form-label small fw-bold text-dark">Birth Month <span class="text-muted fw-normal">(Optional)</span></label>
+                              <select name="birth_month" class="form-select">
+                                <option value="">Month</option>
                                 <option value="January">January</option>
                                 <option value="February">February</option>
                                 <option value="March">March</option>
@@ -1262,10 +1263,10 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                                 <option value="December">December</option>
                               </select>
                             </div>
-                            <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">Birth Day *</label>
-                              <select name="birth_day" class="form-select" required>
-                                <option value="">Select Day</option>
+                            <div class="col-6">
+                              <label class="form-label small fw-bold text-dark">Birth Day <span class="text-muted fw-normal">(Optional)</span></label>
+                              <select name="birth_day" class="form-select">
+                                <option value="">Day</option>
                                 <?php for ( $d = 1; $d <= 31; $d++ ) : ?>
                                   <option value="<?php echo sprintf( '%02d', $d ); ?>"><?php echo sprintf( '%02d', $d ); ?></option>
                                 <?php endfor; ?>
@@ -1274,8 +1275,8 @@ class Santino_Membership_Solution_Widget extends \Elementor\Widget_Base {
                           </div>
                           <div class="row g-3 mb-4">
                             <div class="col-12">
-                              <label class="form-label small fw-bold text-dark">Email: *</label>
-                              <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                              <label class="form-label small fw-bold text-dark">Email Address <span class="text-muted fw-normal">(Optional)</span></label>
+                              <input type="email" name="email" class="form-control" placeholder="name@example.com (optional)">
                             </div>
                           </div>
                           <div class="form-check mb-4">

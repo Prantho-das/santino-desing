@@ -520,24 +520,26 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
         }
 
         .portal-tabs .nav-link {
-          border-radius: 50px !important;
-          padding: 10px 20px !important;
-          font-size: 13.5px !important;
+          border-radius: 12px !important;
+          padding: 10px 16px !important;
+          font-size: 13px !important;
           font-weight: 700 !important;
-          color: #4a5568 !important;
-          background: #f1f5f9 !important;
-          border: 1px solid transparent !important;
+          color: #1a332f !important;
+          background: #ffffff !important;
+          border: 1.5px solid #d4e2dd !important;
           transition: all 0.25s ease !important;
         }
 
         .portal-tabs .nav-link:hover {
-          background: #e2e8f0 !important;
-          color: #1a202c !important;
+          background: #f4faf7 !important;
+          color: #004d49 !important;
+          border-color: #00625d !important;
         }
 
         .portal-tabs .nav-link.active {
           background: var(--santino-teal, #00625d) !important;
           color: #ffffff !important;
+          border-color: var(--santino-teal, #00625d) !important;
           box-shadow: 0 6px 18px rgba(0, 98, 93, 0.28) !important;
         }
 
@@ -977,10 +979,10 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                           </div>
 
                           <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">Birth Month *</label>
-                              <select name="birth_month" class="form-select" required>
-                                <option value="">Select Birth Month</option>
+                            <div class="col-6">
+                              <label class="form-label small fw-bold text-dark">Birth Month <span class="text-muted fw-normal">(Optional)</span></label>
+                              <select name="birth_month" class="form-select">
+                                <option value="">Month</option>
                                 <option value="January">January</option>
                                 <option value="February">February</option>
                                 <option value="March">March</option>
@@ -995,10 +997,10 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
                                 <option value="December">December</option>
                               </select>
                             </div>
-                            <div class="col-md-6">
-                              <label class="form-label small fw-bold text-dark">Birth Day *</label>
-                              <select name="birth_day" class="form-select" required>
-                                <option value="">Select Birth Day</option>
+                            <div class="col-6">
+                              <label class="form-label small fw-bold text-dark">Birth Day <span class="text-muted fw-normal">(Optional)</span></label>
+                              <select name="birth_day" class="form-select">
+                                <option value="">Day</option>
                                 <?php for ( $d = 1; $d <= 31; $d++ ) : ?>
                                   <option value="<?php echo sprintf( '%02d', $d ); ?>"><?php echo sprintf( '%02d', $d ); ?></option>
                                 <?php endfor; ?>
@@ -1008,8 +1010,8 @@ class Santino_Member_Portal_Widget extends \Elementor\Widget_Base {
 
                           <div class="row g-3 mb-4">
                             <div class="col-md-12">
-                              <label class="form-label small fw-bold text-dark">Email Address *</label>
-                              <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                              <label class="form-label small fw-bold text-dark">Email Address <span class="text-muted fw-normal">(Optional)</span></label>
+                              <input type="email" name="email" class="form-control" placeholder="name@example.com (optional)">
                             </div>
                           </div>
 
