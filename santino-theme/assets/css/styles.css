@@ -13410,4 +13410,172 @@ body.modal-open .side-btn-call,
   }
 }
 
+/* Loyalty Stamp Card & Today's Offer Responsive Polish */
+.santino-reward-banner {
+  background: linear-gradient(135deg, rgba(223, 190, 141, 0.25) 0%, rgba(195, 153, 108, 0.12) 100%);
+  border-color: rgba(223, 190, 141, 0.5) !important;
+}
+.santino-reward-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(223, 190, 141, 0.16);
+  border: 1px solid rgba(223, 190, 141, 0.35);
+  color: #dfbe8d;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.santino-stamps-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.stamp-cup-item {
+  min-width: 0;
+}
+.stamp-cup-circle {
+  width: 46px;
+  height: 46px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  border: 2px solid rgba(195, 153, 108, 0.35);
+  background: rgba(0, 98, 93, 0.25);
+  color: rgba(255, 255, 255, 0.45);
+  transition: all 0.3s ease;
+}
+.stamp-cup-circle.is-active {
+  border-color: #ffffff;
+  background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%);
+  color: #041a18;
+  box-shadow: 0 0 14px rgba(223, 190, 141, 0.5);
+}
+.stamp-cup-circle.is-free {
+  border-color: rgba(223, 190, 141, 0.35);
+  background: rgba(223, 190, 141, 0.12);
+  color: #dfbe8d;
+}
+.stamp-cup-circle.is-free.is-ready {
+  border-color: #dfbe8d;
+  background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%);
+  color: #041a18;
+  box-shadow: 0 0 18px rgba(223, 190, 141, 0.7);
+}
+.stamp-cup-label {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+}
+.stamp-cup-label.is-active {
+  color: #dfbe8d;
+}
+.stamp-cup-label.is-free {
+  font-weight: 800;
+  color: rgba(223, 190, 141, 0.65);
+}
+.stamp-cup-label.is-free.is-ready {
+  color: #dfbe8d;
+}
+.santino-vouchers-box {
+  background: rgba(195, 153, 108, 0.08);
+  border-color: rgba(195, 153, 108, 0.3) !important;
+}
+.santino-voucher-row {
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(195, 153, 108, 0.25) !important;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.santino-voucher-code {
+  background: rgba(223, 190, 141, 0.15);
+  color: #dfbe8d;
+  font-size: 13.5px;
+  letter-spacing: 0.6px;
+}
+.santino-voucher-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.btn.santino-card-btn {
+  font-size: 11.5px !important;
+  padding: 9px 15px !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  gap: 6px !important;
+  letter-spacing: 0.4px !important;
+}
+.btn.santino-card-btn-xs {
+  font-size: 10.5px !important;
+  padding: 6px 12px !important;
+}
+.btn.santino-card-btn-outline {
+  border: 1px solid rgba(223, 190, 141, 0.45) !important;
+  color: #dfbe8d !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+.btn.santino-card-btn-outline:hover {
+  background: rgba(223, 190, 141, 0.14) !important;
+  color: #ffffff !important;
+}
+.btn.santino-card-btn-gold {
+  background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%) !important;
+  color: #041a18 !important;
+  border: none !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 15px rgba(223, 190, 141, 0.35) !important;
+}
+.santino-today-live-badge,
+.santino-today-timer-badge {
+  font-size: 10.5px !important;
+  padding: 5px 10px !important;
+  white-space: nowrap;
+}
+.btn.santino-today-offer-cta {
+  background: #dfbe8d !important;
+  color: #002d2b !important;
+  border: none !important;
+  font-size: 11.5px !important;
+  padding: 9px 16px !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  gap: 6px !important;
+}
+
+@media (min-width: 576px) {
+  .santino-voucher-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .santino-stamps-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px 8px;
+  }
+  .btn.santino-reward-cta,
+  .btn.santino-today-offer-cta {
+    width: 100%;
+    justify-content: center;
+  }
+  .santino-voucher-actions .btn.santino-card-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+
 

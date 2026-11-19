@@ -702,11 +702,11 @@ document.addEventListener('DOMContentLoaded', () => {
           for (let i = 1; i <= 5; i++) {
             const isActive = i <= stamps;
             cupsHtml += `
-              <div class="stamp-cup-item text-center flex-grow-1" style="min-width: 0; max-width: 16.66%;">
-                <div style="width: 100%; max-width: 48px; min-width: 34px; aspect-ratio: 1 / 1; margin: 0 auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 4vw, 18px); font-weight: 800; border: 2px solid ${isActive ? '#ffffff' : 'rgba(195, 153, 108, 0.35)'}; background: ${isActive ? 'linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%)' : 'rgba(0, 98, 93, 0.25)'}; color: ${isActive ? '#041a18' : 'rgba(255,255,255,0.45)'}; box-shadow: ${isActive ? '0 0 14px rgba(223, 190, 141, 0.5)' : 'none'}; transition: all 0.3s ease;">
-                  ${isActive ? '<i class="bi bi-cup-hot-fill" style="color: #041a18;"></i>' : i}
+              <div class="stamp-cup-item text-center">
+                <div class="stamp-cup-circle ${isActive ? 'is-active' : ''}">
+                  ${isActive ? '<i class="bi bi-cup-hot-fill"></i>' : i}
                 </div>
-                <div class="text-truncate mt-1.5" style="font-size: clamp(9px, 2.5vw, 11px); font-weight: 700; color: ${isActive ? '#dfbe8d' : 'rgba(255,255,255,0.45)'};">
+                <div class="stamp-cup-label ${isActive ? 'is-active' : ''}">
                   Cup ${i}${isActive ? ' ✓' : ''}
                 </div>
               </div>
@@ -716,11 +716,11 @@ document.addEventListener('DOMContentLoaded', () => {
           // 6th Cup Free Circle
           const isFreeReady = stamps >= 5 || hasUnusedVoucher;
           cupsHtml += `
-            <div class="stamp-cup-item text-center flex-grow-1" style="min-width: 0; max-width: 16.66%;">
-              <div style="width: 100%; max-width: 48px; min-width: 34px; aspect-ratio: 1 / 1; margin: 0 auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 4vw, 18px); border: 2px solid ${isFreeReady ? '#dfbe8d' : 'rgba(223, 190, 141, 0.35)'}; background: ${isFreeReady ? 'linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%)' : 'rgba(223, 190, 141, 0.12)'}; color: ${isFreeReady ? '#041a18' : 'rgba(223,190,141,0.5)'}; box-shadow: ${isFreeReady ? '0 0 18px rgba(223, 190, 141, 0.7)' : 'none'};">
-                <i class="bi bi-gift-fill" style="${isFreeReady ? 'color: #041a18;' : 'color: #dfbe8d;'}"></i>
+            <div class="stamp-cup-item text-center">
+              <div class="stamp-cup-circle is-free ${isFreeReady ? 'is-ready' : ''}">
+                <i class="bi bi-gift-fill"></i>
               </div>
-              <div class="text-truncate mt-1.5" style="font-size: clamp(9px, 2.5vw, 11px); font-weight: 800; color: ${isFreeReady ? '#dfbe8d' : 'rgba(223, 190, 141, 0.6)'};">
+              <div class="stamp-cup-label is-free ${isFreeReady ? 'is-ready' : ''}">
                 ${isFreeReady ? 'FREE #6 ★' : 'FREE #6'}
               </div>
             </div>
@@ -729,27 +729,27 @@ document.addEventListener('DOMContentLoaded', () => {
           let vouchersHtml = '';
           if (d.vouchers && d.vouchers.length > 0) {
             vouchersHtml = `
-              <div class="mt-3 p-3 rounded-4 border" style="background: rgba(195, 153, 108, 0.08); border-color: rgba(195, 153, 108, 0.3) !important;">
-                <div class="d-flex justify-content-between align-items-center mb-2.5">
-                  <h6 class="fw-bold mb-0 text-white" style="font-size: 13px;"><i class="bi bi-gift-fill me-1.5" style="color: #dfbe8d;"></i> Complimentary Vouchers:</h6>
-                  <span class="badge rounded-pill" style="background: rgba(223, 190, 141, 0.2); color: #dfbe8d; font-size: 10px; font-weight: 700;">${d.vouchers.filter(v => v.status === 'unused').length} Active</span>
+              <div class="mt-3 p-3 rounded-4 border santino-vouchers-box">
+                <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+                  <h6 class="fw-bold mb-0 text-white" style="font-size: 13px;"><i class="bi bi-gift-fill me-1" style="color: #dfbe8d;"></i> Complimentary Vouchers</h6>
+                  <span class="badge rounded-pill flex-shrink-0" style="background: rgba(223, 190, 141, 0.2); color: #dfbe8d; font-size: 10px; font-weight: 700;">${d.vouchers.filter(v => v.status === 'unused').length} Active</span>
                 </div>
                 <div class="d-flex flex-column gap-2">
                   ${d.vouchers.map(v => `
-                    <div class="p-3 rounded-3 border d-flex flex-wrap align-items-center justify-content-between gap-2" style="background: rgba(0, 0, 0, 0.35); border-color: rgba(195,153,108,0.25) !important;">
-                      <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <code class="fs-6 fw-bold px-2.5 py-1 rounded" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; letter-spacing: 0.5px;">${v.code}</code>
-                        <span class="badge ${v.status === 'unused' ? 'bg-success' : (v.status === 'pending_redemption' ? 'bg-warning text-dark' : 'bg-secondary')}" style="font-size: 10px;">
+                    <div class="p-3 rounded-3 border santino-voucher-row">
+                      <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
+                        <code class="fw-bold px-2 py-1 rounded santino-voucher-code">${v.code}</code>
+                        <span class="badge ${v.status === 'unused' ? 'bg-success' : (v.status === 'pending_redemption' ? 'bg-warning text-dark' : 'bg-secondary')}" style="font-size: 10px; white-space: nowrap;">
                           ${v.status === 'unused' ? '✓ READY TO CLAIM' : (v.status === 'pending_redemption' ? '⏳ PENDING APPROVAL' : '✓ REDEEMED')}
                         </span>
                       </div>
-                      <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <button type="button" class="btn btn-outline-light btn-sm fw-bold px-3 py-1.5 rounded-pill santino-download-voucher-btn" data-code="${v.code}" data-name="${d.name}" data-phone="${d.phone}" data-id="${d.member_id}" data-type="voucher" data-status="${v.status}" style="font-size: 11px; border-color: rgba(223,190,141,0.4); color: #dfbe8d;">
-                          <i class="bi bi-download me-1"></i> Download Voucher
+                      <div class="santino-voucher-actions">
+                        <button type="button" class="btn btn-outline-light btn-sm fw-bold rounded-pill santino-download-voucher-btn santino-card-btn santino-card-btn-outline" data-code="${v.code}" data-name="${d.name}" data-phone="${d.phone}" data-id="${d.member_id}" data-type="voucher" data-status="${v.status}">
+                          <i class="bi bi-download"></i> Download Voucher
                         </button>
                         ${v.status === 'unused' ? `
-                          <button type="button" class="btn btn-sm fw-bold px-3.5 py-1.5 rounded-pill santino-open-redeem-btn" data-voucher="${v.code}" data-phone="${d.phone}" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 11px; border: none; font-weight: 800;">
-                            <i class="bi bi-cup-hot-fill me-1"></i> Redeem Now &rarr;
+                          <button type="button" class="btn btn-sm fw-bold rounded-pill santino-open-redeem-btn santino-card-btn santino-card-btn-gold" data-voucher="${v.code}" data-phone="${d.phone}">
+                            <i class="bi bi-cup-hot-fill"></i> Redeem Now &rarr;
                           </button>
                         ` : ''}
                       </div>
@@ -764,19 +764,19 @@ document.addEventListener('DOMContentLoaded', () => {
           if (d.redeems && d.redeems.length > 0) {
             redeemsHtml = `
               <div class="mt-3 p-3 rounded-4 border" style="background: rgba(0, 98, 93, 0.15); border-color: rgba(0, 98, 93, 0.4) !important;">
-                <h6 class="fw-bold mb-2 text-white" style="font-size: 13px;"><i class="bi bi-clock-history me-1.5" style="color: #dfbe8d;"></i> Recent Redemptions:</h6>
+                <h6 class="fw-bold mb-2 text-white" style="font-size: 13px;"><i class="bi bi-clock-history me-1" style="color: #dfbe8d;"></i> Recent Redemptions</h6>
                 <div class="d-flex flex-column gap-2">
                   ${d.redeems.map(r => `
-                    <div class="p-2.5 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2 border" style="background: rgba(0, 0, 0, 0.35); border-color: rgba(255,255,255,0.1) !important;">
-                      <div>
+                    <div class="p-2 p-sm-3 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2 border" style="background: rgba(0, 0, 0, 0.35); border-color: rgba(255,255,255,0.1) !important;">
+                      <div style="min-width: 0;">
                         <span class="fw-bold text-white small">${r.item}</span>
                         <div class="text-white-50" style="font-size: 11px;">#${r.code} • ${r.branch} • ${r.date}</div>
                       </div>
-                      <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                        <button type="button" class="btn btn-outline-light btn-sm fw-bold px-2.5 py-1 rounded-pill santino-download-voucher-btn" data-code="${r.code}" data-name="${d.name}" data-phone="${d.phone}" data-id="${d.member_id}" data-item="${r.item}" data-branch="${r.branch}" data-date="${r.date}" data-type="redeem" data-status="${r.status}" style="font-size: 10px; border-color: rgba(223,190,141,0.4); color: #dfbe8d;">
-                          <i class="bi bi-download me-1"></i> Download Slip
+                      <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <button type="button" class="btn btn-outline-light btn-sm fw-bold rounded-pill santino-download-voucher-btn santino-card-btn santino-card-btn-outline santino-card-btn-xs" data-code="${r.code}" data-name="${d.name}" data-phone="${d.phone}" data-id="${d.member_id}" data-item="${r.item}" data-branch="${r.branch}" data-date="${r.date}" data-type="redeem" data-status="${r.status}">
+                          <i class="bi bi-download"></i> Download Slip
                         </button>
-                        <span class="badge ${r.status === 'approved' ? 'bg-success' : (r.status === 'rejected' ? 'bg-danger' : 'bg-warning text-dark')}" style="font-size: 10px;">
+                        <span class="badge ${r.status === 'approved' ? 'bg-success' : (r.status === 'rejected' ? 'bg-danger' : 'bg-warning text-dark')}" style="font-size: 10px; white-space: nowrap;">
                           ${r.status === 'approved' ? '✓ APPROVED (Served)' : (r.status === 'rejected' ? '✗ REJECTED' : '⏳ PENDING APPROVAL')}
                         </span>
                       </div>
@@ -791,8 +791,8 @@ document.addEventListener('DOMContentLoaded', () => {
           if (d.invoices && d.invoices.length > 0) {
             invoicesHtml = `
               <div class="mt-3 p-3 rounded-4 border" style="background: rgba(0, 0, 0, 0.25); border-color: rgba(255,255,255,0.08) !important;">
-                <div class="small fw-bold text-white-50 mb-2" style="font-size: 12px;"><i class="bi bi-receipt me-1" style="color: #dfbe8d;"></i> Recent Approved Invoices:</div>
-                <div class="d-flex flex-wrap gap-1.5">
+                <div class="small fw-bold text-white-50 mb-2" style="font-size: 12px;"><i class="bi bi-receipt me-1" style="color: #dfbe8d;"></i> Recent Invoices</div>
+                <div class="d-flex flex-wrap gap-2">
                   ${d.invoices.map(inv => `
                     <span class="badge p-2 rounded-2 border text-wrap text-start ${inv.status === 'approved' ? 'border-success text-success' : 'border-warning text-warning'}" style="background: rgba(0,0,0,0.5); font-size: 11px; line-height: 1.4;">
                       #${inv.invoice_no} (${inv.cups} ${inv.cups > 1 ? 'Cups' : 'Cup'}) • ${inv.status === 'approved' ? '✓ Approved' : '⏳ Pending'}
@@ -808,12 +808,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card border rounded-4 shadow-2xl p-3 p-sm-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: radial-gradient(ellipse at 80% 20%, #005650 0%, #071f1d 55%, #031311 100%); border: 1.5px solid rgba(223, 190, 141, 0.45) !important; color: #fff; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
               
               <!-- Card Header Row -->
-              <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+              <div class="d-flex justify-content-between align-items-start gap-2 gap-sm-3 mb-3">
                 <div style="min-width: 0; flex: 1;">
-                  <span class="badge px-3 py-1 fw-bold text-uppercase rounded-pill" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 10px; letter-spacing: 1px;">
+                  <span class="badge px-3 py-1 fw-bold text-uppercase rounded-pill" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 10px; letter-spacing: 0.8px;">
                     <i class="bi bi-patch-check-fill me-1"></i> SANTINO COFFEE CLUB
                   </span>
-                  <h3 class="fw-bold text-white mt-2 mb-0 font-heading text-truncate" style="font-size: clamp(20px, 4.5vw, 26px);">${d.name || 'Santino Regular Member'}</h3>
+                  <h3 class="fw-bold text-white mt-2 mb-0 font-heading" style="font-size: clamp(19px, 4.5vw, 26px); line-height: 1.2; word-break: break-word;">${d.name || 'Santino Regular Member'}</h3>
                   <div class="text-white-50 small mt-1 font-monospace" style="font-size: 13px;">
                     <i class="bi bi-phone me-1" style="color: #dfbe8d;"></i> ${d.phone}
                   </div>
@@ -832,17 +832,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
               <!-- Unlocked Reward Banner -->
               ${hasUnusedVoucher ? `
-                <div class="p-3.5 rounded-4 mb-3 d-flex flex-wrap align-items-center justify-content-between gap-3 border" style="background: linear-gradient(135deg, rgba(223, 190, 141, 0.25) 0%, rgba(195, 153, 108, 0.12) 100%); border-color: rgba(223, 190, 141, 0.5) !important;">
-                  <div class="d-flex align-items-center gap-3" style="min-width: 0; flex: 1;">
-                    <div style="font-size: 32px; line-height: 1;"><i class="bi bi-gift-fill" style="color: #dfbe8d;"></i></div>
+                <div class="p-3 p-sm-4 rounded-4 mb-3 d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center justify-content-between gap-3 border santino-reward-banner">
+                  <div class="d-flex align-items-start align-items-sm-center gap-3" style="min-width: 0; flex: 1;">
+                    <div class="santino-reward-icon-box"><i class="bi bi-gift-fill"></i></div>
                     <div style="min-width: 0;">
-                      <span class="badge rounded-pill px-2.5 py-0.5 fw-bold text-uppercase" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 9px;">REWARD UNLOCKED</span>
-                      <div class="fw-bold text-white mt-1" style="font-size: 14px; color: #dfbe8d !important;">1 Complimentary Coffee Available!</div>
-                      <div class="text-white-50" style="font-size: 11px;">5 stamps completed! Claim your free beverage voucher directly below.</div>
+                      <span class="badge rounded-pill px-2 py-1 fw-bold text-uppercase" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; font-size: 9px;">REWARD UNLOCKED</span>
+                      <div class="fw-bold mt-1" style="font-size: 14px; color: #dfbe8d; line-height: 1.3;">1 Complimentary Coffee Available!</div>
+                      <div class="text-white-50 mt-1" style="font-size: 11.5px; line-height: 1.4;">5 stamps completed! Claim your free beverage voucher directly below.</div>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-sm fw-bold px-3.5 py-2 rounded-pill santino-open-redeem-btn flex-shrink-0" data-voucher="${activeVoucherCode}" data-phone="${d.phone}" style="background: linear-gradient(135deg, #dfbe8d 0%, #c3996c 100%); color: #041a18; border: none; font-size: 12px; font-weight: 800; box-shadow: 0 4px 15px rgba(223, 190, 141, 0.35);">
-                    <i class="bi bi-gift-fill me-1"></i> Claim Free Coffee &rarr;
+                  <button type="button" class="btn btn-sm fw-bold rounded-pill santino-open-redeem-btn santino-card-btn santino-card-btn-gold santino-reward-cta flex-shrink-0" data-voucher="${activeVoucherCode}" data-phone="${d.phone}">
+                    <i class="bi bi-gift-fill"></i> Claim Free Coffee &rarr;
                   </button>
                 </div>
               ` : ''}
@@ -851,18 +851,18 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="p-3 p-md-4 rounded-4 mt-2 shadow-lg border" style="background: rgba(0, 0, 0, 0.38); border-color: rgba(195, 153, 108, 0.3) !important;">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                   <h6 class="fw-bold mb-0 text-white font-heading" style="font-size: 13px;">
-                    <i class="bi bi-cup-hot-fill me-1.5" style="color: #dfbe8d;"></i> 5-Cup Stamp Card Tracker
+                    <i class="bi bi-cup-hot-fill me-1" style="color: #dfbe8d;"></i> 5-Cup Stamp Card Tracker
                   </h6>
-                  <span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.35); font-size: 10px; font-weight: 700; letter-spacing: 0.5px;">
+                  <span class="badge px-2 py-1 rounded-pill" style="background: rgba(223, 190, 141, 0.15); color: #dfbe8d; border: 1px solid rgba(223, 190, 141, 0.35); font-size: 10px; font-weight: 700; letter-spacing: 0.5px;">
                     ${5 - stamps === 0 ? '🎉 FREE COFFEE READY!' : 'BUY 5, GET 1 FREE'}
                   </span>
                 </div>
                 
-                <div class="d-flex justify-content-between align-items-center py-2 px-0" style="gap: 4px; width: 100%;">
+                <div class="santino-stamps-grid py-2">
                   ${cupsHtml}
                 </div>
                 
-                <div class="d-flex justify-content-between align-items-center mt-3 pt-2.5 border-top flex-wrap gap-2" style="border-color: rgba(255,255,255,0.08) !important; font-size: 11px;">
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top flex-wrap gap-2" style="border-color: rgba(255,255,255,0.08) !important; font-size: 11px;">
                   <span class="text-white-50"><i class="bi bi-geo-alt-fill text-warning me-1"></i> Valid across all Dhaka branches</span>
                   <span style="color: #dfbe8d;"><i class="bi bi-patch-check-fill text-success me-1"></i> Auto-Verified</span>
                 </div>

@@ -4823,26 +4823,28 @@ class Santino_Membership_System {
                 </a>
             </div>
             <?php else : ?>
-            <div class="p-3 p-md-4 rounded-4 text-white mb-3 position-relative overflow-hidden" style="background: linear-gradient(135deg, #004d49 0%, #002d2b 70%, #011d1c 100%); border: 1.5px solid rgba(223,190,141,0.5);">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
-                    <span class="badge rounded-pill px-3 py-1" style="background: rgba(223,190,141,0.2); color: #dfbe8d; border: 1px solid rgba(223,190,141,0.45); font-size: 11px;">
+            <div class="p-3 p-md-4 rounded-4 text-white mb-3 position-relative overflow-hidden santino-today-offer-card" style="background: linear-gradient(135deg, #004d49 0%, #002d2b 70%, #011d1c 100%); border: 1.5px solid rgba(223,190,141,0.5);">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <span class="badge rounded-pill santino-today-live-badge" style="background: rgba(223,190,141,0.2); color: #dfbe8d; border: 1px solid rgba(223,190,141,0.45);">
                         <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;margin-right:6px;"></span>
                         LIVE TODAY &bull; <span class="js-tab-today-day"><?php echo esc_html( strtoupper( $today_p['day'] ) ); ?></span>
                     </span>
-                    <span class="badge rounded-pill px-3 py-1" style="background: rgba(255,255,255,0.12); color: #ffffff; font-size: 11px;">
+                    <span class="badge rounded-pill santino-today-timer-badge" style="background: rgba(255,255,255,0.12); color: #ffffff;">
                         <i class="bi bi-clock me-1"></i> Ends in <span class="js-dhaka-countdown"><?php echo esc_html( self::get_dhaka_countdown_initial() ); ?></span>
                     </span>
                 </div>
 
-                <div class="fw-bold text-uppercase mb-1" style="color: #dfbe8d; font-size: 11.5px; letter-spacing: 1px;">
-                    <span class="js-tab-today-badge"><?php echo esc_html( $today_p['title'] ); ?></span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-2">
-                    <h4 class="font-heading fw-bold text-white mb-0 js-tab-today-items flex-grow-1" style="font-size: 1.35rem;">
-                        <?php echo esc_html( $today_p['items'] ); ?>
-                    </h4>
-                    <a href="<?php echo esc_url( home_url( '/offers/' ) ); ?>" class="btn btn-sm fw-bold px-3 py-2 rounded-pill text-nowrap" style="background: #dfbe8d; color: #002d2b; border: none; white-space: nowrap;">
-                        <i class="bi bi-stars me-1"></i> View All Offers &rarr;
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-stretch align-items-sm-end gap-3">
+                    <div style="min-width: 0; flex: 1;">
+                        <div class="fw-bold text-uppercase mb-1" style="color: #dfbe8d; font-size: 11.5px; letter-spacing: 1px;">
+                            <span class="js-tab-today-badge"><?php echo esc_html( $today_p['title'] ); ?></span>
+                        </div>
+                        <h4 class="font-heading fw-bold text-white mb-0 js-tab-today-items" style="font-size: clamp(1.2rem, 4vw, 1.45rem); line-height: 1.25;">
+                            <?php echo esc_html( $today_p['items'] ); ?>
+                        </h4>
+                    </div>
+                    <a href="<?php echo esc_url( home_url( '/offers/' ) ); ?>" class="btn btn-sm fw-bold rounded-pill santino-today-offer-cta flex-shrink-0">
+                        <i class="bi bi-stars"></i> View All Offers &rarr;
                     </a>
                 </div>
             </div>
